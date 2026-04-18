@@ -1,0 +1,7 @@
+{
+  "extends": "@gameroman/config/tsconfig/isolated",
+  "compilerOptions": {
+    "types": ["bun"]
+  },
+  "include": ["**/src"]
+}
