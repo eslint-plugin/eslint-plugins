@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import rule from "../../../src/rules/scope";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
@@ -20,8 +21,11 @@ const ruleTester = new RuleTester();
 
 const expectedError = {
   message: "The scope prop can only be used on <th> elements.",
-  type: "JSXAttribute",
 };
+
+if (eslintBefore10) {
+  expectedError.type = "JSXAttribute";
+}
 
 const componentsSettings = {
   "jsx-a11y": {

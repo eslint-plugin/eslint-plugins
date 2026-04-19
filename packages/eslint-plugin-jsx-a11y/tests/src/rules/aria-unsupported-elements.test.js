@@ -41,9 +41,7 @@ const roleValidityTests = domElements.map((element) => {
   const isReserved = dom.get(element).reserved || false;
   const role = isReserved ? "" : "role";
 
-  return {
-    code: `<${element} ${role} />`,
-  };
+  return { code: `<${element} ${role} />` };
 });
 
 const ariaValidityTests = domElements
@@ -51,14 +49,10 @@ const ariaValidityTests = domElements
     const isReserved = dom.get(element).reserved || false;
     const aria = isReserved ? "" : "aria-hidden";
 
-    return {
-      code: `<${element} ${aria} />`,
-    };
+    return { code: `<${element} ${aria} />` };
+    return { code: `<${element} ${aria} />` };
   })
-  .concat({
-    code: "<fake aria-hidden />",
-    errors: [errorMessage("aria-hidden")],
-  });
+  .concat({ code: "<fake aria-hidden />" });
 
 // Generate invalid test cases.
 const invalidRoleValidityTests = domElements
