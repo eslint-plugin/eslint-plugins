@@ -21,7 +21,7 @@
     "prepublishOnly": "bun run build"
   },
   "dependencies": {
-    "@eslintplugin/jsx-ast-utils": "jsx-ast-utils",
+    "@eslintplugin/jsx-ast-utils": "workspace:*",
     "aria-query": "^5.3.2",
     "axe-core": "^4.10.3",
     "axobject-query": "^4.1.0",

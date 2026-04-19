@@ -1,4 +1,4 @@
-import { elementType } from "jsx-ast-utils";
+import { elementType } from "@eslintplugin/jsx-ast-utils";
 import test from "tape";
 
 import JSXAttributeMock from "../../../__mocks__/JSXAttributeMock";

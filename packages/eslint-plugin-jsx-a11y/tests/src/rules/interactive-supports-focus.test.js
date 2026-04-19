@@ -7,7 +7,7 @@
 // Requirements
 // -----------------------------------------------------------------------------
 
-import { eventHandlers, eventHandlersByType } from "jsx-ast-utils";
+import { eventHandlers, eventHandlersByType } from "@eslintplugin/jsx-ast-utils";
 
 import { configs } from "../../../src/index";
 import rule from "../../../src/rules/interactive-supports-focus";

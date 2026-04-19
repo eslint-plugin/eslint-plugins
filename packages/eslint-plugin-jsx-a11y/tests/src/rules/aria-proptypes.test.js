@@ -1,3 +1,5 @@
+import { it, expect } from "bun:test";
+
 /**
  * @fileoverview Enforce ARIA state and property values are valid.
  * @author Ethan Cohen
@@ -8,7 +10,6 @@
 // -----------------------------------------------------------------------------
 
 import { aria } from "aria-query";
-import test from "tape";
 
 import rule from "../../../src/rules/aria-proptypes";
 import parsers from "../../__util__/helpers/parsers";
@@ -57,14 +58,8 @@ tokens from the following: ${permittedValues}.`,
   }
 };
 
-test("validityCheck", (t) => {
-  t.equal(
-    validityCheck(null, null),
-    false,
-    "is false for an unknown expected type",
-  );
-
-  t.end();
+it("validityCheck", () => {
+  expect(validityCheck(null, null)).toBeFalse();
 });
 
 ruleTester.run("aria-proptypes", rule, {
