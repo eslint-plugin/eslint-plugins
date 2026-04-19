@@ -3,16 +3,16 @@ import { expect, describe, it } from "bun:test";
 const semver = require("semver");
 const eslintPkg = require("eslint/package.json");
 
-const ESLint =
-  semver.major(eslintPkg.version) < 9
-    ? require("eslint/use-at-your-own-risk").FlatESLint // eslint-disable-line import/no-unresolved -- false positive
-    : require("eslint").ESLint;
-
 const path = require("node:path");
 
 describe.skipIf(!semver.satisfies(eslintPkg.version, ">= 8.23.0"))(
   "eslint-plugin-react in flat config",
   () => {
+    const ESLint =
+      semver.major(eslintPkg.version) < 9
+        ? require("eslint/use-at-your-own-risk").FlatESLint
+        : require("eslint").ESLint;
+
     const fixturesdDir = path.resolve(__dirname, "fixtures", "flat-config");
 
     it("should work when the plugin is used directly", () => {
