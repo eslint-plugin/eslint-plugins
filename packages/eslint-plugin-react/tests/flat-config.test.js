@@ -5,12 +5,12 @@ const eslintPkg = require("eslint/package.json");
 
 const path = require("node:path");
 
-const supportsFlatConfigs = semver.satisfies(eslintPkg.version, ">= 8.23.0");
+const isFlat = semver.satisfies(eslintPkg.version, ">= 8.23.0");
 
-describe.if(supportsFlatConfigs)("eslint-plugin-react in flat config", () => {
+describe.if(isFlat)("eslint-plugin-react in flat config", async () => {
   const ESLint =
     semver.major(eslintPkg.version) < 9
-      ? require("eslint/use-at-your-own-risk").FlatESLint
+      ? (await import("eslint/use-at-your-own-risk")).FlatESLint
       : require("eslint").ESLint;
 
   const fixturesdDir = path.resolve(__dirname, "fixtures", "flat-config");
