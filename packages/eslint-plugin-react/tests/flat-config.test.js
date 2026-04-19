@@ -5,6 +5,8 @@ const eslintPkg = require("eslint/package.json");
 
 const path = require("node:path");
 
+console.log(eslintPkg.version);
+
 const isFlat = semver.satisfies(eslintPkg.version, ">= 8.23.0");
 
 describe.if(isFlat)("eslint-plugin-react in flat config", async () => {
