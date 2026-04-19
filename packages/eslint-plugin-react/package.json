@@ -39,15 +39,15 @@
     "@types/estree": "0.0.52",
     "@typescript-eslint/parser": "^2.34.0 || ^3.10.1 || ^4 || ^5 || ^6.20 || ^7.14.1 || 8.4 - 8.17",
     "babel-eslint": "^8 || ^9 || ^10.1.0",
-    "eslint": "^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9",
+    "eslint": "^6 || ^7 || ^8 || ^9 || ^10",
     "espree": "^3.5.4",
     "sinon": "^7.5.0",
     "tsdown": "catalog:"
   },
+  "peerDependencies": {
+    "eslint": "^6 || ^7 || ^8 || ^9 || ^10"
+  },
   "engines": {
     "node": ">=22"
-  },
-  "inlinedDependencies": {
-    "eslint": "9.39.4"
   }
 }
