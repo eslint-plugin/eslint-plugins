@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import rule from "../../../src/rules/label-has-associated-control";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import ruleOptionsMapperFactory from "../../__util__/ruleOptionsMapperFactory";
@@ -31,10 +32,14 @@ const errorMessages = {
 };
 const expectedErrors = {};
 Object.keys(errorMessages).forEach((key) => {
-  expectedErrors[key] = {
-    message: errorMessages[key],
-    type: "JSXOpeningElement",
-  };
+  if (eslintBefore10) {
+    expectedErrors[key] = {
+      message: errorMessages[key],
+      type: "JSXOpeningElement",
+    };
+  } else {
+    expectedErrors[key] = { message: errorMessages[key] };
+  }
 });
 
 const componentsSettings = {

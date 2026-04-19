@@ -27,8 +27,8 @@ const inappropriateAutocomplete = [
 ];
 
 if (eslintBefore10) {
-  invalidAutocomplete[0].type = "JSXAttribute";
-  inappropriateAutocomplete[0].type = "JSXAttribute";
+  invalidAutocomplete[0].type = "JSXOpeningElement";
+  inappropriateAutocomplete[0].type = "JSXOpeningElement";
 }
 
 const componentsSettings = {

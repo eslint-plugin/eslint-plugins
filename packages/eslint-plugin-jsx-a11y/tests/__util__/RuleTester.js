@@ -1,6 +1,7 @@
 import { describe, expect, it } from "bun:test";
 
 import { RuleTester } from "eslint";
+
 import { eslintBefore10 } from "./eslint-version";
 
 if (eslintBefore10) {

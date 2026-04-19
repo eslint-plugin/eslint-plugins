@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import rule from "../../../src/rules/no-distracting-elements";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
@@ -19,10 +20,15 @@ import RuleTester from "../../__util__/RuleTester";
 const ruleTester = new RuleTester();
 
 const expectedError = (element) => {
-  return {
+  const error = {
     message: `Do not use <${element}> elements as they can create visual accessibility issues and are deprecated.`,
-    type: "JSXOpeningElement",
   };
+
+  if (eslintBefore10) {
+    error.type = "JSXOpeningElement";
+  }
+
+  return error;
 };
 
 const componentsSettings = {
