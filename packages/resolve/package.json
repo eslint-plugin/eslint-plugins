@@ -1,0 +1,35 @@
+{
+  "name": "@eslintplugin/resolve",
+  "version": "0.0.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eslint-plugin/eslint-plugins.git",
+    "directory": "packages/resolve"
+  },
+  "imports": {
+    "#node-exports-info/*": "./src/node-exports-info/*.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "test": "bun test --reporter dot",
+    "prepublishOnly": "bun run build"
+  },
+  "dependencies": {
+    "semver": "^6.3.1"
+  },
+  "devDependencies": {
+    "tsdown": "catalog:"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

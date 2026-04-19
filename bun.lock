@@ -60,7 +60,7 @@
         "@types/estree": "0.0.52",
         "@typescript-eslint/parser": "^2.34.0 || ^3.10.1 || ^4 || ^5 || ^6.20 || ^7.14.1 || 8.4 - 8.17",
         "babel-eslint": "^8 || ^9 || ^10.1.0",
-        "eslint": "^6 || ^7 || ^8 || ^9 || ^10",
+        "eslint": "^6 || ^7 || ^8 || ^9",
         "espree": "^3.5.4",
         "tsdown": "catalog:",
       },
@@ -86,6 +86,16 @@
         "@types/estree",
         "@types/estree-jsx",
       ],
+    },
+    "packages/resolve": {
+      "name": "@eslintplugin/resolve",
+      "version": "0.0.0",
+      "dependencies": {
+        "semver": "^6.3.1",
+      },
+      "devDependencies": {
+        "tsdown": "catalog:",
+      },
     },
   },
   "catalog": {
@@ -177,6 +187,8 @@
     "@eslintplugin/eslint-plugin-react": ["@eslintplugin/eslint-plugin-react@workspace:packages/eslint-plugin-react"],
 
     "@eslintplugin/jsx-ast-utils": ["@eslintplugin/jsx-ast-utils@workspace:packages/jsx-ast-utils"],
+
+    "@eslintplugin/resolve": ["@eslintplugin/resolve@workspace:packages/resolve"],
 
     "@gameroman/config": ["@gameroman/config@0.0.7", "", { "peerDependencies": { "@biomejs/biome": "^2.4.11", "oxfmt": ">=0.44.0", "oxlint": "^1.59.0", "oxlint-tsgolint": ">=0.20.0", "typescript": "^6.0.2" }, "optionalPeers": ["@biomejs/biome", "oxfmt", "oxlint", "oxlint-tsgolint", "typescript"] }, "sha512-ZGcFbyQH8ZBCi0qazihHfSUO74oM9vgUvDL4UxYdRjmB1Mm69+kHQW9rq8Ha8C4EZJKpTafH7CudNnbqMkFN+A=="],
 
