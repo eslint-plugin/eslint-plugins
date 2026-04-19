@@ -13,7 +13,7 @@ const babelEslintVersion = require("babel-eslint/package.json").version;
 const semver = require("semver");
 const RuleTester = require("../../helpers/ruleTester");
 
-const rule = require("../../../lib/rules/sort-default-props");
+const rule = require("../../../src/rules/sort-default-props");
 
 const parsers = require("../../helpers/parsers");
 

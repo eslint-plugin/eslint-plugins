@@ -10,7 +10,7 @@
 // -----------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/react-in-jsx-scope");
+const rule = require("../../../src/rules/react-in-jsx-scope");
 
 const parsers = require("../../helpers/parsers");
 

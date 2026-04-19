@@ -3,7 +3,7 @@
 const path = require("node:path");
 const assert = require("node:assert");
 const sinon = require("sinon");
-const versionUtil = require("../../lib/util/version");
+const versionUtil = require("../../src/util/version");
 
 describe("Version", () => {
   const base = path.resolve(__dirname, "..", "fixtures", "version");

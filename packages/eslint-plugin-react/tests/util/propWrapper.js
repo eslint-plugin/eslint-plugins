@@ -1,7 +1,7 @@
 "use strict";
 
 const assert = require("node:assert");
-const propWrapperUtil = require("../../lib/util/propWrapper");
+const propWrapperUtil = require("../../src/util/propWrapper");
 
 describe("PropWrapperFunctions", () => {
   describe("getPropWrapperFunctions", () => {

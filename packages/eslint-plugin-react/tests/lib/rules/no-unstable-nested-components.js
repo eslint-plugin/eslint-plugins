@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/no-unstable-nested-components");
+const rule = require("../../../src/rules/no-unstable-nested-components");
 
 const parsers = require("../../helpers/parsers");
 

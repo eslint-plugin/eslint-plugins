@@ -12,7 +12,7 @@
 const semver = require("semver");
 const eslintPkg = require("eslint/package.json");
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-no-leaked-render");
+const rule = require("../../../src/rules/jsx-no-leaked-render");
 
 const parsers = require("../../helpers/parsers");
 

@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-no-comment-textnodes");
+const rule = require("../../../src/rules/jsx-no-comment-textnodes");
 
 const parsers = require("../../helpers/parsers");
 

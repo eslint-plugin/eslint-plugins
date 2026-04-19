@@ -11,7 +11,7 @@
 // -----------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-no-bind");
+const rule = require("../../../src/rules/jsx-no-bind");
 
 const parsers = require("../../helpers/parsers");
 

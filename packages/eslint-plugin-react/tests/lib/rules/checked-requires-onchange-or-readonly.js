@@ -6,7 +6,7 @@
 "use strict";
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/checked-requires-onchange-or-readonly");
+const rule = require("../../../src/rules/checked-requires-onchange-or-readonly");
 
 const parsers = require("../../helpers/parsers");
 

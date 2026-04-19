@@ -17,7 +17,7 @@ const PROPERTY_ASSIGNMENT = "property assignment";
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/static-property-placement");
+const rule = require("../../../src/rules/static-property-placement");
 
 const parsers = require("../../helpers/parsers");
 

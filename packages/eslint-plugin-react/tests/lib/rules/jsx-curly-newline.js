@@ -9,7 +9,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-curly-newline");
+const rule = require("../../../src/rules/jsx-curly-newline");
 
 const parsers = require("../../helpers/parsers");
 

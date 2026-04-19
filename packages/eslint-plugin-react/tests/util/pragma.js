@@ -4,7 +4,7 @@ const assert = require("node:assert");
 const SourceCode = require("eslint").SourceCode;
 const espree = require("espree");
 
-const getFromContext = require("../../lib/util/pragma").getFromContext;
+const getFromContext = require("../../src/util/pragma").getFromContext;
 
 const DEFAULT_CONFIG = {
   ecmaVersion: 6,

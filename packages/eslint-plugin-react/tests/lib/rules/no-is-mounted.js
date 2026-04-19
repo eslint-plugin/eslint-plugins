@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/no-is-mounted");
+const rule = require("../../../src/rules/no-is-mounted");
 
 const parsers = require("../../helpers/parsers");
 

@@ -9,7 +9,7 @@
 // -----------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/forbid-foreign-prop-types");
+const rule = require("../../../src/rules/forbid-foreign-prop-types");
 
 const parsers = require("../../helpers/parsers");
 

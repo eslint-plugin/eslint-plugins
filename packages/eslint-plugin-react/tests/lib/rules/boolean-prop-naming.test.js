@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/boolean-prop-naming");
+const rule = require("../../../src/rules/boolean-prop-naming");
 
 const parsers = require("../../helpers/parsers");
 

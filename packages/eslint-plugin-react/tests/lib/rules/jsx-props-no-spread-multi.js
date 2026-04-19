@@ -9,7 +9,7 @@
 // -----------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-props-no-spread-multi");
+const rule = require("../../../src/rules/jsx-props-no-spread-multi");
 
 const parsers = require("../../helpers/parsers");
 

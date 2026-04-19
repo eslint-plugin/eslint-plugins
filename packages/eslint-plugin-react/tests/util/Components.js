@@ -3,7 +3,7 @@
 const assert = require("node:assert");
 
 const RuleTester = require("../helpers/ruleTester");
-const Components = require("../../lib/util/Components");
+const Components = require("../../src/util/Components");
 const parsers = require("../helpers/parsers");
 
 const ruleTester = new RuleTester({

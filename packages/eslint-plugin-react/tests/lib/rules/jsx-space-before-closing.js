@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-space-before-closing");
+const rule = require("../../../src/rules/jsx-space-before-closing");
 
 const parsers = require("../../helpers/parsers");
 

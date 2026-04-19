@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/function-component-definition");
+const rule = require("../../../src/rules/function-component-definition");
 
 const parserOptions = {
   ecmaVersion: 2018,

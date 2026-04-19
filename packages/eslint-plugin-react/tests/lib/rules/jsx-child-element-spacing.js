@@ -1,7 +1,7 @@
 "use strict";
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-child-element-spacing");
+const rule = require("../../../src/rules/jsx-child-element-spacing");
 
 const parsers = require("../../helpers/parsers");
 

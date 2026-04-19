@@ -9,7 +9,7 @@
 // -----------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/forbid-elements");
+const rule = require("../../../src/rules/forbid-elements");
 
 const parsers = require("../../helpers/parsers");
 

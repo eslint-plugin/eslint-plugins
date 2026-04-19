@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-equals-spacing");
+const rule = require("../../../src/rules/jsx-equals-spacing");
 
 const parsers = require("../../helpers/parsers");
 

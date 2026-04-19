@@ -1,7 +1,7 @@
 "use strict";
 
 const assert = require("node:assert");
-const linkComponentsUtil = require("../../lib/util/linkComponents");
+const linkComponentsUtil = require("../../src/util/linkComponents");
 
 describe("linkComponentsFunctions", () => {
   describe("getLinkComponents", () => {

@@ -10,7 +10,7 @@
 // -----------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-first-prop-new-line");
+const rule = require("../../../src/rules/jsx-first-prop-new-line");
 
 const parsers = require("../../helpers/parsers");
 

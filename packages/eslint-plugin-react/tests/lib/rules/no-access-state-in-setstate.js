@@ -11,7 +11,7 @@
 
 const RuleTester = require("../../helpers/ruleTester");
 const parsers = require("../../helpers/parsers");
-const rule = require("../../../lib/rules/no-access-state-in-setstate");
+const rule = require("../../../src/rules/no-access-state-in-setstate");
 
 const parserOptions = {
   ecmaVersion: 2018,

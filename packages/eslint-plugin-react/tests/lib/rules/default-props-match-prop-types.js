@@ -11,7 +11,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/default-props-match-prop-types");
+const rule = require("../../../src/rules/default-props-match-prop-types");
 
 const parsers = require("../../helpers/parsers");
 

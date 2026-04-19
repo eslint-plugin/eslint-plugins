@@ -6,7 +6,7 @@
 "use strict";
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/require-optimization");
+const rule = require("../../../src/rules/require-optimization");
 
 const parsers = require("../../helpers/parsers");
 

@@ -10,7 +10,7 @@
 // -----------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/prefer-read-only-props");
+const rule = require("../../../src/rules/prefer-read-only-props");
 
 const parsers = require("../../helpers/parsers");
 

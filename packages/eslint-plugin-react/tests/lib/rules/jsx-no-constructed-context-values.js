@@ -11,7 +11,7 @@
 // -----------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-no-constructed-context-values");
+const rule = require("../../../src/rules/jsx-no-constructed-context-values");
 
 const parsers = require("../../helpers/parsers");
 

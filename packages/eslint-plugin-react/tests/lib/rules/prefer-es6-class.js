@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/prefer-es6-class");
+const rule = require("../../../src/rules/prefer-es6-class");
 
 const parsers = require("../../helpers/parsers");
 

@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-pascal-case");
+const rule = require("../../../src/rules/jsx-pascal-case");
 
 const parsers = require("../../helpers/parsers");
 

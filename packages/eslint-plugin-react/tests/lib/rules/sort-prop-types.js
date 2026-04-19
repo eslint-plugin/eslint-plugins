@@ -13,7 +13,7 @@ const semver = require("semver");
 const eslintPkg = require("eslint/package.json");
 const RuleTester = require("../../helpers/ruleTester");
 
-const rule = require("../../../lib/rules/sort-prop-types");
+const rule = require("../../../src/rules/sort-prop-types");
 
 const parsers = require("../../helpers/parsers");
 

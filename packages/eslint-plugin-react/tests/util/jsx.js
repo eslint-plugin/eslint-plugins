@@ -3,7 +3,7 @@
 const assert = require("node:assert");
 const espree = require("espree");
 
-const jsxUtil = require("../../lib/util/jsx");
+const jsxUtil = require("../../src/util/jsx");
 
 const isReturningJSX = jsxUtil.isReturningJSX;
 

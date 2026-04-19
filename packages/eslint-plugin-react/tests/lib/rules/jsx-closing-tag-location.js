@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-closing-tag-location");
+const rule = require("../../../src/rules/jsx-closing-tag-location");
 
 const parsers = require("../../helpers/parsers");
 

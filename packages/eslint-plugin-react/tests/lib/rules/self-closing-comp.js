@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/self-closing-comp");
+const rule = require("../../../src/rules/self-closing-comp");
 
 const parsers = require("../../helpers/parsers");
 

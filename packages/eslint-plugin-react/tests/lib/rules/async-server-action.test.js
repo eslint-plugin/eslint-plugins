@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/async-server-action");
+const rule = require("../../../src/rules/async-server-action");
 
 const parsers = require("../../helpers/parsers");
 

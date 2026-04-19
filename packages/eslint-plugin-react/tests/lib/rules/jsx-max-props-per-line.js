@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-max-props-per-line");
+const rule = require("../../../src/rules/jsx-max-props-per-line");
 
 const parsers = require("../../helpers/parsers");
 

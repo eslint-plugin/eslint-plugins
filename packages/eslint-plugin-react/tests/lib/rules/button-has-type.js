@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/button-has-type");
+const rule = require("../../../src/rules/button-has-type");
 
 const parsers = require("../../helpers/parsers");
 

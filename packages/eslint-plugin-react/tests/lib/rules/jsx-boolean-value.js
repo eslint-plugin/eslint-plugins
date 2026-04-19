@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-boolean-value");
+const rule = require("../../../src/rules/jsx-boolean-value");
 
 const parsers = require("../../helpers/parsers");
 

@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/no-render-return-value");
+const rule = require("../../../src/rules/no-render-return-value");
 
 const parsers = require("../../helpers/parsers");
 

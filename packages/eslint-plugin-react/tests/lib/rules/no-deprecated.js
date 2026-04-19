@@ -12,7 +12,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/no-deprecated");
+const rule = require("../../../src/rules/no-deprecated");
 
 const parsers = require("../../helpers/parsers");
 

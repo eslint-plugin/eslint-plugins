@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-key");
+const rule = require("../../../src/rules/jsx-key");
 
 const parsers = require("../../helpers/parsers");
 

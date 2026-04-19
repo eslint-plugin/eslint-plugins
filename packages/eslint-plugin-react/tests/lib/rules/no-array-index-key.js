@@ -11,7 +11,7 @@
 
 const RuleTester = require("../../helpers/ruleTester");
 const parsers = require("../../helpers/parsers");
-const rule = require("../../../lib/rules/no-array-index-key");
+const rule = require("../../../src/rules/no-array-index-key");
 
 const parserOptions = {
   ecmaVersion: 2018,

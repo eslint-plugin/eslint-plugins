@@ -11,7 +11,7 @@
 
 const RuleTester = require("../../helpers/ruleTester");
 const parsers = require("../../helpers/parsers");
-const rule = require("../../../lib/rules/no-object-type-as-default-prop");
+const rule = require("../../../src/rules/no-object-type-as-default-prop");
 
 const parserOptions = {
   ecmaVersion: 2018,

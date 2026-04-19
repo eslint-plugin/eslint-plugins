@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/forward-ref-uses-ref");
+const rule = require("../../../src/rules/forward-ref-uses-ref");
 const parsers = require("../../helpers/parsers");
 
 // ------------------------------------------------------------------------------

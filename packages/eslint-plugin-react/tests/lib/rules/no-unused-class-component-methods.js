@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/no-unused-class-component-methods");
+const rule = require("../../../src/rules/no-unused-class-component-methods");
 const parsers = require("../../helpers/parsers");
 
 const parserOptions = {

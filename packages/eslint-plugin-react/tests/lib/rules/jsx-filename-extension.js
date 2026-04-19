@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-filename-extension");
+const rule = require("../../../src/rules/jsx-filename-extension");
 
 const parsers = require("../../helpers/parsers");
 

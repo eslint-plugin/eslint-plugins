@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/no-direct-mutation-state");
+const rule = require("../../../src/rules/no-direct-mutation-state");
 
 const parsers = require("../../helpers/parsers");
 

@@ -12,7 +12,7 @@
 const semver = require("semver");
 const eslintPkg = require("eslint/package.json");
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/no-invalid-html-attribute");
+const rule = require("../../../src/rules/no-invalid-html-attribute");
 const parsers = require("../../helpers/parsers");
 
 const parserOptions = {

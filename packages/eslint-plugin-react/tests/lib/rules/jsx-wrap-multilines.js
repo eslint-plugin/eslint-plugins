@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-wrap-multilines");
+const rule = require("../../../src/rules/jsx-wrap-multilines");
 
 const parsers = require("../../helpers/parsers");
 

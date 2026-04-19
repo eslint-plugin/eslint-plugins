@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/style-prop-object");
+const rule = require("../../../src/rules/style-prop-object");
 
 const parsers = require("../../helpers/parsers");
 

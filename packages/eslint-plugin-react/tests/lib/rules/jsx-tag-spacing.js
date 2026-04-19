@@ -10,7 +10,7 @@
 // -----------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-tag-spacing");
+const rule = require("../../../src/rules/jsx-tag-spacing");
 
 const parsers = require("../../helpers/parsers");
 

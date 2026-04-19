@@ -9,7 +9,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/prefer-exact-props");
+const rule = require("../../../src/rules/prefer-exact-props");
 const parsers = require("../../helpers/parsers");
 
 const parserOptions = {

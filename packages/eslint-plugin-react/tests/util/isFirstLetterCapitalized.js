@@ -2,7 +2,7 @@
 
 const assert = require("node:assert");
 
-const isFirstLetterCapitalized = require("../../lib/util/isFirstLetterCapitalized");
+const isFirstLetterCapitalized = require("../../src/util/isFirstLetterCapitalized");
 
 describe("isFirstLetterCapitalized", () => {
   it("should return false for invalid input", () => {

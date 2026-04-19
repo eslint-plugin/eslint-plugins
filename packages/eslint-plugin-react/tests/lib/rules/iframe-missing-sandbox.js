@@ -9,7 +9,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/iframe-missing-sandbox");
+const rule = require("../../../src/rules/iframe-missing-sandbox");
 
 const parsers = require("../../helpers/parsers");
 

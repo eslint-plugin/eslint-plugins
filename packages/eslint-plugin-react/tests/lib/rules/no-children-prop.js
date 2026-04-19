@@ -10,7 +10,7 @@
 // -----------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/no-children-prop");
+const rule = require("../../../src/rules/no-children-prop");
 
 const parsers = require("../../helpers/parsers");
 

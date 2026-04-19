@@ -38,7 +38,7 @@ const ruleTester = new RuleTester({ parserOptions });
 const ruleDefiner = getRuleDefiner(ruleTester);
 ruleDefiner.defineRule(
   "react/jsx-uses-vars",
-  require("../../../lib/rules/jsx-uses-vars"),
+  require("../../../src/rules/jsx-uses-vars"),
 );
 
 ruleTester.run("no-unused-vars", ruleNoUnusedVars, {

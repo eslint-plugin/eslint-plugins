@@ -11,7 +11,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-newline");
+const rule = require("../../../src/rules/jsx-newline");
 const parsers = require("../../helpers/parsers");
 
 const parserOptions = {

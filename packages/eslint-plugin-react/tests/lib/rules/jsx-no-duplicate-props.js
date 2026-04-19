@@ -10,7 +10,7 @@
 // -----------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-no-duplicate-props");
+const rule = require("../../../src/rules/jsx-no-duplicate-props");
 
 const parsers = require("../../helpers/parsers");
 

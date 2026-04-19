@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/jsx-max-depth");
+const rule = require("../../../src/rules/jsx-max-depth");
 
 const parsers = require("../../helpers/parsers");
 

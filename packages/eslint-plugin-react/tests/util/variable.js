@@ -3,7 +3,7 @@
 const assert = require("node:assert");
 
 const getLatestVariableDefinition =
-  require("../../lib/util/variable").getLatestVariableDefinition;
+  require("../../src/util/variable").getLatestVariableDefinition;
 
 describe("variable", () => {
   describe("getLatestVariableDefinition", () => {

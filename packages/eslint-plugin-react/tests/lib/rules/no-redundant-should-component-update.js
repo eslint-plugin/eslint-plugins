@@ -9,7 +9,7 @@
 // -----------------------------------------------------------------------------
 
 const RuleTester = require("../../helpers/ruleTester");
-const rule = require("../../../lib/rules/no-redundant-should-component-update");
+const rule = require("../../../src/rules/no-redundant-should-component-update");
 
 const parsers = require("../../helpers/parsers");
 

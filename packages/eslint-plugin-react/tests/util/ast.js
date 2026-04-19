@@ -4,7 +4,7 @@ const assert = require("node:assert");
 const sinon = require("sinon");
 const espree = require("espree");
 
-const ast = require("../../lib/util/ast");
+const ast = require("../../src/util/ast");
 
 const traverseReturns = ast.traverseReturns;
 const isFunctionLike = ast.isFunctionLike;

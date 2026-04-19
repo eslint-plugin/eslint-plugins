@@ -14,7 +14,7 @@ const eslintPkg = require("eslint/package.json").version;
 const babelEslintVersion = require("babel-eslint/package.json").version;
 const RuleTester = require("../../helpers/ruleTester");
 
-const rule = require("../../../lib/rules/prop-types");
+const rule = require("../../../src/rules/prop-types");
 
 const parsers = require("../../helpers/parsers");
 
