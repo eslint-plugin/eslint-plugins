@@ -29,7 +29,7 @@ Try removing the prop '${invalidProp}'.`,
   };
 
   if (eslintBefore10) {
-    error.type = "JSXOpeningElement";
+    error.type = "JSXAttribute";
   }
 
   return error;
