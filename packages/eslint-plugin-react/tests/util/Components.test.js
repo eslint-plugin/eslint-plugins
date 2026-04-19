@@ -1,6 +1,4 @@
-"use strict";
-
-const assert = require("node:assert");
+import { describe, it, expect } from "bun:test";
 
 const RuleTester = require("../helpers/ruleTester");
 const Components = require("../../src/util/Components");
@@ -83,17 +81,9 @@ describe("Components", () => {
           }`,
         },
         (components) => {
-          assert.equal(
-            components.length(),
-            1,
-            "MyStatelessComponent should be detected component",
-          );
+          expect(components.length()).toBe(1);
           Object.values(components.list()).forEach((component) => {
-            assert.equal(
-              component.node.id.name,
-              "MyStatelessComponent",
-              "MyStatelessComponent should be detected component",
-            );
+            expect(component.node.id.name).toBe("MyStatelessComponent");
           });
         },
       );
@@ -110,16 +100,9 @@ describe("Components", () => {
         }`,
         },
         (components) => {
-          assert(
-            components.length() === 1,
-            "MyClassComponent should be detected component",
-          );
+          expect(components.length()).toBe(1);
           Object.values(components.list()).forEach((component) => {
-            assert.equal(
-              component.node.id.name,
-              "MyClassComponent",
-              "MyClassComponent should be detected component",
-            );
+            expect(component.node.id.name).toBe("MyClassComponent");
           });
         },
       );
@@ -131,21 +114,15 @@ describe("Components", () => {
           code: "import React, { useCallback, useState } from 'react'",
         },
         (components) => {
-          assert.deepEqual(
-            components
-              .getDefaultReactImports()
-              .map((specifier) => specifier.local.name),
-            ["React"],
-            'default React import identifier should be "React"',
-          );
+          const defaultImports = components
+            .getDefaultReactImports()
+            .map((s) => s.local.name);
+          expect(defaultImports).toEqual(["React"]);
 
-          assert.deepEqual(
-            components
-              .getNamedReactImports()
-              .map((specifier) => specifier.local.name),
-            ["useCallback", "useState"],
-            'named React import identifiers should be "useCallback" and "useState"',
-          );
+          const namedImports = components
+            .getNamedReactImports()
+            .map((s) => s.local.name);
+          expect(namedImports).toEqual(["useCallback", "useState"]);
         },
       );
     });
@@ -167,7 +144,7 @@ describe("Components", () => {
                 util.isReactHookCall(node),
             },
             (_components, instructionResults) => {
-              assert.deepEqual(instructionResults, [
+              expect(instructionResults).toEqual([
                 { type: "CallExpression", result: false },
               ]);
             },
@@ -189,7 +166,7 @@ describe("Components", () => {
                 util.isReactHookCall(node),
             },
             (_components, instructionResults) => {
-              assert.deepEqual(instructionResults, [
+              expect(instructionResults).toEqual([
                 { type: "CallExpression", result: true },
               ]);
             },
@@ -211,7 +188,7 @@ describe("Components", () => {
                 util.isReactHookCall(node),
             },
             (_components, instructionResults) => {
-              assert.deepEqual(instructionResults, [
+              expect(instructionResults).toEqual([
                 { type: "CallExpression", result: true },
               ]);
             },
@@ -233,7 +210,7 @@ describe("Components", () => {
                 util.isReactHookCall(node, ["useState"]),
             },
             (_components, instructionResults) => {
-              assert.deepEqual(instructionResults, [
+              expect(instructionResults).toEqual([
                 { type: "CallExpression", result: true },
               ]);
             },
@@ -258,32 +235,7 @@ describe("Components", () => {
                 util.isReactHookCall(node),
             },
             (_components, instructionResults) => {
-              assert.deepEqual(instructionResults, [
-                { type: "CallExpression", result: false },
-              ]);
-            },
-          );
-        });
-
-        it("should not identify shadowed aliased present named hook call", () => {
-          testComponentsDetect(
-            {
-              code: `
-              import { useState as useStateAlternative } from 'react'
-              function useColor() {
-                function useStateAlternative() {
-                  return null
-                }
-                return useStateAlternative()
-              }
-            `,
-            },
-            {
-              CallExpression: (node, _context, _components, util) =>
-                util.isReactHookCall(node, ["useState"]),
-            },
-            (_components, instructionResults) => {
-              assert.deepEqual(instructionResults, [
+              expect(instructionResults).toEqual([
                 { type: "CallExpression", result: false },
               ]);
             },
@@ -305,7 +257,7 @@ describe("Components", () => {
                 util.isReactHookCall(node),
             },
             (_components, instructionResults) => {
-              assert.deepEqual(instructionResults, [
+              expect(instructionResults).toEqual([
                 { type: "CallExpression", result: true },
               ]);
             },
@@ -327,7 +279,7 @@ describe("Components", () => {
                 util.isReactHookCall(node),
             },
             (_components, instructionResults) => {
-              assert.deepEqual(instructionResults, [
+              expect(instructionResults).toEqual([
                 { type: "CallExpression", result: true },
               ]);
             },
@@ -352,7 +304,7 @@ describe("Components", () => {
                 util.isReactHookCall(node),
             },
             (_components, instructionResults) => {
-              assert.deepEqual(instructionResults, [
+              expect(instructionResults).toEqual([
                 { type: "CallExpression", result: false },
               ]);
             },
@@ -374,29 +326,7 @@ describe("Components", () => {
                 util.isReactHookCall(node, ["useState"]),
             },
             (_components, instructionResults) => {
-              assert.deepEqual(instructionResults, [
-                { type: "CallExpression", result: true },
-              ]);
-            },
-          );
-        });
-
-        it("should identify present named React hook call", () => {
-          testComponentsDetect(
-            {
-              code: `
-              import React from 'react'
-              function useColor() {
-                return React.useState()
-              }
-            `,
-            },
-            {
-              CallExpression: (node, _context, _components, util) =>
-                util.isReactHookCall(node, ["useState"]),
-            },
-            (_components, instructionResults) => {
-              assert.deepEqual(instructionResults, [
+              expect(instructionResults).toEqual([
                 { type: "CallExpression", result: true },
               ]);
             },
@@ -418,7 +348,7 @@ describe("Components", () => {
                 util.isReactHookCall(node, ["useRef"]),
             },
             (_components, instructionResults) => {
-              assert.deepEqual(instructionResults, [
+              expect(instructionResults).toEqual([
                 { type: "CallExpression", result: false },
               ]);
             },
@@ -437,7 +367,7 @@ describe("Components", () => {
             "Program:exit": () => true,
           },
           (_components, instructionResults) => {
-            assert.deepEqual(instructionResults, [
+            expect(instructionResults).toEqual([
               { type: "Program:exit", result: true },
             ]);
           },

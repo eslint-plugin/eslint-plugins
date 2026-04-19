@@ -1,14 +1,12 @@
-"use strict";
+import { describe, it, expect } from "bun:test";
 
-const assert = require("node:assert");
 const linkComponentsUtil = require("../../src/util/linkComponents");
 
 describe("linkComponentsFunctions", () => {
   describe("getLinkComponents", () => {
     it("returns a default map of components", () => {
       const context = {};
-      assert.deepStrictEqual(
-        linkComponentsUtil.getLinkComponents(context),
+      expect(linkComponentsUtil.getLinkComponents(context)).toEqual(
         new Map([["a", ["href"]]]),
       );
     });
@@ -30,8 +28,7 @@ describe("linkComponentsFunctions", () => {
           linkComponents,
         },
       };
-      assert.deepStrictEqual(
-        linkComponentsUtil.getLinkComponents(context),
+      expect(linkComponentsUtil.getLinkComponents(context)).toEqual(
         new Map([
           ["a", ["href"]],
           ["Hyperlink", ["href"]],
@@ -45,8 +42,7 @@ describe("linkComponentsFunctions", () => {
   describe("getFormComponents", () => {
     it("returns a default map of components", () => {
       const context = {};
-      assert.deepStrictEqual(
-        linkComponentsUtil.getFormComponents(context),
+      expect(linkComponentsUtil.getFormComponents(context)).toEqual(
         new Map([["form", ["action"]]]),
       );
     });
@@ -68,8 +64,7 @@ describe("linkComponentsFunctions", () => {
           formComponents,
         },
       };
-      assert.deepStrictEqual(
-        linkComponentsUtil.getFormComponents(context),
+      expect(linkComponentsUtil.getFormComponents(context)).toEqual(
         new Map([
           ["form", ["action"]],
           ["Form", ["action"]],

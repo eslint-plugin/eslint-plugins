@@ -1,7 +1,4 @@
-"use strict";
-
-const assert = require("node:assert");
-
+import { describe, it, expect } from "bun:test";
 const getLatestVariableDefinition =
   require("../../src/util/variable").getLatestVariableDefinition;
 
@@ -11,14 +8,14 @@ describe("variable", () => {
       const variable = {
         defs: [],
       };
-      assert.equal(getLatestVariableDefinition(variable), undefined);
+      expect(getLatestVariableDefinition(variable)).toBeUndefined();
     });
 
     it("should return the latest definition", () => {
       const variable = {
         defs: ["one", "two", "latest"],
       };
-      assert.equal(getLatestVariableDefinition(variable), "latest");
+      expect(getLatestVariableDefinition(variable)).toBe("latest");
     });
   });
 });

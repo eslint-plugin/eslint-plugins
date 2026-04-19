@@ -1,6 +1,5 @@
-"use strict";
+import { describe, it, expect } from "bun:test";
 
-const assert = require("node:assert");
 const espree = require("espree");
 
 const jsxUtil = require("../../src/util/jsx");
@@ -36,8 +35,11 @@ const mockContext = {
 
 describe("jsxUtil", () => {
   describe("isReturningJSX", () => {
-    const assertValid = (codeStr) =>
-      assert(isReturningJSX(mockContext, parseCode(codeStr)));
+    // Helper refactored for Bun's expect
+    const assertValid = (codeStr) => {
+      const result = isReturningJSX(mockContext, parseCode(codeStr));
+      expect(result).toBe(true);
+    };
 
     it("Works when returning JSX", () => {
       assertValid(`
@@ -94,9 +96,8 @@ describe("jsxUtil", () => {
       let arrowFunctionExpression =
         astNode.declarations[0].init.properties[0].value;
 
-      assert(
-        !isReturningJSX(() => false, arrowFunctionExpression, mockContext),
-      );
+      // isReturningJSX(context, node, ...)
+      expect(isReturningJSX(mockContext, arrowFunctionExpression)).toBe(false);
 
       astNode = parseCode(`const obj = {
         prop: () => { return test(<a>something</a>); }
@@ -104,9 +105,7 @@ describe("jsxUtil", () => {
       arrowFunctionExpression =
         astNode.declarations[0].init.properties[0].value;
 
-      assert(
-        !isReturningJSX(() => false, arrowFunctionExpression, mockContext),
-      );
+      expect(isReturningJSX(mockContext, arrowFunctionExpression)).toBe(false);
     });
   });
 });
