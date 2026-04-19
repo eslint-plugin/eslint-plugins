@@ -66,14 +66,12 @@ module.exports = {
 
           const sourceCode = getSourceCode(context);
           const equalToken = sourceCode.getTokenAfter(attrNode.name);
-          const spacedBefore = sourceCode.isSpaceBetweenTokens(
-            attrNode.name,
-            equalToken,
-          );
-          const spacedAfter = sourceCode.isSpaceBetweenTokens(
-            equalToken,
-            attrNode.value,
-          );
+          const spacedBefore = sourceCode.isSpaceBetween
+            ? sourceCode.isSpaceBetween(attrNode.name, equalToken)
+            : sourceCode.isSpaceBetweenTokens(attrNode.name, equalToken);
+          const spacedAfter = sourceCode.isSpaceBetween
+            ? sourceCode.isSpaceBetween(equalToken, attrNode.value)
+            : sourceCode.isSpaceBetweenTokens(equalToken, attrNode.value);
 
           if (config === "never") {
             if (spacedBefore) {
