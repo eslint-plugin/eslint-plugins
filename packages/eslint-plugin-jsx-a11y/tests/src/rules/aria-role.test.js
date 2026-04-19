@@ -13,6 +13,7 @@ import rule from "../../../src/rules/aria-role";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 
 // -----------------------------------------------------------------------------
 // Tests
@@ -22,8 +23,11 @@ const ruleTester = new RuleTester();
 
 const errorMessage = {
   message: "Elements with ARIA roles must use a valid, non-abstract ARIA role.",
-  type: "JSXAttribute",
 };
+
+if (eslintBefore10) {
+  errorMessage.type = "JSXAttribute";
+}
 
 const roleKeys = roles.keys();
 

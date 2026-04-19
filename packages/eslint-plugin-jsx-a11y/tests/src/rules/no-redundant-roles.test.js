@@ -9,6 +9,7 @@
 // -----------------------------------------------------------------------------
 
 import rule from "../../../src/rules/no-redundant-roles";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import ruleOptionsMapperFactory from "../../__util__/ruleOptionsMapperFactory";
@@ -20,10 +21,17 @@ import RuleTester from "../../__util__/RuleTester";
 
 const ruleTester = new RuleTester();
 
-const expectedError = (element, implicitRole) => ({
-  message: `The element ${element} has an implicit role of ${implicitRole}. Defining this explicitly is redundant and should be avoided.`,
-  type: "JSXOpeningElement",
-});
+const expectedError = (element, implicitRole) => {
+  const error = {
+    message: `The element ${element} has an implicit role of ${implicitRole}. Defining this explicitly is redundant and should be avoided.`,
+  };
+
+  if (eslintBefore10) {
+    error.type = "JSXOpeningElement";
+  }
+
+  return error;
+};
 
 const ruleName = "jsx-a11y/no-redundant-roles";
 

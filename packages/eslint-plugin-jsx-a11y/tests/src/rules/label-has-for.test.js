@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import rule from "../../../src/rules/label-has-for";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
@@ -21,20 +22,23 @@ const ruleTester = new RuleTester();
 const expectedNestingError = {
   message:
     "Form label must have the following type of associated control: nesting",
-  type: "JSXOpeningElement",
 };
 
 const expectedSomeError = {
   message:
     "Form label must have ANY of the following types of associated control: nesting, id",
-  type: "JSXOpeningElement",
 };
 
 const expectedEveryError = {
   message:
     "Form label must have ALL of the following types of associated control: nesting, id",
-  type: "JSXOpeningElement",
 };
+
+if (eslintBefore10) {
+  expectedNestingError.type = "JSXOpeningElement";
+  expectedSomeError.type = "JSXOpeningElement";
+  expectedEveryError.type = "JSXOpeningElement";
+}
 
 const optionsComponents = [
   {

@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import rule from "../../../src/rules/alt-text";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
@@ -16,17 +17,23 @@ import RuleTester from "../../__util__/RuleTester";
 // Tests
 // -----------------------------------------------------------------------------
 
+const withConditionalType = (error) => {
+  if (eslintBefore10) {
+    error.type = "JSXOpeningElement";
+  }
+  return error;
+};
+
 const ruleTester = new RuleTester();
 
-const missingPropError = (type) => ({
-  message: `${type} elements must have an alt prop, either with meaningful text, or an empty string for decorative images.`,
-  type: "JSXOpeningElement",
-});
+const missingPropError = (type) =>
+  withConditionalType({
+    message: `${type} elements must have an alt prop, either with meaningful text, or an empty string for decorative images.`,
+  });
 
 const altValueError = (type) => ({
   message: `Invalid alt value for ${type}. \
 Use alt="" for presentational images.`,
-  type: "JSXOpeningElement",
 });
 
 const ariaLabelValueError = {
@@ -41,7 +48,6 @@ const ariaLabelledbyValueError = {
 const preferAltError = () => ({
   message:
     'Prefer alt="" over a presentational role. First rule of aria is to not use aria if it can be achieved via native HTML.',
-  type: "JSXOpeningElement",
 });
 
 const objectError = {

@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import rule from "../../../src/rules/no-access-key";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
@@ -21,8 +22,11 @@ const ruleTester = new RuleTester();
 const expectedError = {
   message:
     "No access key attribute allowed. Inconsistencies between keyboard shortcuts and keyboard commands used by screen readers and keyboard-only users create a11y complications.",
-  type: "JSXOpeningElement",
 };
+
+if (eslintBefore10) {
+  expectedError.type = "JSXOpeningElement";
+}
 
 ruleTester.run("no-access-key", rule, {
   valid: parsers

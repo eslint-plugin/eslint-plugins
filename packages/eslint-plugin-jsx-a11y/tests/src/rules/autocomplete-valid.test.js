@@ -9,6 +9,7 @@
 
 import rule from "../../../src/rules/autocomplete-valid";
 import { axeFailMessage } from "../../__util__/axeMapping";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
@@ -19,19 +20,16 @@ import RuleTester from "../../__util__/RuleTester";
 
 const ruleTester = new RuleTester();
 
-const invalidAutocomplete = [
-  {
-    message: axeFailMessage("autocomplete-valid"),
-    type: "JSXOpeningElement",
-  },
-];
+const invalidAutocomplete = [{ message: axeFailMessage("autocomplete-valid") }];
 
 const inappropriateAutocomplete = [
-  {
-    message: axeFailMessage("autocomplete-appropriate"),
-    type: "JSXOpeningElement",
-  },
+  { message: axeFailMessage("autocomplete-appropriate") },
 ];
+
+if (eslintBefore10) {
+  invalidAutocomplete[0].type = "JSXAttribute";
+  inappropriateAutocomplete[0].type = "JSXAttribute";
+}
 
 const componentsSettings = {
   "jsx-a11y": {

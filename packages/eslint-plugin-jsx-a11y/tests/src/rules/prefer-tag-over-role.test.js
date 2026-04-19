@@ -1,14 +1,22 @@
 import rule from "../../../src/rules/prefer-tag-over-role";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
 
 const ruleTester = new RuleTester();
 
-const expectedError = (role, tag) => ({
-  message: `Use ${tag} instead of the "${role}" role to ensure accessibility across all devices.`,
-  type: "JSXOpeningElement",
-});
+const expectedError = (role, tag) => {
+  const error = {
+    message: `Use ${tag} instead of the "${role}" role to ensure accessibility across all devices.`,
+  };
+
+  if (eslintBefore10) {
+    error.type = "JSXOpeningElement";
+  }
+
+  return error;
+};
 
 ruleTester.run("prefer-tag-over-role", rule, {
   valid: parsers

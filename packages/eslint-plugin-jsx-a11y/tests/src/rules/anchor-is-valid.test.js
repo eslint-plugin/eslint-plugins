@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import rule from "../../../src/rules/anchor-is-valid";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
@@ -29,16 +30,19 @@ const invalidHrefErrorMessage =
 
 const preferButtonexpectedError = {
   message: preferButtonErrorMessage,
-  type: "JSXOpeningElement",
 };
 const noHrefexpectedError = {
   message: noHrefErrorMessage,
-  type: "JSXOpeningElement",
 };
 const invalidHrefexpectedError = {
   message: invalidHrefErrorMessage,
-  type: "JSXOpeningElement",
 };
+
+if (eslintBefore10) {
+  preferButtonexpectedError.type = "JSXOpeningElement";
+  noHrefexpectedError.type = "JSXOpeningElement";
+  invalidHrefexpectedError.type = "JSXOpeningElement";
+}
 
 const components = [
   {

@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import rule from "../../../src/rules/click-events-have-key-events";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
@@ -23,8 +24,11 @@ const errorMessage =
 
 const expectedError = {
   message: errorMessage,
-  type: "JSXOpeningElement",
 };
+
+if (eslintBefore10) {
+  expectedError.type = "JSXOpeningElement";
+}
 
 ruleTester.run("click-events-have-key-events", rule, {
   valid: parsers

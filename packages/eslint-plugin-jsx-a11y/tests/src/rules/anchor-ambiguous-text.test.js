@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import rule from "../../../src/rules/anchor-ambiguous-text";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
@@ -26,10 +27,17 @@ const DEFAULT_AMBIGUOUS_WORDS = [
   "learn more",
 ];
 
-const expectedErrorGenerator = (words) => ({
-  message: `Ambiguous text within anchor. Screen reader users rely on link text for context; the words "${words.join('", "')}" are ambiguous and do not provide enough context.`,
-  type: "JSXOpeningElement",
-});
+const withConditionalType = (error) => {
+  if (eslintBefore10) {
+    error.type = "JSXOpeningElement";
+  }
+  return error;
+};
+
+const expectedErrorGenerator = (words) =>
+  withConditionalType({
+    message: `Ambiguous text within anchor. Screen reader users rely on link text for context; the words "${words.join('", "')}" are ambiguous and do not provide enough context.`,
+  });
 
 const expectedError = expectedErrorGenerator(DEFAULT_AMBIGUOUS_WORDS);
 

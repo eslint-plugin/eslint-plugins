@@ -14,6 +14,7 @@ import getSuggestion from "../../../src/util/getSuggestion";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 
 // -----------------------------------------------------------------------------
 // Tests
@@ -27,16 +28,21 @@ const errorMessage = (name) => {
   const message = `${name}: This attribute is an invalid ARIA attribute.`;
 
   if (suggestions.length > 0) {
-    return {
-      type: "JSXAttribute",
-      message: `${message} Did you mean to use ${suggestions}?`,
-    };
+    if (eslintBefore10) {
+      return {
+        type: "JSXAttribute",
+        message: `${message} Did you mean to use ${suggestions}?`,
+      };
+    } else {
+      return { message: `${message} Did you mean to use ${suggestions}?` };
+    }
   }
 
-  return {
-    type: "JSXAttribute",
-    message,
-  };
+  if (eslintBefore10) {
+    return { type: "JSXAttribute", message };
+  } else {
+    return { message };
+  }
 };
 
 // Create basic test cases using all valid role types.

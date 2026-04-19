@@ -21,8 +21,11 @@ const ruleTester = new RuleTester();
 const expectedError = {
   message:
     "Media elements such as <audio> and <video> must have a <track> for captions.",
-  type: "JSXOpeningElement",
 };
+
+if (eslintBefore10) {
+  expectedError.type = "JSXOpeningElement";
+}
 
 const customSchema = [
   {

@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import rule from "../../../src/rules/lang";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
@@ -20,8 +21,11 @@ const ruleTester = new RuleTester();
 
 const expectedError = {
   message: "lang attribute must have a valid value.",
-  type: "JSXAttribute",
 };
+
+if (eslintBefore10) {
+  expectedError.type = "JSXAttribute";
+}
 
 const componentsSettings = {
   "jsx-a11y": {
