@@ -35,7 +35,6 @@
   "devDependencies": {
     "@babel/core": "^7.27.4",
     "@babel/eslint-parser": "^7.27.5",
-    "@babel/register": "^7.27.1",
     "ast-types-flow": "^0.0.8",
     "eslint": "^6 || ^7 || ^8 || ^9 || ^10",
     "minimist": "^1.2.8",
