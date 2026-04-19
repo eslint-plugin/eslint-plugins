@@ -23,7 +23,6 @@
   "dependencies": {
     "@eslintplugin/jsx-ast-utils": "jsx-ast-utils",
     "aria-query": "^5.3.2",
-    "ast-types-flow": "^0.0.8",
     "axe-core": "^4.10.3",
     "axobject-query": "^4.1.0",
     "damerau-levenshtein": "^1.0.8",
@@ -34,37 +33,19 @@
     "safe-regex-test": "^1.1.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.27.2",
     "@babel/core": "^7.27.4",
     "@babel/eslint-parser": "^7.27.5",
-    "@babel/plugin-transform-flow-strip-types": "^7.27.1",
     "@babel/register": "^7.27.1",
-    "auto-changelog": "^2.5.0",
-    "babel-plugin-add-module-exports": "^1.0.4",
-    "babel-preset-airbnb": "^5.0.0",
-    "browserslist": "=4.25.4",
-    "eslint": "^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9",
-    "eslint-doc-generator": "^1.7.1",
-    "eslint-plugin-eslint-plugin": "^4.3.0",
-    "eslint-plugin-flowtype": "^5.8.0 || ^8.0.3",
-    "estraverse": "^5.3.0",
-    "flow-bin": "^0.147.0",
-    "in-publish": "^2.0.1",
-    "jackspeak": "=2.1.1",
-    "jscodeshift": "^17.3.0",
+    "ast-types-flow": "^0.0.8",
+    "eslint": "^6 || ^7 || ^8 || ^9 || ^10",
     "minimist": "^1.2.8",
     "mock-property": "^1.1.0",
-    "npmignore": "^0.3.1",
-    "object.assign": "^4.1.7",
-    "object.entries": "^1.1.9",
-    "rimraf": "^3.0.2",
-    "safe-publish-latest": "^2.0.0",
     "semver": "^6.3.1",
     "to-ast": "^1.0.0",
     "tsdown": "catalog:"
   },
   "peerDependencies": {
-    "eslint": "^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9"
+    "eslint": "^6 || ^7 || ^8 || ^9 || ^ 10"
   },
   "engines": {
     "node": ">=22"
