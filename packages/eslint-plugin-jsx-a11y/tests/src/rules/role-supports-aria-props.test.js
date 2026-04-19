@@ -30,10 +30,17 @@ const generateErrorMessage = (attr, role, tag, isImplicit) => {
   return `The attribute ${attr} is not supported by the role ${role}.`;
 };
 
-const errorMessage = (attr, role, tag, isImplicit) => ({
-  message: generateErrorMessage(attr, role, tag, isImplicit),
-  type: "JSXOpeningElement",
-});
+const errorMessage = (attr, role, tag, isImplicit) => {
+  const error = {
+    message: generateErrorMessage(attr, role, tag, isImplicit),
+  };
+
+  if (semver.lt(eslintVersion, "10")) {
+    error.type = "JSXOpeningElement";
+  }
+
+  return error;
+};
 
 const componentsSettings = {
   "jsx-a11y": {
