@@ -30,7 +30,7 @@ const errorMessage = (role) => {
   };
 
   if (eslintBefore10) {
-    error.type = "JSXOpeningElement";
+    error.type = "JSXAttribute";
   }
 
   return error;
