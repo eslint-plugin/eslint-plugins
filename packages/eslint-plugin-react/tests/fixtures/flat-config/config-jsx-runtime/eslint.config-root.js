@@ -1,6 +1,6 @@
 'use strict';
 
-const reactPlugin = require('../../../..');
+const reactPlugin = require('../../../../src/index');
 
 module.exports = [
   {

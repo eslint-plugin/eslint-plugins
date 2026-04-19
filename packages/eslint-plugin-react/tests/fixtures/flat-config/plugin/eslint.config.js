@@ -1,6 +1,6 @@
 'use strict';
 
-const react = require('../../../..');
+const react = require('../../../../src/index');
 
 module.exports = [{
   files: ['**/*.jsx'],

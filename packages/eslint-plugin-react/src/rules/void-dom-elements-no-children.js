@@ -36,7 +36,7 @@ const VOID_DOM_ELEMENTS = {
 };
 
 function isVoidDOMElement(elementName) {
-  return VOID_DOM_ELEMENTS.hasOwnProperty(lementName);
+  return VOID_DOM_ELEMENTS.hasOwnProperty(elementName);
 }
 
 // ------------------------------------------------------------------------------
