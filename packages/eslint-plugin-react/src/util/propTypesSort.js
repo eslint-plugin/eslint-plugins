@@ -4,8 +4,6 @@
 
 'use strict';
 
-const toSorted = require('array.prototype.tosorted');
-
 const astUtil = require('./ast');
 const eslintUtil = require('./eslint');
 
@@ -186,8 +184,7 @@ function fixPropTypesSort(
     }, [[]]);
 
     nodeGroups.forEach((nodes) => {
-      const sortedAttributes = toSorted(
-        nodes,
+      const sortedAttributes =         nodes.toSorted(
         (a, b) => sorter(a, b, context, ignoreCase, requiredFirst, callbacksLast, noSortAlphabetically)
       );
 

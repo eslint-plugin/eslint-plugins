@@ -5,8 +5,7 @@
 
 'use strict';
 
-const ASTUtils = require('jsx-ast-utils');
-const flatMap = require('array.prototype.flatmap');
+const { elementType } = require('@eslintplugin/jsx-ast-utils');
 const isCreateElement = require('../util/isCreateElement');
 const report = require('../util/report');
 const docsUrl = require('../util/docsUrl');
@@ -30,8 +29,8 @@ const defaultOptions = {
  */
 function extractTargetProps(properties, keyName) {
   return new Set(
-    flatMap(
-      properties,
+    
+      properties.flatMap(
       (prop) => (
         prop[keyName] && targetPropSet.has(prop[keyName].name)
           ? [prop[keyName].name]
@@ -108,7 +107,7 @@ module.exports = {
 
     return {
       JSXOpeningElement(node) {
-        if (ASTUtils.elementType(node) !== 'input') {
+        if (elementType(node) !== 'input') {
           return;
         }
 

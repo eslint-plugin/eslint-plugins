@@ -5,8 +5,6 @@
 
 'use strict';
 
-const repeat = require('string.prototype.repeat');
-
 const astUtil = require('../util/ast');
 const docsUrl = require('../util/docsUrl');
 const getSourceCode = require('../util/eslint').getSourceCode;
@@ -116,8 +114,8 @@ module.exports = {
         node,
         loc: node.loc,
         fix(fixer) {
-          const indent = repeat(
-            ' ',
+          const indent = 
+            ' '.repeat(
             getIndentation(openingStartOfLine, opening)
           );
 

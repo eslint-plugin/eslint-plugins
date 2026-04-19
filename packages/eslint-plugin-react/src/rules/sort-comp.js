@@ -5,9 +5,6 @@
 
 'use strict';
 
-const values = require('object.values');
-const arrayIncludes = require('array-includes');
-
 const Components = require('../util/Components');
 const astUtil = require('../util/ast');
 const docsUrl = require('../util/docsUrl');
@@ -169,7 +166,7 @@ module.exports = {
           if (method.instanceMethod) {
             methodGroupIndexes.push(groupIndex);
           }
-        } else if (arrayIncludes([
+        } else if ([
           'displayName',
           'propTypes',
           'contextTypes',
@@ -196,7 +193,7 @@ module.exports = {
           'componentDidCatch',
           'componentWillUnmount',
           'render',
-        ], currentGroup)) {
+        ].includes(currentGroup)) {
           if (currentGroup === method.name) {
             methodGroupIndexes.push(groupIndex);
           }
@@ -433,7 +430,7 @@ module.exports = {
 
     return {
       'Program:exit'() {
-        values(components.list()).forEach((component) => {
+        Object.values(components.list()).forEach((component) => {
           const properties = astUtil.getComponentProperties(component.node);
           checkPropsOrder(properties);
         });

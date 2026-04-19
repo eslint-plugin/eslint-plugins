@@ -7,7 +7,7 @@
 
 'use strict';
 
-const propName = require('jsx-ast-utils/propName');
+const { propName } = require('@eslintplugin/jsx-ast-utils');
 const docsUrl = require('../util/docsUrl');
 const astUtil = require('../util/ast');
 const jsxUtil = require('../util/jsx');

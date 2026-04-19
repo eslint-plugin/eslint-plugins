@@ -46,5 +46,8 @@
   },
   "engines": {
     "node": ">=22"
+  },
+  "inlinedDependencies": {
+    "eslint": "9.39.4"
   }
 }

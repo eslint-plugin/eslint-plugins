@@ -5,9 +5,6 @@
 
 'use strict';
 
-const find = require('es-iterator-helpers/Iterator.prototype.find');
-const from = require('es-iterator-helpers/Iterator.from');
-
 const getText = require('../util/eslint').getText;
 const docsUrl = require('../util/docsUrl');
 const report = require('../util/report');
@@ -165,7 +162,7 @@ module.exports = {
   create(context) {
     const config = context.options[0] || {};
     const validStrategies = new Set(config.validStrategies || DEFAULT_VALID_STRATEGIES);
-    const fixStrategy = find(from(validStrategies), () => true);
+    const fixStrategy = Array.from(validStrategies).find(() => true);
 
     return {
       'JSXExpressionContainer > LogicalExpression[operator="&&"]'(node) {

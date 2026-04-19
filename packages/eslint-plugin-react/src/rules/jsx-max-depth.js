@@ -5,7 +5,6 @@
 
 'use strict';
 
-const includes = require('array-includes');
 const variableUtil = require('../util/variable');
 const jsxUtil = require('../util/jsx');
 const docsUrl = require('../util/docsUrl');
@@ -105,7 +104,7 @@ module.exports = {
 
       const variable = variableUtil.getVariableFromContext(context, startNode, name);
       if (variable && variable.references) {
-        const containDuplicates = previousReferences.some((ref) => includes(variable.references, ref));
+        const containDuplicates = previousReferences.some((ref) => variable.references.includes(ref));
 
         // Prevent getting stuck in circular references
         if (containDuplicates) {

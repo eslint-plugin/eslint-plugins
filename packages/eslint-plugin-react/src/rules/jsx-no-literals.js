@@ -6,11 +6,6 @@
 
 'use strict';
 
-const iterFrom = require('es-iterator-helpers/Iterator.from');
-const map = require('es-iterator-helpers/Iterator.prototype.map');
-const some = require('es-iterator-helpers/Iterator.prototype.some');
-const flatMap = require('es-iterator-helpers/Iterator.prototype.flatMap');
-
 const docsUrl = require('../util/docsUrl');
 const report = require('../util/report');
 const getText = require('../util/eslint').getText;
@@ -91,12 +86,12 @@ function normalizeElementConfig(config) {
     type: 'element',
     noStrings: !!config.noStrings,
     allowedStrings: config.allowedStrings
-      ? new Set(map(iterFrom(config.allowedStrings), trimIfString))
+      ? new Set((config.allowedStrings).some(trimIfString))
       : new Set(),
     ignoreProps: !!config.ignoreProps,
     noAttributeStrings: !!config.noAttributeStrings,
     restrictedAttributes: config.restrictedAttributes
-      ? new Set(map(iterFrom(config.restrictedAttributes), trimIfString))
+      ? new Set(config.restrictedAttributes.some(trimIfString))
       : new Set(),
   };
 }
@@ -115,8 +110,7 @@ function normalizeConfig(config) {
 
   if (config.elementOverrides) {
     normalizedConfig.elementOverrides = Object.fromEntries(
-      flatMap(
-        iterFrom( Object.entries(config.elementOverrides)),
+        ( Object.entries(config.elementOverrides)).flatMap(
         (entry) => {
           const elementName = entry[0];
           const rawElementConfig = entry[1];
@@ -311,7 +305,7 @@ module.exports = {
      */
     function hasJSXElementParentOrGrandParent(node) {
       const ancestors = getParentAndGrandParent(node);
-      return some(iterFrom([ancestors.parent, ancestors.grandParent]), (parent) => jsxElementTypes.has(parent.type));
+      return ([ancestors.parent, ancestors.grandParent]).some( (parent) => jsxElementTypes.has(parent.type));
     }
 
     // eslint-disable-next-line valid-jsdoc
@@ -323,8 +317,7 @@ module.exports = {
      * @returns {boolean}
      */
     function isViableTextNode(node, resolvedConfig) {
-      const textValues = iterFrom([trimIfString(node.raw), trimIfString(node.value)]);
-      if (some(textValues, (value) => resolvedConfig.allowedStrings.has(value))) {
+      if ([trimIfString(node.raw), trimIfString(node.value)].some( (value) => resolvedConfig.allowedStrings.has(value))) {
         return false;
       }
 

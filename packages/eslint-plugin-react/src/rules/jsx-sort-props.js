@@ -5,9 +5,7 @@
 
 'use strict';
 
-const propName = require('jsx-ast-utils/propName');
-const includes = require('array-includes');
-const toSorted = require('array.prototype.tosorted');
+const { propName } = require('@eslintplugin/jsx-ast-utils');
 
 const docsUrl = require('../util/docsUrl');
 const jsxUtil = require('../util/jsx');
@@ -273,7 +271,7 @@ function generateFixerFunction(node, context, reservedList) {
   const sortableAttributeGroups = getGroupsOfSortableAttributes(attributes, context);
   const sortedAttributeGroups = sortableAttributeGroups
     .slice(0)
-    .map((group) => toSorted(group, (a, b) => contextCompare(a, b, options)));
+    .map((group) => group.toSorted((a, b) => contextCompare(a, b, options)));
 
   return function fixFunction(fixer) {
     const fixers = [];
@@ -356,7 +354,7 @@ const reportedNodeAttributes = new WeakMap();
 function reportNodeAttribute(nodeAttribute, errorType, node, context, reservedList) {
   const errors = reportedNodeAttributes.get(nodeAttribute) || [];
 
-  if (includes(errors, errorType)) {
+  if (errors.includes(errorType)) {
     return;
   }
 

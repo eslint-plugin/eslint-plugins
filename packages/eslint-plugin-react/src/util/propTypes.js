@@ -4,8 +4,6 @@
 
 'use strict';
 
-const flatMap = require('array.prototype.flatmap');
-
 const annotations = require('./annotations');
 const propsUtil = require('./props');
 const variableUtil = require('./variable');
@@ -699,8 +697,8 @@ module.exports = function propTypesInstructions(context, components, utils) {
        */
       const candidateTypes = this.sourceCode.ast.body.filter((item) => astUtil.isTSTypeDeclaration(item));
 
-      const declarations = flatMap(
-        candidateTypes,
+      const declarations = 
+        candidateTypes.flatMap(
         (type) => (
           type.declarations
           || (

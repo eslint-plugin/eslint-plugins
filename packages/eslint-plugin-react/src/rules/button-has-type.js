@@ -5,8 +5,7 @@
 
 'use strict';
 
-const getProp = require('jsx-ast-utils/getProp');
-const getLiteralPropValue = require('jsx-ast-utils/getLiteralPropValue');
+const { getProp,  getLiteralPropValue } = require('@eslintplugin/jsx-ast-utils');
 const docsUrl = require('../util/docsUrl');
 const isCreateElement = require('../util/isCreateElement');
 const report = require('../util/report');

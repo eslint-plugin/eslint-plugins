@@ -5,9 +5,7 @@
 
 'use strict';
 
-const hasProp = require('jsx-ast-utils/hasProp');
-const propName = require('jsx-ast-utils/propName');
-const values = require('object.values');
+const { hasProp,  propName } = require('@eslintplugin/jsx-ast-utils');
 const docsUrl = require('../util/docsUrl');
 const pragmaUtil = require('../util/pragma');
 const report = require('../util/report');
@@ -247,7 +245,7 @@ module.exports = {
         });
 
         if (warnOnDuplicates) {
-          values(map).filter((v) => v.length > 1).forEach((v) => {
+          Object.values(map).filter((v) => v.length > 1).forEach((v) => {
             v.forEach((n) => {
               if (!seen.has(n)) {
                 seen.add(n);

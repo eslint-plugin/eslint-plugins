@@ -5,7 +5,7 @@
 
 'use strict';
 
-const elementType = require('jsx-ast-utils/elementType');
+const { elementType } = require('@eslintplugin/jsx-ast-utils');
 const docsUrl = require('../util/docsUrl');
 const isCreateElement = require('../util/isCreateElement');
 const report = require('../util/report');

@@ -5,7 +5,7 @@
 
 'use strict';
 
-const elementType = require('jsx-ast-utils/elementType');
+const { elementType } = require('@eslintplugin/jsx-ast-utils');
 const minimatch = require('minimatch');
 const docsUrl = require('../util/docsUrl');
 const jsxUtil = require('../util/jsx');

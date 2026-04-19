@@ -5,11 +5,6 @@
 
 'use strict';
 
-const arrayIncludes = require('array-includes');
-const values = require('object.values');
-const iterFrom = require('es-iterator-helpers/Iterator.from');
-const map = require('es-iterator-helpers/Iterator.prototype.map');
-
 const variableUtil = require('./variable');
 const pragmaUtil = require('./pragma');
 const astUtil = require('./ast');
@@ -186,7 +181,7 @@ class Components {
    */
   length() {
     const list = Lists.get(this);
-    return values(list).filter((component) => component.confidence >= 2).length;
+    return Object.values(list).filter((component) => component.confidence >= 2).length;
   }
 
   /**
@@ -273,13 +268,11 @@ function mergeRules(rules) {
   });
 
   /** @type {{ [key: string]: Function }} */
-  return Object.fromEntries(map(iterFrom(handlersByKey), (entry) => [
-    entry[0],
+  return Object.fromEntries([...handlersByKey].map(([key, fns]) => [
+    key,
     function mergedHandler(node) {
-      entry[1].forEach((fn) => {
-        fn(node);
-      });
-    },
+      fns.forEach(fn => fn(node));
+    }
   ]));
 }
 
@@ -374,7 +367,7 @@ function componentRule(rule, context) {
      */
     getDetectedComponents() {
       const list = components.list();
-      return values(list).filter((val) => {
+      return Object.values(list).filter((val) => {
         if (val.node.type === 'ClassDeclaration') {
           return true;
         }
@@ -402,7 +395,7 @@ function componentRule(rule, context) {
     nodeWrapsComponent(node) {
       const childComponent = this.getNameOfWrappedComponent(node.arguments);
       const componentList = this.getDetectedComponents();
-      return !!childComponent && arrayIncludes(componentList, childComponent);
+      return !!childComponent && componentList.includes(childComponent);
     },
 
     isPragmaComponentWrapper(node) {
@@ -832,8 +825,7 @@ function componentRule(rule, context) {
         return true;
       }
 
-      return arrayIncludes(
-        expectedHookNames,
+      return expectedHookNames.includes(
         (reactHookImportNames && reactHookImportNames[localHookName]) || localHookName
       );
     },

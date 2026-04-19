@@ -5,8 +5,6 @@
 
 'use strict';
 
-const repeat = require('string.prototype.repeat');
-
 const docsUrl = require('../util/docsUrl');
 const getSourceCode = require('../util/eslint').getSourceCode;
 const report = require('../util/report');
@@ -184,7 +182,7 @@ module.exports = {
       }
       if (indentation.length + 1 < newColumn) {
         // Non-whitespace characters were included in the column offset
-        spaces = repeat(' ', +correctColumn - indentation.length);
+        spaces = ' '.repeat( +correctColumn - indentation.length);
       }
       return indentation + spaces;
     }

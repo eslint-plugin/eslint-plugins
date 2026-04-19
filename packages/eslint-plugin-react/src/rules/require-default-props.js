@@ -5,7 +5,6 @@
 
 'use strict';
 
-const values = require('object.values');
 const Components = require('../util/Components');
 const docsUrl = require('../util/docsUrl');
 const astUtil = require('../util/ast');
@@ -133,7 +132,7 @@ module.exports = {
       }
 
       if (props.type === 'Identifier') {
-        const hasOptionalProp = values(propTypes).some((propType) => !propType.isRequired);
+        const hasOptionalProp = Object.values(propTypes).some((propType) => !propType.isRequired);
         if (hasOptionalProp) {
           report(context, messages.destructureInSignature, 'destructureInSignature', {
             node: props,
@@ -174,7 +173,7 @@ module.exports = {
       'Program:exit'() {
         const list = components.list();
 
-        values(list).filter((component) => {
+        Object.values(list).filter((component) => {
           if (functions === 'ignore' && astUtil.isFunctionLike(component.node)) {
             return false;
           }
