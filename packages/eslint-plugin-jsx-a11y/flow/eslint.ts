@@ -1,5 +1,6 @@
 export type ESLintReport = {
-  node: any;
+  [key: string]: unknown;
+  node: unknown;
   message: string;
 };
 

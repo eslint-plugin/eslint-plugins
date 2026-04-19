@@ -1,4 +1,4 @@
-import test from "tape";
+import { describe, expect, it } from "bun:test";
 
 import {
   generateObjSchema,
@@ -6,22 +6,19 @@ import {
   enumArraySchema,
 } from "../../../src/util/schemas";
 
-test("schemas", (t) => {
-  t.test("should generate an object schema with correct properties", (st) => {
+describe("schemas", () => {
+  it("should generate an object schema with correct properties", () => {
     const schema = generateObjSchema({
       foo: "bar",
       baz: arraySchema,
     });
     const properties = schema.properties || {};
 
-    st.deepEqual(properties.foo, properties.foo, "bar");
-    st.deepEqual(properties.baz.type, "array");
-
-    st.end();
+    expect(properties.foo).toBe("bar");
+    expect(properties.baz.type).toBe("array");
   });
 
-  t.deepEqual(
-    enumArraySchema(),
+  expect(enumArraySchema()).toEqual(
     {
       additionalItems: false,
       items: {
@@ -34,6 +31,4 @@ test("schemas", (t) => {
     },
     "enumArraySchema works with no arguments",
   );
-
-  t.end();
 });

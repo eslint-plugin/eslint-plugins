@@ -1,5 +1,5 @@
-import { dom } from "aria-query";
 import { elementType } from "@eslintplugin/jsx-ast-utils";
+import { dom } from "aria-query";
 import test from "tape";
 
 import JSXElementMock from "../../../__mocks__/JSXElementMock";

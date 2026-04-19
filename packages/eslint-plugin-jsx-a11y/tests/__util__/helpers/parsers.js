@@ -7,7 +7,7 @@ let tsParserVersion;
 try {
   // eslint-disable-next-line import/no-unresolved, global-require
   tsParserVersion = require("@typescript-eslint/parser/package.json").version;
-} catch (e) {
+} catch {
   /**/
 }
 

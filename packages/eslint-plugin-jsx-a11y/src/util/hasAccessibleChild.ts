@@ -5,7 +5,7 @@ import isHiddenFromScreenReader from "./isHiddenFromScreenReader";
 
 export default function hasAccessibleChild(
   node: JSXElement,
-  elementType: (JSXOpeningElement) => string,
+  elementType: (e: JSXOpeningElement) => string,
 ): boolean {
   return (
     node.children.some((child: Node) => {

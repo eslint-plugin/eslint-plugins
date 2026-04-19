@@ -13,7 +13,7 @@ import {
 } from "@eslintplugin/jsx-ast-utils";
 import minimatch from "minimatch";
 
-function tryTrim(value: any) {
+function tryTrim(value: unknown) {
   return typeof value === "string" ? value.trim() : value;
 }
 

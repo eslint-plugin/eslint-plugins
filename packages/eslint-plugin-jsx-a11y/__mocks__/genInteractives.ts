@@ -115,7 +115,7 @@ const nonInteractiveElementsMap: { [string]: Array<{ [string]: string }> } = {
   ul: [],
 };
 
-const indeterminantInteractiveElementsMap: { [key: string]: Array<any> } =
+const indeterminantInteractiveElementsMap: { [key: string]: Array<unknown> } =
   Object.fromEntries(domElements.map((name) => [name, []]));
 
 Object.keys(interactiveElementsMap)
@@ -148,7 +148,7 @@ const nonInteractiveRoles = roleNames.filter(
     !["toolbar"].includes(role),
 );
 
-export function genElementSymbol(openingElement: Object): string {
+export function genElementSymbol(openingElement: unknown): string {
   return (
     openingElement.name.name +
     (openingElement.attributes.length > 0

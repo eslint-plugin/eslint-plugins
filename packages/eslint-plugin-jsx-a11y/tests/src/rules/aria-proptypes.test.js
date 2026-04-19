@@ -1,10 +1,8 @@
 import { it, expect } from "bun:test";
-
 /**
  * @fileoverview Enforce ARIA state and property values are valid.
  * @author Ethan Cohen
  */
-
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------

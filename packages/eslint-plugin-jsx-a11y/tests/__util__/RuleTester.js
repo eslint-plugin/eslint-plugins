@@ -1,5 +1,6 @@
-import { RuleTester } from "eslint";
 import { describe, expect, it } from "bun:test";
+
+import { RuleTester } from "eslint";
 
 const orig = RuleTester.prototype.run;
 RuleTester.prototype.run = function (name, rule, tests) {
