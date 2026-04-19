@@ -20,7 +20,6 @@
   },
   "scripts": {
     "build": "tsdown",
-    "test": "bun test --reporter dot",
     "prepublishOnly": "bun run build"
   },
   "dependencies": {
