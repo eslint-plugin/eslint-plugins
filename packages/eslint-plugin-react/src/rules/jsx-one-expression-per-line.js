@@ -3,12 +3,12 @@
  * @author Mark Ivan Allen <Vydia.com>
  */
 
-'use strict';
+"use strict";
 
-const docsUrl = require('../util/docsUrl');
-const eslintUtil = require('../util/eslint');
-const jsxUtil = require('../util/jsx');
-const report = require('../util/report');
+const docsUrl = require("../util/docsUrl");
+const eslintUtil = require("../util/eslint");
+const jsxUtil = require("../util/jsx");
+const report = require("../util/report");
 
 const getSourceCode = eslintUtil.getSourceCode;
 const getText = eslintUtil.getText;
@@ -18,32 +18,32 @@ const getText = eslintUtil.getText;
 // ------------------------------------------------------------------------------
 
 const optionDefaults = {
-  allow: 'none',
+  allow: "none",
 };
 
 const messages = {
-  moveToNewLine: '`{{descriptor}}` must be placed on a new line',
+  moveToNewLine: "`{{descriptor}}` must be placed on a new line",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Require one JSX element per line',
-      category: 'Stylistic Issues',
+      description: "Require one JSX element per line",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('jsx-one-expression-per-line'),
+      url: docsUrl("jsx-one-expression-per-line"),
     },
-    fixable: 'whitespace',
+    fixable: "whitespace",
 
     messages,
 
     schema: [
       {
-        type: 'object',
+        type: "object",
         properties: {
           allow: {
-            enum: ['none', 'literal', 'single-child', 'non-jsx'],
+            enum: ["none", "literal", "single-child", "non-jsx"],
           },
         },
         default: optionDefaults,
@@ -64,7 +64,9 @@ module.exports = {
      * @returns {string}
      */
     function nodeDescriptor(n) {
-      return n.openingElement ? n.openingElement.name.name : getText(context, n).replace(/\n/g, '');
+      return n.openingElement
+        ? n.openingElement.name.name
+        : getText(context, n).replace(/\n/g, "");
     }
 
     function handleJSX(node) {
@@ -75,8 +77,11 @@ module.exports = {
       }
 
       if (
-        options.allow === 'non-jsx'
-        && !children.find((child) => (child.type === 'JSXFragment' || child.type === 'JSXElement'))
+        options.allow === "non-jsx" &&
+        !children.find(
+          (child) =>
+            child.type === "JSXFragment" || child.type === "JSXElement",
+        )
       ) {
         return;
       }
@@ -91,15 +96,16 @@ module.exports = {
       if (children.length === 1) {
         const child = children[0];
         if (
-          openingElementStartLine === openingElementEndLine
-          && openingElementEndLine === closingElementStartLine
-          && closingElementStartLine === closingElementEndLine
-          && closingElementEndLine === child.loc.start.line
-          && child.loc.start.line === child.loc.end.line
+          openingElementStartLine === openingElementEndLine &&
+          openingElementEndLine === closingElementStartLine &&
+          closingElementStartLine === closingElementEndLine &&
+          closingElementEndLine === child.loc.start.line &&
+          child.loc.start.line === child.loc.end.line
         ) {
           if (
-            options.allow === 'single-child'
-            || (options.allow === 'literal' && (child.type === 'Literal' || child.type === 'JSXText'))
+            options.allow === "single-child" ||
+            (options.allow === "literal" &&
+              (child.type === "Literal" || child.type === "JSXText"))
           ) {
             return;
           }
@@ -113,12 +119,13 @@ module.exports = {
         let countNewLinesBeforeContent = 0;
         let countNewLinesAfterContent = 0;
 
-        if (child.type === 'Literal' || child.type === 'JSXText') {
+        if (child.type === "Literal" || child.type === "JSXText") {
           if (jsxUtil.isWhiteSpaces(child.raw)) {
             return;
           }
 
-          countNewLinesBeforeContent = (child.raw.match(/^\s*\n/g) || []).length;
+          countNewLinesBeforeContent = (child.raw.match(/^\s*\n/g) || [])
+            .length;
           countNewLinesAfterContent = (child.raw.match(/\n\s*$/g) || []).length;
         }
 
@@ -169,15 +176,23 @@ module.exports = {
           }
 
           function spaceBetweenPrev() {
-            return ((prevChild.type === 'Literal' || prevChild.type === 'JSXText') && / $/.test(prevChild.raw))
-              || ((child.type === 'Literal' || child.type === 'JSXText') && /^ /.test(child.raw))
-              || getSourceCode(context).isSpaceBetweenTokens(prevChild, child);
+            return (
+              ((prevChild.type === "Literal" || prevChild.type === "JSXText") &&
+                / $/.test(prevChild.raw)) ||
+              ((child.type === "Literal" || child.type === "JSXText") &&
+                /^ /.test(child.raw)) ||
+              getSourceCode(context).isSpaceBetweenTokens(prevChild, child)
+            );
           }
 
           function spaceBetweenNext() {
-            return ((nextChild.type === 'Literal' || nextChild.type === 'JSXText') && /^ /.test(nextChild.raw))
-              || ((child.type === 'Literal' || child.type === 'JSXText') && / $/.test(child.raw))
-              || getSourceCode(context).isSpaceBetweenTokens(child, nextChild);
+            return (
+              ((nextChild.type === "Literal" || nextChild.type === "JSXText") &&
+                /^ /.test(nextChild.raw)) ||
+              ((child.type === "Literal" || child.type === "JSXText") &&
+                / $/.test(child.raw)) ||
+              getSourceCode(context).isSpaceBetweenTokens(child, nextChild)
+            );
           }
 
           if (!prevChild && !nextChild) {
@@ -220,16 +235,16 @@ module.exports = {
 
         const nodeToReport = details.node;
         const descriptor = details.descriptor;
-        const source = details.source.replace(/(^ +| +(?=\n)*$)/g, '');
+        const source = details.source.replace(/(^ +| +(?=\n)*$)/g, "");
 
-        const leadingSpaceString = details.leadingSpace ? '\n{\' \'}' : '';
-        const trailingSpaceString = details.trailingSpace ? '{\' \'}\n' : '';
-        const leadingNewLineString = details.leadingNewLine ? '\n' : '';
-        const trailingNewLineString = details.trailingNewLine ? '\n' : '';
+        const leadingSpaceString = details.leadingSpace ? "\n{' '}" : "";
+        const trailingSpaceString = details.trailingSpace ? "{' '}\n" : "";
+        const leadingNewLineString = details.leadingNewLine ? "\n" : "";
+        const trailingNewLineString = details.trailingNewLine ? "\n" : "";
 
         const replaceText = `${leadingSpaceString}${leadingNewLineString}${source}${trailingNewLineString}${trailingSpaceString}`;
 
-        report(context, messages.moveToNewLine, 'moveToNewLine', {
+        report(context, messages.moveToNewLine, "moveToNewLine", {
           node: nodeToReport,
           data: {
             descriptor,

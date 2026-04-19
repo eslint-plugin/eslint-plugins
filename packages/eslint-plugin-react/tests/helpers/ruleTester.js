@@ -1,17 +1,19 @@
-'use strict';
+"use strict";
 
-const ESLintRuleTester = require('eslint').RuleTester;
-const semver = require('semver');
-const eslintPkg = require('eslint/package.json');
+const ESLintRuleTester = require("eslint").RuleTester;
+const semver = require("semver");
+const eslintPkg = require("eslint/package.json");
 
 // `item` can be a config passed to the constructor, or a test case object/string
 function convertToFlat(item, plugins) {
-  if (typeof item === 'string') {
+  if (typeof item === "string") {
     return item;
   }
 
-  if (typeof item !== 'object' || item === null) {
-    throw new TypeError('Invalid value for "item" option. Expected an object or a string.');
+  if (typeof item !== "object" || item === null) {
+    throw new TypeError(
+      'Invalid value for "item" option. Expected an object or a string.',
+    );
   }
 
   const newItem = Object.assign({}, item, { languageOptions: {} });
@@ -50,13 +52,18 @@ function convertToFlat(item, plugins) {
 let RuleTester = ESLintRuleTester;
 
 if (semver.major(eslintPkg.version) >= 9) {
-  const PLUGINS = Symbol('eslint-plugin-react plugins');
-  const RULE_DEFINER = Symbol.for('react.RuleTester.RuleDefiner');
+  const PLUGINS = Symbol("eslint-plugin-react plugins");
+  const RULE_DEFINER = Symbol.for("react.RuleTester.RuleDefiner");
 
   RuleTester = class extends ESLintRuleTester {
     constructor(config) {
-      if ((typeof config !== 'object' && typeof config !== 'undefined') || config === null) {
-        throw new TypeError('Invalid value for "config" option. Expected an object or undefined.');
+      if (
+        (typeof config !== "object" && typeof config !== "undefined") ||
+        config === null
+      ) {
+        throw new TypeError(
+          'Invalid value for "config" option. Expected an object or undefined.',
+        );
       }
 
       const newConfig = convertToFlat(config || {});
@@ -66,7 +73,7 @@ if (semver.major(eslintPkg.version) >= 9) {
       }
 
       if (!newConfig.languageOptions.sourceType) {
-        newConfig.languageOptions.sourceType = 'script'; // old default
+        newConfig.languageOptions.sourceType = "script"; // old default
       }
 
       super(newConfig);
@@ -77,10 +84,12 @@ if (semver.major(eslintPkg.version) >= 9) {
             this[PLUGINS] = {};
           }
 
-          const ruleIdSplit = ruleId.split('/');
+          const ruleIdSplit = ruleId.split("/");
 
           if (ruleIdSplit.length !== 2) {
-            throw new Error('ruleId should be in the format: plugin-name/rule-name');
+            throw new Error(
+              "ruleId should be in the format: plugin-name/rule-name",
+            );
           }
 
           const pluginName = ruleIdSplit[0];
@@ -98,7 +107,9 @@ if (semver.major(eslintPkg.version) >= 9) {
     run(ruleName, rule, tests) {
       const newTests = {
         valid: tests.valid.map((test) => convertToFlat(test, this[PLUGINS])),
-        invalid: tests.invalid.map((test) => convertToFlat(test, this[PLUGINS])),
+        invalid: tests.invalid.map((test) =>
+          convertToFlat(test, this[PLUGINS]),
+        ),
       };
 
       super.run(ruleName, rule, newTests);

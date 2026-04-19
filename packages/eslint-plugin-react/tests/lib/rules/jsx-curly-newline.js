@@ -2,20 +2,20 @@
  * @fileoverview enforce consistent line breaks inside jsx curly
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-curly-newline');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-curly-newline");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -25,24 +25,30 @@ const parserOptions = {
 // Tests
 // ------------------------------------------------------------------------------
 
-const LEFT_MISSING_ERROR = { messageId: 'expectedAfter', type: 'Punctuator' };
-const LEFT_UNEXPECTED_ERROR = { messageId: 'unexpectedAfter', type: 'Punctuator' };
-const RIGHT_MISSING_ERROR = { messageId: 'expectedBefore', type: 'Punctuator' };
-const RIGHT_UNEXPECTED_ERROR = { messageId: 'unexpectedBefore', type: 'Punctuator' };
+const LEFT_MISSING_ERROR = { messageId: "expectedAfter", type: "Punctuator" };
+const LEFT_UNEXPECTED_ERROR = {
+  messageId: "unexpectedAfter",
+  type: "Punctuator",
+};
+const RIGHT_MISSING_ERROR = { messageId: "expectedBefore", type: "Punctuator" };
+const RIGHT_UNEXPECTED_ERROR = {
+  messageId: "unexpectedBefore",
+  type: "Punctuator",
+};
 // const EXPECTED_BETWEEN = {messageId: 'expectedBetween', type: 'Identifier'};
 
-const CONSISTENT = ['consistent'];
-const NEVER = ['never'];
-const MULTILINE_REQUIRE = [{ singleline: 'consistent', multiline: 'require' }];
+const CONSISTENT = ["consistent"];
+const NEVER = ["never"];
+const MULTILINE_REQUIRE = [{ singleline: "consistent", multiline: "require" }];
 
 const ruleTester = new RuleTester({ parserOptions });
 
-ruleTester.run('jsx-curly-newline', rule, {
+ruleTester.run("jsx-curly-newline", rule, {
   valid: parsers.all([
     // consistent option (default)
     {
-      code: '<div>{foo}</div>',
-      options: ['consistent'],
+      code: "<div>{foo}</div>",
+      options: ["consistent"],
     },
 
     {
@@ -89,11 +95,11 @@ ruleTester.run('jsx-curly-newline', rule, {
 
     // {singleline: 'consistent', multiline: 'require'} option
     {
-      code: '<div>{foo}</div>',
+      code: "<div>{foo}</div>",
       options: MULTILINE_REQUIRE,
     },
     {
-      code: '<div foo={bar} />',
+      code: "<div foo={bar} />",
       options: MULTILINE_REQUIRE,
     },
     {
@@ -121,12 +127,12 @@ ruleTester.run('jsx-curly-newline', rule, {
     // never option
 
     {
-      code: '<div>{foo}</div>',
+      code: "<div>{foo}</div>",
       options: NEVER,
     },
 
     {
-      code: '<div foo={bar} />',
+      code: "<div foo={bar} />",
       options: NEVER,
     },
 
@@ -194,14 +200,14 @@ ruleTester.run('jsx-curly-newline', rule, {
 
     // {singleline: 'consistent', multiline: 'require'} option
     {
-      code: '<div>{foo\n}</div>',
-      output: '<div>{foo}</div>',
+      code: "<div>{foo\n}</div>",
+      output: "<div>{foo}</div>",
       errors: [RIGHT_UNEXPECTED_ERROR],
       options: MULTILINE_REQUIRE,
     },
     {
-      code: '<div>{\nfoo}</div>',
-      output: '<div>{\nfoo\n}</div>',
+      code: "<div>{\nfoo}</div>",
+      output: "<div>{\nfoo\n}</div>",
       errors: [RIGHT_MISSING_ERROR],
       options: MULTILINE_REQUIRE,
     },

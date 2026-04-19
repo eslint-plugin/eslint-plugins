@@ -3,13 +3,13 @@
  * @author Joe Lencioni
  */
 
-'use strict';
+"use strict";
 
-const astUtil = require('../util/ast');
-const docsUrl = require('../util/docsUrl');
-const pragma = require('../util/pragma');
-const report = require('../util/report');
-const variableUtil = require('../util/variable');
+const astUtil = require("../util/ast");
+const docsUrl = require("../util/docsUrl");
+const pragma = require("../util/pragma");
+const report = require("../util/report");
+const variableUtil = require("../util/variable");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
@@ -20,16 +20,21 @@ function isCreateCloneElement(node, context) {
     return false;
   }
 
-  if (node.type === 'MemberExpression' || node.type === 'OptionalMemberExpression') {
-    return node.object
-      && node.object.name === pragma.getFromContext(context)
-      && ['createElement', 'cloneElement'].indexOf(node.property.name) !== -1;
+  if (
+    node.type === "MemberExpression" ||
+    node.type === "OptionalMemberExpression"
+  ) {
+    return (
+      node.object &&
+      node.object.name === pragma.getFromContext(context) &&
+      ["createElement", "cloneElement"].indexOf(node.property.name) !== -1
+    );
   }
 
-  if (node.type === 'Identifier') {
+  if (node.type === "Identifier") {
     const variable = variableUtil.findVariableByName(context, node, node.name);
-    if (variable && variable.type === 'ImportSpecifier') {
-      return variable.parent.source.value === 'react';
+    if (variable && variable.type === "ImportSpecifier") {
+      return variable.parent.source.value === "react";
     }
   }
 
@@ -37,17 +42,17 @@ function isCreateCloneElement(node, context) {
 }
 
 const messages = {
-  noArrayIndex: 'Do not use Array index in keys',
+  noArrayIndex: "Do not use Array index in keys",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow usage of Array index in keys',
-      category: 'Best Practices',
+      description: "Disallow usage of Array index in keys",
+      category: "Best Practices",
       recommended: false,
-      url: docsUrl('no-array-index-key'),
+      url: docsUrl("no-array-index-key"),
     },
 
     messages,
@@ -74,30 +79,32 @@ module.exports = {
     };
 
     function isArrayIndex(node) {
-      return node.type === 'Identifier'
-        && indexParamNames.indexOf(node.name) !== -1;
+      return (
+        node.type === "Identifier" && indexParamNames.indexOf(node.name) !== -1
+      );
     }
 
     function isUsingReactChildren(node) {
       const callee = node.callee;
-      if (
-        !callee
-        || !callee.property
-        || !callee.object
-      ) {
+      if (!callee || !callee.property || !callee.object) {
         return null;
       }
 
-      const isReactChildMethod = ['map', 'forEach'].indexOf(callee.property.name) > -1;
+      const isReactChildMethod =
+        ["map", "forEach"].indexOf(callee.property.name) > -1;
       if (!isReactChildMethod) {
         return null;
       }
 
       const obj = callee.object;
-      if (obj && obj.name === 'Children') {
+      if (obj && obj.name === "Children") {
         return true;
       }
-      if (obj && obj.object && obj.object.name === pragma.getFromContext(context)) {
+      if (
+        obj &&
+        obj.object &&
+        obj.object.name === pragma.getFromContext(context)
+      ) {
         return true;
       }
 
@@ -106,17 +113,26 @@ module.exports = {
 
     function getMapIndexParamName(node) {
       const callee = node.callee;
-      if (callee.type !== 'MemberExpression' && callee.type !== 'OptionalMemberExpression') {
+      if (
+        callee.type !== "MemberExpression" &&
+        callee.type !== "OptionalMemberExpression"
+      ) {
         return null;
       }
-      if (callee.property.type !== 'Identifier') {
+      if (callee.property.type !== "Identifier") {
         return null;
       }
-      if (!iteratorFunctionsToIndexParamPosition.hasOwnProperty(callee.property.name)) {
+      if (
+        !iteratorFunctionsToIndexParamPosition.hasOwnProperty(
+          callee.property.name,
+        )
+      ) {
         return null;
       }
 
-      const name = /** @type {keyof iteratorFunctionsToIndexParamPosition} */ (callee.property.name);
+      const name = /** @type {keyof iteratorFunctionsToIndexParamPosition} */ (
+        callee.property.name
+      );
 
       const callbackArg = isUsingReactChildren(node)
         ? node.arguments[1]
@@ -141,11 +157,11 @@ module.exports = {
     }
 
     function getIdentifiersFromBinaryExpression(side) {
-      if (side.type === 'Identifier') {
+      if (side.type === "Identifier") {
         return side;
       }
 
-      if (side.type === 'BinaryExpression') {
+      if (side.type === "BinaryExpression") {
         // recurse
         const left = getIdentifiersFromBinaryExpression(side.left);
         const right = getIdentifiersFromBinaryExpression(side.right);
@@ -158,16 +174,16 @@ module.exports = {
     function checkPropValue(node) {
       if (isArrayIndex(node)) {
         // key={bar}
-        report(context, messages.noArrayIndex, 'noArrayIndex', {
+        report(context, messages.noArrayIndex, "noArrayIndex", {
           node,
         });
         return;
       }
 
-      if (node.type === 'TemplateLiteral') {
+      if (node.type === "TemplateLiteral") {
         // key={`foo-${bar}`}
         node.expressions.filter(isArrayIndex).forEach(() => {
-          report(context, messages.noArrayIndex, 'noArrayIndex', {
+          report(context, messages.noArrayIndex, "noArrayIndex", {
             node,
           });
         });
@@ -175,12 +191,12 @@ module.exports = {
         return;
       }
 
-      if (node.type === 'BinaryExpression') {
+      if (node.type === "BinaryExpression") {
         // key={'foo' + bar}
         const identifiers = getIdentifiersFromBinaryExpression(node);
 
         identifiers.filter(isArrayIndex).forEach(() => {
-          report(context, messages.noArrayIndex, 'noArrayIndex', {
+          report(context, messages.noArrayIndex, "noArrayIndex", {
             node,
           });
         });
@@ -189,33 +205,33 @@ module.exports = {
       }
 
       if (
-        astUtil.isCallExpression(node)
-        && node.callee
-        && node.callee.type === 'MemberExpression'
-        && node.callee.object
-        && isArrayIndex(node.callee.object)
-        && node.callee.property
-        && node.callee.property.type === 'Identifier'
-        && node.callee.property.name === 'toString'
+        astUtil.isCallExpression(node) &&
+        node.callee &&
+        node.callee.type === "MemberExpression" &&
+        node.callee.object &&
+        isArrayIndex(node.callee.object) &&
+        node.callee.property &&
+        node.callee.property.type === "Identifier" &&
+        node.callee.property.name === "toString"
       ) {
         // key={bar.toString()}
-        report(context, messages.noArrayIndex, 'noArrayIndex', {
+        report(context, messages.noArrayIndex, "noArrayIndex", {
           node,
         });
         return;
       }
 
       if (
-        astUtil.isCallExpression(node)
-        && node.callee
-        && node.callee.type === 'Identifier'
-        && node.callee.name === 'String'
-        && Array.isArray(node.arguments)
-        && node.arguments.length > 0
-        && isArrayIndex(node.arguments[0])
+        astUtil.isCallExpression(node) &&
+        node.callee &&
+        node.callee.type === "Identifier" &&
+        node.callee.name === "String" &&
+        Array.isArray(node.arguments) &&
+        node.arguments.length > 0 &&
+        isArrayIndex(node.arguments[0])
       ) {
         // key={String(bar)}
-        report(context, messages.noArrayIndex, 'noArrayIndex', {
+        report(context, messages.noArrayIndex, "noArrayIndex", {
           node: node.arguments[0],
         });
       }
@@ -231,8 +247,11 @@ module.exports = {
     }
 
     return {
-      'CallExpression, OptionalCallExpression'(node) {
-        if (isCreateCloneElement(node.callee, context) && node.arguments.length > 1) {
+      "CallExpression, OptionalCallExpression"(node) {
+        if (
+          isCreateCloneElement(node.callee, context) &&
+          node.arguments.length > 1
+        ) {
           // React.createElement
           if (!indexParamNames.length) {
             return;
@@ -240,12 +259,12 @@ module.exports = {
 
           const props = node.arguments[1];
 
-          if (props.type !== 'ObjectExpression') {
+          if (props.type !== "ObjectExpression") {
             return;
           }
 
           props.properties.forEach((prop) => {
-            if (!prop.key || prop.key.name !== 'key') {
+            if (!prop.key || prop.key.name !== "key") {
               // { ...foo }
               // { foo: bar }
               return;
@@ -266,7 +285,7 @@ module.exports = {
       },
 
       JSXAttribute(node) {
-        if (node.name.name !== 'key') {
+        if (node.name.name !== "key") {
           // foo={bar}
           return;
         }
@@ -277,7 +296,7 @@ module.exports = {
         }
 
         const value = node.value;
-        if (!value || value.type !== 'JSXExpressionContainer') {
+        if (!value || value.type !== "JSXExpressionContainer") {
           // key='foo' or just simply 'key'
           return;
         }
@@ -285,8 +304,8 @@ module.exports = {
         checkPropValue(value.expression);
       },
 
-      'CallExpression:exit': popIndex,
-      'OptionalCallExpression:exit': popIndex,
+      "CallExpression:exit": popIndex,
+      "OptionalCallExpression:exit": popIndex,
     };
   },
 };

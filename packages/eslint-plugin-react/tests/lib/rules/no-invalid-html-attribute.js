@@ -3,21 +3,21 @@
  * @author Kevin Miller
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const semver = require('semver');
-const eslintPkg = require('eslint/package.json');
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/no-invalid-html-attribute');
-const parsers = require('../../helpers/parsers');
+const semver = require("semver");
+const eslintPkg = require("eslint/package.json");
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/no-invalid-html-attribute");
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -29,7 +29,7 @@ const parserOptions = {
 
 const ruleTester = new RuleTester({ parserOptions });
 
-ruleTester.run('no-invalid-html-attribute', rule, {
+ruleTester.run("no-invalid-html-attribute", rule, {
   valid: parsers.all([
     { code: '<a rel="alternate"></a>' },
     { code: 'React.createElement("a", { rel: "alternate" })' },
@@ -202,12 +202,12 @@ ruleTester.run('no-invalid-html-attribute', rule, {
     { code: '<form rel="search"></form>' },
     { code: 'React.createElement("form", { rel: "search" })' },
     { code: 'React.createElement("form", { rel: ["search"] })' },
-    { code: '<form rel={callFoo()}></form>' },
+    { code: "<form rel={callFoo()}></form>" },
     { code: 'React.createElement("form", { rel: callFoo() })' },
     { code: 'React.createElement("form", { rel: [callFoo()] })' },
     { code: '<a rel={{a: "noreferrer"}["a"]}></a>' },
     { code: '<a rel={{a: "noreferrer"}["b"]}></a>' },
-    { code: '<Foo rel></Foo>' },
+    { code: "<Foo rel></Foo>" },
     { code: 'React.createElement("Foo", { rel: true })' },
     {
       code: `
@@ -242,1714 +242,1726 @@ ruleTester.run('no-invalid-html-attribute', rule, {
       code: '<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#fff" />',
     },
   ]),
-  invalid: parsers.all([].concat(
-    {
-      code: '<a rel="alternatex"></a>',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            attributeName: 'rel',
-            reportingValue: 'alternatex',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'alternatex' },
-              output: '<a rel=""></a>',
+  invalid: parsers.all(
+    [].concat(
+      {
+        code: '<a rel="alternatex"></a>',
+        errors: [
+          {
+            messageId: "neverValid",
+            data: {
+              attributeName: "rel",
+              reportingValue: "alternatex",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: 'React.createElement("a", { rel: "alternatex" })',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            attributeName: 'rel',
-            reportingValue: 'alternatex',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'alternatex' },
-              output: 'React.createElement("a", { rel: "" })',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: 'React.createElement("a", { rel: ["alternatex"] })',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            reportingValue: 'alternatex',
-            attributeName: 'rel',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'alternatex' },
-              output: 'React.createElement("a", { rel: [""] })',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="alternatex alternate"></a>',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            attributeName: 'rel',
-            reportingValue: 'alternatex',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'alternatex' },
-              output: '<a rel=" alternate"></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: 'React.createElement("a", { rel: "alternatex alternate" })',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            attributeName: 'rel',
-            reportingValue: 'alternatex alternate',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'alternatex alternate' },
-              output: 'React.createElement("a", { rel: "" })',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: 'React.createElement("a", { rel: ["alternatex alternate"] })',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            reportingValue: 'alternatex alternate',
-            attributeName: 'rel',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'alternatex alternate' },
-              output: 'React.createElement("a", { rel: [""] })',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="alternate alternatex"></a>',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            reportingValue: 'alternatex',
-            attributeName: 'rel',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'alternatex' },
-              output: '<a rel="alternate "></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: 'React.createElement("a", { rel: "alternate alternatex" })',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            reportingValue: 'alternate alternatex',
-            attributeName: 'rel',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'alternate alternatex' },
-              output: 'React.createElement("a", { rel: "" })',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: 'React.createElement("a", { rel: ["alternate alternatex"] })',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            reportingValue: 'alternate alternatex',
-            attributeName: 'rel',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'alternate alternatex' },
-              output: 'React.createElement("a", { rel: [""] })',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<html rel></html>',
-      errors: [
-        {
-          messageId: 'onlyMeaningfulFor',
-          data: {
-            attributeName: 'rel',
-            tagNames: '"<link>", "<a>", "<area>", "<form>"',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveDefault',
-              data: { attributeName: 'rel' },
-              output: '<html ></html>',
-            },
-          ],
-          type: 'JSXIdentifier',
-        },
-      ],
-    },
-    {
-      code: 'React.createElement("html", { rel: 1 })',
-      errors: [
-        {
-          messageId: 'onlyMeaningfulFor',
-          data: {
-            attributeName: 'rel',
-            tagNames: '"<link>", "<a>", "<area>", "<form>"',
-          },
-          // suggestions: [
-          //   {
-          //     messageId: 'suggestRemoveDefault',
-          //     data: { attributeName: 'rel' },
-          //     output: 'React.createElement("html", { })',
-          //   },
-          // ],
-          column: 31,
-          type: 'Identifier',
-        },
-      ],
-    },
-    {
-      code: '<a rel></a>',
-      errors: [
-        {
-          messageId: 'emptyIsMeaningless',
-          data: { attributeName: 'rel' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveEmpty',
-              data: { attributeName: 'rel' },
-              output: '<a ></a>',
-            },
-          ],
-          type: 'JSXIdentifier',
-        },
-      ],
-    },
-    {
-      code: 'React.createElement("a", { rel: 1 })',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            attributeName: 'rel',
-            reportingValue: 1,
-          },
-
-          // FIXME: this suggestion produces invalid code
-          // In ESLint > 9, RuleTester doesn't allow suggestions with parsing errors.
-          suggestions: semver.major(eslintPkg.version) < 9
-            ? [
+            suggestions: [
               {
-                messageId: 'suggestRemoveInvalid',
-                data: { reportingValue: '1' },
-                output: 'React.createElement("a", { rel:  })',
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "alternatex" },
+                output: '<a rel=""></a>',
               },
-            ]
-            : 1,
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: 'React.createElement("a", { rel: "alternatex" })',
+        errors: [
+          {
+            messageId: "neverValid",
+            data: {
+              attributeName: "rel",
+              reportingValue: "alternatex",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "alternatex" },
+                output: 'React.createElement("a", { rel: "" })',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: 'React.createElement("a", { rel: ["alternatex"] })',
+        errors: [
+          {
+            messageId: "neverValid",
+            data: {
+              reportingValue: "alternatex",
+              attributeName: "rel",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "alternatex" },
+                output: 'React.createElement("a", { rel: [""] })',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<a rel="alternatex alternate"></a>',
+        errors: [
+          {
+            messageId: "neverValid",
+            data: {
+              attributeName: "rel",
+              reportingValue: "alternatex",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "alternatex" },
+                output: '<a rel=" alternate"></a>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: 'React.createElement("a", { rel: "alternatex alternate" })',
+        errors: [
+          {
+            messageId: "neverValid",
+            data: {
+              attributeName: "rel",
+              reportingValue: "alternatex alternate",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "alternatex alternate" },
+                output: 'React.createElement("a", { rel: "" })',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: 'React.createElement("a", { rel: ["alternatex alternate"] })',
+        errors: [
+          {
+            messageId: "neverValid",
+            data: {
+              reportingValue: "alternatex alternate",
+              attributeName: "rel",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "alternatex alternate" },
+                output: 'React.createElement("a", { rel: [""] })',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<a rel="alternate alternatex"></a>',
+        errors: [
+          {
+            messageId: "neverValid",
+            data: {
+              reportingValue: "alternatex",
+              attributeName: "rel",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "alternatex" },
+                output: '<a rel="alternate "></a>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: 'React.createElement("a", { rel: "alternate alternatex" })',
+        errors: [
+          {
+            messageId: "neverValid",
+            data: {
+              reportingValue: "alternate alternatex",
+              attributeName: "rel",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "alternate alternatex" },
+                output: 'React.createElement("a", { rel: "" })',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: 'React.createElement("a", { rel: ["alternate alternatex"] })',
+        errors: [
+          {
+            messageId: "neverValid",
+            data: {
+              reportingValue: "alternate alternatex",
+              attributeName: "rel",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "alternate alternatex" },
+                output: 'React.createElement("a", { rel: [""] })',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: "<html rel></html>",
+        errors: [
+          {
+            messageId: "onlyMeaningfulFor",
+            data: {
+              attributeName: "rel",
+              tagNames: '"<link>", "<a>", "<area>", "<form>"',
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveDefault",
+                data: { attributeName: "rel" },
+                output: "<html ></html>",
+              },
+            ],
+            type: "JSXIdentifier",
+          },
+        ],
+      },
+      {
+        code: 'React.createElement("html", { rel: 1 })',
+        errors: [
+          {
+            messageId: "onlyMeaningfulFor",
+            data: {
+              attributeName: "rel",
+              tagNames: '"<link>", "<a>", "<area>", "<form>"',
+            },
+            // suggestions: [
+            //   {
+            //     messageId: 'suggestRemoveDefault',
+            //     data: { attributeName: 'rel' },
+            //     output: 'React.createElement("html", { })',
+            //   },
+            // ],
+            column: 31,
+            type: "Identifier",
+          },
+        ],
+      },
+      {
+        code: "<a rel></a>",
+        errors: [
+          {
+            messageId: "emptyIsMeaningless",
+            data: { attributeName: "rel" },
+            suggestions: [
+              {
+                messageId: "suggestRemoveEmpty",
+                data: { attributeName: "rel" },
+                output: "<a ></a>",
+              },
+            ],
+            type: "JSXIdentifier",
+          },
+        ],
+      },
+      {
+        code: 'React.createElement("a", { rel: 1 })',
+        errors: [
+          {
+            messageId: "neverValid",
+            data: {
+              attributeName: "rel",
+              reportingValue: 1,
+            },
 
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: 'React.createElement("a", { rel() { return 1; } })',
-      errors: [
-        {
-          messageId: 'noMethod',
-          data: { attributeName: 'rel' },
-          type: 'Property',
-        },
-      ],
-    },
-    {
-      code: '<span rel></span>',
-      errors: [
-        {
-          messageId: 'onlyMeaningfulFor',
-          data: {
-            attributeName: 'rel',
-            tagNames: '"<link>", "<a>", "<area>", "<form>"',
+            // FIXME: this suggestion produces invalid code
+            // In ESLint > 9, RuleTester doesn't allow suggestions with parsing errors.
+            suggestions:
+              semver.major(eslintPkg.version) < 9
+                ? [
+                    {
+                      messageId: "suggestRemoveInvalid",
+                      data: { reportingValue: "1" },
+                      output: 'React.createElement("a", { rel:  })',
+                    },
+                  ]
+                : 1,
+
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveDefault',
-              data: { attributeName: 'rel' },
-              output: '<span ></span>',
-            },
-          ],
-          type: 'JSXIdentifier',
-        },
-      ],
-    },
-    {
-      code: '<a rel={null}></a>',
-      errors: [
-        {
-          messageId: 'onlyStrings',
-          data: { attributeName: 'rel' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveNonString',
-              data: { attributeName: 'rel' },
-              output: '<a ></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel={5}></a>',
-      errors: [
-        {
-          messageId: 'onlyStrings',
-          data: { attributeName: 'rel' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveNonString',
-              data: { attributeName: 'rel' },
-              output: '<a ></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel={true}></a>',
-      errors: [
-        {
-          messageId: 'onlyStrings',
-          data: { attributeName: 'rel', reportingValue: 'true' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveNonString',
-              data: { attributeName: 'rel', reportingValue: 'true' },
-              output: '<a ></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel={{}}></a>',
-      errors: [
-        {
-          messageId: 'onlyStrings',
-          data: { attributeName: 'rel' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveDefault',
-              data: { attributeName: 'rel' },
-              output: '<a ></a>',
-            },
-          ],
-          type: 'JSXExpressionContainer',
-        },
-      ],
-    },
-    {
-      code: '<a rel={undefined}></a>',
-      errors: [
-        {
-          messageId: 'onlyStrings',
-          data: { attributeName: 'rel' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveDefault',
-              data: { attributeName: 'rel' },
-              output: '<a ></a>',
-            },
-          ],
-          type: 'JSXExpressionContainer',
-        },
-      ],
-    },
-    {
-      code: '<a rel="noreferrer noopener foobar"></a>',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            attributeName: 'rel',
-            reportingValue: 'foobar',
+        ],
+      },
+      {
+        code: 'React.createElement("a", { rel() { return 1; } })',
+        errors: [
+          {
+            messageId: "noMethod",
+            data: { attributeName: "rel" },
+            type: "Property",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'foobar' },
-              output: '<a rel="noreferrer noopener "></a>',
+        ],
+      },
+      {
+        code: "<span rel></span>",
+        errors: [
+          {
+            messageId: "onlyMeaningfulFor",
+            data: {
+              attributeName: "rel",
+              tagNames: '"<link>", "<a>", "<area>", "<form>"',
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="noreferrer noopener   "></a>',
-      errors: [
-        {
-          messageId: 'spaceDelimited',
-          data: { attributeName: 'rel' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveWhitespaces',
-              data: { attributeName: 'rel' },
-              output: '<a rel="noreferrer noopener"></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="noreferrer        noopener"></a>',
-      errors: [
-        {
-          messageId: 'spaceDelimited',
-          data: { attributeName: 'rel' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveWhitespaces',
-              data: { attributeName: 'rel' },
-              output: '<a rel="noreferrer noopener"></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="noreferrer\xa0\xa0noopener"></a>',
-      errors: [
-        {
-          messageId: 'spaceDelimited',
-          data: { attributeName: 'rel' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveWhitespaces',
-              data: { attributeName: 'rel' },
-              output: '<a rel="noreferrer noopener"></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel={"noreferrer noopener foobar"}></a>',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            reportingValue: 'foobar',
-            attributeName: 'rel',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'foobar' },
-              output: '<a rel={"noreferrer noopener "}></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: 'React.createElement("a", { rel: ["noreferrer", "noopener", "foobar" ] })',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            reportingValue: 'foobar',
-            attributeName: 'rel',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'foobar' },
-              output: 'React.createElement("a", { rel: ["noreferrer", "noopener", "" ] })',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel={"foobar noreferrer noopener"}></a>',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            reportingValue: 'foobar',
-            attributeName: 'rel',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'foobar' },
-              output: '<a rel={" noreferrer noopener"}></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    parsers.skipDueToMultiErrorSorting ? [] : {
-      code: '<a rel={"foobar batgo       noopener"}></a>',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            reportingValue: 'foobar',
-            attributeName: 'rel',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'foobar' },
-              output: '<a rel={" batgo       noopener"}></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-        {
-          messageId: 'neverValid',
-          data: {
-            reportingValue: 'batgo',
-            attributeName: 'rel',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'batgo' },
-              output: '<a rel={"foobar        noopener"}></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-        {
-          messageId: 'spaceDelimited',
-          data: { attributeName: 'rel' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveWhitespaces',
-              data: { attributeName: 'rel' },
-              output: '<a rel={"foobar batgo noopener"}></a>',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      code: '<a rel={"        noopener"}></a>',
-      errors: [
-        {
-          messageId: 'spaceDelimited',
-          data: { attributeName: 'rel' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveWhitespaces',
-              data: { attributeName: 'rel' },
-              output: '<a rel={"noopener"}></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel={"noopener        "}></a>',
-      errors: [
-        {
-          messageId: 'spaceDelimited',
-          data: { attributeName: 'rel' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveWhitespaces',
-              data: { attributeName: 'rel' },
-              output: '<a rel={"noopener"}></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    parsers.skipDueToMultiErrorSorting ? [] : {
-      code: '<a rel={" batgo noopener"}></a>',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            reportingValue: 'batgo',
-            attributeName: 'rel',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'batgo' },
-              output: '<a rel={"  noopener"}></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-        {
-          messageId: 'spaceDelimited',
-          data: { attributeName: 'rel' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveWhitespaces',
-              data: { attributeName: 'rel' },
-              output: '<a rel={"batgo noopener"}></a>',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      code: '<a rel={"batgo noopener"}></a>',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            reportingValue: 'batgo',
-            attributeName: 'rel',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'batgo' },
-              output: '<a rel={" noopener"}></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel={" noopener"}></a>',
-      errors: [
-        {
-          messageId: 'spaceDelimited',
-          data: { attributeName: 'rel' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveWhitespaces',
-              data: { attributeName: 'rel' },
-              output: '<a rel={"noopener"}></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="canonical"></a>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'canonical',
-            attributeName: 'rel',
-            elementName: 'a',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'canonical' },
-              output: '<a rel=""></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="dns-prefetch"></a>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'dns-prefetch',
-            attributeName: 'rel',
-            elementName: 'a',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'dns-prefetch' },
-              output: '<a rel=""></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="icon"></a>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'icon',
-            attributeName: 'rel',
-            elementName: 'a',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'icon' },
-              output: '<a rel=""></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<link rel="shortcut"></link>',
-      errors: [
-        {
-          messageId: 'notAlone',
-          data: {
-            reportingValue: 'shortcut',
-            missingValue: 'icon',
-          },
-          type: 'Literal',
-        },
-      ],
-    },
-    parsers.skipDueToMultiErrorSorting ? [] : {
-      code: '<link rel="shortcut foo"></link>',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            attributeName: 'rel',
-            reportingValue: 'foo',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: {
-                attributeName: 'rel',
-                reportingValue: 'foo',
+            suggestions: [
+              {
+                messageId: "suggestRemoveDefault",
+                data: { attributeName: "rel" },
+                output: "<span ></span>",
               },
-              output: '<link rel="shortcut "></link>',
-            },
-          ],
-          type: 'Literal',
-        },
-        {
-          messageId: 'notPaired',
-          data: {
-            reportingValue: 'shortcut',
-            secondValue: 'foo',
-            missingValue: 'icon',
+            ],
+            type: "JSXIdentifier",
           },
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<link rel="shortcut  icon"></link>',
-      errors: [
-        {
-          messageId: 'spaceDelimited',
-          data: { attributeName: 'rel' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveWhitespaces',
-              data: { attributeName: 'rel' },
-              output: '<link rel="shortcut icon"></link>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    parsers.skipDueToMultiErrorSorting ? [] : {
-      code: '<link rel="shortcut  foo"></link>',
-      errors: [
-        {
-          messageId: 'neverValid',
-          data: {
-            attributeName: 'rel',
-            reportingValue: 'foo',
-          },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: {
-                attributeName: 'rel',
-                reportingValue: 'foo',
+        ],
+      },
+      {
+        code: "<a rel={null}></a>",
+        errors: [
+          {
+            messageId: "onlyStrings",
+            data: { attributeName: "rel" },
+            suggestions: [
+              {
+                messageId: "suggestRemoveNonString",
+                data: { attributeName: "rel" },
+                output: "<a ></a>",
               },
-              output: '<link rel="shortcut  "></link>',
-            },
-          ],
-          type: 'Literal',
-        },
-        {
-          messageId: 'notAlone',
-          data: {
-            attributeName: 'rel',
-            reportingValue: 'shortcut',
-            missingValue: 'icon',
+            ],
+            type: "Literal",
           },
-        },
-        {
-          messageId: 'spaceDelimited',
-          data: { attributeName: 'rel' },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveWhitespaces',
-              data: { attributeName: 'rel' },
-              output: '<link rel="shortcut foo"></link>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="manifest"></a>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'manifest',
-            attributeName: 'rel',
-            elementName: 'a',
+        ],
+      },
+      {
+        code: "<a rel={5}></a>",
+        errors: [
+          {
+            messageId: "onlyStrings",
+            data: { attributeName: "rel" },
+            suggestions: [
+              {
+                messageId: "suggestRemoveNonString",
+                data: { attributeName: "rel" },
+                output: "<a ></a>",
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'manifest' },
-              output: '<a rel=""></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="modulepreload"></a>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'modulepreload',
-            attributeName: 'rel',
-            elementName: 'a',
+        ],
+      },
+      {
+        code: "<a rel={true}></a>",
+        errors: [
+          {
+            messageId: "onlyStrings",
+            data: { attributeName: "rel", reportingValue: "true" },
+            suggestions: [
+              {
+                messageId: "suggestRemoveNonString",
+                data: { attributeName: "rel", reportingValue: "true" },
+                output: "<a ></a>",
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'modulepreload' },
-              output: '<a rel=""></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="pingback"></a>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'pingback',
-            attributeName: 'rel',
-            elementName: 'a',
+        ],
+      },
+      {
+        code: "<a rel={{}}></a>",
+        errors: [
+          {
+            messageId: "onlyStrings",
+            data: { attributeName: "rel" },
+            suggestions: [
+              {
+                messageId: "suggestRemoveDefault",
+                data: { attributeName: "rel" },
+                output: "<a ></a>",
+              },
+            ],
+            type: "JSXExpressionContainer",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'pingback' },
-              output: '<a rel=""></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="preconnect"></a>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'preconnect',
-            attributeName: 'rel',
-            elementName: 'a',
+        ],
+      },
+      {
+        code: "<a rel={undefined}></a>",
+        errors: [
+          {
+            messageId: "onlyStrings",
+            data: { attributeName: "rel" },
+            suggestions: [
+              {
+                messageId: "suggestRemoveDefault",
+                data: { attributeName: "rel" },
+                output: "<a ></a>",
+              },
+            ],
+            type: "JSXExpressionContainer",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'preconnect' },
-              output: '<a rel=""></a>',
+        ],
+      },
+      {
+        code: '<a rel="noreferrer noopener foobar"></a>',
+        errors: [
+          {
+            messageId: "neverValid",
+            data: {
+              attributeName: "rel",
+              reportingValue: "foobar",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="prefetch"></a>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'prefetch',
-            attributeName: 'rel',
-            elementName: 'a',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "foobar" },
+                output: '<a rel="noreferrer noopener "></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'prefetch' },
-              output: '<a rel=""></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="preload"></a>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'preload',
-            attributeName: 'rel',
-            elementName: 'a',
+        ],
+      },
+      {
+        code: '<a rel="noreferrer noopener   "></a>',
+        errors: [
+          {
+            messageId: "spaceDelimited",
+            data: { attributeName: "rel" },
+            suggestions: [
+              {
+                messageId: "suggestRemoveWhitespaces",
+                data: { attributeName: "rel" },
+                output: '<a rel="noreferrer noopener"></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'preload' },
-              output: '<a rel=""></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="prerender"></a>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'prerender',
-            attributeName: 'rel',
-            elementName: 'a',
+        ],
+      },
+      {
+        code: '<a rel="noreferrer        noopener"></a>',
+        errors: [
+          {
+            messageId: "spaceDelimited",
+            data: { attributeName: "rel" },
+            suggestions: [
+              {
+                messageId: "suggestRemoveWhitespaces",
+                data: { attributeName: "rel" },
+                output: '<a rel="noreferrer noopener"></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'prerender' },
-              output: '<a rel=""></a>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<a rel="stylesheet"></a>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'stylesheet',
-            attributeName: 'rel',
-            elementName: 'a',
+        ],
+      },
+      {
+        code: '<a rel="noreferrer\xa0\xa0noopener"></a>',
+        errors: [
+          {
+            messageId: "spaceDelimited",
+            data: { attributeName: "rel" },
+            suggestions: [
+              {
+                messageId: "suggestRemoveWhitespaces",
+                data: { attributeName: "rel" },
+                output: '<a rel="noreferrer noopener"></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'stylesheet' },
-              output: '<a rel=""></a>',
+        ],
+      },
+      {
+        code: '<a rel={"noreferrer noopener foobar"}></a>',
+        errors: [
+          {
+            messageId: "neverValid",
+            data: {
+              reportingValue: "foobar",
+              attributeName: "rel",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<area rel="canonical"></area>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'canonical',
-            attributeName: 'rel',
-            elementName: 'area',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "foobar" },
+                output: '<a rel={"noreferrer noopener "}></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'canonical' },
-              output: '<area rel=""></area>',
+        ],
+      },
+      {
+        code: 'React.createElement("a", { rel: ["noreferrer", "noopener", "foobar" ] })',
+        errors: [
+          {
+            messageId: "neverValid",
+            data: {
+              reportingValue: "foobar",
+              attributeName: "rel",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<area rel="dns-prefetch"></area>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'dns-prefetch',
-            attributeName: 'rel',
-            elementName: 'area',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "foobar" },
+                output:
+                  'React.createElement("a", { rel: ["noreferrer", "noopener", "" ] })',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'dns-prefetch' },
-              output: '<area rel=""></area>',
+        ],
+      },
+      {
+        code: '<a rel={"foobar noreferrer noopener"}></a>',
+        errors: [
+          {
+            messageId: "neverValid",
+            data: {
+              reportingValue: "foobar",
+              attributeName: "rel",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<area rel="icon"></area>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'icon',
-            attributeName: 'rel',
-            elementName: 'area',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "foobar" },
+                output: '<a rel={" noreferrer noopener"}></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'icon' },
-              output: '<area rel=""></area>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<area rel="manifest"></area>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'manifest',
-            attributeName: 'rel',
-            elementName: 'area',
+        ],
+      },
+      parsers.skipDueToMultiErrorSorting
+        ? []
+        : {
+            code: '<a rel={"foobar batgo       noopener"}></a>',
+            errors: [
+              {
+                messageId: "neverValid",
+                data: {
+                  reportingValue: "foobar",
+                  attributeName: "rel",
+                },
+                suggestions: [
+                  {
+                    messageId: "suggestRemoveInvalid",
+                    data: { reportingValue: "foobar" },
+                    output: '<a rel={" batgo       noopener"}></a>',
+                  },
+                ],
+                type: "Literal",
+              },
+              {
+                messageId: "neverValid",
+                data: {
+                  reportingValue: "batgo",
+                  attributeName: "rel",
+                },
+                suggestions: [
+                  {
+                    messageId: "suggestRemoveInvalid",
+                    data: { reportingValue: "batgo" },
+                    output: '<a rel={"foobar        noopener"}></a>',
+                  },
+                ],
+                type: "Literal",
+              },
+              {
+                messageId: "spaceDelimited",
+                data: { attributeName: "rel" },
+                suggestions: [
+                  {
+                    messageId: "suggestRemoveWhitespaces",
+                    data: { attributeName: "rel" },
+                    output: '<a rel={"foobar batgo noopener"}></a>',
+                  },
+                ],
+              },
+            ],
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'manifest' },
-              output: '<area rel=""></area>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<area rel="modulepreload"></area>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'modulepreload',
-            attributeName: 'rel',
-            elementName: 'area',
+      {
+        code: '<a rel={"        noopener"}></a>',
+        errors: [
+          {
+            messageId: "spaceDelimited",
+            data: { attributeName: "rel" },
+            suggestions: [
+              {
+                messageId: "suggestRemoveWhitespaces",
+                data: { attributeName: "rel" },
+                output: '<a rel={"noopener"}></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'modulepreload' },
-              output: '<area rel=""></area>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<area rel="pingback"></area>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'pingback',
-            attributeName: 'rel',
-            elementName: 'area',
+        ],
+      },
+      {
+        code: '<a rel={"noopener        "}></a>',
+        errors: [
+          {
+            messageId: "spaceDelimited",
+            data: { attributeName: "rel" },
+            suggestions: [
+              {
+                messageId: "suggestRemoveWhitespaces",
+                data: { attributeName: "rel" },
+                output: '<a rel={"noopener"}></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'pingback' },
-              output: '<area rel=""></area>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<area rel="preconnect"></area>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'preconnect',
-            attributeName: 'rel',
-            elementName: 'area',
+        ],
+      },
+      parsers.skipDueToMultiErrorSorting
+        ? []
+        : {
+            code: '<a rel={" batgo noopener"}></a>',
+            errors: [
+              {
+                messageId: "neverValid",
+                data: {
+                  reportingValue: "batgo",
+                  attributeName: "rel",
+                },
+                suggestions: [
+                  {
+                    messageId: "suggestRemoveInvalid",
+                    data: { reportingValue: "batgo" },
+                    output: '<a rel={"  noopener"}></a>',
+                  },
+                ],
+                type: "Literal",
+              },
+              {
+                messageId: "spaceDelimited",
+                data: { attributeName: "rel" },
+                suggestions: [
+                  {
+                    messageId: "suggestRemoveWhitespaces",
+                    data: { attributeName: "rel" },
+                    output: '<a rel={"batgo noopener"}></a>',
+                  },
+                ],
+              },
+            ],
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'preconnect' },
-              output: '<area rel=""></area>',
+      {
+        code: '<a rel={"batgo noopener"}></a>',
+        errors: [
+          {
+            messageId: "neverValid",
+            data: {
+              reportingValue: "batgo",
+              attributeName: "rel",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<area rel="prefetch"></area>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'prefetch',
-            attributeName: 'rel',
-            elementName: 'area',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "batgo" },
+                output: '<a rel={" noopener"}></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'prefetch' },
-              output: '<area rel=""></area>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<area rel="preload"></area>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'preload',
-            attributeName: 'rel',
-            elementName: 'area',
+        ],
+      },
+      {
+        code: '<a rel={" noopener"}></a>',
+        errors: [
+          {
+            messageId: "spaceDelimited",
+            data: { attributeName: "rel" },
+            suggestions: [
+              {
+                messageId: "suggestRemoveWhitespaces",
+                data: { attributeName: "rel" },
+                output: '<a rel={"noopener"}></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'preload' },
-              output: '<area rel=""></area>',
+        ],
+      },
+      {
+        code: '<a rel="canonical"></a>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "canonical",
+              attributeName: "rel",
+              elementName: "a",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<area rel="prerender"></area>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'prerender',
-            attributeName: 'rel',
-            elementName: 'area',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "canonical" },
+                output: '<a rel=""></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'prerender' },
-              output: '<area rel=""></area>',
+        ],
+      },
+      {
+        code: '<a rel="dns-prefetch"></a>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "dns-prefetch",
+              attributeName: "rel",
+              elementName: "a",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<area rel="stylesheet"></area>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'stylesheet',
-            attributeName: 'rel',
-            elementName: 'area',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "dns-prefetch" },
+                output: '<a rel=""></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'stylesheet' },
-              output: '<area rel=""></area>',
+        ],
+      },
+      {
+        code: '<a rel="icon"></a>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "icon",
+              attributeName: "rel",
+              elementName: "a",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<link rel="bookmark"></link>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'bookmark',
-            attributeName: 'rel',
-            elementName: 'link',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "icon" },
+                output: '<a rel=""></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'bookmark' },
-              output: '<link rel=""></link>',
+        ],
+      },
+      {
+        code: '<link rel="shortcut"></link>',
+        errors: [
+          {
+            messageId: "notAlone",
+            data: {
+              reportingValue: "shortcut",
+              missingValue: "icon",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<link rel="external"></link>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'external',
-            attributeName: 'rel',
-            elementName: 'link',
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'external' },
-              output: '<link rel=""></link>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<link rel="nofollow"></link>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'nofollow',
-            attributeName: 'rel',
-            elementName: 'link',
+        ],
+      },
+      parsers.skipDueToMultiErrorSorting
+        ? []
+        : {
+            code: '<link rel="shortcut foo"></link>',
+            errors: [
+              {
+                messageId: "neverValid",
+                data: {
+                  attributeName: "rel",
+                  reportingValue: "foo",
+                },
+                suggestions: [
+                  {
+                    messageId: "suggestRemoveInvalid",
+                    data: {
+                      attributeName: "rel",
+                      reportingValue: "foo",
+                    },
+                    output: '<link rel="shortcut "></link>',
+                  },
+                ],
+                type: "Literal",
+              },
+              {
+                messageId: "notPaired",
+                data: {
+                  reportingValue: "shortcut",
+                  secondValue: "foo",
+                  missingValue: "icon",
+                },
+                type: "Literal",
+              },
+            ],
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'nofollow' },
-              output: '<link rel=""></link>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<link rel="noopener"></link>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'noopener',
-            attributeName: 'rel',
-            elementName: 'link',
+      {
+        code: '<link rel="shortcut  icon"></link>',
+        errors: [
+          {
+            messageId: "spaceDelimited",
+            data: { attributeName: "rel" },
+            suggestions: [
+              {
+                messageId: "suggestRemoveWhitespaces",
+                data: { attributeName: "rel" },
+                output: '<link rel="shortcut icon"></link>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'noopener' },
-              output: '<link rel=""></link>',
-            },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<link rel="noreferrer"></link>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'noreferrer',
-            attributeName: 'rel',
-            elementName: 'link',
+        ],
+      },
+      parsers.skipDueToMultiErrorSorting
+        ? []
+        : {
+            code: '<link rel="shortcut  foo"></link>',
+            errors: [
+              {
+                messageId: "neverValid",
+                data: {
+                  attributeName: "rel",
+                  reportingValue: "foo",
+                },
+                suggestions: [
+                  {
+                    messageId: "suggestRemoveInvalid",
+                    data: {
+                      attributeName: "rel",
+                      reportingValue: "foo",
+                    },
+                    output: '<link rel="shortcut  "></link>',
+                  },
+                ],
+                type: "Literal",
+              },
+              {
+                messageId: "notAlone",
+                data: {
+                  attributeName: "rel",
+                  reportingValue: "shortcut",
+                  missingValue: "icon",
+                },
+              },
+              {
+                messageId: "spaceDelimited",
+                data: { attributeName: "rel" },
+                suggestions: [
+                  {
+                    messageId: "suggestRemoveWhitespaces",
+                    data: { attributeName: "rel" },
+                    output: '<link rel="shortcut foo"></link>',
+                  },
+                ],
+                type: "Literal",
+              },
+            ],
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'noreferrer' },
-              output: '<link rel=""></link>',
+      {
+        code: '<a rel="manifest"></a>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "manifest",
+              attributeName: "rel",
+              elementName: "a",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<link rel="opener"></link>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'opener',
-            attributeName: 'rel',
-            elementName: 'link',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "manifest" },
+                output: '<a rel=""></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'opener' },
-              output: '<link rel=""></link>',
+        ],
+      },
+      {
+        code: '<a rel="modulepreload"></a>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "modulepreload",
+              attributeName: "rel",
+              elementName: "a",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<link rel="tag"></link>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'tag',
-            attributeName: 'rel',
-            elementName: 'link',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "modulepreload" },
+                output: '<a rel=""></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'tag' },
-              output: '<link rel=""></link>',
+        ],
+      },
+      {
+        code: '<a rel="pingback"></a>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "pingback",
+              attributeName: "rel",
+              elementName: "a",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel="alternate"></form>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'alternate',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "pingback" },
+                output: '<a rel=""></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'alternate' },
-              output: '<form rel=""></form>',
+        ],
+      },
+      {
+        code: '<a rel="preconnect"></a>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "preconnect",
+              attributeName: "rel",
+              elementName: "a",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel="author"></form>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'author',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "preconnect" },
+                output: '<a rel=""></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'author' },
-              output: '<form rel=""></form>',
+        ],
+      },
+      {
+        code: '<a rel="prefetch"></a>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "prefetch",
+              attributeName: "rel",
+              elementName: "a",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel="bookmark"></form>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'bookmark',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "prefetch" },
+                output: '<a rel=""></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'bookmark' },
-              output: '<form rel=""></form>',
+        ],
+      },
+      {
+        code: '<a rel="preload"></a>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "preload",
+              attributeName: "rel",
+              elementName: "a",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel="canonical"></form>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'canonical',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "preload" },
+                output: '<a rel=""></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'canonical' },
-              output: '<form rel=""></form>',
+        ],
+      },
+      {
+        code: '<a rel="prerender"></a>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "prerender",
+              attributeName: "rel",
+              elementName: "a",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel="dns-prefetch"></form>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'dns-prefetch',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "prerender" },
+                output: '<a rel=""></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'dns-prefetch' },
-              output: '<form rel=""></form>',
+        ],
+      },
+      {
+        code: '<a rel="stylesheet"></a>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "stylesheet",
+              attributeName: "rel",
+              elementName: "a",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel="icon"></form>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'icon',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "stylesheet" },
+                output: '<a rel=""></a>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'icon' },
-              output: '<form rel=""></form>',
+        ],
+      },
+      {
+        code: '<area rel="canonical"></area>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "canonical",
+              attributeName: "rel",
+              elementName: "area",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel="manifest"></form>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'manifest',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "canonical" },
+                output: '<area rel=""></area>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'manifest' },
-              output: '<form rel=""></form>',
+        ],
+      },
+      {
+        code: '<area rel="dns-prefetch"></area>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "dns-prefetch",
+              attributeName: "rel",
+              elementName: "area",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel="modulepreload"></form>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'modulepreload',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "dns-prefetch" },
+                output: '<area rel=""></area>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'modulepreload' },
-              output: '<form rel=""></form>',
+        ],
+      },
+      {
+        code: '<area rel="icon"></area>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "icon",
+              attributeName: "rel",
+              elementName: "area",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel="pingback"></form>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'pingback',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "icon" },
+                output: '<area rel=""></area>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'pingback' },
-              output: '<form rel=""></form>',
+        ],
+      },
+      {
+        code: '<area rel="manifest"></area>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "manifest",
+              attributeName: "rel",
+              elementName: "area",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel="preconnect"></form>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'preconnect',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "manifest" },
+                output: '<area rel=""></area>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'preconnect' },
-              output: '<form rel=""></form>',
+        ],
+      },
+      {
+        code: '<area rel="modulepreload"></area>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "modulepreload",
+              attributeName: "rel",
+              elementName: "area",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel="prefetch"></form>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'prefetch',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "modulepreload" },
+                output: '<area rel=""></area>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'prefetch' },
-              output: '<form rel=""></form>',
+        ],
+      },
+      {
+        code: '<area rel="pingback"></area>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "pingback",
+              attributeName: "rel",
+              elementName: "area",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel="preload"></form>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'preload',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "pingback" },
+                output: '<area rel=""></area>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'preload' },
-              output: '<form rel=""></form>',
+        ],
+      },
+      {
+        code: '<area rel="preconnect"></area>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "preconnect",
+              attributeName: "rel",
+              elementName: "area",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel="prerender"></form>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'prerender',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "preconnect" },
+                output: '<area rel=""></area>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'prerender' },
-              output: '<form rel=""></form>',
+        ],
+      },
+      {
+        code: '<area rel="prefetch"></area>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "prefetch",
+              attributeName: "rel",
+              elementName: "area",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel="stylesheet"></form>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'stylesheet',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "prefetch" },
+                output: '<area rel=""></area>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'stylesheet' },
-              output: '<form rel=""></form>',
+        ],
+      },
+      {
+        code: '<area rel="preload"></area>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "preload",
+              attributeName: "rel",
+              elementName: "area",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel="tag"></form>',
-      errors: [
-        {
-          messageId: 'notValidFor',
-          data: {
-            reportingValue: 'tag',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "preload" },
+                output: '<area rel=""></area>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveInvalid',
-              data: { reportingValue: 'tag' },
-              output: '<form rel=""></form>',
+        ],
+      },
+      {
+        code: '<area rel="prerender"></area>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "prerender",
+              attributeName: "rel",
+              elementName: "area",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    },
-    {
-      code: '<form rel=""></form>',
-      errors: [
-        {
-          messageId: 'noEmpty',
-          data: {
-            reportingValue: 'tag',
-            attributeName: 'rel',
-            elementName: 'form',
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "prerender" },
+                output: '<area rel=""></area>',
+              },
+            ],
+            type: "Literal",
           },
-          suggestions: [
-            {
-              messageId: 'suggestRemoveEmpty',
-              data: { attributeName: 'rel' },
-              output: '<form ></form>',
+        ],
+      },
+      {
+        code: '<area rel="stylesheet"></area>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "stylesheet",
+              attributeName: "rel",
+              elementName: "area",
             },
-          ],
-          type: 'Literal',
-        },
-      ],
-    }
-  )),
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "stylesheet" },
+                output: '<area rel=""></area>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<link rel="bookmark"></link>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "bookmark",
+              attributeName: "rel",
+              elementName: "link",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "bookmark" },
+                output: '<link rel=""></link>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<link rel="external"></link>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "external",
+              attributeName: "rel",
+              elementName: "link",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "external" },
+                output: '<link rel=""></link>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<link rel="nofollow"></link>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "nofollow",
+              attributeName: "rel",
+              elementName: "link",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "nofollow" },
+                output: '<link rel=""></link>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<link rel="noopener"></link>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "noopener",
+              attributeName: "rel",
+              elementName: "link",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "noopener" },
+                output: '<link rel=""></link>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<link rel="noreferrer"></link>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "noreferrer",
+              attributeName: "rel",
+              elementName: "link",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "noreferrer" },
+                output: '<link rel=""></link>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<link rel="opener"></link>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "opener",
+              attributeName: "rel",
+              elementName: "link",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "opener" },
+                output: '<link rel=""></link>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<link rel="tag"></link>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "tag",
+              attributeName: "rel",
+              elementName: "link",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "tag" },
+                output: '<link rel=""></link>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel="alternate"></form>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "alternate",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "alternate" },
+                output: '<form rel=""></form>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel="author"></form>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "author",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "author" },
+                output: '<form rel=""></form>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel="bookmark"></form>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "bookmark",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "bookmark" },
+                output: '<form rel=""></form>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel="canonical"></form>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "canonical",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "canonical" },
+                output: '<form rel=""></form>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel="dns-prefetch"></form>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "dns-prefetch",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "dns-prefetch" },
+                output: '<form rel=""></form>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel="icon"></form>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "icon",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "icon" },
+                output: '<form rel=""></form>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel="manifest"></form>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "manifest",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "manifest" },
+                output: '<form rel=""></form>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel="modulepreload"></form>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "modulepreload",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "modulepreload" },
+                output: '<form rel=""></form>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel="pingback"></form>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "pingback",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "pingback" },
+                output: '<form rel=""></form>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel="preconnect"></form>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "preconnect",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "preconnect" },
+                output: '<form rel=""></form>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel="prefetch"></form>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "prefetch",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "prefetch" },
+                output: '<form rel=""></form>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel="preload"></form>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "preload",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "preload" },
+                output: '<form rel=""></form>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel="prerender"></form>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "prerender",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "prerender" },
+                output: '<form rel=""></form>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel="stylesheet"></form>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "stylesheet",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "stylesheet" },
+                output: '<form rel=""></form>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel="tag"></form>',
+        errors: [
+          {
+            messageId: "notValidFor",
+            data: {
+              reportingValue: "tag",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveInvalid",
+                data: { reportingValue: "tag" },
+                output: '<form rel=""></form>',
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+      {
+        code: '<form rel=""></form>',
+        errors: [
+          {
+            messageId: "noEmpty",
+            data: {
+              reportingValue: "tag",
+              attributeName: "rel",
+              elementName: "form",
+            },
+            suggestions: [
+              {
+                messageId: "suggestRemoveEmpty",
+                data: { attributeName: "rel" },
+                output: "<form ></form>",
+              },
+            ],
+            type: "Literal",
+          },
+        ],
+      },
+    ),
+  ),
 });

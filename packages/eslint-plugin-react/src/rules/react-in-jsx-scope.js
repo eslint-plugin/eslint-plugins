@@ -3,29 +3,29 @@
  * @author Glen Mailer
  */
 
-'use strict';
+"use strict";
 
-const variableUtil = require('../util/variable');
-const pragmaUtil = require('../util/pragma');
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
+const variableUtil = require("../util/variable");
+const pragmaUtil = require("../util/pragma");
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
 
 // -----------------------------------------------------------------------------
 // Rule Definition
 // -----------------------------------------------------------------------------
 
 const messages = {
-  notInScope: '\'{{name}}\' must be in scope when using JSX',
+  notInScope: "'{{name}}' must be in scope when using JSX",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow missing React when using JSX',
-      category: 'Possible Errors',
+      description: "Disallow missing React when using JSX",
+      category: "Possible Errors",
       recommended: true,
-      url: docsUrl('react-in-jsx-scope'),
+      url: docsUrl("react-in-jsx-scope"),
     },
 
     messages,
@@ -40,7 +40,7 @@ module.exports = {
       if (variableUtil.getVariableFromContext(context, node, pragma)) {
         return;
       }
-      report(context, messages.notInScope, 'notInScope', {
+      report(context, messages.notInScope, "notInScope", {
         node,
         data: {
           name: pragma,

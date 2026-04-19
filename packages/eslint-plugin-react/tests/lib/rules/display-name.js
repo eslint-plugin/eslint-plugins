@@ -3,20 +3,20 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/display-name');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/display-name");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('display-name', rule, {
+ruleTester.run("display-name", rule, {
   valid: parsers.all([
     {
       code: `
@@ -118,7 +118,7 @@ ruleTester.run('display-name', rule, {
       options: [{ ignoreTranspilerName: true }],
       settings: {
         react: {
-          createClass: 'createClass',
+          createClass: "createClass",
         },
       },
     },
@@ -151,7 +151,7 @@ ruleTester.run('display-name', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -159,7 +159,7 @@ ruleTester.run('display-name', rule, {
           method;
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -184,7 +184,7 @@ ruleTester.run('display-name', rule, {
         }
       `,
       options: [{ ignoreTranspilerName: true }],
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -409,7 +409,7 @@ ruleTester.run('display-name', rule, {
       options: [{ ignoreTranspilerName: true }],
       settings: {
         react: {
-          createClass: 'createClass',
+          createClass: "createClass",
         },
       },
     },
@@ -530,7 +530,7 @@ ruleTester.run('display-name', rule, {
         type LinkProps = {...{}};
         class Link extends Component<LinkProps> {}
       `,
-      features: ['flow'],
+      features: ["flow"],
     },
     {
       code: `
@@ -566,7 +566,7 @@ ruleTester.run('display-name', rule, {
         const Comp = React.forwardRef((props, ref) => <main data-as="yes" />) as SomeComponent;
         Comp.displayName = 'MyCompNameAs';
       `,
-      features: ['ts', 'no-babel'],
+      features: ["ts", "no-babel"],
     },
     {
       code: `
@@ -714,7 +714,7 @@ ruleTester.run('display-name', rule, {
       `,
       settings: {
         react: {
-          version: '16.14.0',
+          version: "16.14.0",
         },
       },
     },
@@ -732,7 +732,7 @@ ruleTester.run('display-name', rule, {
       `,
       settings: {
         react: {
-          version: '15.7.0',
+          version: "15.7.0",
         },
       },
     },
@@ -750,7 +750,7 @@ ruleTester.run('display-name', rule, {
       `,
       settings: {
         react: {
-          version: '16.12.1',
+          version: "16.12.1",
         },
       },
     },
@@ -766,7 +766,7 @@ ruleTester.run('display-name', rule, {
       `,
       settings: {
         react: {
-          version: '0.14.11',
+          version: "0.14.11",
         },
       },
     },
@@ -784,7 +784,7 @@ ruleTester.run('display-name', rule, {
       `,
       settings: {
         react: {
-          version: '15.7.1',
+          version: "15.7.1",
         },
       },
     },
@@ -849,7 +849,7 @@ ruleTester.run('display-name', rule, {
       `,
       settings: {
         react: {
-          version: '16.2.0',
+          version: "16.2.0",
         },
       },
       options: [{ checkContextObjects: true }],
@@ -863,7 +863,7 @@ ruleTester.run('display-name', rule, {
       `,
       settings: {
         react: {
-          version: '>16.3.0',
+          version: ">16.3.0",
         },
       },
       options: [{ checkContextObjects: true }],
@@ -886,7 +886,7 @@ ruleTester.run('display-name', rule, {
       `,
       settings: {
         react: {
-          version: '>16.3.0',
+          version: ">16.3.0",
         },
       },
       options: [{ checkContextObjects: false }],
@@ -937,9 +937,9 @@ ruleTester.run('display-name', rule, {
         }
       `,
       errors: [
-        { messageId: 'noDisplayName' },
-        { messageId: 'noDisplayName' },
-        { messageId: 'noDisplayName' },
+        { messageId: "noDisplayName" },
+        { messageId: "noDisplayName" },
+        { messageId: "noDisplayName" },
       ],
     },
     {
@@ -961,9 +961,9 @@ ruleTester.run('display-name', rule, {
         }
       `,
       errors: [
-        { messageId: 'noDisplayName' },
-        { messageId: 'noDisplayName' },
-        { messageId: 'noDisplayName' },
+        { messageId: "noDisplayName" },
+        { messageId: "noDisplayName" },
+        { messageId: "noDisplayName" },
       ],
     },
     {
@@ -984,10 +984,10 @@ ruleTester.run('display-name', rule, {
         }
       `,
       errors: [
-        { messageId: 'noDisplayName' },
-        { messageId: 'noDisplayName' },
-        { messageId: 'noDisplayName' },
-        { messageId: 'noDisplayName' },
+        { messageId: "noDisplayName" },
+        { messageId: "noDisplayName" },
+        { messageId: "noDisplayName" },
+        { messageId: "noDisplayName" },
       ],
     },
     {
@@ -1001,8 +1001,9 @@ ruleTester.run('display-name', rule, {
       options: [{ ignoreTranspilerName: true }],
       errors: [
         {
-          messageId: 'noDisplayName',
-        }],
+          messageId: "noDisplayName",
+        },
+      ],
     },
     {
       code: `
@@ -1015,10 +1016,10 @@ ruleTester.run('display-name', rule, {
       options: [{ ignoreTranspilerName: true }],
       settings: {
         react: {
-          createClass: 'createClass',
+          createClass: "createClass",
         },
       },
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1029,7 +1030,7 @@ ruleTester.run('display-name', rule, {
         });
       `,
       options: [{ ignoreTranspilerName: true }],
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1040,7 +1041,7 @@ ruleTester.run('display-name', rule, {
         }
       `,
       options: [{ ignoreTranspilerName: true }],
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1054,7 +1055,7 @@ ruleTester.run('display-name', rule, {
         module.exports = HelloComponent();
       `,
       options: [{ ignoreTranspilerName: true }],
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1062,7 +1063,7 @@ ruleTester.run('display-name', rule, {
           return <div>Hello {props.name}</div>;
         }
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1070,7 +1071,7 @@ ruleTester.run('display-name', rule, {
           return <div>Hello {props.name}</div>;
         }
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1080,7 +1081,7 @@ ruleTester.run('display-name', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1094,7 +1095,7 @@ ruleTester.run('display-name', rule, {
         });
       `,
       options: [{ ignoreTranspilerName: true }],
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1110,11 +1111,11 @@ ruleTester.run('display-name', rule, {
       options: [{ ignoreTranspilerName: true }],
       settings: {
         react: {
-          pragma: 'Foo',
-          createClass: 'createClass',
+          pragma: "Foo",
+          createClass: "createClass",
         },
       },
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1131,10 +1132,10 @@ ruleTester.run('display-name', rule, {
       options: [{ ignoreTranspilerName: true }],
       settings: {
         react: {
-          createClass: 'createClass',
+          createClass: "createClass",
         },
       },
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1147,7 +1148,7 @@ ruleTester.run('display-name', rule, {
         };
       `,
       options: [{ ignoreTranspilerName: true }],
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1157,7 +1158,7 @@ ruleTester.run('display-name', rule, {
           }
         }
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1166,7 +1167,7 @@ ruleTester.run('display-name', rule, {
           return createElement("div", {}, "hello");
         };
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1176,7 +1177,7 @@ ruleTester.run('display-name', rule, {
           return <div>Hello {world}</div>
         })
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1186,7 +1187,7 @@ ruleTester.run('display-name', rule, {
           return <div>Hello {world}</div>
         })
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1196,7 +1197,7 @@ ruleTester.run('display-name', rule, {
           return <div ref={ref}>Hello {world}</div>
         })
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1206,12 +1207,12 @@ ruleTester.run('display-name', rule, {
           return <div ref={ref}>Hello {world}</div>
         })
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
-    // Only trigger an error for the outer React.memo,
-    // if the React version is not in the following range:
-    // ^0.14.10 || ^15.7.0 || >= 16.12.0
+      // Only trigger an error for the outer React.memo,
+      // if the React version is not in the following range:
+      // ^0.14.10 || ^15.7.0 || >= 16.12.0
       code: `
         import React from 'react'
 
@@ -1223,18 +1224,19 @@ ruleTester.run('display-name', rule, {
       `,
       errors: [
         {
-          messageId: 'noDisplayName',
-        }],
+          messageId: "noDisplayName",
+        },
+      ],
       settings: {
         react: {
-          version: '15.6.0',
+          version: "15.6.0",
         },
       },
     },
     {
-    // Only trigger an error for the outer React.memo,
-    // if the React version is not in the following range:
-    // ^0.14.10 || ^15.7.0 || >= ^16.12.0
+      // Only trigger an error for the outer React.memo,
+      // if the React version is not in the following range:
+      // ^0.14.10 || ^15.7.0 || >= ^16.12.0
       code: `
         import React from 'react'
 
@@ -1244,17 +1246,17 @@ ruleTester.run('display-name', rule, {
           })
         )
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
       settings: {
         react: {
-          version: '0.14.2',
+          version: "0.14.2",
         },
       },
     },
     {
-    // React does not handle the result of forwardRef being passed into memo
-    // ComponentWithMemoAndForwardRef gets shown as Memo(Anonymous)
-    // See https://github.com/facebook/react/issues/16722
+      // React does not handle the result of forwardRef being passed into memo
+      // ComponentWithMemoAndForwardRef gets shown as Memo(Anonymous)
+      // See https://github.com/facebook/react/issues/16722
       code: `
         import React from 'react'
 
@@ -1264,10 +1266,10 @@ ruleTester.run('display-name', rule, {
           })
         )
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
       settings: {
         react: {
-          version: '15.0.1',
+          version: "15.0.1",
         },
       },
     },
@@ -1279,7 +1281,7 @@ ruleTester.run('display-name', rule, {
           return createElement("div", {}, "hello");
         };
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1289,7 +1291,7 @@ ruleTester.run('display-name', rule, {
           return createElement("div", {}, "hello");
         };
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1307,7 +1309,7 @@ ruleTester.run('display-name', rule, {
           return React.createElement("div", {}, "text content");
         }
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1326,7 +1328,7 @@ ruleTester.run('display-name', rule, {
           return React.createElement("div", {}, "text content");
         }
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1346,7 +1348,7 @@ ruleTester.run('display-name', rule, {
           }
         }
       `,
-      errors: [{ messageId: 'noDisplayName' }],
+      errors: [{ messageId: "noDisplayName" }],
     },
     {
       code: `
@@ -1364,12 +1366,12 @@ ruleTester.run('display-name', rule, {
       `,
       errors: [
         {
-          messageId: 'noDisplayName',
+          messageId: "noDisplayName",
           line: 2,
           column: 24,
         },
         {
-          messageId: 'noDisplayName',
+          messageId: "noDisplayName",
           line: 9,
           column: 18,
         },
@@ -1381,9 +1383,7 @@ ruleTester.run('display-name', rule, {
           <div>{a} {listItem}</div>
         );
       `,
-      errors: [
-        { message: 'Component definition is missing display name' },
-      ],
+      errors: [{ message: "Component definition is missing display name" }],
     },
     {
       code: `
@@ -1399,15 +1399,15 @@ ruleTester.run('display-name', rule, {
           return <div>{data}</div>;
         });
       `,
-      features: ['optional chaining', 'types'],
-      settings: { componentWrapperFunctions: ['observer'] },
+      features: ["optional chaining", "types"],
+      settings: { componentWrapperFunctions: ["observer"] },
       errors: [
         {
-          message: 'Component definition is missing display name',
+          message: "Component definition is missing display name",
           line: 4,
         },
         {
-          message: 'Component definition is missing display name',
+          message: "Component definition is missing display name",
           line: 9,
         },
       ],
@@ -1420,7 +1420,7 @@ ruleTester.run('display-name', rule, {
       `,
       errors: [
         {
-          messageId: 'noContextDisplayName',
+          messageId: "noContextDisplayName",
           line: 4,
         },
       ],
@@ -1434,7 +1434,7 @@ ruleTester.run('display-name', rule, {
       `,
       errors: [
         {
-          messageId: 'noContextDisplayName',
+          messageId: "noContextDisplayName",
           line: 4,
         },
       ],
@@ -1448,7 +1448,7 @@ ruleTester.run('display-name', rule, {
       `,
       errors: [
         {
-          messageId: 'noContextDisplayName',
+          messageId: "noContextDisplayName",
           line: 4,
         },
       ],
@@ -1463,7 +1463,7 @@ ruleTester.run('display-name', rule, {
       `,
       errors: [
         {
-          messageId: 'noContextDisplayName',
+          messageId: "noContextDisplayName",
           line: 5,
         },
       ],
@@ -1478,7 +1478,7 @@ ruleTester.run('display-name', rule, {
       `,
       errors: [
         {
-          messageId: 'noContextDisplayName',
+          messageId: "noContextDisplayName",
           line: 5,
         },
       ],

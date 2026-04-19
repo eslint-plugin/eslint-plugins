@@ -3,20 +3,20 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-max-props-per-line');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-max-props-per-line");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,32 +27,32 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('jsx-max-props-per-line', rule, {
+ruleTester.run("jsx-max-props-per-line", rule, {
   valid: parsers.all([
     {
-      code: '<App />',
+      code: "<App />",
     },
     {
-      code: '<App foo />',
+      code: "<App foo />",
     },
     {
-      code: '<App foo bar />',
+      code: "<App foo bar />",
       options: [{ maximum: 2 }],
     },
     {
-      code: '<App foo bar />',
-      options: [{ when: 'multiline' }],
+      code: "<App foo bar />",
+      options: [{ when: "multiline" }],
     },
     {
-      code: '<App foo {...this.props} />',
-      options: [{ when: 'multiline' }],
+      code: "<App foo {...this.props} />",
+      options: [{ when: "multiline" }],
     },
     {
-      code: '<App foo bar baz />',
-      options: [{ maximum: 2, when: 'multiline' }],
+      code: "<App foo bar baz />",
+      options: [{ maximum: 2, when: "multiline" }],
     },
     {
-      code: '<App {...this.props} bar />',
+      code: "<App {...this.props} bar />",
       options: [{ maximum: 2 }],
     },
     {
@@ -91,11 +91,11 @@ ruleTester.run('jsx-max-props-per-line', rule, {
       options: [{ maximum: { multi: 2, single: 1 } }],
     },
     {
-      code: '<App foo baz bar />',
+      code: "<App foo baz bar />",
       options: [{ maximum: { multi: 2, single: 3 } }],
     },
     {
-      code: '<App {...this.props} bar />',
+      code: "<App {...this.props} bar />",
       options: [{ maximum: { single: 2 } }],
     },
     {
@@ -108,7 +108,7 @@ ruleTester.run('jsx-max-props-per-line', rule, {
       options: [{ maximum: { multi: 2, single: 1 } }],
     },
     {
-      code: '<App foo baz bar />',
+      code: "<App foo baz bar />",
       options: [{ maximum: { multi: 2 } }],
     },
     {
@@ -142,7 +142,7 @@ ruleTester.run('jsx-max-props-per-line', rule, {
           bar
         />
       `,
-      options: [{ maximum: 1, when: 'multiline' }],
+      options: [{ maximum: 1, when: "multiline" }],
     },
   ]),
 
@@ -158,8 +158,8 @@ baz />;
       `,
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'bar' },
+          messageId: "newLine",
+          data: { prop: "bar" },
         },
       ],
       parserOptions,
@@ -175,8 +175,8 @@ baz />;
       options: [{ maximum: 2 }],
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'baz' },
+          messageId: "newLine",
+          data: { prop: "baz" },
         },
       ],
     },
@@ -190,8 +190,8 @@ bar />;
       `,
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'bar' },
+          messageId: "newLine",
+          data: { prop: "bar" },
         },
       ],
       parserOptions,
@@ -206,8 +206,8 @@ bar />;
       `,
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'this.props' },
+          messageId: "newLine",
+          data: { prop: "this.props" },
         },
       ],
       parserOptions,
@@ -228,8 +228,8 @@ bar
       `,
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'bar' },
+          messageId: "newLine",
+          data: { prop: "bar" },
         },
       ],
       parserOptions,
@@ -250,8 +250,8 @@ bar
       `,
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'this.props' },
+          messageId: "newLine",
+          data: { prop: "this.props" },
         },
       ],
       parserOptions,
@@ -272,8 +272,8 @@ bar
       `,
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'bar' },
+          messageId: "newLine",
+          data: { prop: "bar" },
         },
       ],
       parserOptions,
@@ -290,8 +290,8 @@ bar />
       `,
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'bar' },
+          messageId: "newLine",
+          data: { prop: "bar" },
         },
       ],
       parserOptions,
@@ -309,8 +309,8 @@ baz />
       options: [{ maximum: 2 }],
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'baz' },
+          messageId: "newLine",
+          data: { prop: "baz" },
         },
       ],
     },
@@ -326,8 +326,8 @@ baz />
       `,
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'rest' },
+          messageId: "newLine",
+          data: { prop: "rest" },
         },
       ],
       parserOptions,
@@ -346,8 +346,8 @@ bar />
       `,
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'bar' },
+          messageId: "newLine",
+          data: { prop: "bar" },
         },
       ],
       parserOptions,
@@ -370,8 +370,8 @@ bar />
       `,
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'rest' },
+          messageId: "newLine",
+          data: { prop: "rest" },
         },
       ],
       parserOptions,
@@ -393,8 +393,8 @@ baz bor
       options: [{ maximum: 2 }],
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'baz' },
+          messageId: "newLine",
+          data: { prop: "baz" },
         },
       ],
     },
@@ -410,8 +410,8 @@ baz />
       options: [{ maximum: { single: 1, multi: 1 } }],
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'bar' },
+          messageId: "newLine",
+          data: { prop: "bar" },
         },
       ],
     },
@@ -431,8 +431,8 @@ baz
       options: [{ maximum: { single: 1, multi: 1 } }],
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'bar' },
+          messageId: "newLine",
+          data: { prop: "bar" },
         },
       ],
     },
@@ -451,8 +451,8 @@ baz
       options: [{ maximum: { single: 1, multi: 1 } }],
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'baz' },
+          messageId: "newLine",
+          data: { prop: "baz" },
         },
       ],
     },
@@ -471,8 +471,8 @@ bor
       options: [{ maximum: { single: 1, multi: 2 } }],
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'bor' },
+          messageId: "newLine",
+          data: { prop: "bor" },
         },
       ],
     },
@@ -487,9 +487,10 @@ bor />
       options: [{ maximum: { single: 3, multi: 2 } }],
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'bor' },
-        }],
+          messageId: "newLine",
+          data: { prop: "bor" },
+        },
+      ],
     },
     {
       code: `
@@ -508,8 +509,8 @@ baz bor
       options: [{ maximum: { multi: 2 } }],
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'baz' },
+          messageId: "newLine",
+          data: { prop: "baz" },
         },
       ],
     },
@@ -530,8 +531,8 @@ baz bor
       options: [{ maximum: { multi: 2, single: 1 } }],
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'baz' },
+          messageId: "newLine",
+          data: { prop: "baz" },
         },
       ],
     },
@@ -544,7 +545,7 @@ baz bor
           ]}
         />
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ["ts", "no-babel-old"],
       output: `
         <DataTable<Items> fullscreen
 keyField="id"
@@ -558,8 +559,8 @@ items={items}
       options: [{ maximum: { multi: 1, single: 1 } }],
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'keyField' },
+          messageId: "newLine",
+          data: { prop: "keyField" },
         },
       ],
     },
@@ -573,7 +574,7 @@ fullscreen keyField="id" items={items}
           ]}
         />
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ["ts", "no-babel-old"],
       output: `
         <DataTable<Items>
 fullscreen
@@ -588,8 +589,8 @@ items={items}
       options: [{ maximum: { multi: 1, single: 1 } }],
       errors: [
         {
-          messageId: 'newLine',
-          data: { prop: 'keyField' },
+          messageId: "newLine",
+          data: { prop: "keyField" },
         },
       ],
     },

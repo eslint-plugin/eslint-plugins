@@ -2,23 +2,23 @@
  * @fileoverview Tests for forbid-prop-types
  */
 
-'use strict';
+"use strict";
 
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------
 
-const babelEslintVersion = require('babel-eslint/package.json').version;
-const semver = require('semver');
-const RuleTester = require('../../helpers/ruleTester');
+const babelEslintVersion = require("babel-eslint/package.json").version;
+const semver = require("semver");
+const RuleTester = require("../../helpers/ruleTester");
 
-const rule = require('../../../lib/rules/forbid-prop-types');
+const rule = require("../../../lib/rules/forbid-prop-types");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -29,19 +29,20 @@ const parserOptions = {
 // -----------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('forbid-prop-types', rule, {
-  valid: parsers.all([].concat(
-    {
-      code: `
+ruleTester.run("forbid-prop-types", rule, {
+  valid: parsers.all(
+    [].concat(
+      {
+        code: `
         var First = createReactClass({
           render: function() {
             return <div />;
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var First = createReactClass({
           propTypes: externalPropTypes,
           render: function() {
@@ -49,9 +50,9 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var First = createReactClass({
           propTypes: {
             s: PropTypes.string,
@@ -64,9 +65,9 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var First = createReactClass({
           propTypes: {
             a: PropTypes.array
@@ -76,10 +77,10 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         })
       `,
-      options: [{ forbid: ['any', 'object'] }],
-    },
-    {
-      code: `
+        options: [{ forbid: ["any", "object"] }],
+      },
+      {
+        code: `
         var First = createReactClass({
           propTypes: {
             o: PropTypes.object
@@ -89,10 +90,10 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [{ forbid: ['any', 'array'] }],
-    },
-    {
-      code: `
+        options: [{ forbid: ["any", "array"] }],
+      },
+      {
+        code: `
         var First = createReactClass({
           propTypes: {
             o: PropTypes.object,
@@ -102,12 +103,10 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [
-        { forbid: ['any', 'array'] },
-      ],
-    },
-    {
-      code: `
+        options: [{ forbid: ["any", "array"] }],
+      },
+      {
+        code: `
         class First extends React.Component {
           render() {
             return <div />;
@@ -119,9 +118,9 @@ ruleTester.run('forbid-prop-types', rule, {
         };
         First.propTypes.justforcheck = PropTypes.string;
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class First extends React.Component {
           render() {
             return <div />;
@@ -131,9 +130,9 @@ ruleTester.run('forbid-prop-types', rule, {
           elem: PropTypes.instanceOf(HTMLElement)
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>Hello</div>;
@@ -143,10 +142,11 @@ ruleTester.run('forbid-prop-types', rule, {
           "aria-controls": PropTypes.string
         };
       `,
-    },
-    semver.satisfies(babelEslintVersion, '< 9') ? {
-      // Invalid code, should not be validated
-      code: `
+      },
+      semver.satisfies(babelEslintVersion, "< 9")
+        ? {
+            // Invalid code, should not be validated
+            code: `
         class Component extends React.Component {
           propTypes: {
             a: PropTypes.any,
@@ -158,10 +158,11 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         }
       `,
-      parser: parsers.BABEL_ESLINT,
-    } : [],
-    {
-      code: `
+            parser: parsers.BABEL_ESLINT,
+          }
+        : [],
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             let { a, ...b } = obj;
@@ -170,9 +171,9 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             retailer: PropTypes.instanceOf(Map).isRequired,
@@ -183,10 +184,10 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      // Proptypes declared with a spread property
-      code: `
+      },
+      {
+        // Proptypes declared with a spread property
+        code: `
         class Test extends React.component {
           static propTypes = {
             intl: React.propTypes.number,
@@ -194,11 +195,11 @@ ruleTester.run('forbid-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      // Proptypes declared with a spread property
-      code: `
+        features: ["class fields"],
+      },
+      {
+        // Proptypes declared with a spread property
+        code: `
         class Test extends React.component {
           static get propTypes() {
             return {
@@ -208,9 +209,9 @@ ruleTester.run('forbid-prop-types', rule, {
           };
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var First = createReactClass({
           childContextTypes: externalPropTypes,
           render: function() {
@@ -218,10 +219,10 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [{ checkContextTypes: true }],
-    },
-    {
-      code: `
+        options: [{ checkContextTypes: true }],
+      },
+      {
+        code: `
         var First = createReactClass({
           childContextTypes: {
             s: PropTypes.string,
@@ -234,10 +235,10 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [{ checkContextTypes: true }],
-    },
-    {
-      code: `
+        options: [{ checkContextTypes: true }],
+      },
+      {
+        code: `
         var First = createReactClass({
           childContextTypes: {
             a: PropTypes.array
@@ -247,15 +248,15 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [
-        {
-          forbid: ['any', 'object'],
-          checkContextTypes: true,
-        },
-      ],
-    },
-    {
-      code: `
+        options: [
+          {
+            forbid: ["any", "object"],
+            checkContextTypes: true,
+          },
+        ],
+      },
+      {
+        code: `
         var First = createReactClass({
           childContextTypes: {
             o: PropTypes.object
@@ -265,15 +266,15 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [
-        {
-          forbid: ['any', 'array'],
-          checkContextTypes: true,
-        },
-      ],
-    },
-    {
-      code: `
+        options: [
+          {
+            forbid: ["any", "array"],
+            checkContextTypes: true,
+          },
+        ],
+      },
+      {
+        code: `
         var First = createReactClass({
           childContextTypes: {
             o: PropTypes.object,
@@ -283,15 +284,15 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [
-        {
-          forbid: ['any', 'array'],
-          checkContextTypes: true,
-        },
-      ],
-    },
-    {
-      code: `
+        options: [
+          {
+            forbid: ["any", "array"],
+            checkContextTypes: true,
+          },
+        ],
+      },
+      {
+        code: `
         class First extends React.Component {
           render() {
             return <div />;
@@ -303,10 +304,10 @@ ruleTester.run('forbid-prop-types', rule, {
         };
         First.childContextTypes.justforcheck = PropTypes.string;
       `,
-      options: [{ checkContextTypes: true }],
-    },
-    {
-      code: `
+        options: [{ checkContextTypes: true }],
+      },
+      {
+        code: `
         class First extends React.Component {
           render() {
             return <div />;
@@ -316,10 +317,10 @@ ruleTester.run('forbid-prop-types', rule, {
           elem: PropTypes.instanceOf(HTMLElement)
         };
       `,
-      options: [{ checkContextTypes: true }],
-    },
-    {
-      code: `
+        options: [{ checkContextTypes: true }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>Hello</div>;
@@ -329,11 +330,12 @@ ruleTester.run('forbid-prop-types', rule, {
           "aria-controls": PropTypes.string
         };
       `,
-      options: [{ checkContextTypes: true }],
-    },
-    semver.satisfies(babelEslintVersion, '< 9') ? {
-      // Invalid code, should not be validated
-      code: `
+        options: [{ checkContextTypes: true }],
+      },
+      semver.satisfies(babelEslintVersion, "< 9")
+        ? {
+            // Invalid code, should not be validated
+            code: `
         class Component extends React.Component {
           childContextTypes: {
             a: PropTypes.any,
@@ -345,11 +347,12 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         }
       `,
-      parser: parsers.BABEL_ESLINT,
-      options: [{ checkContextTypes: true }],
-    } : [],
-    {
-      code: `
+            parser: parsers.BABEL_ESLINT,
+            options: [{ checkContextTypes: true }],
+          }
+        : [],
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             let { a, ...b } = obj;
@@ -358,10 +361,10 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [{ checkContextTypes: true }],
-    },
-    {
-      code: `
+        options: [{ checkContextTypes: true }],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           childContextTypes: {
             retailer: PropTypes.instanceOf(Map).isRequired,
@@ -372,11 +375,11 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [{ checkContextTypes: true }],
-    },
-    {
-      // Proptypes declared with a spread property
-      code: `
+        options: [{ checkContextTypes: true }],
+      },
+      {
+        // Proptypes declared with a spread property
+        code: `
         class Test extends React.component {
           static childContextTypes = {
             intl: React.childContextTypes.number,
@@ -384,12 +387,12 @@ ruleTester.run('forbid-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields'],
-      options: [{ checkContextTypes: true }],
-    },
-    {
-      // Proptypes declared with a spread property
-      code: `
+        features: ["class fields"],
+        options: [{ checkContextTypes: true }],
+      },
+      {
+        // Proptypes declared with a spread property
+        code: `
         class Test extends React.component {
           static get childContextTypes() {
             return {
@@ -399,10 +402,10 @@ ruleTester.run('forbid-prop-types', rule, {
           };
         }
       `,
-      options: [{ checkContextTypes: true }],
-    },
-    {
-      code: `
+        options: [{ checkContextTypes: true }],
+      },
+      {
+        code: `
         var First = createReactClass({
           childContextTypes: externalPropTypes,
           render: function() {
@@ -410,10 +413,10 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [{ checkChildContextTypes: true }],
-    },
-    {
-      code: `
+        options: [{ checkChildContextTypes: true }],
+      },
+      {
+        code: `
         var First = createReactClass({
           childContextTypes: {
             s: PropTypes.string,
@@ -426,10 +429,10 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [{ checkChildContextTypes: true }],
-    },
-    {
-      code: `
+        options: [{ checkChildContextTypes: true }],
+      },
+      {
+        code: `
         var First = createReactClass({
           childContextTypes: {
             a: PropTypes.array
@@ -439,15 +442,15 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [
-        {
-          forbid: ['any', 'object'],
-          checkChildContextTypes: true,
-        },
-      ],
-    },
-    {
-      code: `
+        options: [
+          {
+            forbid: ["any", "object"],
+            checkChildContextTypes: true,
+          },
+        ],
+      },
+      {
+        code: `
         var First = createReactClass({
           childContextTypes: {
             o: PropTypes.object
@@ -457,15 +460,15 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [
-        {
-          forbid: ['any', 'array'],
-          checkChildContextTypes: true,
-        },
-      ],
-    },
-    {
-      code: `
+        options: [
+          {
+            forbid: ["any", "array"],
+            checkChildContextTypes: true,
+          },
+        ],
+      },
+      {
+        code: `
         var First = createReactClass({
           childContextTypes: {
             o: PropTypes.object,
@@ -475,15 +478,15 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [
-        {
-          forbid: ['any', 'array'],
-          checkChildContextTypes: true,
-        },
-      ],
-    },
-    {
-      code: `
+        options: [
+          {
+            forbid: ["any", "array"],
+            checkChildContextTypes: true,
+          },
+        ],
+      },
+      {
+        code: `
         class First extends React.Component {
           render() {
             return <div />;
@@ -495,10 +498,10 @@ ruleTester.run('forbid-prop-types', rule, {
         };
         First.childContextTypes.justforcheck = PropTypes.string;
       `,
-      options: [{ checkChildContextTypes: true }],
-    },
-    {
-      code: `
+        options: [{ checkChildContextTypes: true }],
+      },
+      {
+        code: `
         class First extends React.Component {
           render() {
             return <div />;
@@ -508,10 +511,10 @@ ruleTester.run('forbid-prop-types', rule, {
           elem: PropTypes.instanceOf(HTMLElement)
         };
       `,
-      options: [{ checkChildContextTypes: true }],
-    },
-    {
-      code: `
+        options: [{ checkChildContextTypes: true }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>Hello</div>;
@@ -521,11 +524,12 @@ ruleTester.run('forbid-prop-types', rule, {
           "aria-controls": PropTypes.string
         };
       `,
-      options: [{ checkChildContextTypes: true }],
-    },
-    semver.satisfies(babelEslintVersion, '< 9') ? {
-      // Invalid code, should not be validated
-      code: `
+        options: [{ checkChildContextTypes: true }],
+      },
+      semver.satisfies(babelEslintVersion, "< 9")
+        ? {
+            // Invalid code, should not be validated
+            code: `
         class Component extends React.Component {
           childContextTypes: {
             a: PropTypes.any,
@@ -537,11 +541,12 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         }
       `,
-      parser: parsers.BABEL_ESLINT,
-      options: [{ checkChildContextTypes: true }],
-    } : [],
-    {
-      code: `
+            parser: parsers.BABEL_ESLINT,
+            options: [{ checkChildContextTypes: true }],
+          }
+        : [],
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             let { a, ...b } = obj;
@@ -550,10 +555,10 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [{ checkChildContextTypes: true }],
-    },
-    {
-      code: `
+        options: [{ checkChildContextTypes: true }],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           childContextTypes: {
             retailer: PropTypes.instanceOf(Map).isRequired,
@@ -564,11 +569,11 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [{ checkChildContextTypes: true }],
-    },
-    {
-      // Proptypes declared with a spread property
-      code: `
+        options: [{ checkChildContextTypes: true }],
+      },
+      {
+        // Proptypes declared with a spread property
+        code: `
         class Test extends React.component {
           static childContextTypes = {
             intl: React.childContextTypes.number,
@@ -576,12 +581,12 @@ ruleTester.run('forbid-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields'],
-      options: [{ checkChildContextTypes: true }],
-    },
-    {
-      // Proptypes declared with a spread property
-      code: `
+        features: ["class fields"],
+        options: [{ checkChildContextTypes: true }],
+      },
+      {
+        // Proptypes declared with a spread property
+        code: `
         class Test extends React.component {
           static get childContextTypes() {
             return {
@@ -591,10 +596,10 @@ ruleTester.run('forbid-prop-types', rule, {
           };
         }
       `,
-      options: [{ checkChildContextTypes: true }],
-    },
-    {
-      code: `
+        options: [{ checkChildContextTypes: true }],
+      },
+      {
+        code: `
         class TestComponent extends React.Component {
           static defaultProps = function () {
             const date = new Date();
@@ -604,10 +609,10 @@ ruleTester.run('forbid-prop-types', rule, {
           }();
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      code: `
+        features: ["class fields"],
+      },
+      {
+        code: `
         class HeroTeaserList extends React.Component {
           render() { return null; }
         }
@@ -616,9 +621,9 @@ ruleTester.run('forbid-prop-types', rule, {
           preview: PropTypes.bool,
         }, componentApi, teaserListProps);
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         const Foo = {
           foo: PropTypes.string,
@@ -627,18 +632,18 @@ ruleTester.run('forbid-prop-types', rule, {
           bar: PropTypes.shape(Foo),
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         import yup from "yup"
         const formValidation = Yup.object().shape({
           name: Yup.string(),
           customer_ids: Yup.array()
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         import yup from "Yup"
         const validation = yup.object().shape({
           address: yup.object({
@@ -647,14 +652,14 @@ ruleTester.run('forbid-prop-types', rule, {
           })
         })
       `,
-      options: [
-        {
-          forbid: ['string', 'object'],
-        },
-      ],
-    },
-    {
-      code: `
+        options: [
+          {
+            forbid: ["string", "object"],
+          },
+        ],
+      },
+      {
+        code: `
         import yup from "yup"
         Yup.array(
           Yup.object().shape({
@@ -662,10 +667,10 @@ ruleTester.run('forbid-prop-types', rule, {
           })
         )
       `,
-      options: [{ forbid: ['number'] }],
-    },
-    {
-      code: `
+        options: [{ forbid: ["number"] }],
+      },
+      {
+        code: `
         import CustomPropTypes from "prop-types";
         class Component extends React.Component {};
         Component.propTypes = {
@@ -675,45 +680,46 @@ ruleTester.run('forbid-prop-types', rule, {
           })
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         import CustomReact from "react"
         class Component extends React.Component {};
         Component.propTypes = {
           b: CustomReact.PropTypes.string,
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         import PropTypes from "yup"
         class Component extends React.Component {};
         Component.propTypes = {
           b: PropTypes.array(),
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         import { PropTypes, shape, any } from "yup"
         class Component extends React.Component {};
         Component.propTypes = {
           b: PropTypes.any,
         }
       `,
-      options: [{ forbid: ['any'] }],
-    },
-    {
-      code: `
+        options: [{ forbid: ["any"] }],
+      },
+      {
+        code: `
         import { PropTypes } from "not-react"
         class Component extends React.Component {};
         Component.propTypes = {
           b: PropTypes.array(),
         }
       `,
-    }
-  )),
+      },
+    ),
+  ),
 
   invalid: parsers.all([
     {
@@ -729,11 +735,11 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
           line: 4,
           column: 13,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -750,16 +756,14 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'number' },
+          messageId: "forbiddenPropType",
+          data: { target: "number" },
           line: 4,
           column: 13,
-          type: 'Property',
+          type: "Property",
         },
       ],
-      options: [
-        { forbid: ['number'] },
-      ],
+      options: [{ forbid: ["number"] }],
     },
     {
       code: `
@@ -774,11 +778,11 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
           line: 4,
           column: 13,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -795,11 +799,11 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'array' },
+          messageId: "forbiddenPropType",
+          data: { target: "array" },
           line: 4,
           column: 13,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -816,11 +820,11 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'array' },
+          messageId: "forbiddenPropType",
+          data: { target: "array" },
           line: 4,
           column: 13,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -837,11 +841,11 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'object' },
+          messageId: "forbiddenPropType",
+          data: { target: "object" },
           line: 4,
           column: 13,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -858,11 +862,11 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'object' },
+          messageId: "forbiddenPropType",
+          data: { target: "object" },
           line: 4,
           column: 13,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -937,7 +941,7 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: 1,
       settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
+        propWrapperFunctions: ["forbidExtraProps"],
       },
     },
     {
@@ -949,8 +953,8 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
         },
       ],
     },
@@ -963,12 +967,12 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
         },
       ],
       settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
+        propWrapperFunctions: ["forbidExtraProps"],
       },
     },
     {
@@ -983,7 +987,7 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       errors: 2,
     },
     {
@@ -1014,10 +1018,10 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       errors: 2,
       settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
+        propWrapperFunctions: ["forbidExtraProps"],
       },
     },
     {
@@ -1036,7 +1040,7 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: 2,
       settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
+        propWrapperFunctions: ["forbidExtraProps"],
       },
     },
     {
@@ -1051,7 +1055,7 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [{ forbid: ['instanceOf'] }],
+      options: [{ forbid: ["instanceOf"] }],
       errors: 1,
     },
     {
@@ -1066,7 +1070,7 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         });
       `,
-      options: [{ forbid: ['object'] }],
+      options: [{ forbid: ["object"] }],
       errors: 1,
     },
     {
@@ -1083,11 +1087,11 @@ ruleTester.run('forbid-prop-types', rule, {
       options: [{ checkContextTypes: true }],
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
           line: 4,
           column: 13,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -1103,14 +1107,14 @@ ruleTester.run('forbid-prop-types', rule, {
         }
       `,
       options: [{ checkContextTypes: true }],
-      features: ['class fields'],
+      features: ["class fields"],
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
           line: 4,
           column: 13,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -1130,11 +1134,11 @@ ruleTester.run('forbid-prop-types', rule, {
       options: [{ checkContextTypes: true }],
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
           line: 5,
           column: 15,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -1152,11 +1156,11 @@ ruleTester.run('forbid-prop-types', rule, {
       options: [{ checkContextTypes: true }],
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
           line: 8,
           column: 11,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -1172,11 +1176,11 @@ ruleTester.run('forbid-prop-types', rule, {
       options: [{ checkContextTypes: true }],
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
           line: 6,
           column: 11,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -1192,11 +1196,11 @@ ruleTester.run('forbid-prop-types', rule, {
       options: [{ checkContextTypes: true }],
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
           line: 6,
           column: 11,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -1212,11 +1216,11 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       errors: 2,
       options: [{ checkContextTypes: true }],
       settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
+        propWrapperFunctions: ["forbidExtraProps"],
       },
     },
     {
@@ -1236,7 +1240,7 @@ ruleTester.run('forbid-prop-types', rule, {
       errors: 2,
       options: [{ checkContextTypes: true }],
       settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
+        propWrapperFunctions: ["forbidExtraProps"],
       },
     },
     {
@@ -1254,7 +1258,7 @@ ruleTester.run('forbid-prop-types', rule, {
       errors: 2,
       options: [{ checkContextTypes: true }],
       settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
+        propWrapperFunctions: ["forbidExtraProps"],
       },
     },
     {
@@ -1270,7 +1274,7 @@ ruleTester.run('forbid-prop-types', rule, {
       errors: 2,
       options: [{ checkContextTypes: true }],
       settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
+        propWrapperFunctions: ["forbidExtraProps"],
       },
     },
     {
@@ -1286,7 +1290,7 @@ ruleTester.run('forbid-prop-types', rule, {
       errors: 2,
       options: [{ checkContextTypes: true }],
       settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
+        propWrapperFunctions: ["forbidExtraProps"],
       },
     },
     {
@@ -1303,7 +1307,7 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       options: [
         {
-          forbid: ['instanceOf'],
+          forbid: ["instanceOf"],
           checkContextTypes: true,
         },
       ],
@@ -1321,10 +1325,10 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [
         {
-          forbid: ['instanceOf'],
+          forbid: ["instanceOf"],
           checkContextTypes: true,
         },
       ],
@@ -1346,7 +1350,7 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       options: [
         {
-          forbid: ['instanceOf'],
+          forbid: ["instanceOf"],
           checkContextTypes: true,
         },
       ],
@@ -1366,7 +1370,7 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       options: [
         {
-          forbid: ['instanceOf'],
+          forbid: ["instanceOf"],
           checkContextTypes: true,
         },
       ],
@@ -1384,7 +1388,7 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       options: [
         {
-          forbid: ['instanceOf'],
+          forbid: ["instanceOf"],
           checkContextTypes: true,
         },
       ],
@@ -1402,7 +1406,7 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       options: [
         {
-          forbid: ['instanceOf'],
+          forbid: ["instanceOf"],
           checkContextTypes: true,
         },
       ],
@@ -1422,11 +1426,11 @@ ruleTester.run('forbid-prop-types', rule, {
       options: [{ checkChildContextTypes: true }],
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
           line: 4,
           column: 13,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -1442,14 +1446,14 @@ ruleTester.run('forbid-prop-types', rule, {
         }
       `,
       options: [{ checkChildContextTypes: true }],
-      features: ['class fields'],
+      features: ["class fields"],
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
           line: 4,
           column: 13,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -1469,11 +1473,11 @@ ruleTester.run('forbid-prop-types', rule, {
       options: [{ checkChildContextTypes: true }],
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
           line: 5,
           column: 15,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -1491,11 +1495,11 @@ ruleTester.run('forbid-prop-types', rule, {
       options: [{ checkChildContextTypes: true }],
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
           line: 8,
           column: 11,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -1511,11 +1515,11 @@ ruleTester.run('forbid-prop-types', rule, {
       options: [{ checkChildContextTypes: true }],
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
           line: 6,
           column: 11,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -1531,11 +1535,11 @@ ruleTester.run('forbid-prop-types', rule, {
       options: [{ checkChildContextTypes: true }],
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'any' },
+          messageId: "forbiddenPropType",
+          data: { target: "any" },
           line: 6,
           column: 11,
-          type: 'Property',
+          type: "Property",
         },
       ],
     },
@@ -1551,11 +1555,11 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       errors: 2,
       options: [{ checkChildContextTypes: true }],
       settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
+        propWrapperFunctions: ["forbidExtraProps"],
       },
     },
     {
@@ -1575,7 +1579,7 @@ ruleTester.run('forbid-prop-types', rule, {
       errors: 2,
       options: [{ checkChildContextTypes: true }],
       settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
+        propWrapperFunctions: ["forbidExtraProps"],
       },
     },
     {
@@ -1593,7 +1597,7 @@ ruleTester.run('forbid-prop-types', rule, {
       errors: 2,
       options: [{ checkChildContextTypes: true }],
       settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
+        propWrapperFunctions: ["forbidExtraProps"],
       },
     },
     {
@@ -1609,7 +1613,7 @@ ruleTester.run('forbid-prop-types', rule, {
       errors: 2,
       options: [{ checkChildContextTypes: true }],
       settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
+        propWrapperFunctions: ["forbidExtraProps"],
       },
     },
     {
@@ -1625,7 +1629,7 @@ ruleTester.run('forbid-prop-types', rule, {
       errors: 2,
       options: [{ checkChildContextTypes: true }],
       settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
+        propWrapperFunctions: ["forbidExtraProps"],
       },
     },
     {
@@ -1642,7 +1646,7 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       options: [
         {
-          forbid: ['instanceOf'],
+          forbid: ["instanceOf"],
           checkChildContextTypes: true,
         },
       ],
@@ -1660,10 +1664,10 @@ ruleTester.run('forbid-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [
         {
-          forbid: ['instanceOf'],
+          forbid: ["instanceOf"],
           checkChildContextTypes: true,
         },
       ],
@@ -1683,7 +1687,7 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       options: [
         {
-          forbid: ['instanceOf'],
+          forbid: ["instanceOf"],
           checkChildContextTypes: true,
         },
       ],
@@ -1701,7 +1705,7 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       options: [
         {
-          forbid: ['instanceOf'],
+          forbid: ["instanceOf"],
           checkChildContextTypes: true,
         },
       ],
@@ -1719,7 +1723,7 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       options: [
         {
-          forbid: ['instanceOf'],
+          forbid: ["instanceOf"],
           checkChildContextTypes: true,
         },
       ],
@@ -1734,9 +1738,7 @@ ruleTester.run('forbid-prop-types', rule, {
           b: string
         };
       `,
-      options: [
-        { forbid: ['object'] },
-      ],
+      options: [{ forbid: ["object"] }],
       errors: 1,
     },
     {
@@ -1747,9 +1749,7 @@ ruleTester.run('forbid-prop-types', rule, {
           a: objectOf(any)
         };
       `,
-      options: [
-        { forbid: ['any'] },
-      ],
+      options: [{ forbid: ["any"] }],
       errors: 1,
     },
     {
@@ -1760,7 +1760,7 @@ ruleTester.run('forbid-prop-types', rule, {
           a: objectOf(any)
         };
       `,
-      options: [{ forbid: ['objectOf'] }],
+      options: [{ forbid: ["objectOf"] }],
       errors: 1,
     },
     {
@@ -1773,7 +1773,7 @@ ruleTester.run('forbid-prop-types', rule, {
           })
         };
       `,
-      options: [{ forbid: ['any'] }],
+      options: [{ forbid: ["any"] }],
       errors: 1,
     },
     {
@@ -1786,7 +1786,7 @@ ruleTester.run('forbid-prop-types', rule, {
           })
         };
       `,
-      options: [{ forbid: ['any'] }],
+      options: [{ forbid: ["any"] }],
       errors: 1,
     },
     {
@@ -1824,8 +1824,8 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'object' },
+          messageId: "forbiddenPropType",
+          data: { target: "object" },
         },
       ],
     },
@@ -1849,8 +1849,8 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'object' },
+          messageId: "forbiddenPropType",
+          data: { target: "object" },
         },
       ],
     },
@@ -1867,8 +1867,8 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'object' },
+          messageId: "forbiddenPropType",
+          data: { target: "object" },
         },
       ],
     },
@@ -1885,8 +1885,8 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'object' },
+          messageId: "forbiddenPropType",
+          data: { target: "object" },
         },
       ],
     },
@@ -1900,8 +1900,8 @@ ruleTester.run('forbid-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          data: { target: 'object' },
+          messageId: "forbiddenPropType",
+          data: { target: "object" },
         },
       ],
     },

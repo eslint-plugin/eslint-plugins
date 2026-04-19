@@ -3,24 +3,24 @@
  * @author Jaesoekjjang
  */
 
-'use strict';
+"use strict";
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/checked-requires-onchange-or-readonly');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/checked-requires-onchange-or-readonly");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const ruleTester = new RuleTester({
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: 'module',
+    sourceType: "module",
     ecmaFeatures: {
       jsx: true,
     },
   },
 });
 
-ruleTester.run('checked-requires-onchange-or-readonly', rule, {
+ruleTester.run("checked-requires-onchange-or-readonly", rule, {
   valid: parsers.all([
     '<input type="checkbox" />',
     '<input type="checkbox" onChange={noop} />',
@@ -56,67 +56,77 @@ ruleTester.run('checked-requires-onchange-or-readonly', rule, {
     },
     {
       code: '<input type="checkbox" onChange={noop} checked defaultChecked />',
-      options: [{ ignoreMissingProperties: true, ignoreExclusiveCheckedAttribute: true }],
+      options: [
+        {
+          ignoreMissingProperties: true,
+          ignoreExclusiveCheckedAttribute: true,
+        },
+      ],
     },
-    '<span/>',
+    "<span/>",
     "React.createElement('span')",
-    '(()=>{})()',
+    "(()=>{})()",
   ]),
   invalid: parsers.all([
     {
       code: '<input type="radio" checked />',
-      errors: [{ messageId: 'missingProperty' }],
+      errors: [{ messageId: "missingProperty" }],
     },
     {
       code: '<input type="radio" checked={true} />',
-      errors: [{ messageId: 'missingProperty' }],
+      errors: [{ messageId: "missingProperty" }],
     },
     {
       code: '<input type="checkbox" checked />',
-      errors: [{ messageId: 'missingProperty' }],
+      errors: [{ messageId: "missingProperty" }],
     },
     {
       code: '<input type="checkbox" checked={true} />',
-      errors: [{ messageId: 'missingProperty' }],
+      errors: [{ messageId: "missingProperty" }],
     },
     {
       code: '<input type="checkbox" checked={condition ? true : false} />',
-      errors: [{ messageId: 'missingProperty' }],
+      errors: [{ messageId: "missingProperty" }],
     },
     {
       code: '<input type="checkbox" checked defaultChecked />',
       errors: [
-        { messageId: 'exclusiveCheckedAttribute' },
-        { messageId: 'missingProperty' },
+        { messageId: "exclusiveCheckedAttribute" },
+        { messageId: "missingProperty" },
       ],
     },
     {
       code: 'React.createElement("input", { checked: false })',
-      errors: [{ messageId: 'missingProperty' }],
+      errors: [{ messageId: "missingProperty" }],
     },
     {
       code: 'React.createElement("input", { checked: true, defaultChecked: true })',
       errors: [
-        { messageId: 'exclusiveCheckedAttribute' },
-        { messageId: 'missingProperty' },
+        { messageId: "exclusiveCheckedAttribute" },
+        { messageId: "missingProperty" },
       ],
     },
     {
       code: '<input type="checkbox" checked defaultChecked />',
       options: [{ ignoreMissingProperties: true }],
-      errors: [{ messageId: 'exclusiveCheckedAttribute' }],
+      errors: [{ messageId: "exclusiveCheckedAttribute" }],
     },
     {
       code: '<input type="checkbox" checked defaultChecked />',
       options: [{ ignoreExclusiveCheckedAttribute: true }],
-      errors: [{ messageId: 'missingProperty' }],
+      errors: [{ messageId: "missingProperty" }],
     },
     {
       code: '<input type="checkbox" checked defaultChecked />',
-      options: [{ ignoreMissingProperties: false, ignoreExclusiveCheckedAttribute: false }],
+      options: [
+        {
+          ignoreMissingProperties: false,
+          ignoreExclusiveCheckedAttribute: false,
+        },
+      ],
       errors: [
-        { messageId: 'exclusiveCheckedAttribute' },
-        { messageId: 'missingProperty' },
+        { messageId: "exclusiveCheckedAttribute" },
+        { messageId: "missingProperty" },
       ],
     },
   ]),

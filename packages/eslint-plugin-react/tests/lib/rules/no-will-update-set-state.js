@@ -3,20 +3,20 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/no-will-update-set-state');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/no-will-update-set-state");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('no-will-update-set-state', rule, {
+ruleTester.run("no-will-update-set-state", rule, {
   valid: parsers.all([
     {
       code: `
@@ -92,7 +92,7 @@ ruleTester.run('no-will-update-set-state', rule, {
           }
         }
       `,
-      settings: { react: { version: '16.2.0' } },
+      settings: { react: { version: "16.2.0" } },
     },
   ]),
 
@@ -109,8 +109,8 @@ ruleTester.run('no-will-update-set-state', rule, {
       `,
       errors: [
         {
-          messageId: 'noSetState',
-          data: { name: 'componentWillUpdate' },
+          messageId: "noSetState",
+          data: { name: "componentWillUpdate" },
         },
       ],
     },
@@ -126,8 +126,8 @@ ruleTester.run('no-will-update-set-state', rule, {
       `,
       errors: [
         {
-          messageId: 'noSetState',
-          data: { name: 'componentWillUpdate' },
+          messageId: "noSetState",
+          data: { name: "componentWillUpdate" },
         },
       ],
     },
@@ -141,11 +141,11 @@ ruleTester.run('no-will-update-set-state', rule, {
           }
         });
       `,
-      options: ['disallow-in-func'],
+      options: ["disallow-in-func"],
       errors: [
         {
-          messageId: 'noSetState',
-          data: { name: 'componentWillUpdate' },
+          messageId: "noSetState",
+          data: { name: "componentWillUpdate" },
         },
       ],
     },
@@ -159,11 +159,11 @@ ruleTester.run('no-will-update-set-state', rule, {
           }
         }
       `,
-      options: ['disallow-in-func'],
+      options: ["disallow-in-func"],
       errors: [
         {
-          messageId: 'noSetState',
-          data: { name: 'componentWillUpdate' },
+          messageId: "noSetState",
+          data: { name: "componentWillUpdate" },
         },
       ],
     },
@@ -179,11 +179,11 @@ ruleTester.run('no-will-update-set-state', rule, {
           }
         });
       `,
-      options: ['disallow-in-func'],
+      options: ["disallow-in-func"],
       errors: [
         {
-          messageId: 'noSetState',
-          data: { name: 'componentWillUpdate' },
+          messageId: "noSetState",
+          data: { name: "componentWillUpdate" },
         },
       ],
     },
@@ -199,11 +199,11 @@ ruleTester.run('no-will-update-set-state', rule, {
           }
         }
       `,
-      options: ['disallow-in-func'],
+      options: ["disallow-in-func"],
       errors: [
         {
-          messageId: 'noSetState',
-          data: { name: 'componentWillUpdate' },
+          messageId: "noSetState",
+          data: { name: "componentWillUpdate" },
         },
       ],
     },
@@ -221,8 +221,8 @@ ruleTester.run('no-will-update-set-state', rule, {
       `,
       errors: [
         {
-          messageId: 'noSetState',
-          data: { name: 'componentWillUpdate' },
+          messageId: "noSetState",
+          data: { name: "componentWillUpdate" },
         },
       ],
     },
@@ -240,8 +240,8 @@ ruleTester.run('no-will-update-set-state', rule, {
       `,
       errors: [
         {
-          messageId: 'noSetState',
-          data: { name: 'componentWillUpdate' },
+          messageId: "noSetState",
+          data: { name: "componentWillUpdate" },
         },
       ],
     },
@@ -253,11 +253,11 @@ ruleTester.run('no-will-update-set-state', rule, {
           }
         });
       `,
-      options: ['disallow-in-func'],
+      options: ["disallow-in-func"],
       errors: [
         {
-          messageId: 'noSetState',
-          data: { name: 'componentWillUpdate' },
+          messageId: "noSetState",
+          data: { name: "componentWillUpdate" },
         },
       ],
     },
@@ -269,11 +269,11 @@ ruleTester.run('no-will-update-set-state', rule, {
           }
         }
       `,
-      options: ['disallow-in-func'],
+      options: ["disallow-in-func"],
       errors: [
         {
-          messageId: 'noSetState',
-          data: { name: 'componentWillUpdate' },
+          messageId: "noSetState",
+          data: { name: "componentWillUpdate" },
         },
       ],
     },
@@ -287,11 +287,11 @@ ruleTester.run('no-will-update-set-state', rule, {
           }
         }
       `,
-      settings: { react: { version: '16.3.0' } },
+      settings: { react: { version: "16.3.0" } },
       errors: [
         {
-          messageId: 'noSetState',
-          data: { name: 'UNSAFE_componentWillUpdate' },
+          messageId: "noSetState",
+          data: { name: "UNSAFE_componentWillUpdate" },
         },
       ],
     },
@@ -305,11 +305,11 @@ ruleTester.run('no-will-update-set-state', rule, {
           }
         });
       `,
-      settings: { react: { version: '16.3.0' } },
+      settings: { react: { version: "16.3.0" } },
       errors: [
         {
-          messageId: 'noSetState',
-          data: { name: 'UNSAFE_componentWillUpdate' },
+          messageId: "noSetState",
+          data: { name: "UNSAFE_componentWillUpdate" },
         },
       ],
     },

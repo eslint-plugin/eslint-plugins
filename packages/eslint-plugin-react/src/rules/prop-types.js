@@ -3,56 +3,59 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
 // As for exceptions for props.children or props.className (and alike) look at
 // https://github.com/jsx-eslint/eslint-plugin-react/issues/7
 
-const Components = require('../util/Components');
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
+const Components = require("../util/Components");
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  missingPropType: '\'{{name}}\' is missing in props validation',
+  missingPropType: "'{{name}}' is missing in props validation",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow missing props validation in a React component definition',
-      category: 'Best Practices',
+      description:
+        "Disallow missing props validation in a React component definition",
+      category: "Best Practices",
       recommended: true,
-      url: docsUrl('prop-types'),
+      url: docsUrl("prop-types"),
     },
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        ignore: {
-          type: 'array',
-          items: {
-            type: 'string',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          ignore: {
+            type: "array",
+            items: {
+              type: "string",
+            },
+          },
+          customValidators: {
+            type: "array",
+            items: {
+              type: "string",
+            },
+          },
+          skipUndeclared: {
+            type: "boolean",
           },
         },
-        customValidators: {
-          type: 'array',
-          items: {
-            type: 'string',
-          },
-        },
-        skipUndeclared: {
-          type: 'boolean',
-        },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create: Components.detect((context, components) => {
@@ -75,12 +78,13 @@ module.exports = {
      * @returns {boolean} True if the component must be validated, false if not.
      */
     function mustBeValidated(component) {
-      const isSkippedByConfig = skipUndeclared && typeof component.declaredPropTypes === 'undefined';
+      const isSkippedByConfig =
+        skipUndeclared && typeof component.declaredPropTypes === "undefined";
       return !!(
-        component
-        && component.usedPropTypes
-        && !component.ignorePropsValidation
-        && !isSkippedByConfig
+        component &&
+        component.usedPropTypes &&
+        !component.ignorePropsValidation &&
+        !isSkippedByConfig
       );
     }
 
@@ -93,29 +97,31 @@ module.exports = {
     function internalIsDeclaredInComponent(declaredPropTypes, keyList) {
       for (let i = 0, j = keyList.length; i < j; i++) {
         const key = keyList[i];
-        const propType = (
-          declaredPropTypes && (
-            // Check if this key is declared
-            (declaredPropTypes[key] // If not, check if this type accepts any key
-            || declaredPropTypes.__ANY_KEY__) // eslint-disable-line no-underscore-dangle
-          )
-        );
+        const propType =
+          declaredPropTypes &&
+          // Check if this key is declared
+          (declaredPropTypes[key] || // If not, check if this type accepts any key
+            declaredPropTypes.__ANY_KEY__); // eslint-disable-line no-underscore-dangle
 
         if (!propType) {
           // If it's a computed property, we can't make any further analysis, but is valid
-          return key === '__COMPUTED_PROP__';
+          return key === "__COMPUTED_PROP__";
         }
-        if (typeof propType === 'object' && !propType.type) {
+        if (typeof propType === "object" && !propType.type) {
           return true;
         }
         // Consider every children as declared
-        if (propType.children === true || propType.containsUnresolvedSpread || propType.containsIndexers) {
+        if (
+          propType.children === true ||
+          propType.containsUnresolvedSpread ||
+          propType.containsIndexers
+        ) {
           return true;
         }
         if (propType.acceptedProperties) {
           return key in propType.acceptedProperties;
         }
-        if (propType.type === 'union') {
+        if (propType.type === "union") {
           // If we fall in this case, we know there is at least one complex type in the union
           if (i + 1 >= j) {
             // this is the last key, accept everything
@@ -128,7 +134,7 @@ module.exports = {
             unionPropType[key] = unionTypes[k];
             const isValid = internalIsDeclaredInComponent(
               unionPropType,
-              keyList.slice(i)
+              keyList.slice(i),
             );
             if (isValid) {
               return true;
@@ -153,8 +159,13 @@ module.exports = {
       while (node) {
         const component = components.get(node);
 
-        const isDeclared = component && component.confidence >= 2
-          && internalIsDeclaredInComponent(component.declaredPropTypes || {}, names);
+        const isDeclared =
+          component &&
+          component.confidence >= 2 &&
+          internalIsDeclaredInComponent(
+            component.declaredPropTypes || {},
+            names,
+          );
 
         if (isDeclared) {
           return true;
@@ -170,16 +181,19 @@ module.exports = {
      * @param {Object} component The component to process
      */
     function reportUndeclaredPropTypes(component) {
-      const undeclareds = component.usedPropTypes.filter((propType) => (
-        propType.node
-        && !isIgnored(propType.allNames[0])
-        && !isDeclaredInComponent(component.node, propType.allNames)
-      ));
+      const undeclareds = component.usedPropTypes.filter(
+        (propType) =>
+          propType.node &&
+          !isIgnored(propType.allNames[0]) &&
+          !isDeclaredInComponent(component.node, propType.allNames),
+      );
       undeclareds.forEach((propType) => {
-        report(context, messages.missingPropType, 'missingPropType', {
+        report(context, messages.missingPropType, "missingPropType", {
           node: propType.node,
           data: {
-            name: propType.allNames.join('.').replace(/\.__COMPUTED_PROP__/g, '[]'),
+            name: propType.allNames
+              .join(".")
+              .replace(/\.__COMPUTED_PROP__/g, "[]"),
           },
         });
       });
@@ -191,14 +205,20 @@ module.exports = {
      * @returns {boolean} True if the component is nested False if not.
      */
     function checkNestedComponent(component, list) {
-      const componentIsMemo = component.node.callee && component.node.callee.name === 'memo';
-      const argumentIsForwardRef = component.node.arguments && component.node.arguments[0].callee && component.node.arguments[0].callee.name === 'forwardRef';
+      const componentIsMemo =
+        component.node.callee && component.node.callee.name === "memo";
+      const argumentIsForwardRef =
+        component.node.arguments &&
+        component.node.arguments[0].callee &&
+        component.node.arguments[0].callee.name === "forwardRef";
       if (componentIsMemo && argumentIsForwardRef) {
         const forwardComponent = list.find(
-          (innerComponent) => (
-            innerComponent.node.range[0] === component.node.arguments[0].range[0]
-            && innerComponent.node.range[0] === component.node.arguments[0].range[0]
-          ));
+          (innerComponent) =>
+            innerComponent.node.range[0] ===
+              component.node.arguments[0].range[0] &&
+            innerComponent.node.range[0] ===
+              component.node.arguments[0].range[0],
+        );
 
         const isValidated = mustBeValidated(forwardComponent);
         const isIgnorePropsValidation = forwardComponent.ignorePropsValidation;
@@ -208,7 +228,7 @@ module.exports = {
     }
 
     return {
-      'Program:exit'() {
+      "Program:exit"() {
         const list = components.list();
         // Report undeclared proptypes for all classes
         Object.values(list)

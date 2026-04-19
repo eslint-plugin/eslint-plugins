@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-child-element-spacing');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-child-element-spacing");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
-  sourceType: 'module',
+  sourceType: "module",
   ecmaVersion: 2015,
   ecmaFeatures: {
     jsx: true,
@@ -14,7 +14,7 @@ const parserOptions = {
 };
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('jsx-child-element-spacing', rule, {
+ruleTester.run("jsx-child-element-spacing", rule, {
   valid: parsers.all([
     {
       code: `
@@ -29,7 +29,7 @@ ruleTester.run('jsx-child-element-spacing', rule, {
           foo
         </>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
       code: `
@@ -198,8 +198,8 @@ ruleTester.run('jsx-child-element-spacing', rule, {
       `,
       errors: [
         {
-          messageId: 'spacingBeforeNext',
-          data: { element: 'a' },
+          messageId: "spacingBeforeNext",
+          data: { element: "a" },
           line: 4,
           column: 11,
         },
@@ -212,11 +212,11 @@ ruleTester.run('jsx-child-element-spacing', rule, {
           <a>bar</a>
         </>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
       errors: [
         {
-          messageId: 'spacingBeforeNext',
-          data: { element: 'a' },
+          messageId: "spacingBeforeNext",
+          data: { element: "a" },
           line: 4,
           column: 11,
         },
@@ -231,8 +231,8 @@ ruleTester.run('jsx-child-element-spacing', rule, {
       `,
       errors: [
         {
-          messageId: 'spacingAfterPrev',
-          data: { element: 'a' },
+          messageId: "spacingAfterPrev",
+          data: { element: "a" },
           line: 3,
           column: 21,
         },
@@ -247,8 +247,8 @@ ruleTester.run('jsx-child-element-spacing', rule, {
       `,
       errors: [
         {
-          messageId: 'spacingAfterPrev',
-          data: { element: 'a' },
+          messageId: "spacingAfterPrev",
+          data: { element: "a" },
           line: 3,
           column: 26,
         },
@@ -263,8 +263,8 @@ ruleTester.run('jsx-child-element-spacing', rule, {
       `,
       errors: [
         {
-          messageId: 'spacingBeforeNext',
-          data: { element: 'a' },
+          messageId: "spacingBeforeNext",
+          data: { element: "a" },
           line: 4,
           column: 11,
         },
@@ -279,8 +279,8 @@ ruleTester.run('jsx-child-element-spacing', rule, {
       `,
       errors: [
         {
-          messageId: 'spacingBeforeNext',
-          data: { element: 'code' },
+          messageId: "spacingBeforeNext",
+          data: { element: "code" },
           line: 4,
           column: 11,
         },
@@ -296,14 +296,14 @@ ruleTester.run('jsx-child-element-spacing', rule, {
       `,
       errors: [
         {
-          messageId: 'spacingBeforeNext',
-          data: { element: 'a' },
+          messageId: "spacingBeforeNext",
+          data: { element: "a" },
           line: 4,
           column: 11,
         },
         {
-          messageId: 'spacingBeforeNext',
-          data: { element: 'a' },
+          messageId: "spacingBeforeNext",
+          data: { element: "a" },
           line: 5,
           column: 11,
         },

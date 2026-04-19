@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-const assert = require('assert');
-const sinon = require('sinon');
-const espree = require('espree');
+const assert = require("assert");
+const sinon = require("sinon");
+const espree = require("espree");
 
-const ast = require('../../lib/util/ast');
+const ast = require("../../lib/util/ast");
 
 const traverseReturns = ast.traverseReturns;
 const isFunctionLike = ast.isFunctionLike;
@@ -21,52 +21,69 @@ const parseCode = (code) => {
 
 const mockContext = {};
 
-describe('ast', () => {
-  describe('traverseReturnStatements', () => {
-    it('Correctly traverses function declarations', () => {
+describe("ast", () => {
+  describe("traverseReturnStatements", () => {
+    it("Correctly traverses function declarations", () => {
       const spy = sinon.spy();
-      traverseReturns(parseCode(`
+      traverseReturns(
+        parseCode(`
         function foo({prop}) {
           return;
         }
-      `), mockContext, spy);
+      `),
+        mockContext,
+        spy,
+      );
 
       assert(spy.calledOnce);
     });
 
-    it('Correctly traverses function expressions', () => {
+    it("Correctly traverses function expressions", () => {
       const spy = sinon.spy();
-      traverseReturns(parseCode(`
+      traverseReturns(
+        parseCode(`
         const foo = function({prop}) {
           return;
         }
-      `).declarations[0].init, mockContext, spy);
+      `).declarations[0].init,
+        mockContext,
+        spy,
+      );
 
       assert(spy.calledOnce);
     });
 
-    it('Correctly traverses arrow functions', () => {
+    it("Correctly traverses arrow functions", () => {
       const spy = sinon.spy();
-      traverseReturns(parseCode(`
+      traverseReturns(
+        parseCode(`
         ({prop}) => {
           return;
         }
-      `).expression, mockContext, spy);
+      `).expression,
+        mockContext,
+        spy,
+      );
 
       assert(spy.calledOnce);
 
       spy.resetHistory();
 
-      traverseReturns(parseCode(`
+      traverseReturns(
+        parseCode(`
         ({prop}) => 'something'
-      `).expression, mockContext, spy);
+      `).expression,
+        mockContext,
+        spy,
+      );
 
       assert(spy.calledOnce);
     });
 
-    it('Correctly traverses inside control flow expressions', () => {
+    it("Correctly traverses inside control flow expressions", () => {
       const spy = sinon.spy();
-      traverseReturns(parseCode(`
+      traverseReturns(
+        parseCode(`
         function foo({prop}) {
           if (prop) {
             return 0;
@@ -91,7 +108,10 @@ describe('ast', () => {
 
           const foo = () => 'not valid';
         }
-      `), mockContext, spy);
+      `),
+        mockContext,
+        spy,
+      );
 
       const enterCalls = spy.getCalls();
 
@@ -103,8 +123,8 @@ describe('ast', () => {
     });
   });
 
-  describe('isFunctionLike()', () => {
-    it('FunctionDeclaration should return true', () => {
+  describe("isFunctionLike()", () => {
+    it("FunctionDeclaration should return true", () => {
       const node1 = parseCode(`
         function foo(bar) {
           const asdf = () => 'zxcv';
@@ -123,7 +143,7 @@ describe('ast', () => {
       assert.strictEqual(isFunctionLike(node2), true);
     });
 
-    it('FunctionExpression should return true', () => {
+    it("FunctionExpression should return true", () => {
       const node1 = parseCode(`
         const foo = function(bar) {
           return () => 'zxcv';
@@ -139,7 +159,7 @@ describe('ast', () => {
       assert.strictEqual(isFunctionLike(node2), true);
     });
 
-    it('ArrowFunctionExpression should return true', () => {
+    it("ArrowFunctionExpression should return true", () => {
       const node1 = parseCode(`
         (bar) => {
           return () => 'zxcv';
@@ -158,7 +178,7 @@ describe('ast', () => {
       assert.strictEqual(isFunctionLike(node3), true);
     });
 
-    it('Non-functions should return false', () => {
+    it("Non-functions should return false", () => {
       const node1 = parseCode(`
         class bar {
           a() {

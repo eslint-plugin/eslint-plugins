@@ -3,20 +3,20 @@
  * @author Mark Orel
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/require-render-return');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/require-render-return");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('require-render-return', rule, {
+ruleTester.run("require-render-return", rule, {
   valid: parsers.all([
     {
       // ES6 class
@@ -48,7 +48,7 @@ ruleTester.run('require-render-return', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
     },
     {
       // ES6 class with render property (implicit return)
@@ -59,7 +59,7 @@ ruleTester.run('require-render-return', rule, {
           )
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
     },
     {
       // ES5 class
@@ -127,11 +127,11 @@ ruleTester.run('require-render-return', rule, {
     },
     {
       // ES6 class without a render method
-      code: 'class Hello extends React.Component {}',
+      code: "class Hello extends React.Component {}",
     },
     {
       // ES5 class without a render method
-      code: 'var Hello = createReactClass({});',
+      code: "var Hello = createReactClass({});",
     },
     {
       // ES5 class with an imported render method
@@ -149,7 +149,7 @@ ruleTester.run('require-render-return', rule, {
           render
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
   ]),
 
@@ -164,7 +164,7 @@ ruleTester.run('require-render-return', rule, {
       `,
       errors: [
         {
-          messageId: 'noRenderReturn',
+          messageId: "noRenderReturn",
           line: 4,
         },
       ],
@@ -176,7 +176,7 @@ ruleTester.run('require-render-return', rule, {
           render() {}
         }
       `,
-      errors: [{ messageId: 'noRenderReturn' }],
+      errors: [{ messageId: "noRenderReturn" }],
     },
     {
       // Missing return (but one is present in a sub-function)
@@ -191,7 +191,7 @@ ruleTester.run('require-render-return', rule, {
       `,
       errors: [
         {
-          messageId: 'noRenderReturn',
+          messageId: "noRenderReturn",
           line: 3,
         },
       ],
@@ -205,10 +205,10 @@ ruleTester.run('require-render-return', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       errors: [
         {
-          messageId: 'noRenderReturn',
+          messageId: "noRenderReturn",
           line: 3,
         },
       ],

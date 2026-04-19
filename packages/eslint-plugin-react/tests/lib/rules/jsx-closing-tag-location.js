@@ -3,19 +3,19 @@
  * @author Ross Solomon
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-closing-tag-location');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-closing-tag-location");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
-  sourceType: 'module',
+  sourceType: "module",
   ecmaVersion: 2015,
   ecmaFeatures: {
     jsx: true,
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('jsx-closing-tag-location', rule, {
+ruleTester.run("jsx-closing-tag-location", rule, {
   valid: parsers.all([
     {
       code: `
@@ -36,7 +36,7 @@ ruleTester.run('jsx-closing-tag-location', rule, {
        bar</App>
         }
       `,
-      options: [{ location: 'line-aligned' }],
+      options: [{ location: "line-aligned" }],
     },
     {
       code: `
@@ -54,7 +54,7 @@ ruleTester.run('jsx-closing-tag-location', rule, {
           </App>
         }
       `,
-      options: ['line-aligned'],
+      options: ["line-aligned"],
     },
     {
       code: `
@@ -62,7 +62,7 @@ ruleTester.run('jsx-closing-tag-location', rule, {
               bar
         </App>
       `,
-      options: ['line-aligned'],
+      options: ["line-aligned"],
     },
     {
       code: `
@@ -78,7 +78,7 @@ ruleTester.run('jsx-closing-tag-location', rule, {
               bar
           </App>
       `,
-      options: ['line-aligned'],
+      options: ["line-aligned"],
     },
     {
       code: `
@@ -101,7 +101,7 @@ ruleTester.run('jsx-closing-tag-location', rule, {
           foo
         </App>
       `,
-      options: ['line-aligned'],
+      options: ["line-aligned"],
     },
     {
       code: `
@@ -114,13 +114,13 @@ ruleTester.run('jsx-closing-tag-location', rule, {
           foo
         </>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
       code: `
         <>foo</>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
   ]),
 
@@ -136,7 +136,7 @@ ruleTester.run('jsx-closing-tag-location', rule, {
           foo
         </App>
       `,
-      errors: [{ messageId: 'matchIndent' }],
+      errors: [{ messageId: "matchIndent" }],
     },
     {
       code: `
@@ -148,7 +148,7 @@ ruleTester.run('jsx-closing-tag-location', rule, {
           foo
         </App>
       `,
-      errors: [{ messageId: 'onOwnLine' }],
+      errors: [{ messageId: "onOwnLine" }],
     },
     {
       code: `
@@ -156,26 +156,26 @@ ruleTester.run('jsx-closing-tag-location', rule, {
           foo
           </>
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
       output: `
         <>
           foo
         </>
       `,
-      errors: [{ messageId: 'matchIndent' }],
+      errors: [{ messageId: "matchIndent" }],
     },
     {
       code: `
         <>
           foo</>
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
       output: `
         <>
           foo
         </>
       `,
-      errors: [{ messageId: 'onOwnLine' }],
+      errors: [{ messageId: "onOwnLine" }],
     },
     {
       code: `
@@ -191,8 +191,8 @@ ruleTester.run('jsx-closing-tag-location', rule, {
           </App>
         }
       `,
-      errors: [{ messageId: 'onOwnLine' }],
-      options: ['line-aligned'],
+      errors: [{ messageId: "onOwnLine" }],
+      options: ["line-aligned"],
     },
     {
       code: `
@@ -205,8 +205,8 @@ ruleTester.run('jsx-closing-tag-location', rule, {
               foo
         </App>
       `,
-      errors: [{ messageId: 'alignWithOpening' }],
-      options: ['line-aligned'],
+      errors: [{ messageId: "alignWithOpening" }],
+      options: ["line-aligned"],
     },
   ]),
 });

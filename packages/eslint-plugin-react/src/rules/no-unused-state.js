@@ -7,18 +7,18 @@
  * property assignments.
  */
 
-'use strict';
+"use strict";
 
-const docsUrl = require('../util/docsUrl');
-const astUtil = require('../util/ast');
-const componentUtil = require('../util/componentUtil');
-const report = require('../util/report');
-const getScope = require('../util/eslint').getScope;
+const docsUrl = require("../util/docsUrl");
+const astUtil = require("../util/ast");
+const componentUtil = require("../util/componentUtil");
+const report = require("../util/report");
+const getScope = require("../util/eslint").getScope;
 
 // Descend through all wrapping TypeCastExpressions and return the expression
 // that was cast.
 function uncast(node) {
-  while (node.type === 'TypeCastExpression') {
+  while (node.type === "TypeCastExpression") {
     node = node.expression;
   }
   return node;
@@ -31,20 +31,20 @@ function getName(node) {
   node = uncast(node);
   const type = node.type;
 
-  if (type === 'Identifier') {
+  if (type === "Identifier") {
     return node.name;
   }
-  if (type === 'Literal') {
+  if (type === "Literal") {
     return String(node.value);
   }
-  if (type === 'TemplateLiteral' && node.expressions.length === 0) {
+  if (type === "TemplateLiteral" && node.expressions.length === 0) {
     return node.quasis[0].value.raw;
   }
   return null;
 }
 
 function isThisExpression(node) {
-  return astUtil.unwrapTSAsExpression(uncast(node)).type === 'ThisExpression';
+  return astUtil.unwrapTSAsExpression(uncast(node)).type === "ThisExpression";
 }
 
 function getInitialClassInfo() {
@@ -68,24 +68,24 @@ function isSetStateCall(node) {
   const unwrappedCalleeNode = astUtil.unwrapTSAsExpression(node.callee);
 
   return (
-    unwrappedCalleeNode.type === 'MemberExpression'
-    && isThisExpression(unwrappedCalleeNode.object)
-    && getName(unwrappedCalleeNode.property) === 'setState'
+    unwrappedCalleeNode.type === "MemberExpression" &&
+    isThisExpression(unwrappedCalleeNode.object) &&
+    getName(unwrappedCalleeNode.property) === "setState"
   );
 }
 
 const messages = {
-  unusedStateField: 'Unused state field: \'{{name}}\'',
+  unusedStateField: "Unused state field: '{{name}}'",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow definitions of unused state',
-      category: 'Best Practices',
+      description: "Disallow definitions of unused state",
+      category: "Best Practices",
       recommended: false,
-      url: docsUrl('no-unused-state'),
+      url: docsUrl("no-unused-state"),
     },
 
     messages,
@@ -102,25 +102,24 @@ module.exports = {
 
     function isStateParameterReference(node) {
       const classMethods = [
-        'shouldComponentUpdate',
-        'componentWillUpdate',
-        'UNSAFE_componentWillUpdate',
-        'getSnapshotBeforeUpdate',
-        'componentDidUpdate',
+        "shouldComponentUpdate",
+        "componentWillUpdate",
+        "UNSAFE_componentWillUpdate",
+        "getSnapshotBeforeUpdate",
+        "componentDidUpdate",
       ];
 
       let scope = getScope(context, node);
       while (scope) {
         const parent = scope.block && scope.block.parent;
         if (
-          parent
-          && parent.type === 'MethodDefinition' && (
-            (parent.static && parent.key.name === 'getDerivedStateFromProps')
-            || classMethods.indexOf(parent.key.name) !== -1
-          )
-          && parent.value.type === 'FunctionExpression'
-          && parent.value.params[1]
-          && parent.value.params[1].name === node.name
+          parent &&
+          parent.type === "MethodDefinition" &&
+          ((parent.static && parent.key.name === "getDerivedStateFromProps") ||
+            classMethods.indexOf(parent.key.name) !== -1) &&
+          parent.value.type === "FunctionExpression" &&
+          parent.value.params[1] &&
+          parent.value.params[1].name === node.name
         ) {
           return true;
         }
@@ -135,29 +134,39 @@ module.exports = {
     function isStateReference(node) {
       node = uncast(node);
 
-      const isDirectStateReference = node.type === 'MemberExpression'
-        && isThisExpression(node.object)
-        && node.property.name === 'state';
+      const isDirectStateReference =
+        node.type === "MemberExpression" &&
+        isThisExpression(node.object) &&
+        node.property.name === "state";
 
-      const isAliasedStateReference = node.type === 'Identifier'
-        && classInfo.aliases
-        && classInfo.aliases.has(node.name);
+      const isAliasedStateReference =
+        node.type === "Identifier" &&
+        classInfo.aliases &&
+        classInfo.aliases.has(node.name);
 
-      return isDirectStateReference || isAliasedStateReference || isStateParameterReference(node);
+      return (
+        isDirectStateReference ||
+        isAliasedStateReference ||
+        isStateParameterReference(node)
+      );
     }
 
     // Takes an ObjectExpression node and adds all named Property nodes to the
     // current set of state fields.
     function addStateFields(node) {
-      node.properties.filter((prop) => (
-        prop.type === 'Property'
-          && (prop.key.type === 'Literal'
-          || (prop.key.type === 'TemplateLiteral' && prop.key.expressions.length === 0)
-          || (prop.computed === false && prop.key.type === 'Identifier'))
-          && getName(prop.key) !== null
-      )).forEach((prop) => {
-        classInfo.stateFields.add(prop);
-      });
+      node.properties
+        .filter(
+          (prop) =>
+            prop.type === "Property" &&
+            (prop.key.type === "Literal" ||
+              (prop.key.type === "TemplateLiteral" &&
+                prop.key.expressions.length === 0) ||
+              (prop.computed === false && prop.key.type === "Identifier")) &&
+            getName(prop.key) !== null,
+        )
+        .forEach((prop) => {
+          classInfo.stateFields.add(prop);
+        });
     }
 
     // Adds the name of the given node as a used state field if the node is an
@@ -176,11 +185,12 @@ module.exports = {
     // destructures `this.state`.
     function handleStateDestructuring(node) {
       node.properties.forEach((prop) => {
-        if (prop.type === 'Property') {
+        if (prop.type === "Property") {
           addUsedStateField(prop.key);
         } else if (
-          (prop.type === 'ExperimentalRestProperty' || prop.type === 'RestElement')
-          && classInfo.aliases
+          (prop.type === "ExperimentalRestProperty" ||
+            prop.type === "RestElement") &&
+          classInfo.aliases
         ) {
           classInfo.aliases.add(getName(prop.argument));
         }
@@ -193,21 +203,21 @@ module.exports = {
       const unwrappedRight = astUtil.unwrapTSAsExpression(right);
 
       switch (left.type) {
-        case 'Identifier':
+        case "Identifier":
           if (isStateReference(unwrappedRight) && classInfo.aliases) {
             classInfo.aliases.add(left.name);
           }
           break;
-        case 'ObjectPattern':
+        case "ObjectPattern":
           if (isStateReference(unwrappedRight)) {
             handleStateDestructuring(left);
           } else if (isThisExpression(unwrappedRight) && classInfo.aliases) {
             left.properties.forEach((prop) => {
-              if (prop.type === 'Property' && getName(prop.key) === 'state') {
+              if (prop.type === "Property" && getName(prop.key) === "state") {
                 const name = getName(prop.value);
                 if (name) {
                   classInfo.aliases.add(name);
-                } else if (prop.value.type === 'ObjectPattern') {
+                } else if (prop.value.type === "ObjectPattern") {
                   handleStateDestructuring(prop.value);
                 }
               }
@@ -224,7 +234,7 @@ module.exports = {
       classInfo.stateFields.forEach((node) => {
         const name = getName(node.key);
         if (!classInfo.usedStateFields.has(name)) {
-          report(context, messages.unusedStateField, 'unusedStateField', {
+          report(context, messages.unusedStateField, "unusedStateField", {
             node,
             data: {
               name,
@@ -251,11 +261,11 @@ module.exports = {
     function isGDSFP(node) {
       const name = getName(node.key);
       if (
-        !node.static
-        || name !== 'getDerivedStateFromProps'
-        || !node.value
-        || !node.value.params
-        || node.value.params.length < 2 // no `state` argument
+        !node.static ||
+        name !== "getDerivedStateFromProps" ||
+        !node.value ||
+        !node.value.params ||
+        node.value.params.length < 2 // no `state` argument
       ) {
         return false;
       }
@@ -265,11 +275,11 @@ module.exports = {
     return {
       ClassDeclaration: handleES6ComponentEnter,
 
-      'ClassDeclaration:exit': handleES6ComponentExit,
+      "ClassDeclaration:exit": handleES6ComponentExit,
 
       ClassExpression: handleES6ComponentEnter,
 
-      'ClassExpression:exit': handleES6ComponentExit,
+      "ClassExpression:exit": handleES6ComponentExit,
 
       ObjectExpression(node) {
         if (componentUtil.isES5Component(node, context)) {
@@ -277,7 +287,7 @@ module.exports = {
         }
       },
 
-      'ObjectExpression:exit'(node) {
+      "ObjectExpression:exit"(node) {
         if (!classInfo) {
           return;
         }
@@ -294,29 +304,33 @@ module.exports = {
         }
 
         const unwrappedNode = astUtil.unwrapTSAsExpression(node);
-        const unwrappedArgumentNode = astUtil.unwrapTSAsExpression(unwrappedNode.arguments[0]);
+        const unwrappedArgumentNode = astUtil.unwrapTSAsExpression(
+          unwrappedNode.arguments[0],
+        );
 
         // If we're looking at a `this.setState({})` invocation, record all the
         // properties as state fields.
         if (
-          isSetStateCall(unwrappedNode)
-          && unwrappedNode.arguments.length > 0
-          && unwrappedArgumentNode.type === 'ObjectExpression'
+          isSetStateCall(unwrappedNode) &&
+          unwrappedNode.arguments.length > 0 &&
+          unwrappedArgumentNode.type === "ObjectExpression"
         ) {
           addStateFields(unwrappedArgumentNode);
         } else if (
-          isSetStateCall(unwrappedNode)
-          && unwrappedNode.arguments.length > 0
-          && unwrappedArgumentNode.type === 'ArrowFunctionExpression'
+          isSetStateCall(unwrappedNode) &&
+          unwrappedNode.arguments.length > 0 &&
+          unwrappedArgumentNode.type === "ArrowFunctionExpression"
         ) {
-          const unwrappedBodyNode = astUtil.unwrapTSAsExpression(unwrappedArgumentNode.body);
+          const unwrappedBodyNode = astUtil.unwrapTSAsExpression(
+            unwrappedArgumentNode.body,
+          );
 
-          if (unwrappedBodyNode.type === 'ObjectExpression') {
+          if (unwrappedBodyNode.type === "ObjectExpression") {
             addStateFields(unwrappedBodyNode);
           }
           if (unwrappedArgumentNode.params.length > 0 && classInfo.aliases) {
             const firstParam = unwrappedArgumentNode.params[0];
-            if (firstParam.type === 'ObjectPattern') {
+            if (firstParam.type === "ObjectPattern") {
               handleStateDestructuring(firstParam);
             } else {
               classInfo.aliases.add(getName(firstParam));
@@ -325,7 +339,7 @@ module.exports = {
         }
       },
 
-      'ClassProperty, PropertyDefinition'(node) {
+      "ClassProperty, PropertyDefinition"(node) {
         if (!classInfo) {
           return;
         }
@@ -335,46 +349,50 @@ module.exports = {
 
         const name = getName(node.key);
         if (
-          name === 'state'
-          && !node.static
-          && unwrappedValueNode
-          && unwrappedValueNode.type === 'ObjectExpression'
+          name === "state" &&
+          !node.static &&
+          unwrappedValueNode &&
+          unwrappedValueNode.type === "ObjectExpression"
         ) {
           addStateFields(unwrappedValueNode);
         }
 
         if (
-          !node.static
-          && unwrappedValueNode
-          && unwrappedValueNode.type === 'ArrowFunctionExpression'
+          !node.static &&
+          unwrappedValueNode &&
+          unwrappedValueNode.type === "ArrowFunctionExpression"
         ) {
           // Create a new set for this.state aliases local to this method.
           classInfo.aliases = new Set();
         }
       },
 
-      'ClassProperty:exit'(node) {
+      "ClassProperty:exit"(node) {
         if (
-          classInfo
-          && !node.static
-          && node.value
-          && node.value.type === 'ArrowFunctionExpression'
+          classInfo &&
+          !node.static &&
+          node.value &&
+          node.value.type === "ArrowFunctionExpression"
         ) {
           // Forget our set of local aliases.
           classInfo.aliases = null;
         }
       },
 
-      'PropertyDefinition, ClassProperty'(node) {
+      "PropertyDefinition, ClassProperty"(node) {
         if (!isGDSFP(node)) {
           return;
         }
 
-        const childScope = getScope(context, node).childScopes.find((x) => x.block === node.value);
+        const childScope = getScope(context, node).childScopes.find(
+          (x) => x.block === node.value,
+        );
         if (!childScope) {
           return;
         }
-        const scope = childScope.variableScope.childScopes.find((x) => x.block === node.value);
+        const scope = childScope.variableScope.childScopes.find(
+          (x) => x.block === node.value,
+        );
         const stateArg = node.value.params[1]; // probably "state"
         if (!scope || !scope.variables) {
           return;
@@ -386,20 +404,24 @@ module.exports = {
 
           stateRefs.forEach((ref) => {
             const identifier = ref.identifier;
-            if (identifier && identifier.parent && identifier.parent.type === 'MemberExpression') {
+            if (
+              identifier &&
+              identifier.parent &&
+              identifier.parent.type === "MemberExpression"
+            ) {
               addUsedStateField(identifier.parent.property);
             }
           });
         }
       },
 
-      'PropertyDefinition:exit'(node) {
+      "PropertyDefinition:exit"(node) {
         if (
-          classInfo
-          && !node.static
-          && node.value
-          && node.value.type === 'ArrowFunctionExpression'
-          && !isGDSFP(node)
+          classInfo &&
+          !node.static &&
+          node.value &&
+          node.value.type === "ArrowFunctionExpression" &&
+          !isGDSFP(node)
         ) {
           // Forget our set of local aliases.
           classInfo.aliases = null;
@@ -414,7 +436,7 @@ module.exports = {
         classInfo.aliases = new Set();
       },
 
-      'MethodDefinition:exit'() {
+      "MethodDefinition:exit"() {
         if (!classInfo) {
           return;
         }
@@ -433,16 +455,16 @@ module.exports = {
         }
 
         if (
-          'key' in parent
-          && 'name' in parent.key
-          && parent.key.name === 'getInitialState'
+          "key" in parent &&
+          "name" in parent.key &&
+          parent.key.name === "getInitialState"
         ) {
           const body = node.body.body;
           const lastBodyNode = body[body.length - 1];
 
           if (
-            lastBodyNode.type === 'ReturnStatement'
-            && lastBodyNode.argument.type === 'ObjectExpression'
+            lastBodyNode.type === "ReturnStatement" &&
+            lastBodyNode.argument.type === "ObjectExpression"
           ) {
             addStateFields(lastBodyNode.argument);
           }
@@ -462,23 +484,23 @@ module.exports = {
 
         // Check for assignments like `this.state = {}`
         if (
-          unwrappedLeft.type === 'MemberExpression'
-          && isThisExpression(unwrappedLeft.object)
-          && getName(unwrappedLeft.property) === 'state'
-          && unwrappedRight.type === 'ObjectExpression'
+          unwrappedLeft.type === "MemberExpression" &&
+          isThisExpression(unwrappedLeft.object) &&
+          getName(unwrappedLeft.property) === "state" &&
+          unwrappedRight.type === "ObjectExpression"
         ) {
           // Find the nearest function expression containing this assignment.
           /** @type {import('eslint').Rule.Node} */
           let fn = node;
-          while (fn.type !== 'FunctionExpression' && fn.parent) {
+          while (fn.type !== "FunctionExpression" && fn.parent) {
             fn = fn.parent;
           }
           // If the nearest containing function is the constructor, then we want
           // to record all the assigned properties as state fields.
           if (
-            fn.parent
-            && fn.parent.type === 'MethodDefinition'
-            && fn.parent.kind === 'constructor'
+            fn.parent &&
+            fn.parent.type === "MethodDefinition" &&
+            fn.parent.kind === "constructor"
           ) {
             addStateFields(unwrappedRight);
           }
@@ -495,20 +517,23 @@ module.exports = {
         handleAssignment(node.id, node.init);
       },
 
-      'MemberExpression, OptionalMemberExpression'(node) {
+      "MemberExpression, OptionalMemberExpression"(node) {
         if (!classInfo) {
           return;
         }
         if (isStateReference(astUtil.unwrapTSAsExpression(node.object))) {
           // If we see this.state[foo] access, give up.
-          if (node.computed && node.property.type !== 'Literal') {
+          if (node.computed && node.property.type !== "Literal") {
             classInfo = null;
             return;
           }
           // Otherwise, record that we saw this property being accessed.
           addUsedStateField(node.property);
-        // If we see a `this.state` access in a CallExpression, give up.
-        } else if (isStateReference(node) && astUtil.isCallExpression(node.parent)) {
+          // If we see a `this.state` access in a CallExpression, give up.
+        } else if (
+          isStateReference(node) &&
+          astUtil.isCallExpression(node.parent)
+        ) {
           classInfo = null;
         }
       },
@@ -519,7 +544,7 @@ module.exports = {
         }
       },
 
-      'ExperimentalSpreadProperty, SpreadElement'(node) {
+      "ExperimentalSpreadProperty, SpreadElement"(node) {
         if (classInfo && isStateReference(node.argument)) {
           classInfo = null;
         }

@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const assert = require('assert');
-const espree = require('espree');
+const assert = require("assert");
+const espree = require("espree");
 
-const jsxUtil = require('../../lib/util/jsx');
+const jsxUtil = require("../../lib/util/jsx");
 
 const isReturningJSX = jsxUtil.isReturningJSX;
 
@@ -21,10 +21,12 @@ const parseCode = (code) => {
 };
 
 const mockContext = {
-  getSourceCode() { return { getScope: mockContext.getScope }; },
+  getSourceCode() {
+    return { getScope: mockContext.getScope };
+  },
   getScope() {
     return {
-      type: 'global',
+      type: "global",
       upper: null,
       childScopes: [],
       variables: [],
@@ -32,13 +34,12 @@ const mockContext = {
   },
 };
 
-describe('jsxUtil', () => {
-  describe('isReturningJSX', () => {
-    const assertValid = (codeStr) => assert(
-      isReturningJSX(mockContext, parseCode(codeStr))
-    );
+describe("jsxUtil", () => {
+  describe("isReturningJSX", () => {
+    const assertValid = (codeStr) =>
+      assert(isReturningJSX(mockContext, parseCode(codeStr)));
 
-    it('Works when returning JSX', () => {
+    it("Works when returning JSX", () => {
       assertValid(`
         function Test() {
           return (
@@ -54,7 +55,7 @@ describe('jsxUtil', () => {
       `);
     });
 
-    it('Works when returning null', () => {
+    it("Works when returning null", () => {
       assertValid(`
         function Test() {
           return null;
@@ -68,7 +69,7 @@ describe('jsxUtil', () => {
       `);
     });
 
-    it('Works with nested return', () => {
+    it("Works with nested return", () => {
       assertValid(`
         function Test({prop}) {
           if (prop) {
@@ -78,7 +79,7 @@ describe('jsxUtil', () => {
       `);
     });
 
-    it('Can ignore null', () => {
+    it("Can ignore null", () => {
       assertValid(`
         function Test() {
           return null;
@@ -86,20 +87,26 @@ describe('jsxUtil', () => {
       `);
     });
 
-    it('Ignores JSX arguments to function calls used as return value of arrow functions', () => {
+    it("Ignores JSX arguments to function calls used as return value of arrow functions", () => {
       let astNode = parseCode(`const obj = {
         prop: () => test(<a>something</a>)
       }`);
-      let arrowFunctionExpression = astNode.declarations[0].init.properties[0].value;
+      let arrowFunctionExpression =
+        astNode.declarations[0].init.properties[0].value;
 
-      assert(!isReturningJSX(() => false, arrowFunctionExpression, mockContext));
+      assert(
+        !isReturningJSX(() => false, arrowFunctionExpression, mockContext),
+      );
 
       astNode = parseCode(`const obj = {
         prop: () => { return test(<a>something</a>); }
       }`);
-      arrowFunctionExpression = astNode.declarations[0].init.properties[0].value;
+      arrowFunctionExpression =
+        astNode.declarations[0].init.properties[0].value;
 
-      assert(!isReturningJSX(() => false, arrowFunctionExpression, mockContext));
+      assert(
+        !isReturningJSX(() => false, arrowFunctionExpression, mockContext),
+      );
     });
   });
 });

@@ -3,20 +3,20 @@
  * @author Luke Zapart
  */
 
-'use strict';
+"use strict";
 
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/prefer-read-only-props');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/prefer-read-only-props");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('prefer-read-only-props', rule, {
+ruleTester.run("prefer-read-only-props", rule, {
   valid: parsers.all([
     {
       // Class component with type parameter
@@ -42,7 +42,7 @@ ruleTester.run('prefer-read-only-props', rule, {
           }
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
     },
     {
       // Class component with typed props property
@@ -57,7 +57,7 @@ ruleTester.run('prefer-read-only-props', rule, {
           }
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
     },
     {
       // Functional component with typed props argument
@@ -66,7 +66,7 @@ ruleTester.run('prefer-read-only-props', rule, {
           return <div>Hello {props.name}</div>;
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
     },
     {
       // Functional component with type intersection
@@ -79,7 +79,7 @@ ruleTester.run('prefer-read-only-props', rule, {
           return <div>Hello {firstName} {lastName}</div>;
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
     },
     {
       // Arrow function
@@ -88,7 +88,7 @@ ruleTester.run('prefer-read-only-props', rule, {
           <div>Hello {props.name}</div>
         );
       `,
-      features: ['flow'],
+      features: ["flow"],
     },
     {
       // Destructured props
@@ -97,7 +97,7 @@ ruleTester.run('prefer-read-only-props', rule, {
           <div>Hello {props.name}</div>
         );
       `,
-      features: ['flow'],
+      features: ["flow"],
     },
     {
       // No error, because this is not a component
@@ -106,7 +106,7 @@ ruleTester.run('prefer-read-only-props', rule, {
           return props.n + 1;
         };
       `,
-      features: ['flow'],
+      features: ["flow"],
     },
     {
       // No error, because there is no Props flow type
@@ -144,7 +144,7 @@ ruleTester.run('prefer-read-only-props', rule, {
           }
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
     },
     {
       // Class component with typed props argument
@@ -160,7 +160,7 @@ ruleTester.run('prefer-read-only-props', rule, {
           }
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
     },
     {
       code: `
@@ -176,7 +176,7 @@ ruleTester.run('prefer-read-only-props', rule, {
 
         export default MyComponent;
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ["ts", "no-babel-old"],
     },
     {
       code: `
@@ -190,7 +190,7 @@ ruleTester.run('prefer-read-only-props', rule, {
         };
         export default MyComponent;
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ["ts", "no-babel-old"],
     },
     {
       code: `
@@ -203,7 +203,7 @@ ruleTester.run('prefer-read-only-props', rule, {
         };
         export default MyComponent;
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ["ts", "no-babel-old"],
     },
     {
       code: `
@@ -216,7 +216,7 @@ ruleTester.run('prefer-read-only-props', rule, {
         };
         export default MyComponent;
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ["ts", "no-babel-old"],
     },
     {
       code: `
@@ -229,7 +229,7 @@ ruleTester.run('prefer-read-only-props', rule, {
         };
         export default MyComponent;
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ["ts", "no-babel-old"],
     },
     {
       code: `
@@ -244,7 +244,7 @@ ruleTester.run('prefer-read-only-props', rule, {
         };
         export default MyComponent;
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ["ts", "no-babel-old"],
     },
   ]),
 
@@ -273,11 +273,11 @@ ruleTester.run('prefer-read-only-props', rule, {
           }
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
       errors: [
         {
-          messageId: 'readOnlyProp',
-          data: { name: 'name' },
+          messageId: "readOnlyProp",
+          data: { name: "name" },
         },
       ],
     },
@@ -305,11 +305,11 @@ ruleTester.run('prefer-read-only-props', rule, {
           }
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
       errors: [
         {
-          messageId: 'readOnlyProp',
-          data: { name: 'name' },
+          messageId: "readOnlyProp",
+          data: { name: "name" },
         },
       ],
     },
@@ -336,11 +336,11 @@ ruleTester.run('prefer-read-only-props', rule, {
           }
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
       errors: [
         {
-          messageId: 'readOnlyProp',
-          data: { name: 'name' },
+          messageId: "readOnlyProp",
+          data: { name: "name" },
         },
       ],
     },
@@ -355,11 +355,11 @@ ruleTester.run('prefer-read-only-props', rule, {
           return <div>Hello {props.name}</div>;
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
       errors: [
         {
-          messageId: 'readOnlyProp',
-          data: { name: 'name' },
+          messageId: "readOnlyProp",
+          data: { name: "name" },
         },
       ],
     },
@@ -374,11 +374,11 @@ ruleTester.run('prefer-read-only-props', rule, {
           return <div>Hello {props.name}</div>;
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
       errors: [
         {
-          messageId: 'readOnlyProp',
-          data: { name: 'name' },
+          messageId: "readOnlyProp",
+          data: { name: "name" },
         },
       ],
     },
@@ -393,11 +393,11 @@ ruleTester.run('prefer-read-only-props', rule, {
           return <div>Hello {props.name}</div>;
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
       errors: [
         {
-          messageId: 'readOnlyProp',
-          data: { name: 'name' },
+          messageId: "readOnlyProp",
+          data: { name: "name" },
         },
       ],
     },
@@ -420,15 +420,15 @@ ruleTester.run('prefer-read-only-props', rule, {
           return <div>Hello {firstName} {lastName}</div>;
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
       errors: [
         {
-          messageId: 'readOnlyProp',
-          data: { name: 'firstName' },
+          messageId: "readOnlyProp",
+          data: { name: "firstName" },
         },
         {
-          messageId: 'readOnlyProp',
-          data: { name: 'lastName' },
+          messageId: "readOnlyProp",
+          data: { name: "lastName" },
         },
       ],
     },
@@ -443,11 +443,11 @@ ruleTester.run('prefer-read-only-props', rule, {
           <div>Hello {props.name}</div>
         );
       `,
-      features: ['flow'],
+      features: ["flow"],
       errors: [
         {
-          messageId: 'readOnlyProp',
-          data: { name: 'name' },
+          messageId: "readOnlyProp",
+          data: { name: "name" },
         },
       ],
     },
@@ -474,11 +474,11 @@ ruleTester.run('prefer-read-only-props', rule, {
           }
         }
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ["ts", "no-babel-old"],
       errors: [
         {
-          messageId: 'readOnlyProp',
-          data: { name: 'name' },
+          messageId: "readOnlyProp",
+          data: { name: "name" },
         },
       ],
     },
@@ -505,11 +505,11 @@ ruleTester.run('prefer-read-only-props', rule, {
           }
         }
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ["ts", "no-babel-old"],
       errors: [
         {
-          messageId: 'readOnlyProp',
-          data: { name: 'name' },
+          messageId: "readOnlyProp",
+          data: { name: "name" },
         },
       ],
     },
@@ -534,11 +534,11 @@ ruleTester.run('prefer-read-only-props', rule, {
         };
         export default MyComponent;
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ["ts", "no-babel-old"],
       errors: [
         {
-          messageId: 'readOnlyProp',
-          data: { name: 'name' },
+          messageId: "readOnlyProp",
+          data: { name: "name" },
         },
       ],
     },
@@ -567,11 +567,11 @@ ruleTester.run('prefer-read-only-props', rule, {
           }
         }
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ["ts", "no-babel-old"],
       errors: [
         {
-          messageId: 'readOnlyProp',
-          data: { name: 'lastName' },
+          messageId: "readOnlyProp",
+          data: { name: "lastName" },
         },
       ],
     },

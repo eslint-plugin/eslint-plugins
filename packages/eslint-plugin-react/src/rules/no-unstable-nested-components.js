@@ -3,20 +3,21 @@
  * @author Ari Perkkiö
  */
 
-'use strict';
+"use strict";
 
-const minimatch = require('minimatch');
-const Components = require('../util/Components');
-const docsUrl = require('../util/docsUrl');
-const astUtil = require('../util/ast');
-const isCreateElement = require('../util/isCreateElement');
-const report = require('../util/report');
+const minimatch = require("minimatch");
+const Components = require("../util/Components");
+const docsUrl = require("../util/docsUrl");
+const astUtil = require("../util/ast");
+const isCreateElement = require("../util/isCreateElement");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Constants
 // ------------------------------------------------------------------------------
 
-const COMPONENT_AS_PROPS_INFO = ' If you want to allow component creation in props, set allowAsProps option to true.';
+const COMPONENT_AS_PROPS_INFO =
+  " If you want to allow component creation in props, set allowAsProps option to true.";
 const HOOK_REGEXP = /^use[A-Z0-9].*$/;
 
 // ------------------------------------------------------------------------------
@@ -29,7 +30,7 @@ const HOOK_REGEXP = /^use[A-Z0-9].*$/;
  * @returns {string} Error message with parent component name
  */
 function generateErrorMessageWithParentName(parentName) {
-  return `Do not define components during render. React will see a new component type on every render and destroy the entire subtree’s DOM nodes and state (https://reactjs.org/docs/reconciliation.html#elements-of-different-types). Instead, move this component definition out of the parent component${parentName ? ` “${parentName}” ` : ' '}and pass data as props.`;
+  return `Do not define components during render. React will see a new component type on every render and destroy the entire subtree’s DOM nodes and state (https://reactjs.org/docs/reconciliation.html#elements-of-different-types). Instead, move this component definition out of the parent component${parentName ? ` “${parentName}” ` : " "}and pass data as props.`;
 }
 
 /**
@@ -39,7 +40,7 @@ function generateErrorMessageWithParentName(parentName) {
  * @returns {boolean}
  */
 function propMatchesRenderPropPattern(text, pattern) {
-  return typeof text === 'string' && minimatch(text, pattern);
+  return typeof text === "string" && minimatch(text, pattern);
 }
 
 /**
@@ -50,7 +51,7 @@ function propMatchesRenderPropPattern(text, pattern) {
  * @returns {ASTNode} The matching parent node, if any
  */
 function getClosestMatchingParent(node, context, matcher) {
-  if (!node || !node.parent || node.parent.type === 'Program') {
+  if (!node || !node.parent || node.parent.type === "Program") {
     return;
   }
 
@@ -68,10 +69,7 @@ function getClosestMatchingParent(node, context, matcher) {
  * @returns {boolean} True if node is a `createElement` call, false if not
  */
 function isCreateElementMatcher(node, context) {
-  return (
-    astUtil.isCallExpression(node)
-    && isCreateElement(context, node)
-  );
+  return astUtil.isCallExpression(node) && isCreateElement(context, node);
 }
 
 /**
@@ -80,7 +78,7 @@ function isCreateElementMatcher(node, context) {
  * @returns {boolean} True if node is a `ObjectExpression`, false if not
  */
 function isObjectExpressionMatcher(node) {
-  return node && node.type === 'ObjectExpression';
+  return node && node.type === "ObjectExpression";
 }
 
 /**
@@ -89,7 +87,7 @@ function isObjectExpressionMatcher(node) {
  * @returns {boolean} True if node is a `JSXExpressionContainer`, false if not
  */
 function isJSXExpressionContainerMatcher(node) {
-  return node && node.type === 'JSXExpressionContainer';
+  return node && node.type === "JSXExpressionContainer";
 }
 
 /**
@@ -99,10 +97,10 @@ function isJSXExpressionContainerMatcher(node) {
  */
 function isJSXAttributeOfExpressionContainerMatcher(node) {
   return (
-    node
-    && node.type === 'JSXAttribute'
-    && node.value
-    && node.value.type === 'JSXExpressionContainer'
+    node &&
+    node.type === "JSXAttribute" &&
+    node.value &&
+    node.value.type === "JSXExpressionContainer"
   );
 }
 
@@ -112,11 +110,7 @@ function isJSXAttributeOfExpressionContainerMatcher(node) {
  * @returns {boolean} True if node is a `Property`, false if not
  */
 function isPropertyOfObjectExpressionMatcher(node) {
-  return (
-    node
-    && node.parent
-    && node.parent.type === 'Property'
-  );
+  return node && node.parent && node.parent.type === "Property";
 }
 
 /**
@@ -129,10 +123,10 @@ function isPropertyOfObjectExpressionMatcher(node) {
  */
 function isMapCall(node) {
   return (
-    node
-    && node.callee
-    && node.callee.property
-    && node.callee.property.name === 'map'
+    node &&
+    node.callee &&
+    node.callee.property &&
+    node.callee.property.name === "map"
   );
 }
 
@@ -143,19 +137,19 @@ function isMapCall(node) {
  * @returns {boolean} True if node is a `ReturnStatement` of a React hook, false if not
  */
 function isReturnStatementOfHook(node, context) {
-  if (
-    !node
-    || !node.parent
-    || node.parent.type !== 'ReturnStatement'
-  ) {
+  if (!node || !node.parent || node.parent.type !== "ReturnStatement") {
     return false;
   }
 
-  const callExpression = getClosestMatchingParent(node, context, astUtil.isCallExpression);
+  const callExpression = getClosestMatchingParent(
+    node,
+    context,
+    astUtil.isCallExpression,
+  );
   return (
-    callExpression
-    && callExpression.callee
-    && HOOK_REGEXP.test(callExpression.callee.name)
+    callExpression &&
+    callExpression.callee &&
+    HOOK_REGEXP.test(callExpression.callee.name)
   );
 }
 
@@ -172,35 +166,39 @@ function isReturnStatementOfHook(node, context) {
  */
 function isComponentInRenderProp(node, context, propNamePattern) {
   if (
-    node
-    && node.parent
-    && node.parent.type === 'Property'
-    && node.parent.key
-    && propMatchesRenderPropPattern(node.parent.key.name, propNamePattern)
+    node &&
+    node.parent &&
+    node.parent.type === "Property" &&
+    node.parent.key &&
+    propMatchesRenderPropPattern(node.parent.key.name, propNamePattern)
   ) {
     return true;
   }
 
   // Check whether component is a render prop used as direct children, e.g. <Component>{() => <div />}</Component>
   if (
-    node
-    && node.parent
-    && node.parent.type === 'JSXExpressionContainer'
-    && node.parent.parent
-    && node.parent.parent.type === 'JSXElement'
+    node &&
+    node.parent &&
+    node.parent.type === "JSXExpressionContainer" &&
+    node.parent.parent &&
+    node.parent.parent.type === "JSXElement"
   ) {
     return true;
   }
 
-  const jsxExpressionContainer = getClosestMatchingParent(node, context, isJSXExpressionContainerMatcher);
+  const jsxExpressionContainer = getClosestMatchingParent(
+    node,
+    context,
+    isJSXExpressionContainerMatcher,
+  );
 
   // Check whether prop name indicates accepted patterns
   if (
-    jsxExpressionContainer
-    && jsxExpressionContainer.parent
-    && jsxExpressionContainer.parent.type === 'JSXAttribute'
-    && jsxExpressionContainer.parent.name
-    && jsxExpressionContainer.parent.name.type === 'JSXIdentifier'
+    jsxExpressionContainer &&
+    jsxExpressionContainer.parent &&
+    jsxExpressionContainer.parent.type === "JSXAttribute" &&
+    jsxExpressionContainer.parent.name &&
+    jsxExpressionContainer.parent.name.type === "JSXIdentifier"
   ) {
     const propName = jsxExpressionContainer.parent.name.name;
 
@@ -210,7 +208,7 @@ function isComponentInRenderProp(node, context, propNamePattern) {
     }
 
     // Uses children prop explicitly, e.g. <Component children={() => <div />} />
-    if (propName === 'children') {
+    if (propName === "children") {
       return true;
     }
   }
@@ -230,12 +228,12 @@ function isComponentInRenderProp(node, context, propNamePattern) {
  */
 function isDirectValueOfRenderProperty(node, propNamePattern) {
   return (
-    node
-    && node.parent
-    && node.parent.type === 'Property'
-    && node.parent.key
-    && node.parent.key.type === 'Identifier'
-    && propMatchesRenderPropPattern(node.parent.key.name, propNamePattern)
+    node &&
+    node.parent &&
+    node.parent.type === "Property" &&
+    node.parent.key &&
+    node.parent.key.type === "Identifier" &&
+    propMatchesRenderPropPattern(node.parent.key.name, propNamePattern)
   );
 }
 
@@ -249,10 +247,10 @@ function resolveComponentName(node) {
   if (parentName) return parentName;
 
   return (
-    node.type === 'ArrowFunctionExpression'
-    && node.parent
-    && node.parent.id
-    && node.parent.id.name
+    node.type === "ArrowFunctionExpression" &&
+    node.parent &&
+    node.parent.id &&
+    node.parent.id.name
   );
 }
 
@@ -264,34 +262,39 @@ function resolveComponentName(node) {
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow creating unstable components inside components',
-      category: 'Possible Errors',
+      description: "Disallow creating unstable components inside components",
+      category: "Possible Errors",
       recommended: false,
-      url: docsUrl('no-unstable-nested-components'),
+      url: docsUrl("no-unstable-nested-components"),
     },
-    schema: [{
-      type: 'object',
-      properties: {
-        customValidators: {
-          type: 'array',
-          items: {
-            type: 'string',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          customValidators: {
+            type: "array",
+            items: {
+              type: "string",
+            },
+          },
+          allowAsProps: {
+            type: "boolean",
+          },
+          propNamePattern: {
+            type: "string",
           },
         },
-        allowAsProps: {
-          type: 'boolean',
-        },
-        propNamePattern: {
-          type: 'string',
-        },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create: Components.detect((context, components, utils) => {
-    const allowAsProps = context.options.some((option) => option && option.allowAsProps);
-    const propNamePattern = (context.options[0] || {}).propNamePattern || 'render*';
+    const allowAsProps = context.options.some(
+      (option) => option && option.allowAsProps,
+    );
+    const propNamePattern =
+      (context.options[0] || {}).propNamePattern || "render*";
 
     /**
      * Check whether given node is declared inside class component's render block
@@ -307,16 +310,16 @@ module.exports = {
     function isInsideRenderMethod(node) {
       const parentComponent = utils.getParentComponent(node);
 
-      if (!parentComponent || parentComponent.type !== 'ClassDeclaration') {
+      if (!parentComponent || parentComponent.type !== "ClassDeclaration") {
         return false;
       }
 
       return (
-        node
-        && node.parent
-        && node.parent.type === 'MethodDefinition'
-        && node.parent.key
-        && node.parent.key.name === 'render'
+        node &&
+        node.parent &&
+        node.parent.type === "MethodDefinition" &&
+        node.parent.key &&
+        node.parent.key.name === "render"
       );
     }
 
@@ -337,11 +340,11 @@ module.exports = {
       const parentStatelessComponent = utils.getParentStatelessComponent(node);
 
       return (
-        parentComponent
-        && parentStatelessComponent
-        && parentComponent.type === 'ClassDeclaration'
-        && utils.getStatelessComponent(parentStatelessComponent)
-        && utils.isReturningJSX(node)
+        parentComponent &&
+        parentStatelessComponent &&
+        parentComponent.type === "ClassDeclaration" &&
+        utils.getStatelessComponent(parentStatelessComponent) &&
+        utils.isReturningJSX(node)
       );
     }
 
@@ -360,12 +363,17 @@ module.exports = {
         return false;
       }
 
-      const createElementParent = getClosestMatchingParent(node, context, isCreateElementMatcher);
+      const createElementParent = getClosestMatchingParent(
+        node,
+        context,
+        isCreateElementMatcher,
+      );
 
       return (
-        createElementParent
-        && createElementParent.arguments
-        && createElementParent.arguments[1] === getClosestMatchingParent(node, context, isObjectExpressionMatcher)
+        createElementParent &&
+        createElementParent.arguments &&
+        createElementParent.arguments[1] ===
+          getClosestMatchingParent(node, context, isObjectExpressionMatcher)
       );
     }
 
@@ -383,7 +391,11 @@ module.exports = {
         return utils.isReturningJSX(node);
       }
 
-      const jsxAttribute = getClosestMatchingParent(node, context, isJSXAttributeOfExpressionContainerMatcher);
+      const jsxAttribute = getClosestMatchingParent(
+        node,
+        context,
+        isJSXAttributeOfExpressionContainerMatcher,
+      );
 
       if (!jsxAttribute) {
         return isComponentInsideCreateElementsProp(node);
@@ -418,31 +430,29 @@ module.exports = {
       const isDeclaredInsideProps = isComponentInProp(node);
 
       if (
-        !components.get(node)
-        && !isFunctionComponentInsideClassComponent(node)
-        && !isDeclaredInsideProps) {
+        !components.get(node) &&
+        !isFunctionComponentInsideClassComponent(node) &&
+        !isDeclaredInsideProps
+      ) {
         return;
       }
 
       if (
         // Support allowAsProps option
-        (isDeclaredInsideProps && (allowAsProps || isComponentInRenderProp(node, context, propNamePattern)))
-
+        (isDeclaredInsideProps &&
+          (allowAsProps ||
+            isComponentInRenderProp(node, context, propNamePattern))) ||
         // Prevent reporting components created inside Array.map calls
-        || isMapCall(node)
-        || isMapCall(node.parent)
-
+        isMapCall(node) ||
+        isMapCall(node.parent) ||
         // Do not mark components declared inside hooks (or falsy '() => null' clean-up methods)
-        || isReturnStatementOfHook(node, context)
-
+        isReturnStatementOfHook(node, context) ||
         // Do not mark objects containing render methods
-        || isDirectValueOfRenderProperty(node, propNamePattern)
-
+        isDirectValueOfRenderProperty(node, propNamePattern) ||
         // Prevent reporting nested class components twice
-        || isInsideRenderMethod(node)
-
+        isInsideRenderMethod(node) ||
         // Prevent falsely reporting detected "components" which do not return JSX
-        || isStatelessComponentReturningNull(node)
+        isStatelessComponentReturningNull(node)
       ) {
         return;
       }
@@ -451,7 +461,7 @@ module.exports = {
       const parentComponent = getClosestMatchingParent(
         node,
         context,
-        (nodeToMatch) => components.get(nodeToMatch)
+        (nodeToMatch) => components.get(nodeToMatch),
       );
 
       if (parentComponent) {
@@ -481,11 +491,21 @@ module.exports = {
     // --------------------------------------------------------------------------
 
     return {
-      FunctionDeclaration(node) { validate(node); },
-      ArrowFunctionExpression(node) { validate(node); },
-      FunctionExpression(node) { validate(node); },
-      ClassDeclaration(node) { validate(node); },
-      CallExpression(node) { validate(node); },
+      FunctionDeclaration(node) {
+        validate(node);
+      },
+      ArrowFunctionExpression(node) {
+        validate(node);
+      },
+      FunctionExpression(node) {
+        validate(node);
+      },
+      ClassDeclaration(node) {
+        validate(node);
+      },
+      CallExpression(node) {
+        validate(node);
+      },
     };
   }),
 };

@@ -2,29 +2,31 @@
  * @fileoverview Flag shouldComponentUpdate when extending PureComponent
  */
 
-'use strict';
+"use strict";
 
-const astUtil = require('../util/ast');
-const componentUtil = require('../util/componentUtil');
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
+const astUtil = require("../util/ast");
+const componentUtil = require("../util/componentUtil");
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  noShouldCompUpdate: '{{component}} does not need shouldComponentUpdate when extending React.PureComponent.',
+  noShouldCompUpdate:
+    "{{component}} does not need shouldComponentUpdate when extending React.PureComponent.",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow usage of shouldComponentUpdate when extending React.PureComponent',
-      category: 'Possible Errors',
+      description:
+        "Disallow usage of shouldComponentUpdate when extending React.PureComponent",
+      category: "Possible Errors",
       recommended: false,
-      url: docsUrl('no-redundant-should-component-update'),
+      url: docsUrl("no-redundant-should-component-update"),
     },
 
     messages,
@@ -42,7 +44,7 @@ module.exports = {
       const properties = astUtil.getComponentProperties(node);
       return properties.some((property) => {
         const name = astUtil.getPropertyName(property);
-        return name === 'shouldComponentUpdate';
+        return name === "shouldComponentUpdate";
       });
     }
 
@@ -58,7 +60,7 @@ module.exports = {
       if (node.parent && node.parent.id) {
         return node.parent.id.name;
       }
-      return '';
+      return "";
     }
 
     /**
@@ -70,7 +72,7 @@ module.exports = {
         const hasScu = hasShouldComponentUpdate(node);
         if (hasScu) {
           const className = getNodeName(node);
-          report(context, messages.noShouldCompUpdate, 'noShouldCompUpdate', {
+          report(context, messages.noShouldCompUpdate, "noShouldCompUpdate", {
             node,
             data: {
               component: className,

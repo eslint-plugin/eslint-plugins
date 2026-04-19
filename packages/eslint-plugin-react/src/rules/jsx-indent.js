@@ -28,13 +28,13 @@
  THE SOFTWARE.
  */
 
-'use strict';
+"use strict";
 
-const astUtil = require('../util/ast');
-const docsUrl = require('../util/docsUrl');
-const reportC = require('../util/report');
-const jsxUtil = require('../util/jsx');
-const eslintUtil = require('../util/eslint');
+const astUtil = require("../util/ast");
+const docsUrl = require("../util/docsUrl");
+const reportC = require("../util/report");
+const jsxUtil = require("../util/jsx");
+const eslintUtil = require("../util/eslint");
 
 const getSourceCode = eslintUtil.getSourceCode;
 const getText = eslintUtil.getText;
@@ -44,58 +44,65 @@ const getText = eslintUtil.getText;
 // ------------------------------------------------------------------------------
 
 const messages = {
-  wrongIndent: 'Expected indentation of {{needed}} {{type}} {{characters}} but found {{gotten}}.',
+  wrongIndent:
+    "Expected indentation of {{needed}} {{type}} {{characters}} but found {{gotten}}.",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Enforce JSX indentation',
-      category: 'Stylistic Issues',
+      description: "Enforce JSX indentation",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('jsx-indent'),
+      url: docsUrl("jsx-indent"),
     },
-    fixable: 'whitespace',
+    fixable: "whitespace",
 
     messages,
 
-    schema: [{
-      anyOf: [{
-        enum: ['tab'],
-      }, {
-        type: 'integer',
-      }],
-    }, {
-      type: 'object',
-      properties: {
-        checkAttributes: {
-          type: 'boolean',
-        },
-        indentLogicalExpressions: {
-          type: 'boolean',
-        },
+    schema: [
+      {
+        anyOf: [
+          {
+            enum: ["tab"],
+          },
+          {
+            type: "integer",
+          },
+        ],
       },
-      additionalProperties: false,
-    }],
+      {
+        type: "object",
+        properties: {
+          checkAttributes: {
+            type: "boolean",
+          },
+          indentLogicalExpressions: {
+            type: "boolean",
+          },
+        },
+        additionalProperties: false,
+      },
+    ],
   },
 
   create(context) {
     const extraColumnStart = 0;
-    let indentType = 'space';
+    let indentType = "space";
     let indentSize = 4;
 
     if (context.options.length) {
-      if (context.options[0] === 'tab') {
+      if (context.options[0] === "tab") {
         indentSize = 1;
-        indentType = 'tab';
-      } else if (typeof context.options[0] === 'number') {
+        indentType = "tab";
+      } else if (typeof context.options[0] === "number") {
         indentSize = context.options[0];
-        indentType = 'space';
+        indentType = "space";
       }
     }
 
-    const indentChar = indentType === 'space' ? ' ' : '\t';
+    const indentChar = indentType === "space" ? " " : "\t";
     const options = context.options[1] || {};
     const checkAttributes = options.checkAttributes || false;
     const indentLogicalExpressions = options.indentLogicalExpressions || false;
@@ -110,24 +117,29 @@ module.exports = {
     function getFixerFunction(node, needed) {
       const indent = indentChar.repeat(needed);
 
-      if (node.type === 'JSXText' || node.type === 'Literal') {
+      if (node.type === "JSXText" || node.type === "Literal") {
         return function fix(fixer) {
           const regExp = /\n[\t ]*(\S)/g;
-          const fixedText = node.raw.replace(regExp, (match, p1) => `\n${indent}${p1}`);
+          const fixedText = node.raw.replace(
+            regExp,
+            (match, p1) => `\n${indent}${p1}`,
+          );
           return fixer.replaceText(node, fixedText);
         };
       }
 
-      if (node.type === 'ReturnStatement') {
+      if (node.type === "ReturnStatement") {
         const raw = getText(context, node);
-        const lines = raw.split('\n');
+        const lines = raw.split("\n");
         if (lines.length > 1) {
           return function fix(fixer) {
-            const lastLineStart = raw.lastIndexOf('\n');
-            const lastLine = raw.slice(lastLineStart).replace(/^\n[\t ]*(\S)/, (match, p1) => `\n${indent}${p1}`);
+            const lastLineStart = raw.lastIndexOf("\n");
+            const lastLine = raw
+              .slice(lastLineStart)
+              .replace(/^\n[\t ]*(\S)/, (match, p1) => `\n${indent}${p1}`);
             return fixer.replaceTextRange(
               [node.range[0] + lastLineStart, node.range[1]],
-              lastLine
+              lastLine,
             );
           };
         }
@@ -136,7 +148,7 @@ module.exports = {
       return function fix(fixer) {
         return fixer.replaceTextRange(
           [node.range[0] - node.loc.start.column, node.range[0]],
-          indent
+          indent,
         );
       };
     }
@@ -152,15 +164,23 @@ module.exports = {
       const msgContext = {
         needed,
         type: indentType,
-        characters: needed === 1 ? 'character' : 'characters',
+        characters: needed === 1 ? "character" : "characters",
         gotten,
       };
 
-      reportC(context, messages.wrongIndent, 'wrongIndent', Object.assign({
-        node,
-        data: msgContext,
-        fix: getFixerFunction(node, needed),
-      }, loc && { loc }));
+      reportC(
+        context,
+        messages.wrongIndent,
+        "wrongIndent",
+        Object.assign(
+          {
+            node,
+            data: msgContext,
+            fix: getFixerFunction(node, needed),
+          },
+          loc && { loc },
+        ),
+      );
     }
 
     /**
@@ -171,18 +191,22 @@ module.exports = {
      * @return {number} Indent
      */
     function getNodeIndent(node, byLastLine, excludeCommas) {
-      let src = getText(context, node, node.loc.start.column + extraColumnStart);
-      const lines = src.split('\n');
+      let src = getText(
+        context,
+        node,
+        node.loc.start.column + extraColumnStart,
+      );
+      const lines = src.split("\n");
       if (byLastLine) {
         src = lines[lines.length - 1];
       } else {
         src = lines[0];
       }
 
-      const skip = excludeCommas ? ',' : '';
+      const skip = excludeCommas ? "," : "";
 
       let regExp;
-      if (indentType === 'space') {
+      if (indentType === "space") {
         regExp = new RegExp(`^[ ${skip}]+`);
       } else {
         regExp = new RegExp(`^[\t${skip}]+`);
@@ -199,11 +223,11 @@ module.exports = {
      */
     function isRightInLogicalExp(node) {
       return (
-        node.parent
-        && node.parent.parent
-        && node.parent.parent.type === 'LogicalExpression'
-        && node.parent.parent.right === node.parent
-        && !indentLogicalExpressions
+        node.parent &&
+        node.parent.parent &&
+        node.parent.parent.type === "LogicalExpression" &&
+        node.parent.parent.right === node.parent &&
+        !indentLogicalExpressions
       );
     }
 
@@ -214,11 +238,11 @@ module.exports = {
      */
     function isAlternateInConditionalExp(node) {
       return (
-        node.parent
-        && node.parent.parent
-        && node.parent.parent.type === 'ConditionalExpression'
-        && node.parent.parent.alternate === node.parent
-        && getSourceCode(context).getTokenBefore(node).value !== '('
+        node.parent &&
+        node.parent.parent &&
+        node.parent.parent.type === "ConditionalExpression" &&
+        node.parent.parent.alternate === node.parent &&
+        getSourceCode(context).getTokenBefore(node).value !== "("
       );
     }
 
@@ -268,22 +292,20 @@ module.exports = {
           })
         })
       */
-      const isInExpStmt = (
-        node.parent
-        && node.parent.parent
-        && node.parent.parent.type === 'ExpressionStatement'
-      );
+      const isInExpStmt =
+        node.parent &&
+        node.parent.parent &&
+        node.parent.parent.type === "ExpressionStatement";
       if (!isInExpStmt) {
         return false;
       }
 
       const expStmt = node.parent.parent;
-      const isInBlockStmtWithinDoExp = (
-        expStmt.parent
-        && expStmt.parent.type === 'BlockStatement'
-        && expStmt.parent.parent
-        && expStmt.parent.parent.type === 'DoExpression'
-      );
+      const isInBlockStmtWithinDoExp =
+        expStmt.parent &&
+        expStmt.parent.type === "BlockStatement" &&
+        expStmt.parent.parent &&
+        expStmt.parent.parent.type === "DoExpression";
       if (!isInBlockStmtWithinDoExp) {
         return false;
       }
@@ -301,13 +323,15 @@ module.exports = {
      */
     function checkNodesIndent(node, indent, excludeCommas) {
       const nodeIndent = getNodeIndent(node, false, excludeCommas);
-      const isCorrectRightInLogicalExp = isRightInLogicalExp(node) && (nodeIndent - indent) === indentSize;
-      const isCorrectAlternateInCondExp = isAlternateInConditionalExp(node) && (nodeIndent - indent) === 0;
+      const isCorrectRightInLogicalExp =
+        isRightInLogicalExp(node) && nodeIndent - indent === indentSize;
+      const isCorrectAlternateInCondExp =
+        isAlternateInConditionalExp(node) && nodeIndent - indent === 0;
       if (
-        nodeIndent !== indent
-        && astUtil.isNodeFirstInLine(context, node)
-        && !isCorrectRightInLogicalExp
-        && !isCorrectAlternateInCondExp
+        nodeIndent !== indent &&
+        astUtil.isNodeFirstInLine(context, node) &&
+        !isCorrectRightInLogicalExp &&
+        !isCorrectAlternateInCondExp
       ) {
         report(node, indent, nodeIndent);
       }
@@ -320,15 +344,16 @@ module.exports = {
      */
     function checkLiteralNodeIndent(node, indent) {
       const value = node.value;
-      const regExp = indentType === 'space' ? /\n( *)[\t ]*\S/g : /\n(\t*)[\t ]*\S/g;
+      const regExp =
+        indentType === "space" ? /\n( *)[\t ]*\S/g : /\n(\t*)[\t ]*\S/g;
       const nodeIndentsPerLine = Array.from(
         String(value).matchAll(regExp),
-        (match) => (match[1] ? match[1].length : 0)
+        (match) => (match[1] ? match[1].length : 0),
       );
       const hasFirstInLineNode = nodeIndentsPerLine.length > 0;
       if (
-        hasFirstInLineNode
-        && !nodeIndentsPerLine.every((actualIndent) => actualIndent === indent)
+        hasFirstInLineNode &&
+        !nodeIndentsPerLine.every((actualIndent) => actualIndent === indent)
       ) {
         nodeIndentsPerLine.forEach((nodeIndent) => {
           report(node, indent, nodeIndent);
@@ -343,27 +368,40 @@ module.exports = {
         return;
       }
       // Use the parent in a list or an array
-      if (prevToken.type === 'JSXText' || ((prevToken.type === 'Punctuator') && prevToken.value === ',')) {
+      if (
+        prevToken.type === "JSXText" ||
+        (prevToken.type === "Punctuator" && prevToken.value === ",")
+      ) {
         prevToken = sourceCode.getNodeByRangeIndex(prevToken.range[0]);
-        prevToken = prevToken.type === 'Literal' || prevToken.type === 'JSXText' ? prevToken.parent : prevToken;
-      // Use the first non-punctuator token in a conditional expression
-      } else if (prevToken.type === 'Punctuator' && prevToken.value === ':') {
+        prevToken =
+          prevToken.type === "Literal" || prevToken.type === "JSXText"
+            ? prevToken.parent
+            : prevToken;
+        // Use the first non-punctuator token in a conditional expression
+      } else if (prevToken.type === "Punctuator" && prevToken.value === ":") {
         do {
           prevToken = sourceCode.getTokenBefore(prevToken);
-        } while (prevToken.type === 'Punctuator' && prevToken.value !== '/');
+        } while (prevToken.type === "Punctuator" && prevToken.value !== "/");
         prevToken = sourceCode.getNodeByRangeIndex(prevToken.range[0]);
-        while (prevToken.parent && prevToken.parent.type !== 'ConditionalExpression') {
+        while (
+          prevToken.parent &&
+          prevToken.parent.type !== "ConditionalExpression"
+        ) {
           prevToken = prevToken.parent;
         }
       }
-      prevToken = prevToken.type === 'JSXExpressionContainer' ? prevToken.expression : prevToken;
+      prevToken =
+        prevToken.type === "JSXExpressionContainer"
+          ? prevToken.expression
+          : prevToken;
       const parentElementIndent = getNodeIndent(prevToken);
-      const indent = (
-        prevToken.loc.start.line === node.loc.start.line
-        || isRightInLogicalExp(node)
-        || isAlternateInConditionalExp(node)
-        || isSecondOrSubsequentExpWithinDoExp(node)
-      ) ? 0 : indentSize;
+      const indent =
+        prevToken.loc.start.line === node.loc.start.line ||
+        isRightInLogicalExp(node) ||
+        isAlternateInConditionalExp(node) ||
+        isSecondOrSubsequentExpWithinDoExp(node)
+          ? 0
+          : indentSize;
       checkNodesIndent(node, parentElementIndent + indent);
     }
 
@@ -371,18 +409,27 @@ module.exports = {
       if (!node.parent) {
         return;
       }
-      const peerElementIndent = getNodeIndent(node.parent.openingElement || node.parent.openingFragment);
+      const peerElementIndent = getNodeIndent(
+        node.parent.openingElement || node.parent.openingFragment,
+      );
       checkNodesIndent(node, peerElementIndent);
     }
 
     function handleAttribute(node) {
-      if (!checkAttributes || (!node.value || node.value.type !== 'JSXExpressionContainer')) {
+      if (
+        !checkAttributes ||
+        !node.value ||
+        node.value.type !== "JSXExpressionContainer"
+      ) {
         return;
       }
       const nameIndent = getNodeIndent(node.name);
       const lastToken = getSourceCode(context).getLastToken(node.value);
       const firstInLine = astUtil.getFirstNodeInLine(context, lastToken);
-      const indent = node.name.loc.start.line === firstInLine.loc.start.line ? 0 : nameIndent;
+      const indent =
+        node.name.loc.start.line === firstInLine.loc.start.line
+          ? 0
+          : nameIndent;
       checkNodesIndent(firstInLine, indent);
     }
 
@@ -390,7 +437,10 @@ module.exports = {
       if (!node.parent) {
         return;
       }
-      if (node.parent.type !== 'JSXElement' && node.parent.type !== 'JSXFragment') {
+      if (
+        node.parent.type !== "JSXElement" &&
+        node.parent.type !== "JSXFragment"
+      ) {
         return;
       }
       const parentNodeIndent = getNodeIndent(node.parent);
@@ -414,21 +464,19 @@ module.exports = {
       JSXText: handleLiteral,
 
       ReturnStatement(node) {
-        if (
-          !node.parent
-          || !jsxUtil.isJSX(node.argument)
-        ) {
+        if (!node.parent || !jsxUtil.isJSX(node.argument)) {
           return;
         }
 
         let fn = node.parent;
-        while (fn && fn.type !== 'FunctionDeclaration' && fn.type !== 'FunctionExpression') {
+        while (
+          fn &&
+          fn.type !== "FunctionDeclaration" &&
+          fn.type !== "FunctionExpression"
+        ) {
           fn = fn.parent;
         }
-        if (
-          !fn
-          || !jsxUtil.isReturningJSX(context, node, true)
-        ) {
+        if (!fn || !jsxUtil.isReturningJSX(context, node, true)) {
           return;
         }
 

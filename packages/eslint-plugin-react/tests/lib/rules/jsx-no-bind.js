@@ -4,20 +4,20 @@
  * @author Daniel Lo Nigro <dan.cx>
  */
 
-'use strict';
+"use strict";
 
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-no-bind');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-no-bind");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -28,47 +28,47 @@ const parserOptions = {
 // -----------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('jsx-no-bind', rule, {
+ruleTester.run("jsx-no-bind", rule, {
   valid: parsers.all([
     // Not covered by the rule
     {
-      code: '<div onClick={this._handleClick}></div>',
+      code: "<div onClick={this._handleClick}></div>",
     },
     {
-      code: '<div onClick={this._handleClick}></div>',
+      code: "<div onClick={this._handleClick}></div>",
       options: [{}],
     },
     {
-      code: '<Foo onClick={this._handleClick} />',
+      code: "<Foo onClick={this._handleClick} />",
     },
     {
-      code: '<Foo onClick={this._handleClick} />',
+      code: "<Foo onClick={this._handleClick} />",
       options: [{}],
     },
     {
-      code: '<div meaningOfLife={42}></div>',
+      code: "<div meaningOfLife={42}></div>",
     },
     {
-      code: '<div onClick={getHandler()}></div>',
+      code: "<div onClick={getHandler()}></div>",
     },
 
     // bind() and arrow functions in refs explicitly ignored
     {
-      code: '<div ref={c => this._input = c}></div>',
+      code: "<div ref={c => this._input = c}></div>",
       options: [{ ignoreRefs: true }],
     },
     {
-      code: '<div ref={this._refCallback.bind(this)}></div>',
+      code: "<div ref={this._refCallback.bind(this)}></div>",
       options: [{ ignoreRefs: true }],
     },
     {
-      code: '<div ref={function (c) {this._input = c}}></div>',
+      code: "<div ref={function (c) {this._input = c}}></div>",
       options: [{ ignoreRefs: true }],
     },
 
     // bind() explicitly allowed
     {
-      code: '<div onClick={this._handleClick.bind(this)}></div>',
+      code: "<div onClick={this._handleClick.bind(this)}></div>",
       options: [{ allowBind: true }],
     },
 
@@ -202,7 +202,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      features: ['bind operator'],
+      features: ["bind operator"],
     },
     {
       code: `
@@ -214,7 +214,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      features: ['bind operator'],
+      features: ["bind operator"],
     },
     {
       code: `
@@ -236,7 +236,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         });
       `,
-      features: ['bind operator'],
+      features: ["bind operator"],
     },
     {
       code: `
@@ -257,7 +257,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -269,7 +269,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       // issue #1543: don't crash on uninitialized variables
@@ -285,7 +285,7 @@ ruleTester.run('jsx-no-bind', rule, {
 
     // ignore DOM components
     {
-      code: '<div onClick={this._handleClick.bind(this)}></div>',
+      code: "<div onClick={this._handleClick.bind(this)}></div>",
       options: [{ ignoreDOMComponents: true }],
     },
     {
@@ -297,9 +297,9 @@ ruleTester.run('jsx-no-bind', rule, {
       options: [{ ignoreDOMComponents: true }],
     },
     {
-      code: '<div foo={::this.onChange} />',
+      code: "<div foo={::this.onChange} />",
       options: [{ ignoreDOMComponents: true }],
-      features: ['bind operator'],
+      features: ["bind operator"],
     },
 
     // Local function declaration
@@ -319,20 +319,20 @@ ruleTester.run('jsx-no-bind', rule, {
   invalid: parsers.all([
     // .bind()
     {
-      code: '<div onClick={this._handleClick.bind(this)}></div>',
-      errors: [{ messageId: 'bindCall' }],
+      code: "<div onClick={this._handleClick.bind(this)}></div>",
+      errors: [{ messageId: "bindCall" }],
     },
     {
-      code: '<div onClick={someGlobalFunction.bind(this)}></div>',
-      errors: [{ messageId: 'bindCall' }],
+      code: "<div onClick={someGlobalFunction.bind(this)}></div>",
+      errors: [{ messageId: "bindCall" }],
     },
     {
-      code: '<div onClick={window.lol.bind(this)}></div>',
-      errors: [{ messageId: 'bindCall' }],
+      code: "<div onClick={window.lol.bind(this)}></div>",
+      errors: [{ messageId: "bindCall" }],
     },
     {
-      code: '<div ref={this._refCallback.bind(this)}></div>',
-      errors: [{ messageId: 'bindCall' }],
+      code: "<div ref={this._refCallback.bind(this)}></div>",
+      errors: [{ messageId: "bindCall" }],
     },
     {
       code: `
@@ -343,7 +343,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'bindCall' }],
+      errors: [{ messageId: "bindCall" }],
     },
     {
       code: `
@@ -354,7 +354,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'bindCall' }],
+      errors: [{ messageId: "bindCall" }],
     },
     {
       code: `
@@ -365,7 +365,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'bindCall' }],
+      errors: [{ messageId: "bindCall" }],
     },
     {
       code: `
@@ -376,8 +376,8 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'bindCall' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      errors: [{ messageId: "bindCall" }],
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
     },
     {
       code: `
@@ -388,8 +388,8 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'bindCall' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      errors: [{ messageId: "bindCall" }],
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
     },
     {
       code: `
@@ -399,7 +399,7 @@ ruleTester.run('jsx-no-bind', rule, {
           )
         };
       `,
-      errors: [{ messageId: 'bindCall' }],
+      errors: [{ messageId: "bindCall" }],
     },
     {
       code: `
@@ -409,7 +409,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'bindCall' }],
+      errors: [{ messageId: "bindCall" }],
     },
     {
       code: `
@@ -420,7 +420,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'bindCall' }],
+      errors: [{ messageId: "bindCall" }],
     },
     {
       code: `
@@ -435,11 +435,8 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [
-        { messageId: 'bindCall' },
-        { messageId: 'arrowFunc' },
-      ],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      errors: [{ messageId: "bindCall" }, { messageId: "arrowFunc" }],
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
     },
     {
       code: `
@@ -449,7 +446,7 @@ ruleTester.run('jsx-no-bind', rule, {
           )
         };
       `,
-      errors: [{ messageId: 'bindCall' }],
+      errors: [{ messageId: "bindCall" }],
     },
     {
       code: `
@@ -459,7 +456,7 @@ ruleTester.run('jsx-no-bind', rule, {
           )
         };
       `,
-      errors: [{ messageId: 'bindCall' }],
+      errors: [{ messageId: "bindCall" }],
     },
     {
       code: `
@@ -469,7 +466,7 @@ ruleTester.run('jsx-no-bind', rule, {
           )
         };
       `,
-      errors: [{ messageId: 'bindCall' }],
+      errors: [{ messageId: "bindCall" }],
     },
     {
       code: `
@@ -479,29 +476,29 @@ ruleTester.run('jsx-no-bind', rule, {
           )
         };
       `,
-      errors: [{ messageId: 'bindCall' }],
+      errors: [{ messageId: "bindCall" }],
     },
 
     // Arrow functions
     {
       code: '<div onClick={() => alert("1337")}></div>',
-      errors: [{ messageId: 'arrowFunc' }],
+      errors: [{ messageId: "arrowFunc" }],
     },
     {
       code: '<div onClick={async () => alert("1337")}></div>',
-      errors: [{ messageId: 'arrowFunc' }],
+      errors: [{ messageId: "arrowFunc" }],
     },
     {
-      code: '<div onClick={() => 42}></div>',
-      errors: [{ messageId: 'arrowFunc' }],
+      code: "<div onClick={() => 42}></div>",
+      errors: [{ messageId: "arrowFunc" }],
     },
     {
-      code: '<div onClick={param => { first(); second(); }}></div>',
-      errors: [{ messageId: 'arrowFunc' }],
+      code: "<div onClick={param => { first(); second(); }}></div>",
+      errors: [{ messageId: "arrowFunc" }],
     },
     {
-      code: '<div ref={c => this._input = c}></div>',
-      errors: [{ messageId: 'arrowFunc' }],
+      code: "<div ref={c => this._input = c}></div>",
+      errors: [{ messageId: "arrowFunc" }],
     },
     {
       code: `
@@ -512,8 +509,8 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'arrowFunc' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      errors: [{ messageId: "arrowFunc" }],
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
     },
     {
       code: `
@@ -524,8 +521,8 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'arrowFunc' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      errors: [{ messageId: "arrowFunc" }],
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
     },
     {
       code: `
@@ -536,8 +533,8 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'arrowFunc' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      errors: [{ messageId: "arrowFunc" }],
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
     },
     {
       code: `
@@ -547,7 +544,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'arrowFunc' }],
+      errors: [{ messageId: "arrowFunc" }],
     },
     {
       code: `
@@ -557,7 +554,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'arrowFunc' }],
+      errors: [{ messageId: "arrowFunc" }],
     },
     {
       code: `
@@ -568,7 +565,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'arrowFunc' }],
+      errors: [{ messageId: "arrowFunc" }],
     },
     {
       code: `
@@ -579,7 +576,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'arrowFunc' }],
+      errors: [{ messageId: "arrowFunc" }],
     },
     {
       code: `
@@ -594,29 +591,26 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [
-        { messageId: 'arrowFunc' },
-        { messageId: 'bindExpression' },
-      ],
-      features: ['bind operator'],
+      errors: [{ messageId: "arrowFunc" }, { messageId: "bindExpression" }],
+      features: ["bind operator"],
     },
 
     // Functions
     {
       code: '<div onClick={function () { alert("1337") }}></div>',
-      errors: [{ messageId: 'func' }],
+      errors: [{ messageId: "func" }],
     },
     {
       code: '<div onClick={function * () { alert("1337") }}></div>',
-      errors: [{ messageId: 'func' }],
+      errors: [{ messageId: "func" }],
     },
     {
       code: '<div onClick={async function () { alert("1337") }}></div>',
-      errors: [{ messageId: 'func' }],
+      errors: [{ messageId: "func" }],
     },
     {
-      code: '<div ref={function (c) { this._input = c }}></div>',
-      errors: [{ messageId: 'func' }],
+      code: "<div ref={function (c) { this._input = c }}></div>",
+      errors: [{ messageId: "func" }],
     },
     {
       code: `
@@ -627,8 +621,8 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'func' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      errors: [{ messageId: "func" }],
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
     },
     {
       code: `
@@ -639,8 +633,8 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'func' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      errors: [{ messageId: "func" }],
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
     },
     {
       code: `
@@ -651,8 +645,8 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'func' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      errors: [{ messageId: "func" }],
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
     },
     {
       code: `
@@ -663,8 +657,8 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'func' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      errors: [{ messageId: "func" }],
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
     },
     {
       code: `
@@ -674,7 +668,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'func' }],
+      errors: [{ messageId: "func" }],
     },
     {
       code: `
@@ -684,7 +678,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'func' }],
+      errors: [{ messageId: "func" }],
     },
     {
       code: `
@@ -694,7 +688,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'func' }],
+      errors: [{ messageId: "func" }],
     },
     {
       code: `
@@ -705,7 +699,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'func' }],
+      errors: [{ messageId: "func" }],
     },
     {
       code: `
@@ -716,7 +710,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'func' }],
+      errors: [{ messageId: "func" }],
     },
     {
       code: `
@@ -727,7 +721,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'func' }],
+      errors: [{ messageId: "func" }],
     },
     {
       code: `
@@ -742,28 +736,25 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [
-        { messageId: 'func' },
-        { messageId: 'bindExpression' },
-      ],
-      features: ['bind operator'],
+      errors: [{ messageId: "func" }, { messageId: "bindExpression" }],
+      features: ["bind operator"],
     },
 
     // Bind expression
     {
-      code: '<div foo={::this.onChange} />',
-      errors: [{ messageId: 'bindExpression' }],
-      features: ['bind operator'],
+      code: "<div foo={::this.onChange} />",
+      errors: [{ messageId: "bindExpression" }],
+      features: ["bind operator"],
     },
     {
-      code: '<div foo={foo.bar::baz} />',
-      errors: [{ messageId: 'bindExpression' }],
-      features: ['bind operator'],
+      code: "<div foo={foo.bar::baz} />",
+      errors: [{ messageId: "bindExpression" }],
+      features: ["bind operator"],
     },
     {
-      code: '<div foo={foo::bar} />',
-      errors: [{ messageId: 'bindExpression' }],
-      features: ['bind operator'],
+      code: "<div foo={foo::bar} />",
+      errors: [{ messageId: "bindExpression" }],
+      features: ["bind operator"],
     },
     {
       code: `
@@ -774,8 +765,8 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'bindExpression' }],
-      features: ['bind operator'],
+      errors: [{ messageId: "bindExpression" }],
+      features: ["bind operator"],
     },
     {
       code: `
@@ -786,8 +777,8 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'bindExpression' }],
-      features: ['bind operator'],
+      errors: [{ messageId: "bindExpression" }],
+      features: ["bind operator"],
     },
     {
       code: `
@@ -798,8 +789,8 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'bindExpression' }],
-      features: ['bind operator'],
+      errors: [{ messageId: "bindExpression" }],
+      features: ["bind operator"],
     },
     {
       code: `
@@ -814,8 +805,8 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'bindExpression' }],
-      features: ['bind operator'],
+      errors: [{ messageId: "bindExpression" }],
+      features: ["bind operator"],
     },
 
     // Local function declaration
@@ -828,16 +819,14 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [
-        { messageId: 'func' },
-      ],
+      errors: [{ messageId: "func" }],
     },
 
     // ignore DOM components
     {
-      code: '<Foo onClick={this._handleClick.bind(this)} />',
+      code: "<Foo onClick={this._handleClick.bind(this)} />",
       options: [{ ignoreDOMComponents: true }],
-      errors: [{ messageId: 'bindCall' }],
+      errors: [{ messageId: "bindCall" }],
     },
   ]),
 });

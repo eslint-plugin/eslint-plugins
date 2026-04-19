@@ -3,20 +3,20 @@
  * @author Alex Zherdev
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-fragments');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-fragments");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -24,17 +24,17 @@ const parserOptions = {
 
 const settings = {
   react: {
-    version: '16.2',
-    pragma: 'Act',
-    fragment: 'Frag',
+    version: "16.2",
+    pragma: "Act",
+    fragment: "Frag",
   },
 };
 
 const settingsOld = {
   react: {
-    version: '16.1',
-    pragma: 'Act',
-    fragment: 'Frag',
+    version: "16.1",
+    pragma: "Act",
+    fragment: "Frag",
   },
 };
 
@@ -43,21 +43,21 @@ const settingsOld = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('jsx-fragments', rule, {
+ruleTester.run("jsx-fragments", rule, {
   valid: parsers.all([
     {
-      code: '<><Foo /></>',
-      features: ['fragment', 'no-ts-old'],
+      code: "<><Foo /></>",
+      features: ["fragment", "no-ts-old"],
       settings,
     },
     {
-      code: '<Act.Frag><Foo /></Act.Frag>',
-      options: ['element'],
+      code: "<Act.Frag><Foo /></Act.Frag>",
+      options: ["element"],
       settings,
     },
     {
-      code: '<Act.Frag />',
-      options: ['element'],
+      code: "<Act.Frag />",
+      options: ["element"],
       settings,
     },
     {
@@ -65,7 +65,7 @@ ruleTester.run('jsx-fragments', rule, {
         import Act, { Frag as F } from 'react';
         <F><Foo /></F>;
       `,
-      options: ['element'],
+      options: ["element"],
       settings,
     },
     {
@@ -73,7 +73,7 @@ ruleTester.run('jsx-fragments', rule, {
         const F = Act.Frag;
         <F><Foo /></F>;
       `,
-      options: ['element'],
+      options: ["element"],
       settings,
     },
     {
@@ -81,7 +81,7 @@ ruleTester.run('jsx-fragments', rule, {
         const { Frag } = Act;
         <Frag><Foo /></Frag>;
       `,
-      options: ['element'],
+      options: ["element"],
       settings,
     },
     {
@@ -89,91 +89,85 @@ ruleTester.run('jsx-fragments', rule, {
         const { Frag } = require('react');
         <Frag><Foo /></Frag>;
       `,
-      options: ['element'],
+      options: ["element"],
       settings,
     },
     {
       code: '<Act.Frag key="key"><Foo /></Act.Frag>',
-      options: ['syntax'],
+      options: ["syntax"],
       settings,
     },
     {
       code: '<Act.Frag key="key" />',
-      options: ['syntax'],
+      options: ["syntax"],
       settings,
     },
   ]),
 
   invalid: parsers.all([
     {
-      code: '<><Foo /></>',
-      features: ['fragment', 'no-ts-old'],
+      code: "<><Foo /></>",
+      features: ["fragment", "no-ts-old"],
       settings: settingsOld,
-      errors: [
-        { messageId: 'fragmentsNotSupported' },
-      ],
+      errors: [{ messageId: "fragmentsNotSupported" }],
     },
     {
-      code: '<Act.Frag><Foo /></Act.Frag>',
+      code: "<Act.Frag><Foo /></Act.Frag>",
       settings: settingsOld,
-      errors: [
-        { messageId: 'fragmentsNotSupported' },
-      ],
+      errors: [{ messageId: "fragmentsNotSupported" }],
     },
     {
-      code: '<Act.Frag />',
+      code: "<Act.Frag />",
       settings: settingsOld,
-      errors: [
-        { messageId: 'fragmentsNotSupported' },
-      ],
+      errors: [{ messageId: "fragmentsNotSupported" }],
     },
     {
-      code: '<><Foo /></>',
-      output: '<Act.Frag><Foo /></Act.Frag>',
-      features: ['fragment', 'no-ts-old'],
-      options: ['element'],
+      code: "<><Foo /></>",
+      output: "<Act.Frag><Foo /></Act.Frag>",
+      features: ["fragment", "no-ts-old"],
+      options: ["element"],
       settings,
       errors: [
         {
-          messageId: 'preferPragma',
-          data: { react: 'Act', fragment: 'Frag' },
+          messageId: "preferPragma",
+          data: { react: "Act", fragment: "Frag" },
         },
       ],
     },
     {
-      code: '<><Foo /></>',
+      code: "<><Foo /></>",
       output: null, // should get '<Act.Frag><Foo /></Act.Frag>', but the old TS parser lacks opening/closing Fragment info
-      features: ['fragment', 'no-babel', 'ts', 'no-ts-new'],
-      options: ['element'],
+      features: ["fragment", "no-babel", "ts", "no-ts-new"],
+      options: ["element"],
       settings,
       errors: [
         {
-          messageId: 'preferPragma',
-          data: { react: 'Act', fragment: 'Frag' },
+          messageId: "preferPragma",
+          data: { react: "Act", fragment: "Frag" },
         },
       ],
     },
     {
-      code: '<Act.Frag><Foo /></Act.Frag>',
-      output: '<><Foo /></>',
-      options: ['syntax'],
+      code: "<Act.Frag><Foo /></Act.Frag>",
+      output: "<><Foo /></>",
+      options: ["syntax"],
       settings,
       errors: [
         {
-          messageId: 'preferFragment',
-          data: { react: 'Act', fragment: 'Frag' },
+          messageId: "preferFragment",
+          data: { react: "Act", fragment: "Frag" },
         },
       ],
     },
     {
-      code: '<Act.Frag />',
-      output: '<></>',
-      options: ['syntax'],
+      code: "<Act.Frag />",
+      output: "<></>",
+      options: ["syntax"],
       settings,
       errors: [
         {
-          messageId: 'preferFragment',
-          data: { react: 'Act', fragment: 'Frag' },
+          messageId: "preferFragment",
+          data: { react: "Act", fragment: "Frag" },
         },
       ],
     },
@@ -186,12 +180,12 @@ ruleTester.run('jsx-fragments', rule, {
         import Act, { Frag as F } from 'react';
         <></>;
       `,
-      options: ['syntax'],
+      options: ["syntax"],
       settings,
       errors: [
         {
-          messageId: 'preferFragment',
-          data: { react: 'Act', fragment: 'Frag' },
+          messageId: "preferFragment",
+          data: { react: "Act", fragment: "Frag" },
         },
       ],
     },
@@ -204,12 +198,12 @@ ruleTester.run('jsx-fragments', rule, {
         import Act, { Frag as F } from 'react';
         <><Foo /></>;
       `,
-      options: ['syntax'],
+      options: ["syntax"],
       settings,
       errors: [
         {
-          messageId: 'preferFragment',
-          data: { react: 'Act', fragment: 'Frag' },
+          messageId: "preferFragment",
+          data: { react: "Act", fragment: "Frag" },
         },
       ],
     },
@@ -222,12 +216,12 @@ ruleTester.run('jsx-fragments', rule, {
         import Act, { Frag } from 'react';
         <><Foo /></>;
       `,
-      options: ['syntax'],
+      options: ["syntax"],
       settings,
       errors: [
         {
-          messageId: 'preferFragment',
-          data: { react: 'Act', fragment: 'Frag' },
+          messageId: "preferFragment",
+          data: { react: "Act", fragment: "Frag" },
         },
       ],
     },
@@ -240,12 +234,12 @@ ruleTester.run('jsx-fragments', rule, {
         const F = Act.Frag;
         <><Foo /></>;
       `,
-      options: ['syntax'],
+      options: ["syntax"],
       settings,
       errors: [
         {
-          messageId: 'preferFragment',
-          data: { react: 'Act', fragment: 'Frag' },
+          messageId: "preferFragment",
+          data: { react: "Act", fragment: "Frag" },
         },
       ],
     },
@@ -258,12 +252,12 @@ ruleTester.run('jsx-fragments', rule, {
         const { Frag } = Act;
         <><Foo /></>;
       `,
-      options: ['syntax'],
+      options: ["syntax"],
       settings,
       errors: [
         {
-          messageId: 'preferFragment',
-          data: { react: 'Act', fragment: 'Frag' },
+          messageId: "preferFragment",
+          data: { react: "Act", fragment: "Frag" },
         },
       ],
     },
@@ -276,12 +270,12 @@ ruleTester.run('jsx-fragments', rule, {
         const { Frag } = require('react');
         <><Foo /></>;
       `,
-      options: ['syntax'],
+      options: ["syntax"],
       settings,
       errors: [
         {
-          messageId: 'preferFragment',
-          data: { react: 'Act', fragment: 'Frag' },
+          messageId: "preferFragment",
+          data: { react: "Act", fragment: "Frag" },
         },
       ],
     },

@@ -3,13 +3,13 @@
  * @author Jake Marsh
  */
 
-'use strict';
+"use strict";
 
-const { elementType } = require('@eslintplugin/jsx-ast-utils');
-const minimatch = require('minimatch');
-const docsUrl = require('../util/docsUrl');
-const jsxUtil = require('../util/jsx');
-const report = require('../util/report');
+const { elementType } = require("@eslintplugin/jsx-ast-utils");
+const minimatch = require("minimatch");
+const docsUrl = require("../util/docsUrl");
+const jsxUtil = require("../util/jsx");
+const report = require("../util/report");
 
 function testDigit(char) {
   const charCode = char.charCodeAt(0);
@@ -32,14 +32,14 @@ function testPascalCase(name) {
   }
   const anyNonAlphaNumeric = Array.prototype.some.call(
     name.slice(1),
-    (char) => char.toLowerCase() === char.toUpperCase() && !testDigit(char)
+    (char) => char.toLowerCase() === char.toUpperCase() && !testDigit(char),
   );
   if (anyNonAlphaNumeric) {
     return false;
   }
   return Array.prototype.some.call(
     name.slice(1),
-    (char) => testLowerCase(char) || testDigit(char)
+    (char) => testLowerCase(char) || testDigit(char),
   );
 }
 
@@ -50,7 +50,7 @@ function testAllCaps(name) {
   }
   for (let i = 1; i < name.length - 1; i += 1) {
     const char = name.charAt(i);
-    if (!(testUpperCase(char) || testDigit(char) || char === '_')) {
+    if (!(testUpperCase(char) || testDigit(char) || char === "_")) {
       return false;
     }
   }
@@ -63,7 +63,7 @@ function testAllCaps(name) {
 
 function ignoreCheck(ignore, name) {
   return ignore.some(
-    (entry) => name === entry || minimatch(name, entry, { noglobstar: true })
+    (entry) => name === entry || minimatch(name, entry, { noglobstar: true }),
   );
 }
 
@@ -72,53 +72,57 @@ function ignoreCheck(ignore, name) {
 // ------------------------------------------------------------------------------
 
 const messages = {
-  usePascalCase: 'Imported JSX component {{name}} must be in PascalCase',
-  usePascalOrSnakeCase: 'Imported JSX component {{name}} must be in PascalCase or SCREAMING_SNAKE_CASE',
+  usePascalCase: "Imported JSX component {{name}} must be in PascalCase",
+  usePascalOrSnakeCase:
+    "Imported JSX component {{name}} must be in PascalCase or SCREAMING_SNAKE_CASE",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Enforce PascalCase for user-defined JSX components',
-      category: 'Stylistic Issues',
+      description: "Enforce PascalCase for user-defined JSX components",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('jsx-pascal-case'),
+      url: docsUrl("jsx-pascal-case"),
     },
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        allowAllCaps: {
-          type: 'boolean',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          allowAllCaps: {
+            type: "boolean",
+          },
+          allowLeadingUnderscore: {
+            type: "boolean",
+          },
+          allowNamespace: {
+            type: "boolean",
+          },
+          ignore: {
+            items: [
+              {
+                type: "string",
+              },
+            ],
+            minItems: 0,
+            type: "array",
+            uniqueItems: true,
+          },
         },
-        allowLeadingUnderscore: {
-          type: 'boolean',
-        },
-        allowNamespace: {
-          type: 'boolean',
-        },
-        ignore: {
-          items: [
-            {
-              type: 'string',
-            },
-          ],
-          minItems: 0,
-          type: 'array',
-          uniqueItems: true,
-        },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create(context) {
     const configuration = context.options[0] || {};
     const allowAllCaps = configuration.allowAllCaps || false;
-    const allowLeadingUnderscore = configuration.allowLeadingUnderscore || false;
+    const allowLeadingUnderscore =
+      configuration.allowLeadingUnderscore || false;
     const allowNamespace = configuration.allowNamespace || false;
     const ignore = configuration.ignore || [];
 
@@ -131,10 +135,10 @@ module.exports = {
         let checkNames = [name];
         let index = 0;
 
-        if (name.lastIndexOf(':') > -1) {
-          checkNames = name.split(':');
-        } else if (name.lastIndexOf('.') > -1) {
-          checkNames = name.split('.');
+        if (name.lastIndexOf(":") > -1) {
+          checkNames = name.split(":");
+        } else if (name.lastIndexOf(".") > -1) {
+          checkNames = name.split(".");
         }
 
         do {
@@ -142,12 +146,17 @@ module.exports = {
           if (splitName.length === 1) return undefined;
           const isIgnored = ignoreCheck(ignore, splitName);
 
-          const checkName = allowLeadingUnderscore && splitName.startsWith('_') ? splitName.slice(1) : splitName;
+          const checkName =
+            allowLeadingUnderscore && splitName.startsWith("_")
+              ? splitName.slice(1)
+              : splitName;
           const isPascalCase = testPascalCase(checkName);
           const isAllowedAllCaps = allowAllCaps && testAllCaps(checkName);
 
           if (!isPascalCase && !isAllowedAllCaps && !isIgnored) {
-            const messageId = allowAllCaps ? 'usePascalOrSnakeCase' : 'usePascalCase';
+            const messageId = allowAllCaps
+              ? "usePascalOrSnakeCase"
+              : "usePascalCase";
             report(context, messages[messageId], messageId, {
               node,
               data: {

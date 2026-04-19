@@ -3,13 +3,13 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
-const docsUrl = require('../util/docsUrl');
-const eslintUtil = require('../util/eslint');
-const jsxUtil = require('../util/jsx');
-const reportC = require('../util/report');
-const isParenthesized = require('../util/ast').isParenthesized;
+const docsUrl = require("../util/docsUrl");
+const eslintUtil = require("../util/eslint");
+const jsxUtil = require("../util/jsx");
+const reportC = require("../util/report");
+const isParenthesized = require("../util/ast").isParenthesized;
 
 const getSourceCode = eslintUtil.getSourceCode;
 const getText = eslintUtil.getText;
@@ -19,13 +19,13 @@ const getText = eslintUtil.getText;
 // ------------------------------------------------------------------------------
 
 const DEFAULTS = {
-  declaration: 'parens',
-  assignment: 'parens',
-  return: 'parens',
-  arrow: 'parens',
-  condition: 'ignore',
-  logical: 'ignore',
-  prop: 'ignore',
+  declaration: "parens",
+  assignment: "parens",
+  return: "parens",
+  arrow: "parens",
+  condition: "ignore",
+  logical: "ignore",
+  prop: "ignore",
 };
 
 // ------------------------------------------------------------------------------
@@ -33,52 +33,54 @@ const DEFAULTS = {
 // ------------------------------------------------------------------------------
 
 const messages = {
-  missingParens: 'Missing parentheses around multilines JSX',
-  extraParens: 'Expected no parentheses around multilines JSX',
-  parensOnNewLines: 'Parentheses around JSX should be on separate lines',
+  missingParens: "Missing parentheses around multilines JSX",
+  extraParens: "Expected no parentheses around multilines JSX",
+  parensOnNewLines: "Parentheses around JSX should be on separate lines",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow missing parentheses around multiline JSX',
-      category: 'Stylistic Issues',
+      description: "Disallow missing parentheses around multiline JSX",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('jsx-wrap-multilines'),
+      url: docsUrl("jsx-wrap-multilines"),
     },
-    fixable: 'code',
+    fixable: "code",
 
     messages,
 
-    schema: [{
-      type: 'object',
-      // true/false are for backwards compatibility
-      properties: {
-        declaration: {
-          enum: [true, false, 'ignore', 'parens', 'parens-new-line', 'never'],
+    schema: [
+      {
+        type: "object",
+        // true/false are for backwards compatibility
+        properties: {
+          declaration: {
+            enum: [true, false, "ignore", "parens", "parens-new-line", "never"],
+          },
+          assignment: {
+            enum: [true, false, "ignore", "parens", "parens-new-line", "never"],
+          },
+          return: {
+            enum: [true, false, "ignore", "parens", "parens-new-line", "never"],
+          },
+          arrow: {
+            enum: [true, false, "ignore", "parens", "parens-new-line", "never"],
+          },
+          condition: {
+            enum: [true, false, "ignore", "parens", "parens-new-line", "never"],
+          },
+          logical: {
+            enum: [true, false, "ignore", "parens", "parens-new-line", "never"],
+          },
+          prop: {
+            enum: [true, false, "ignore", "parens", "parens-new-line", "never"],
+          },
         },
-        assignment: {
-          enum: [true, false, 'ignore', 'parens', 'parens-new-line', 'never'],
-        },
-        return: {
-          enum: [true, false, 'ignore', 'parens', 'parens-new-line', 'never'],
-        },
-        arrow: {
-          enum: [true, false, 'ignore', 'parens', 'parens-new-line', 'never'],
-        },
-        condition: {
-          enum: [true, false, 'ignore', 'parens', 'parens-new-line', 'never'],
-        },
-        logical: {
-          enum: [true, false, 'ignore', 'parens', 'parens-new-line', 'never'],
-        },
-        prop: {
-          enum: [true, false, 'ignore', 'parens', 'parens-new-line', 'never'],
-        },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create(context) {
@@ -92,7 +94,7 @@ module.exports = {
 
     function isEnabled(type) {
       const option = getOption(type);
-      return option && option !== 'ignore';
+      return option && option !== "ignore";
     }
 
     function needsOpeningNewLine(node) {
@@ -137,8 +139,8 @@ module.exports = {
     function trimTokenBeforeNewline(node, tokenBefore) {
       // if the token before the jsx is a bracket or curly brace
       // we don't want a space between the opening parentheses and the multiline jsx
-      const isBracket = tokenBefore.value === '{' || tokenBefore.value === '[';
-      return `${tokenBefore.value.trim()}${isBracket ? '' : ' '}`;
+      const isBracket = tokenBefore.value === "{" || tokenBefore.value === "[";
+      return `${tokenBefore.value.trim()}${isBracket ? "" : " "}`;
     }
 
     function check(node, type) {
@@ -149,33 +151,49 @@ module.exports = {
       const sourceCode = getSourceCode(context);
       const option = getOption(type);
 
-      if ((option === true || option === 'parens') && !isParenthesized(context, node) && isMultilines(node)) {
-        report(node, 'missingParens', (fixer) => fixer.replaceText(node, `(${getText(context, node)})`));
+      if (
+        (option === true || option === "parens") &&
+        !isParenthesized(context, node) &&
+        isMultilines(node)
+      ) {
+        report(node, "missingParens", (fixer) =>
+          fixer.replaceText(node, `(${getText(context, node)})`),
+        );
       }
 
-      if (option === 'parens-new-line' && isMultilines(node)) {
+      if (option === "parens-new-line" && isMultilines(node)) {
         if (!isParenthesized(context, node)) {
-          const tokenBefore = sourceCode.getTokenBefore(node, { includeComments: true });
-          const tokenAfter = sourceCode.getTokenAfter(node, { includeComments: true });
+          const tokenBefore = sourceCode.getTokenBefore(node, {
+            includeComments: true,
+          });
+          const tokenAfter = sourceCode.getTokenAfter(node, {
+            includeComments: true,
+          });
           const start = node.loc.start;
           if (tokenBefore.loc.end.line < start.line) {
             // Strip newline after operator if parens newline is specified
-            report(
-              node,
-              'missingParens',
-              (fixer) => fixer.replaceTextRange(
-                [tokenBefore.range[0], tokenAfter && (tokenAfter.value === ';' || tokenAfter.value === '}') ? tokenAfter.range[0] : node.range[1]],
-                `${trimTokenBeforeNewline(node, tokenBefore)}(\n${start.column > 0 ? ' '.repeat(start.column) : ''}${getText(context, node)}\n${start.column > 0 ? ' '.repeat(start.column - 2) : ''})`
-              )
+            report(node, "missingParens", (fixer) =>
+              fixer.replaceTextRange(
+                [
+                  tokenBefore.range[0],
+                  tokenAfter &&
+                  (tokenAfter.value === ";" || tokenAfter.value === "}")
+                    ? tokenAfter.range[0]
+                    : node.range[1],
+                ],
+                `${trimTokenBeforeNewline(node, tokenBefore)}(\n${start.column > 0 ? " ".repeat(start.column) : ""}${getText(context, node)}\n${start.column > 0 ? " ".repeat(start.column - 2) : ""})`,
+              ),
             );
           } else {
-            report(node, 'missingParens', (fixer) => fixer.replaceText(node, `(\n${getText(context, node)}\n)`));
+            report(node, "missingParens", (fixer) =>
+              fixer.replaceText(node, `(\n${getText(context, node)}\n)`),
+            );
           }
         } else {
           const needsOpening = needsOpeningNewLine(node);
           const needsClosing = needsClosingNewLine(node);
           if (needsOpening || needsClosing) {
-            report(node, 'parensOnNewLines', (fixer) => {
+            report(node, "parensOnNewLines", (fixer) => {
               const text = getText(context, node);
               let fixed = text;
               if (needsOpening) {
@@ -190,13 +208,15 @@ module.exports = {
         }
       }
 
-      if (option === 'never' && isParenthesized(context, node)) {
+      if (option === "never" && isParenthesized(context, node)) {
         const tokenBefore = sourceCode.getTokenBefore(node);
         const tokenAfter = sourceCode.getTokenAfter(node);
-        report(node, 'extraParens', (fixer) => fixer.replaceTextRange(
-          [tokenBefore.range[0], tokenAfter.range[1]],
-          getText(context, node)
-        ));
+        report(node, "extraParens", (fixer) =>
+          fixer.replaceTextRange(
+            [tokenBefore.range[0], tokenAfter.range[1]],
+            getText(context, node),
+          ),
+        );
       }
     }
 
@@ -205,13 +225,16 @@ module.exports = {
     // --------------------------------------------------------------------------
 
     return {
-
       VariableDeclarator(node) {
-        const type = 'declaration';
+        const type = "declaration";
         if (!isEnabled(type)) {
           return;
         }
-        if (!isEnabled('condition') && node.init && node.init.type === 'ConditionalExpression') {
+        if (
+          !isEnabled("condition") &&
+          node.init &&
+          node.init.type === "ConditionalExpression"
+        ) {
           check(node.init.consequent, type);
           check(node.init.alternate, type);
           return;
@@ -220,11 +243,14 @@ module.exports = {
       },
 
       AssignmentExpression(node) {
-        const type = 'assignment';
+        const type = "assignment";
         if (!isEnabled(type)) {
           return;
         }
-        if (!isEnabled('condition') && node.right.type === 'ConditionalExpression') {
+        if (
+          !isEnabled("condition") &&
+          node.right.type === "ConditionalExpression"
+        ) {
           check(node.right.consequent, type);
           check(node.right.alternate, type);
           return;
@@ -233,23 +259,23 @@ module.exports = {
       },
 
       ReturnStatement(node) {
-        const type = 'return';
+        const type = "return";
         if (isEnabled(type)) {
           check(node.argument, type);
         }
       },
 
-      'ArrowFunctionExpression:exit': (node) => {
+      "ArrowFunctionExpression:exit": (node) => {
         const arrowBody = node.body;
-        const type = 'arrow';
+        const type = "arrow";
 
-        if (isEnabled(type) && arrowBody.type !== 'BlockStatement') {
+        if (isEnabled(type) && arrowBody.type !== "BlockStatement") {
           check(arrowBody, type);
         }
       },
 
       ConditionalExpression(node) {
-        const type = 'condition';
+        const type = "condition";
         if (isEnabled(type)) {
           check(node.consequent, type);
           check(node.alternate, type);
@@ -257,15 +283,19 @@ module.exports = {
       },
 
       LogicalExpression(node) {
-        const type = 'logical';
+        const type = "logical";
         if (isEnabled(type)) {
           check(node.right, type);
         }
       },
 
       JSXAttribute(node) {
-        const type = 'prop';
-        if (isEnabled(type) && node.value && node.value.type === 'JSXExpressionContainer') {
+        const type = "prop";
+        if (
+          isEnabled(type) &&
+          node.value &&
+          node.value.type === "JSXExpressionContainer"
+        ) {
           check(node.value.expression, type);
         }
       },

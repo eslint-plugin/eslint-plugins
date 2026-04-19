@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 function getSourceCode(context) {
   return context.getSourceCode ? context.getSourceCode() : context.sourceCode;
@@ -10,7 +10,9 @@ function getFilename(context) {
 
 function getAncestors(context, node) {
   const sourceCode = getSourceCode(context);
-  return sourceCode.getAncestors ? sourceCode.getAncestors(node) : context.getAncestors();
+  return sourceCode.getAncestors
+    ? sourceCode.getAncestors(node)
+    : context.getAncestors();
 }
 
 function getScope(context, node) {
@@ -31,13 +33,17 @@ function markVariableAsUsed(name, node, context) {
 
 function getFirstTokens(context, node, count) {
   const sourceCode = getSourceCode(context);
-  return sourceCode.getFirstTokens ? sourceCode.getFirstTokens(node, count) : context.getFirstTokens(node, count);
+  return sourceCode.getFirstTokens
+    ? sourceCode.getFirstTokens(node, count)
+    : context.getFirstTokens(node, count);
 }
 
 function getText(context) {
   const sourceCode = getSourceCode(context);
   const args = Array.prototype.slice.call(arguments, 1);
-  return sourceCode.getText ? sourceCode.getText.apply(sourceCode, args) : context.getSource.apply(context, args);
+  return sourceCode.getText
+    ? sourceCode.getText.apply(sourceCode, args)
+    : context.getSource.apply(context, args);
 }
 
 module.exports = {

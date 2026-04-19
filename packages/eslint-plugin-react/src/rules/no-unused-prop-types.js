@@ -3,14 +3,14 @@
  * @author Evgueni Naverniouk
  */
 
-'use strict';
+"use strict";
 
 // As for exceptions for props.children or props.className (and alike) look at
 // https://github.com/jsx-eslint/eslint-plugin-react/issues/7
 
-const Components = require('../util/Components');
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
+const Components = require("../util/Components");
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
 
 /**
  * Checks if the component must be validated
@@ -26,43 +26,45 @@ function mustBeValidated(component) {
 // ------------------------------------------------------------------------------
 
 const messages = {
-  unusedPropType: '\'{{name}}\' PropType is defined but prop is never used',
+  unusedPropType: "'{{name}}' PropType is defined but prop is never used",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow definitions of unused propTypes',
-      category: 'Best Practices',
+      description: "Disallow definitions of unused propTypes",
+      category: "Best Practices",
       recommended: false,
-      url: docsUrl('no-unused-prop-types'),
+      url: docsUrl("no-unused-prop-types"),
     },
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        ignore: {
-          type: 'array',
-          items: {
-            type: 'string',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          ignore: {
+            type: "array",
+            items: {
+              type: "string",
+            },
+            uniqueItems: true,
           },
-          uniqueItems: true,
-        },
-        customValidators: {
-          type: 'array',
-          items: {
-            type: 'string',
+          customValidators: {
+            type: "array",
+            items: {
+              type: "string",
+            },
+          },
+          skipShapeProps: {
+            type: "boolean",
           },
         },
-        skipShapeProps: {
-          type: 'boolean',
-        },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create: Components.detect((context, components) => {
@@ -89,10 +91,10 @@ module.exports = {
       for (let i = 0, l = usedPropTypes.length; i < l; i++) {
         const usedProp = usedPropTypes[i];
         if (
-          prop.type === 'shape'
-          || prop.type === 'exact'
-          || prop.name === '__ANY_KEY__'
-          || usedProp.name === prop.name
+          prop.type === "shape" ||
+          prop.type === "exact" ||
+          prop.name === "__ANY_KEY__" ||
+          usedProp.name === prop.name
         ) {
           return true;
         }
@@ -119,17 +121,28 @@ module.exports = {
           return;
         }
 
-        if ((prop.type === 'shape' || prop.type === 'exact') && configuration.skipShapeProps) {
+        if (
+          (prop.type === "shape" || prop.type === "exact") &&
+          configuration.skipShapeProps
+        ) {
           return;
         }
 
-        if (prop.node && prop.node.typeAnnotation && prop.node.typeAnnotation.typeAnnotation
-          && prop.node.typeAnnotation.typeAnnotation.type === 'TSNeverKeyword') {
+        if (
+          prop.node &&
+          prop.node.typeAnnotation &&
+          prop.node.typeAnnotation.typeAnnotation &&
+          prop.node.typeAnnotation.typeAnnotation.type === "TSNeverKeyword"
+        ) {
           return;
         }
 
-        if (prop.node && !isIgnored(prop.fullName) && !isPropUsed(component, prop)) {
-          report(context, messages.unusedPropType, 'unusedPropType', {
+        if (
+          prop.node &&
+          !isIgnored(prop.fullName) &&
+          !isPropUsed(component, prop)
+        ) {
+          report(context, messages.unusedPropType, "unusedPropType", {
             node: prop.node.key || prop.node,
             data: {
               name: prop.fullName,
@@ -156,7 +169,7 @@ module.exports = {
     // --------------------------------------------------------------------------
 
     return {
-      'Program:exit'() {
+      "Program:exit"() {
         // Report undeclared proptypes for all classes
         Object.values(components.list())
           .filter((component) => mustBeValidated(component))

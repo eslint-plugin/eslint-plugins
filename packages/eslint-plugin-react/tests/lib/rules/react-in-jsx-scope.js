@@ -3,20 +3,20 @@
  * @author Glen Mailer
  */
 
-'use strict';
+"use strict";
 
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/react-in-jsx-scope');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/react-in-jsx-scope");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -24,7 +24,7 @@ const parserOptions = {
 
 const settings = {
   react: {
-    pragma: 'Foo',
+    pragma: "Foo",
   },
 };
 
@@ -33,19 +33,21 @@ const settings = {
 // -----------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('react-in-jsx-scope', rule, {
+ruleTester.run("react-in-jsx-scope", rule, {
   valid: parsers.all([
-    { code: 'var React, App; <App />;' },
-    { code: 'var React; <img />;' },
+    { code: "var React, App; <App />;" },
+    { code: "var React; <img />;" },
     {
-      code: 'var React; <>fragment</>;',
-      features: ['fragment'],
+      code: "var React; <>fragment</>;",
+      features: ["fragment"],
     },
-    { code: 'var React; <x-gif />;' },
-    { code: 'var React, App, a=1; <App attr={a} />;' },
-    { code: 'var React, App, a=1; function elem() { return <App attr={a} />; }' },
-    { code: '/** @jsx Foo */ var Foo, App; <App />;' },
-    { code: '/** @jsx Foo.Bar */ var Foo, App; <App />;' },
+    { code: "var React; <x-gif />;" },
+    { code: "var React, App, a=1; <App attr={a} />;" },
+    {
+      code: "var React, App, a=1; function elem() { return <App attr={a} />; }",
+    },
+    { code: "/** @jsx Foo */ var Foo, App; <App />;" },
+    { code: "/** @jsx Foo.Bar */ var Foo, App; <App />;" },
     {
       code: `
         import React from 'react/addons';
@@ -60,73 +62,73 @@ ruleTester.run('react-in-jsx-scope', rule, {
       `,
     },
     {
-      code: 'var Foo, App; <App />;',
+      code: "var Foo, App; <App />;",
       settings,
     },
   ]),
   invalid: parsers.all([
     {
-      code: 'var App, a = <App />;',
+      code: "var App, a = <App />;",
       errors: [
         {
-          messageId: 'notInScope',
-          data: { name: 'React' },
+          messageId: "notInScope",
+          data: { name: "React" },
         },
       ],
     },
     {
-      code: 'var a = <App />;',
+      code: "var a = <App />;",
       errors: [
         {
-          messageId: 'notInScope',
-          data: { name: 'React' },
+          messageId: "notInScope",
+          data: { name: "React" },
         },
       ],
     },
     {
-      code: 'var a = <img />;',
+      code: "var a = <img />;",
       errors: [
         {
-          messageId: 'notInScope',
-          data: { name: 'React' },
+          messageId: "notInScope",
+          data: { name: "React" },
         },
       ],
     },
     {
-      code: 'var a = <>fragment</>;',
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      code: "var a = <>fragment</>;",
+      features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
       errors: [
         {
-          messageId: 'notInScope',
-          data: { name: 'React' },
+          messageId: "notInScope",
+          data: { name: "React" },
         },
       ],
     },
     {
-      code: '/** @jsx React.DOM */ var a = <img />;',
+      code: "/** @jsx React.DOM */ var a = <img />;",
       errors: [
         {
-          messageId: 'notInScope',
-          data: { name: 'React' },
+          messageId: "notInScope",
+          data: { name: "React" },
         },
       ],
     },
     {
-      code: '/** @jsx Foo.bar */ var React, a = <img />;',
+      code: "/** @jsx Foo.bar */ var React, a = <img />;",
       errors: [
         {
-          messageId: 'notInScope',
-          data: { name: 'Foo' },
+          messageId: "notInScope",
+          data: { name: "Foo" },
         },
       ],
     },
     {
-      code: 'var React, a = <img />;',
+      code: "var React, a = <img />;",
       settings,
       errors: [
         {
-          messageId: 'notInScope',
-          data: { name: 'Foo' },
+          messageId: "notInScope",
+          data: { name: "Foo" },
         },
       ],
     },

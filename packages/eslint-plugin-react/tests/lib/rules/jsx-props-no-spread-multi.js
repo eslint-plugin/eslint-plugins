@@ -2,20 +2,20 @@
  * @fileoverview Tests for jsx-props-no-spread-multi
  */
 
-'use strict';
+"use strict";
 
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-props-no-spread-multi');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-props-no-spread-multi");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -26,9 +26,9 @@ const parserOptions = {
 // -----------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-const expectedError = { messageId: 'noMultiSpreading' };
+const expectedError = { messageId: "noMultiSpreading" };
 
-ruleTester.run('jsx-props-no-spread-multi', rule, {
+ruleTester.run("jsx-props-no-spread-multi", rule, {
   valid: parsers.all([
     {
       code: `

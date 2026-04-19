@@ -2,19 +2,19 @@
  * @fileoverview Prefer exact proptype definitions
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/prefer-exact-props');
-const parsers = require('../../helpers/parsers');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/prefer-exact-props");
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 8,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     experimentalObjectRestSpread: true,
     jsx: true,
@@ -22,16 +22,15 @@ const parserOptions = {
 };
 
 const settings = {
-  propWrapperFunctions: [
-    { property: 'exact', exact: true },
-  ],
+  propWrapperFunctions: [{ property: "exact", exact: true }],
 };
 
-const PROP_TYPES_MESSAGE = 'Component propTypes should be exact by using \'exact\'.';
-const FLOW_MESSAGE = 'Component flow props should be set with exact objects.';
+const PROP_TYPES_MESSAGE =
+  "Component propTypes should be exact by using 'exact'.";
+const FLOW_MESSAGE = "Component flow props should be set with exact objects.";
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('prefer-exact-props', rule, {
+ruleTester.run("prefer-exact-props", rule, {
   valid: parsers.all([
     {
       code: `
@@ -53,7 +52,7 @@ ruleTester.run('prefer-exact-props', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       settings,
     },
     {
@@ -65,7 +64,7 @@ ruleTester.run('prefer-exact-props', rule, {
           }
         }
       `,
-      features: ['types'],
+      features: ["types"],
       settings,
     },
     {
@@ -83,7 +82,7 @@ ruleTester.run('prefer-exact-props', rule, {
           return <div />;
         }
       `,
-      features: ['types'],
+      features: ["types"],
     },
     {
       code: `
@@ -94,7 +93,7 @@ ruleTester.run('prefer-exact-props', rule, {
           return <div />;
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
     },
     {
       code: `
@@ -106,7 +105,7 @@ ruleTester.run('prefer-exact-props', rule, {
           return <div />;
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
     },
     {
       code: `
@@ -114,7 +113,7 @@ ruleTester.run('prefer-exact-props', rule, {
           return <div />;
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
     },
     {
       code: `
@@ -123,7 +122,7 @@ ruleTester.run('prefer-exact-props', rule, {
           return <div />;
         }
       `,
-      features: ['types'],
+      features: ["types"],
     },
     {
       code: `
@@ -132,7 +131,7 @@ ruleTester.run('prefer-exact-props', rule, {
           return <div />;
         }
       `,
-      features: ['types'],
+      features: ["types"],
     },
     {
       code: `
@@ -177,7 +176,7 @@ ruleTester.run('prefer-exact-props', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -250,7 +249,7 @@ ruleTester.run('prefer-exact-props', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
   ]),
   invalid: parsers.all([
@@ -280,7 +279,7 @@ ruleTester.run('prefer-exact-props', rule, {
         }
       `,
       settings,
-      features: ['class fields'],
+      features: ["class fields"],
       errors: [{ message: PROP_TYPES_MESSAGE }],
     },
     {
@@ -294,7 +293,7 @@ ruleTester.run('prefer-exact-props', rule, {
           }
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
       errors: [{ message: FLOW_MESSAGE }],
     },
     {
@@ -303,7 +302,7 @@ ruleTester.run('prefer-exact-props', rule, {
           return <div />;
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
       errors: [{ message: FLOW_MESSAGE }],
     },
     {
@@ -315,7 +314,7 @@ ruleTester.run('prefer-exact-props', rule, {
           return <div />;
         }
       `,
-      features: ['flow'],
+      features: ["flow"],
       errors: [{ message: FLOW_MESSAGE }],
     },
     {
@@ -360,11 +359,16 @@ ruleTester.run('prefer-exact-props', rule, {
       `,
       settings: {
         propWrapperFunctions: [
-          { property: 'exact', exact: true },
-          { property: 'forbidExtraProps', exact: true },
+          { property: "exact", exact: true },
+          { property: "forbidExtraProps", exact: true },
         ],
       },
-      errors: [{ message: 'Component propTypes should be exact by using one of \'exact\', \'forbidExtraProps\'.' }],
+      errors: [
+        {
+          message:
+            "Component propTypes should be exact by using one of 'exact', 'forbidExtraProps'.",
+        },
+      ],
     },
     {
       code: `
@@ -383,11 +387,16 @@ ruleTester.run('prefer-exact-props', rule, {
       `,
       settings: {
         propWrapperFunctions: [
-          { property: 'exact', exact: true },
-          { property: 'forbidExtraProps', exact: true },
+          { property: "exact", exact: true },
+          { property: "forbidExtraProps", exact: true },
         ],
       },
-      errors: [{ message: 'Component propTypes should be exact by using one of \'exact\', \'forbidExtraProps\'.' }],
+      errors: [
+        {
+          message:
+            "Component propTypes should be exact by using one of 'exact', 'forbidExtraProps'.",
+        },
+      ],
     },
     {
       code: `
@@ -401,7 +410,9 @@ ruleTester.run('prefer-exact-props', rule, {
         });
       `,
       settings,
-      errors: [{ message: 'Component propTypes should be exact by using \'exact\'.' }],
+      errors: [
+        { message: "Component propTypes should be exact by using 'exact'." },
+      ],
     },
     {
       code: `
@@ -420,7 +431,9 @@ ruleTester.run('prefer-exact-props', rule, {
         Component.propTypes = somethingElse(props);
       `,
       settings,
-      errors: [{ message: 'Component propTypes should be exact by using \'exact\'.' }],
+      errors: [
+        { message: "Component propTypes should be exact by using 'exact'." },
+      ],
     },
     {
       code: `
@@ -439,8 +452,10 @@ ruleTester.run('prefer-exact-props', rule, {
         }
       `,
       settings,
-      features: ['class fields'],
-      errors: [{ message: 'Component propTypes should be exact by using \'exact\'.' }],
+      features: ["class fields"],
+      errors: [
+        { message: "Component propTypes should be exact by using 'exact'." },
+      ],
     },
   ]),
 });

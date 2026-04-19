@@ -3,9 +3,9 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
-const makeNoMethodSetStateRule = require('../util/makeNoMethodSetStateRule');
+const makeNoMethodSetStateRule = require("../util/makeNoMethodSetStateRule");
 
 /** @type {import('eslint').Rule.RuleModule} */
-module.exports = makeNoMethodSetStateRule('componentDidUpdate');
+module.exports = makeNoMethodSetStateRule("componentDidUpdate");

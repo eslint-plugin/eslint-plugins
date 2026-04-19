@@ -2,13 +2,13 @@
  * @fileoverview Require all forwardRef components include a ref parameter
  */
 
-'use strict';
+"use strict";
 
-const isParenthesized = require('../util/ast').isParenthesized;
-const docsUrl = require('../util/docsUrl');
-const getSourceCode = require('../util/eslint').getSourceCode;
-const report = require('../util/report');
-const getMessageData = require('../util/message');
+const isParenthesized = require("../util/ast").isParenthesized;
+const docsUrl = require("../util/docsUrl");
+const getSourceCode = require("../util/eslint").getSourceCode;
+const report = require("../util/report");
+const getMessageData = require("../util/message");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
@@ -19,7 +19,7 @@ const getMessageData = require('../util/message');
  * @returns {boolean} If the node represents the identifier `forwardRef`.
  */
 function isForwardRefIdentifier(node) {
-  return node.type === 'Identifier' && node.name === 'forwardRef';
+  return node.type === "Identifier" && node.name === "forwardRef";
 }
 
 /**
@@ -28,32 +28,32 @@ function isForwardRefIdentifier(node) {
  */
 function isForwardRefCall(node) {
   return (
-    node.type === 'CallExpression'
-    && (
-      isForwardRefIdentifier(node.callee)
-      || (node.callee.type === 'MemberExpression' && isForwardRefIdentifier(node.callee.property))
-    )
+    node.type === "CallExpression" &&
+    (isForwardRefIdentifier(node.callee) ||
+      (node.callee.type === "MemberExpression" &&
+        isForwardRefIdentifier(node.callee.property)))
   );
 }
 
 const messages = {
-  missingRefParameter: 'forwardRef is used with this component but no ref parameter is set',
-  addRefParameter: 'Add a ref parameter',
-  removeForwardRef: 'Remove forwardRef wrapper',
+  missingRefParameter:
+    "forwardRef is used with this component but no ref parameter is set",
+  addRefParameter: "Add a ref parameter",
+  removeForwardRef: "Remove forwardRef wrapper",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Require all forwardRef components include a ref parameter',
-      category: 'Possible Errors',
+      description: "Require all forwardRef components include a ref parameter",
+      category: "Possible Errors",
       recommended: false,
-      url: docsUrl('forward-ref-uses-ref'),
+      url: docsUrl("forward-ref-uses-ref"),
     },
     messages,
     schema: [],
-    type: 'suggestion',
+    type: "suggestion",
     hasSuggestions: true,
   },
 
@@ -61,36 +61,46 @@ module.exports = {
     const sourceCode = getSourceCode(context);
 
     return {
-      'FunctionExpression, ArrowFunctionExpression'(node) {
+      "FunctionExpression, ArrowFunctionExpression"(node) {
         if (!isForwardRefCall(node.parent)) {
           return;
         }
 
         if (node.params.length === 1) {
-          report(context, messages.missingRefParameter, 'missingRefParameter', {
+          report(context, messages.missingRefParameter, "missingRefParameter", {
             node,
             suggest: [
               Object.assign(
-                getMessageData('addRefParameter', messages.addRefParameter),
+                getMessageData("addRefParameter", messages.addRefParameter),
                 {
                   fix(fixer) {
                     const param = node.params[0];
                     // If using shorthand arrow function syntax, add parentheses around the new parameter pair
-                    const shouldAddParentheses = node.type === 'ArrowFunctionExpression' && !isParenthesized(context, param);
+                    const shouldAddParentheses =
+                      node.type === "ArrowFunctionExpression" &&
+                      !isParenthesized(context, param);
                     return [].concat(
-                      shouldAddParentheses ? fixer.insertTextBefore(param, '(') : [],
-                      fixer.insertTextAfter(param, `, ref${shouldAddParentheses ? ')' : ''}`)
+                      shouldAddParentheses
+                        ? fixer.insertTextBefore(param, "(")
+                        : [],
+                      fixer.insertTextAfter(
+                        param,
+                        `, ref${shouldAddParentheses ? ")" : ""}`,
+                      ),
                     );
                   },
-                }
+                },
               ),
               Object.assign(
-                getMessageData('removeForwardRef', messages.removeForwardRef),
+                getMessageData("removeForwardRef", messages.removeForwardRef),
                 {
                   fix(fixer) {
-                    return fixer.replaceText(node.parent, sourceCode.getText(node));
+                    return fixer.replaceText(
+                      node.parent,
+                      sourceCode.getText(node),
+                    );
                   },
-                }
+                },
               ),
             ],
           });

@@ -5,15 +5,15 @@
  * @copyright 2015 Alberto Rodríguez. All rights reserved.
  */
 
-'use strict';
+"use strict";
 
-const Components = require('../util/Components');
-const testReactVersion = require('../util/version').testReactVersion;
-const astUtil = require('../util/ast');
-const componentUtil = require('../util/componentUtil');
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
-const eslintUtil = require('../util/eslint');
+const Components = require("../util/Components");
+const testReactVersion = require("../util/version").testReactVersion;
+const astUtil = require("../util/ast");
+const componentUtil = require("../util/componentUtil");
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
+const eslintUtil = require("../util/eslint");
 
 const getScope = eslintUtil.getScope;
 const getText = eslintUtil.getText;
@@ -23,31 +23,34 @@ const getText = eslintUtil.getText;
 // ------------------------------------------------------------------------------
 
 const messages = {
-  componentShouldBePure: 'Component should be written as a pure function',
+  componentShouldBePure: "Component should be written as a pure function",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Enforce stateless components to be written as a pure function',
-      category: 'Stylistic Issues',
+      description:
+        "Enforce stateless components to be written as a pure function",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('prefer-stateless-function'),
+      url: docsUrl("prefer-stateless-function"),
     },
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        ignorePureComponents: {
-          default: false,
-          type: 'boolean',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          ignorePureComponents: {
+            default: false,
+            type: "boolean",
+          },
         },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create: Components.detect((context, components, utils) => {
@@ -66,10 +69,10 @@ module.exports = {
      */
     function isSingleSuperCall(body) {
       return (
-        body.length === 1
-        && body[0].type === 'ExpressionStatement'
-        && astUtil.isCallExpression(body[0].expression)
-        && body[0].expression.callee.type === 'Super'
+        body.length === 1 &&
+        body[0].type === "ExpressionStatement" &&
+        astUtil.isCallExpression(body[0].expression) &&
+        body[0].expression.callee.type === "Super"
       );
     }
 
@@ -81,7 +84,7 @@ module.exports = {
      * @returns {boolean} `true` if the node doesn't have any side effects.
      */
     function isSimple(node) {
-      return node.type === 'Identifier' || node.type === 'RestElement';
+      return node.type === "Identifier" || node.type === "RestElement";
     }
 
     /**
@@ -93,10 +96,10 @@ module.exports = {
      */
     function isSpreadArguments(superArgs) {
       return (
-        superArgs.length === 1
-        && superArgs[0].type === 'SpreadElement'
-        && superArgs[0].argument.type === 'Identifier'
-        && superArgs[0].argument.name === 'arguments'
+        superArgs.length === 1 &&
+        superArgs[0].type === "SpreadElement" &&
+        superArgs[0].argument.type === "Identifier" &&
+        superArgs[0].argument.name === "arguments"
       );
     }
 
@@ -110,9 +113,9 @@ module.exports = {
      */
     function isValidIdentifierPair(ctorParam, superArg) {
       return (
-        ctorParam.type === 'Identifier'
-        && superArg.type === 'Identifier'
-        && ctorParam.name === superArg.name
+        ctorParam.type === "Identifier" &&
+        superArg.type === "Identifier" &&
+        ctorParam.name === superArg.name
       );
     }
 
@@ -126,9 +129,9 @@ module.exports = {
      */
     function isValidRestSpreadPair(ctorParam, superArg) {
       return (
-        ctorParam.type === 'RestElement'
-        && superArg.type === 'SpreadElement'
-        && isValidIdentifierPair(ctorParam.argument, superArg.argument)
+        ctorParam.type === "RestElement" &&
+        superArg.type === "SpreadElement" &&
+        isValidIdentifierPair(ctorParam.argument, superArg.argument)
       );
     }
 
@@ -141,8 +144,8 @@ module.exports = {
      */
     function isValidPair(ctorParam, superArg) {
       return (
-        isValidIdentifierPair(ctorParam, superArg)
-        || isValidRestSpreadPair(ctorParam, superArg)
+        isValidIdentifierPair(ctorParam, superArg) ||
+        isValidRestSpreadPair(ctorParam, superArg)
       );
     }
 
@@ -177,12 +180,10 @@ module.exports = {
      */
     function isRedundantSuperCall(body, ctorParams) {
       return (
-        isSingleSuperCall(body)
-        && ctorParams.every(isSimple)
-        && (
-          isSpreadArguments(body[0].expression.arguments)
-          || isPassingThrough(ctorParams, body[0].expression.arguments)
-        )
+        isSingleSuperCall(body) &&
+        ctorParams.every(isSimple) &&
+        (isSpreadArguments(body[0].expression.arguments) ||
+          isPassingThrough(ctorParams, body[0].expression.arguments))
       );
     }
 
@@ -195,15 +196,24 @@ module.exports = {
       const properties = astUtil.getComponentProperties(node);
       return properties.some((property) => {
         const name = astUtil.getPropertyName(property);
-        const isDisplayName = name === 'displayName';
-        const isPropTypes = name === 'propTypes' || ((name === 'props') && property.typeAnnotation);
-        const contextTypes = name === 'contextTypes';
-        const defaultProps = name === 'defaultProps';
-        const isUselessConstructor = property.kind === 'constructor'
-          && !!property.value.body
-          && isRedundantSuperCall(property.value.body.body, property.value.params);
-        const isRender = name === 'render';
-        return !isDisplayName && !isPropTypes && !contextTypes && !defaultProps && !isUselessConstructor && !isRender;
+        const isDisplayName = name === "displayName";
+        const isPropTypes =
+          name === "propTypes" || (name === "props" && property.typeAnnotation);
+        const contextTypes = name === "contextTypes";
+        const defaultProps = name === "defaultProps";
+        const isUselessConstructor =
+          property.kind === "constructor" &&
+          !!property.value.body &&
+          isRedundantSuperCall(property.value.body.body, property.value.params);
+        const isRender = name === "render";
+        return (
+          !isDisplayName &&
+          !isPropTypes &&
+          !contextTypes &&
+          !defaultProps &&
+          !isUselessConstructor &&
+          !isRender
+        );
       });
     }
 
@@ -278,7 +288,10 @@ module.exports = {
     }
 
     function visitClass(node) {
-      if (ignorePureComponents && componentUtil.isPureComponent(node, context)) {
+      if (
+        ignorePureComponents &&
+        componentUtil.isPureComponent(node, context)
+      ) {
         markSCUAsDeclared(node);
       }
 
@@ -294,13 +307,18 @@ module.exports = {
       // Mark `this` destructuring as a usage of `this`
       VariableDeclarator(node) {
         // Ignore destructuring on other than `this`
-        if (!node.id || node.id.type !== 'ObjectPattern' || !node.init || node.init.type !== 'ThisExpression') {
+        if (
+          !node.id ||
+          node.id.type !== "ObjectPattern" ||
+          !node.init ||
+          node.init.type !== "ThisExpression"
+        ) {
           return;
         }
         // Ignore `props` and `context`
         const useThis = node.id.properties.some((property) => {
           const name = astUtil.getPropertyName(property);
-          return name !== 'props' && name !== 'context';
+          return name !== "props" && name !== "context";
         });
         if (!useThis) {
           markPropsOrContextAsUsed(node);
@@ -311,8 +329,8 @@ module.exports = {
 
       // Mark `this` usage
       MemberExpression(node) {
-        if (node.object.type !== 'ThisExpression') {
-          if (node.property && node.property.name === 'childContextTypes') {
+        if (node.object.type !== "ThisExpression") {
+          if (node.property && node.property.name === "childContextTypes") {
             const component = utils.getRelatedComponent(node);
             if (!component) {
               return;
@@ -320,11 +338,11 @@ module.exports = {
             markChildContextTypesAsDeclared(component.node);
           }
           return;
-        // Ignore calls to `this.props` and `this.context`
+          // Ignore calls to `this.props` and `this.context`
         }
         if (
-          (node.property.name || node.property.value) === 'props'
-          || (node.property.name || node.property.value) === 'context'
+          (node.property.name || node.property.value) === "props" ||
+          (node.property.name || node.property.value) === "context"
         ) {
           markPropsOrContextAsUsed(node);
           return;
@@ -335,7 +353,7 @@ module.exports = {
       // Mark `ref` usage
       JSXAttribute(node) {
         const name = getText(context, node.name);
-        if (name !== 'ref') {
+        if (name !== "ref") {
           return;
         }
         markRefAsUsed(node);
@@ -347,47 +365,56 @@ module.exports = {
         let scope = getScope(context, node);
         while (scope) {
           blockNode = scope.block && scope.block.parent;
-          if (blockNode && (blockNode.type === 'MethodDefinition' || blockNode.type === 'Property')) {
+          if (
+            blockNode &&
+            (blockNode.type === "MethodDefinition" ||
+              blockNode.type === "Property")
+          ) {
             break;
           }
           scope = scope.upper;
         }
-        const isRender = blockNode
-          && blockNode.key
-          && blockNode.key.name === 'render';
-        const allowNull = testReactVersion(context, '>= 15.0.0'); // Stateless components can return null since React 15
+        const isRender =
+          blockNode && blockNode.key && blockNode.key.name === "render";
+        const allowNull = testReactVersion(context, ">= 15.0.0"); // Stateless components can return null since React 15
         const isReturningJSX = utils.isReturningJSX(node, !allowNull);
-        const isReturningNull = node.argument && (node.argument.value === null || node.argument.value === false);
+        const isReturningNull =
+          node.argument &&
+          (node.argument.value === null || node.argument.value === false);
         if (
-          !isRender
-          || (allowNull && (isReturningJSX || isReturningNull))
-          || (!allowNull && isReturningJSX)
+          !isRender ||
+          (allowNull && (isReturningJSX || isReturningNull)) ||
+          (!allowNull && isReturningJSX)
         ) {
           return;
         }
         markReturnAsInvalid(node);
       },
 
-      'Program:exit'() {
+      "Program:exit"() {
         const list = components.list();
         Object.values(list)
-          .filter((component) => (
-            !hasOtherProperties(component.node)
-            && !component.useThis
-            && !component.useRef
-            && !component.invalidReturn
-            && !component.hasChildContextTypes
-            && !component.useDecorators
-            && !component.hasSCU
-            && (
-              componentUtil.isES5Component(component.node, context)
-              || componentUtil.isES6Component(component.node, context)
-            )
-          ))
+          .filter(
+            (component) =>
+              !hasOtherProperties(component.node) &&
+              !component.useThis &&
+              !component.useRef &&
+              !component.invalidReturn &&
+              !component.hasChildContextTypes &&
+              !component.useDecorators &&
+              !component.hasSCU &&
+              (componentUtil.isES5Component(component.node, context) ||
+                componentUtil.isES6Component(component.node, context)),
+          )
           .forEach((component) => {
-            report(context, messages.componentShouldBePure, 'componentShouldBePure', {
-              node: component.node,
-            });
+            report(
+              context,
+              messages.componentShouldBePure,
+              "componentShouldBePure",
+              {
+                node: component.node,
+              },
+            );
           });
       },
     };

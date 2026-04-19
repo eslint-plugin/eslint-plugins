@@ -3,78 +3,87 @@
  * @author Vitor Balocco
  */
 
-'use strict';
+"use strict";
 
-const Components = require('../util/Components');
-const docsUrl = require('../util/docsUrl');
-const astUtil = require('../util/ast');
-const report = require('../util/report');
+const Components = require("../util/Components");
+const docsUrl = require("../util/docsUrl");
+const astUtil = require("../util/ast");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  noDefaultWithRequired: 'propType "{{name}}" is required and should not have a defaultProps declaration.',
-  shouldHaveDefault: 'propType "{{name}}" is not required, but has no corresponding defaultProps declaration.',
-  noDefaultPropsWithFunction: 'Don’t use defaultProps with function components.',
-  shouldAssignObjectDefault: 'propType "{{name}}" is not required, but has no corresponding default argument value.',
-  destructureInSignature: 'Must destructure props in the function signature to initialize an optional prop.',
+  noDefaultWithRequired:
+    'propType "{{name}}" is required and should not have a defaultProps declaration.',
+  shouldHaveDefault:
+    'propType "{{name}}" is not required, but has no corresponding defaultProps declaration.',
+  noDefaultPropsWithFunction:
+    "Don’t use defaultProps with function components.",
+  shouldAssignObjectDefault:
+    'propType "{{name}}" is not required, but has no corresponding default argument value.',
+  destructureInSignature:
+    "Must destructure props in the function signature to initialize an optional prop.",
 };
 
 function isPropWithNoDefaulVal(prop) {
-  if (prop.type === 'RestElement' || prop.type === 'ExperimentalRestProperty') {
+  if (prop.type === "RestElement" || prop.type === "ExperimentalRestProperty") {
     return false;
   }
-  return prop.value.type !== 'AssignmentPattern';
+  return prop.value.type !== "AssignmentPattern";
 }
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Enforce a defaultProps definition for every prop that is not a required prop',
-      category: 'Best Practices',
-      url: docsUrl('require-default-props'),
+      description:
+        "Enforce a defaultProps definition for every prop that is not a required prop",
+      category: "Best Practices",
+      url: docsUrl("require-default-props"),
     },
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        forbidDefaultForRequired: {
-          type: 'boolean',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          forbidDefaultForRequired: {
+            type: "boolean",
+          },
+          classes: {
+            enum: ["defaultProps", "ignore"],
+          },
+          functions: {
+            enum: ["defaultArguments", "defaultProps", "ignore"],
+          },
+          /**
+           * @deprecated
+           */
+          ignoreFunctionalComponents: {
+            type: "boolean",
+          },
         },
-        classes: {
-          enum: ['defaultProps', 'ignore'],
-        },
-        functions: {
-          enum: ['defaultArguments', 'defaultProps', 'ignore'],
-        },
-        /**
-         * @deprecated
-         */
-        ignoreFunctionalComponents: {
-          type: 'boolean',
-        },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create: Components.detect((context, components) => {
     const configuration = context.options[0] || {};
-    const forbidDefaultForRequired = configuration.forbidDefaultForRequired || false;
-    const classes = configuration.classes || 'defaultProps';
+    const forbidDefaultForRequired =
+      configuration.forbidDefaultForRequired || false;
+    const classes = configuration.classes || "defaultProps";
     /**
      * @todo
      * - Remove ignoreFunctionalComponents
      * - Change default to 'defaultArguments'
      */
     const functions = configuration.ignoreFunctionalComponents
-      ? 'ignore'
-      : configuration.functions || 'defaultProps';
+      ? "ignore"
+      : configuration.functions || "defaultProps";
 
     /**
      * Reports all propTypes passed in that don't have a defaultProps counterpart.
@@ -92,10 +101,15 @@ module.exports = {
         }
         if (prop.isRequired) {
           if (forbidDefaultForRequired && defaultProps[propName]) {
-            report(context, messages.noDefaultWithRequired, 'noDefaultWithRequired', {
-              node: prop.node,
-              data: { name: propName },
-            });
+            report(
+              context,
+              messages.noDefaultWithRequired,
+              "noDefaultWithRequired",
+              {
+                node: prop.node,
+                data: { name: propName },
+              },
+            );
           }
           return;
         }
@@ -104,7 +118,7 @@ module.exports = {
           return;
         }
 
-        report(context, messages.shouldHaveDefault, 'shouldHaveDefault', {
+        report(context, messages.shouldHaveDefault, "shouldHaveDefault", {
           node: prop.node,
           data: { name: propName },
         });
@@ -117,11 +131,20 @@ module.exports = {
      * @param {Object[]} declaredPropTypes List of propTypes to check `isRequired`.
      * @param {Object} defaultProps Object of defaultProps to check used.
      */
-    function reportFunctionComponent(componentNode, declaredPropTypes, defaultProps) {
+    function reportFunctionComponent(
+      componentNode,
+      declaredPropTypes,
+      defaultProps,
+    ) {
       if (defaultProps) {
-        report(context, messages.noDefaultPropsWithFunction, 'noDefaultPropsWithFunction', {
-          node: componentNode,
-        });
+        report(
+          context,
+          messages.noDefaultPropsWithFunction,
+          "noDefaultPropsWithFunction",
+          {
+            node: componentNode,
+          },
+        );
       }
 
       const props = componentNode.params[0];
@@ -131,37 +154,68 @@ module.exports = {
         return;
       }
 
-      if (props.type === 'Identifier') {
-        const hasOptionalProp = Object.values(propTypes).some((propType) => !propType.isRequired);
+      if (props.type === "Identifier") {
+        const hasOptionalProp = Object.values(propTypes).some(
+          (propType) => !propType.isRequired,
+        );
         if (hasOptionalProp) {
-          report(context, messages.destructureInSignature, 'destructureInSignature', {
-            node: props,
-          });
+          report(
+            context,
+            messages.destructureInSignature,
+            "destructureInSignature",
+            {
+              node: props,
+            },
+          );
         }
-      } else if (props.type === 'ObjectPattern') {
+      } else if (props.type === "ObjectPattern") {
         // Filter required props with default value and report error
-        props.properties.filter((prop) => {
-          const propName = prop && prop.key && prop.key.name;
-          const isPropRequired = propTypes[propName] && propTypes[propName].isRequired;
-          return propTypes[propName] && isPropRequired && !isPropWithNoDefaulVal(prop);
-        }).forEach((prop) => {
-          report(context, messages.noDefaultWithRequired, 'noDefaultWithRequired', {
-            node: prop,
-            data: { name: prop.key.name },
+        props.properties
+          .filter((prop) => {
+            const propName = prop && prop.key && prop.key.name;
+            const isPropRequired =
+              propTypes[propName] && propTypes[propName].isRequired;
+            return (
+              propTypes[propName] &&
+              isPropRequired &&
+              !isPropWithNoDefaulVal(prop)
+            );
+          })
+          .forEach((prop) => {
+            report(
+              context,
+              messages.noDefaultWithRequired,
+              "noDefaultWithRequired",
+              {
+                node: prop,
+                data: { name: prop.key.name },
+              },
+            );
           });
-        });
 
         // Filter non required props with no default value and report error
-        props.properties.filter((prop) => {
-          const propName = prop && prop.key && prop.key.name;
-          const isPropRequired = propTypes[propName] && propTypes[propName].isRequired;
-          return propTypes[propName] && !isPropRequired && isPropWithNoDefaulVal(prop);
-        }).forEach((prop) => {
-          report(context, messages.shouldAssignObjectDefault, 'shouldAssignObjectDefault', {
-            node: prop,
-            data: { name: prop.key.name },
+        props.properties
+          .filter((prop) => {
+            const propName = prop && prop.key && prop.key.name;
+            const isPropRequired =
+              propTypes[propName] && propTypes[propName].isRequired;
+            return (
+              propTypes[propName] &&
+              !isPropRequired &&
+              isPropWithNoDefaulVal(prop)
+            );
+          })
+          .forEach((prop) => {
+            report(
+              context,
+              messages.shouldAssignObjectDefault,
+              "shouldAssignObjectDefault",
+              {
+                node: prop,
+                data: { name: prop.key.name },
+              },
+            );
           });
-        });
       }
     }
 
@@ -170,37 +224,45 @@ module.exports = {
     // --------------------------------------------------------------------------
 
     return {
-      'Program:exit'() {
+      "Program:exit"() {
         const list = components.list();
 
-        Object.values(list).filter((component) => {
-          if (functions === 'ignore' && astUtil.isFunctionLike(component.node)) {
-            return false;
-          }
-          if (classes === 'ignore' && astUtil.isClass(component.node)) {
-            return false;
-          }
+        Object.values(list)
+          .filter((component) => {
+            if (
+              functions === "ignore" &&
+              astUtil.isFunctionLike(component.node)
+            ) {
+              return false;
+            }
+            if (classes === "ignore" && astUtil.isClass(component.node)) {
+              return false;
+            }
 
-          // If this defaultProps is "unresolved", then we should ignore this component and not report
-          // any errors for it, to avoid false-positives with e.g. external defaultProps declarations or spread operators.
-          if (component.defaultProps === 'unresolved') {
-            return false;
-          }
-          return component.declaredPropTypes !== undefined;
-        }).forEach((component) => {
-          if (functions === 'defaultArguments' && astUtil.isFunctionLike(component.node)) {
-            reportFunctionComponent(
-              component.node,
-              component.declaredPropTypes,
-              component.defaultProps
-            );
-          } else {
-            reportPropTypesWithoutDefault(
-              component.declaredPropTypes,
-              component.defaultProps || {}
-            );
-          }
-        });
+            // If this defaultProps is "unresolved", then we should ignore this component and not report
+            // any errors for it, to avoid false-positives with e.g. external defaultProps declarations or spread operators.
+            if (component.defaultProps === "unresolved") {
+              return false;
+            }
+            return component.declaredPropTypes !== undefined;
+          })
+          .forEach((component) => {
+            if (
+              functions === "defaultArguments" &&
+              astUtil.isFunctionLike(component.node)
+            ) {
+              reportFunctionComponent(
+                component.node,
+                component.declaredPropTypes,
+                component.defaultProps,
+              );
+            } else {
+              reportPropTypesWithoutDefault(
+                component.declaredPropTypes,
+                component.defaultProps || {},
+              );
+            }
+          });
       },
     };
   }),

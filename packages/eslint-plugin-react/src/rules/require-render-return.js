@@ -3,31 +3,32 @@
  * @author Mark Orel
  */
 
-'use strict';
+"use strict";
 
-const Components = require('../util/Components');
-const astUtil = require('../util/ast');
-const componentUtil = require('../util/componentUtil');
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
-const getAncestors = require('../util/eslint').getAncestors;
+const Components = require("../util/Components");
+const astUtil = require("../util/ast");
+const componentUtil = require("../util/componentUtil");
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
+const getAncestors = require("../util/eslint").getAncestors;
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  noRenderReturn: 'Your render method should have a return statement',
+  noRenderReturn: "Your render method should have a return statement",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Enforce ES5 or ES6 class for returning value in render function',
-      category: 'Possible Errors',
+      description:
+        "Enforce ES5 or ES6 class for returning value in render function",
+      category: "Possible Errors",
       recommended: true,
-      url: docsUrl('require-render-return'),
+      url: docsUrl("require-render-return"),
     },
 
     messages,
@@ -54,7 +55,10 @@ module.exports = {
     function findRenderMethod(node) {
       const properties = astUtil.getComponentProperties(node);
       return properties
-        .filter((property) => astUtil.getPropertyName(property) === 'render' && property.value)
+        .filter(
+          (property) =>
+            astUtil.getPropertyName(property) === "render" && property.value,
+        )
         .find((property) => astUtil.isFunctionLikeExpression(property.value));
     }
 
@@ -67,9 +71,11 @@ module.exports = {
             depth += 1;
           }
           if (
-            /(MethodDefinition|Property|ClassProperty|PropertyDefinition)$/.test(ancestor.type)
-            && astUtil.getPropertyName(ancestor) === 'render'
-            && depth <= 1
+            /(MethodDefinition|Property|ClassProperty|PropertyDefinition)$/.test(
+              ancestor.type,
+            ) &&
+            astUtil.getPropertyName(ancestor) === "render" &&
+            depth <= 1
           ) {
             markReturnStatementPresent(node);
           }
@@ -77,24 +83,26 @@ module.exports = {
       },
 
       ArrowFunctionExpression(node) {
-        if (node.expression === false || astUtil.getPropertyName(node.parent) !== 'render') {
+        if (
+          node.expression === false ||
+          astUtil.getPropertyName(node.parent) !== "render"
+        ) {
           return;
         }
         markReturnStatementPresent(node);
       },
 
-      'Program:exit'() {
+      "Program:exit"() {
         Object.values(components.list())
-          .filter((component) => (
-            findRenderMethod(component.node)
-            && !component.hasReturnStatement
-            && (
-              componentUtil.isES5Component(component.node, context)
-              || componentUtil.isES6Component(component.node, context)
-            )
-          ))
+          .filter(
+            (component) =>
+              findRenderMethod(component.node) &&
+              !component.hasReturnStatement &&
+              (componentUtil.isES5Component(component.node, context) ||
+                componentUtil.isES6Component(component.node, context)),
+          )
           .forEach((component) => {
-            report(context, messages.noRenderReturn, 'noRenderReturn', {
+            report(context, messages.noRenderReturn, "noRenderReturn", {
               node: findRenderMethod(component.node),
             });
           });

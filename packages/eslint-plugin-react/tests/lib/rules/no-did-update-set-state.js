@@ -3,20 +3,20 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/no-did-update-set-state');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/no-did-update-set-state");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -39,8 +39,8 @@ const invalid = [
     `,
     errors: [
       {
-        messageId: 'noSetState',
-        data: { name: 'componentDidUpdate' },
+        messageId: "noSetState",
+        data: { name: "componentDidUpdate" },
       },
     ],
   },
@@ -56,8 +56,8 @@ const invalid = [
     `,
     errors: [
       {
-        messageId: 'noSetState',
-        data: { name: 'componentDidUpdate' },
+        messageId: "noSetState",
+        data: { name: "componentDidUpdate" },
       },
     ],
   },
@@ -71,12 +71,12 @@ const invalid = [
         }
       }
     `,
-    features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+    features: ["class fields", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
 
     errors: [
       {
-        messageId: 'noSetState',
-        data: { name: 'componentDidUpdate' },
+        messageId: "noSetState",
+        data: { name: "componentDidUpdate" },
       },
     ],
   },
@@ -90,11 +90,11 @@ const invalid = [
       }
     });
   `,
-    options: ['disallow-in-func'],
+    options: ["disallow-in-func"],
     errors: [
       {
-        messageId: 'noSetState',
-        data: { name: 'componentDidUpdate' },
+        messageId: "noSetState",
+        data: { name: "componentDidUpdate" },
       },
     ],
   },
@@ -108,11 +108,11 @@ const invalid = [
         }
       }
     `,
-    options: ['disallow-in-func'],
+    options: ["disallow-in-func"],
     errors: [
       {
-        messageId: 'noSetState',
-        data: { name: 'componentDidUpdate' },
+        messageId: "noSetState",
+        data: { name: "componentDidUpdate" },
       },
     ],
   },
@@ -128,11 +128,11 @@ const invalid = [
         }
       });
     `,
-    options: ['disallow-in-func'],
+    options: ["disallow-in-func"],
     errors: [
       {
-        messageId: 'noSetState',
-        data: { name: 'componentDidUpdate' },
+        messageId: "noSetState",
+        data: { name: "componentDidUpdate" },
       },
     ],
   },
@@ -148,11 +148,11 @@ const invalid = [
         }
       }
     `,
-    options: ['disallow-in-func'],
+    options: ["disallow-in-func"],
     errors: [
       {
-        messageId: 'noSetState',
-        data: { name: 'componentDidUpdate' },
+        messageId: "noSetState",
+        data: { name: "componentDidUpdate" },
       },
     ],
   },
@@ -170,8 +170,8 @@ const invalid = [
     `,
     errors: [
       {
-        messageId: 'noSetState',
-        data: { name: 'componentDidUpdate' },
+        messageId: "noSetState",
+        data: { name: "componentDidUpdate" },
       },
     ],
   },
@@ -189,8 +189,8 @@ const invalid = [
     `,
     errors: [
       {
-        messageId: 'noSetState',
-        data: { name: 'componentDidUpdate' },
+        messageId: "noSetState",
+        data: { name: "componentDidUpdate" },
       },
     ],
   },
@@ -202,11 +202,11 @@ const invalid = [
         }
       });
     `,
-    options: ['disallow-in-func'],
+    options: ["disallow-in-func"],
     errors: [
       {
-        messageId: 'noSetState',
-        data: { name: 'componentDidUpdate' },
+        messageId: "noSetState",
+        data: { name: "componentDidUpdate" },
       },
     ],
   },
@@ -218,37 +218,38 @@ const invalid = [
         }
       }
     `,
-    options: ['disallow-in-func'],
+    options: ["disallow-in-func"],
     errors: [
       {
-        messageId: 'noSetState',
-        data: { name: 'componentDidUpdate' },
+        messageId: "noSetState",
+        data: { name: "componentDidUpdate" },
       },
     ],
   },
 ];
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('no-did-update-set-state', rule, {
-  valid: parsers.all([].concat(
-    {
-      code: `
+ruleTester.run("no-did-update-set-state", rule, {
+  valid: parsers.all(
+    [].concat(
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             return <div>Hello {this.props.name}</div>;
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           componentDidUpdate: function() {}
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           componentDidUpdate: function() {
             someNonMemberFunction(arg);
@@ -256,9 +257,9 @@ ruleTester.run('no-did-update-set-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           componentDidUpdate: function() {
             someClass.onSomeEvent(function(data) {
@@ -269,9 +270,9 @@ ruleTester.run('no-did-update-set-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           componentDidUpdate: function() {
             function handleEvent(data) {
@@ -283,19 +284,20 @@ ruleTester.run('no-did-update-set-state', rule, {
           }
         });
       `,
-    },
-    invalid.map((test) => {
-      const newTest = Object.assign({}, test, {
-        settings: Object.assign({}, test.settings, {
-          react: {
-            version: '16.3.0',
-          },
-        }),
-      });
-      delete newTest.errors;
-      return newTest;
-    })
-  )),
+      },
+      invalid.map((test) => {
+        const newTest = Object.assign({}, test, {
+          settings: Object.assign({}, test.settings, {
+            react: {
+              version: "16.3.0",
+            },
+          }),
+        });
+        delete newTest.errors;
+        return newTest;
+      }),
+    ),
+  ),
 
   invalid: parsers.all(invalid),
 });

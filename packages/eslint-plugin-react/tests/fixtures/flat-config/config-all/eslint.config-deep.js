@@ -1,11 +1,13 @@
-'use strict';
+"use strict";
 
-const reactAll = require('../../../../configs/all');
+const reactAll = require("../../../../configs/all");
 
-module.exports = [{
-  files: ['**/*.jsx'],
-  ...reactAll,
-  languageOptions: {
-    ...reactAll.languageOptions
-  }
-}];
+module.exports = [
+  {
+    files: ["**/*.jsx"],
+    ...reactAll,
+    languageOptions: {
+      ...reactAll.languageOptions,
+    },
+  },
+];

@@ -2,13 +2,13 @@
  * @fileoverview Utility functions for JSX
  */
 
-'use strict';
+"use strict";
 
-const { elementType } = require('@eslintplugin/jsx-ast-utils');
+const { elementType } = require("@eslintplugin/jsx-ast-utils");
 
-const astUtil = require('./ast');
-const isCreateElement = require('./isCreateElement');
-const variableUtil = require('./variable');
+const astUtil = require("./ast");
+const isCreateElement = require("./isCreateElement");
+const variableUtil = require("./variable");
 
 // See https://github.com/babel/babel/blob/ce420ba51c68591e057696ef43e028f41c6e04cd/packages/babel-types/src/validators/react/isCompatTag.js
 // for why we only test for the first character
@@ -35,17 +35,17 @@ function isFragment(node, reactPragma, fragmentPragma) {
   const name = node.openingElement.name;
 
   // <Fragment>
-  if (name.type === 'JSXIdentifier' && name.name === fragmentPragma) {
+  if (name.type === "JSXIdentifier" && name.name === fragmentPragma) {
     return true;
   }
 
   // <React.Fragment>
   if (
-    name.type === 'JSXMemberExpression'
-    && name.object.type === 'JSXIdentifier'
-    && name.object.name === reactPragma
-    && name.property.type === 'JSXIdentifier'
-    && name.property.name === fragmentPragma
+    name.type === "JSXMemberExpression" &&
+    name.object.type === "JSXIdentifier" &&
+    name.object.name === reactPragma &&
+    name.property.type === "JSXIdentifier" &&
+    name.property.name === fragmentPragma
   ) {
     return true;
   }
@@ -59,7 +59,7 @@ function isFragment(node, reactPragma, fragmentPragma) {
  * @returns {boolean} Whether or not the node if a JSX element or fragment.
  */
 function isJSX(node) {
-  return node && ['JSXElement', 'JSXFragment'].indexOf(node.type) >= 0;
+  return node && ["JSXElement", "JSXFragment"].indexOf(node.type) >= 0;
 }
 
 /**
@@ -68,10 +68,12 @@ function isJSX(node) {
  * @returns {boolean}
  */
 function isJSXAttributeKey(node) {
-  return node.type === 'JSXAttribute'
-    && node.name
-    && node.name.type === 'JSXIdentifier'
-    && node.name.name === 'key';
+  return (
+    node.type === "JSXAttribute" &&
+    node.name &&
+    node.name.type === "JSXIdentifier" &&
+    node.name.name === "key"
+  );
 }
 
 /**
@@ -80,7 +82,7 @@ function isJSXAttributeKey(node) {
  * @returns {boolean}
  */
 function isWhiteSpaces(value) {
-  return typeof value === 'string' ? /^\s*$/.test(value) : false;
+  return typeof value === "string" ? /^\s*$/.test(value) : false;
 }
 
 /**
@@ -98,30 +100,34 @@ function isReturningJSX(context, ASTnode, strict, ignoreNull) {
       return false;
     }
     switch (node.type) {
-      case 'ConditionalExpression':
+      case "ConditionalExpression":
         if (strict) {
           return isJSXValue(node.consequent) && isJSXValue(node.alternate);
         }
         return isJSXValue(node.consequent) || isJSXValue(node.alternate);
-      case 'LogicalExpression':
+      case "LogicalExpression":
         if (strict) {
           return isJSXValue(node.left) && isJSXValue(node.right);
         }
         return isJSXValue(node.left) || isJSXValue(node.right);
-      case 'SequenceExpression':
+      case "SequenceExpression":
         return isJSXValue(node.expressions[node.expressions.length - 1]);
-      case 'JSXElement':
-      case 'JSXFragment':
+      case "JSXElement":
+      case "JSXFragment":
         return true;
-      case 'CallExpression':
+      case "CallExpression":
         return isCreateElement(context, node);
-      case 'Literal':
+      case "Literal":
         if (!ignoreNull && node.value === null) {
           return true;
         }
         return false;
-      case 'Identifier': {
-        const variable = variableUtil.findVariableByName(context, node, node.name);
+      case "Identifier": {
+        const variable = variableUtil.findVariableByName(
+          context,
+          node,
+          node.name,
+        );
         return isJSX(variable);
       }
       default:
@@ -163,14 +169,17 @@ function isReturningOnlyNull(ASTnode, context) {
           this.skip();
         };
         switch (childNode.type) {
-          case 'ReturnStatement':
+          case "ReturnStatement":
             break;
-          case 'ConditionalExpression':
-            if (childNode.consequent.value === null && childNode.alternate.value === null) {
+          case "ConditionalExpression":
+            if (
+              childNode.consequent.value === null &&
+              childNode.alternate.value === null
+            ) {
               setFound();
             }
             break;
-          case 'Literal':
+          case "Literal":
             if (childNode.value === null) {
               setFound();
             }

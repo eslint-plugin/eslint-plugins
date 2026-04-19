@@ -3,27 +3,29 @@
  * @author Ari Perkkiö
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/no-unstable-nested-components');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/no-unstable-nested-components");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
 };
 
-const ERROR_MESSAGE = 'Do not define components during render. React will see a new component type on every render and destroy the entire subtree’s DOM nodes and state (https://reactjs.org/docs/reconciliation.html#elements-of-different-types). Instead, move this component definition out of the parent component “ParentComponent” and pass data as props.';
-const ERROR_MESSAGE_WITHOUT_NAME = 'Do not define components during render. React will see a new component type on every render and destroy the entire subtree’s DOM nodes and state (https://reactjs.org/docs/reconciliation.html#elements-of-different-types). Instead, move this component definition out of the parent component and pass data as props.';
+const ERROR_MESSAGE =
+  "Do not define components during render. React will see a new component type on every render and destroy the entire subtree’s DOM nodes and state (https://reactjs.org/docs/reconciliation.html#elements-of-different-types). Instead, move this component definition out of the parent component “ParentComponent” and pass data as props.";
+const ERROR_MESSAGE_WITHOUT_NAME =
+  "Do not define components during render. React will see a new component type on every render and destroy the entire subtree’s DOM nodes and state (https://reactjs.org/docs/reconciliation.html#elements-of-different-types). Instead, move this component definition out of the parent component and pass data as props.";
 const ERROR_MESSAGE_COMPONENT_AS_PROPS = `${ERROR_MESSAGE} If you want to allow component creation in props, set allowAsProps option to true.`;
 
 // ------------------------------------------------------------------------------
@@ -31,7 +33,7 @@ const ERROR_MESSAGE_COMPONENT_AS_PROPS = `${ERROR_MESSAGE} If you want to allow 
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('no-unstable-nested-components', rule, {
+ruleTester.run("no-unstable-nested-components", rule, {
   valid: parsers.all([
     {
       code: `
@@ -436,9 +438,11 @@ ruleTester.run('no-unstable-nested-components', rule, {
         )
       }
       `,
-      options: [{
-        allowAsProps: true,
-      }],
+      options: [
+        {
+          allowAsProps: true,
+        },
+      ],
     },
     {
       code: `
@@ -455,9 +459,11 @@ ruleTester.run('no-unstable-nested-components', rule, {
         )
       }
       `,
-      options: [{
-        allowAsProps: true,
-      }],
+      options: [
+        {
+          allowAsProps: true,
+        },
+      ],
     },
     {
       code: `
@@ -576,9 +582,11 @@ ruleTester.run('no-unstable-nested-components', rule, {
           return <Table rows={rows} />;
         }
       `,
-      options: [{
-        allowAsProps: true,
-      }],
+      options: [
+        {
+          allowAsProps: true,
+        },
+      ],
     },
     {
       code: `
@@ -588,9 +596,11 @@ ruleTester.run('no-unstable-nested-components', rule, {
           />
         }
       `,
-      options: [{
-        propNamePattern: '*Renderer',
-      }],
+      options: [
+        {
+          propNamePattern: "*Renderer",
+        },
+      ],
     },
     /* TODO These minor cases are currently falsely marked due to component detection
     {

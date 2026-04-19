@@ -9,57 +9,58 @@
  * @author Erik Wendel
  */
 
-'use strict';
+"use strict";
 
-const docsUrl = require('../util/docsUrl');
-const getSourceCode = require('../util/eslint').getSourceCode;
-const report = require('../util/report');
+const docsUrl = require("../util/docsUrl");
+const getSourceCode = require("../util/eslint").getSourceCode;
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const SPACING = {
-  always: 'always',
-  never: 'never',
+  always: "always",
+  never: "never",
 };
 const SPACING_VALUES = [SPACING.always, SPACING.never];
 
 const messages = {
-  noNewlineAfter: 'There should be no newline after \'{{token}}\'',
-  noNewlineBefore: 'There should be no newline before \'{{token}}\'',
-  noSpaceAfter: 'There should be no space after \'{{token}}\'',
-  noSpaceBefore: 'There should be no space before \'{{token}}\'',
-  spaceNeededAfter: 'A space is required after \'{{token}}\'',
-  spaceNeededBefore: 'A space is required before \'{{token}}\'',
+  noNewlineAfter: "There should be no newline after '{{token}}'",
+  noNewlineBefore: "There should be no newline before '{{token}}'",
+  noSpaceAfter: "There should be no space after '{{token}}'",
+  noSpaceBefore: "There should be no space before '{{token}}'",
+  spaceNeededAfter: "A space is required after '{{token}}'",
+  spaceNeededBefore: "A space is required before '{{token}}'",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Enforce or disallow spaces inside of curly braces in JSX attributes and expressions',
-      category: 'Stylistic Issues',
+      description:
+        "Enforce or disallow spaces inside of curly braces in JSX attributes and expressions",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('jsx-curly-spacing'),
+      url: docsUrl("jsx-curly-spacing"),
     },
-    fixable: 'code',
+    fixable: "code",
 
     messages,
 
     schema: {
       definitions: {
         basicConfig: {
-          type: 'object',
+          type: "object",
           properties: {
             when: {
               enum: SPACING_VALUES,
             },
             allowMultiline: {
-              type: 'boolean',
+              type: "boolean",
             },
             spacing: {
-              type: 'object',
+              type: "object",
               properties: {
                 objectLiterals: {
                   enum: SPACING_VALUES,
@@ -69,49 +70,61 @@ module.exports = {
           },
         },
         basicConfigOrBoolean: {
-          anyOf: [{
-            $ref: '#/definitions/basicConfig',
-          }, {
-            type: 'boolean',
-          }],
+          anyOf: [
+            {
+              $ref: "#/definitions/basicConfig",
+            },
+            {
+              type: "boolean",
+            },
+          ],
         },
       },
-      type: 'array',
-      items: [{
-        anyOf: [{
-          allOf: [{
-            $ref: '#/definitions/basicConfig',
-          }, {
-            type: 'object',
-            properties: {
-              attributes: {
-                $ref: '#/definitions/basicConfigOrBoolean',
-              },
-              children: {
-                $ref: '#/definitions/basicConfigOrBoolean',
-              },
+      type: "array",
+      items: [
+        {
+          anyOf: [
+            {
+              allOf: [
+                {
+                  $ref: "#/definitions/basicConfig",
+                },
+                {
+                  type: "object",
+                  properties: {
+                    attributes: {
+                      $ref: "#/definitions/basicConfigOrBoolean",
+                    },
+                    children: {
+                      $ref: "#/definitions/basicConfigOrBoolean",
+                    },
+                  },
+                },
+              ],
             },
-          }],
-        }, {
-          enum: SPACING_VALUES,
-        }],
-      }, {
-        type: 'object',
-        properties: {
-          allowMultiline: {
-            type: 'boolean',
-          },
-          spacing: {
-            type: 'object',
-            properties: {
-              objectLiterals: {
-                enum: SPACING_VALUES,
-              },
+            {
+              enum: SPACING_VALUES,
             },
-          },
+          ],
         },
-        additionalProperties: false,
-      }],
+        {
+          type: "object",
+          properties: {
+            allowMultiline: {
+              type: "boolean",
+            },
+            spacing: {
+              type: "object",
+              properties: {
+                objectLiterals: {
+                  enum: SPACING_VALUES,
+                },
+              },
+            },
+          },
+          additionalProperties: false,
+        },
+      ],
     },
   },
 
@@ -119,9 +132,12 @@ module.exports = {
     function normalizeConfig(configOrTrue, defaults, lastPass) {
       const config = configOrTrue === true ? {} : configOrTrue;
       const when = config.when || defaults.when;
-      const allowMultiline = config.hasOwnProperty('allowMultiline') ? config.allowMultiline : defaults.allowMultiline;
+      const allowMultiline = config.hasOwnProperty("allowMultiline")
+        ? config.allowMultiline
+        : defaults.allowMultiline;
       const spacing = config.spacing || {};
-      let objectLiteralSpaces = spacing.objectLiterals || defaults.objectLiteralSpaces;
+      let objectLiteralSpaces =
+        spacing.objectLiterals || defaults.objectLiteralSpaces;
       if (lastPass) {
         // On the final pass assign the values that should be derived from others if they are still undefined
         objectLiteralSpaces = objectLiteralSpaces || when;
@@ -141,16 +157,27 @@ module.exports = {
 
     let originalConfig = context.options[0] || {};
     if (SPACING_VALUES.indexOf(originalConfig) !== -1) {
-      originalConfig = Object.assign({ when: context.options[0] }, context.options[1]);
+      originalConfig = Object.assign(
+        { when: context.options[0] },
+        context.options[1],
+      );
     }
     const defaultConfig = normalizeConfig(originalConfig, {
       when: DEFAULT_WHEN,
       allowMultiline: DEFAULT_ALLOW_MULTILINE,
     });
-    const attributes = originalConfig.hasOwnProperty('attributes') ? originalConfig.attributes : DEFAULT_ATTRIBUTES;
-    const attributesConfig = attributes ? normalizeConfig(attributes, defaultConfig, true) : null;
-    const children = originalConfig.hasOwnProperty('children') ? originalConfig.children : DEFAULT_CHILDREN;
-    const childrenConfig = children ? normalizeConfig(children, defaultConfig, true) : null;
+    const attributes = originalConfig.hasOwnProperty("attributes")
+      ? originalConfig.attributes
+      : DEFAULT_ATTRIBUTES;
+    const attributesConfig = attributes
+      ? normalizeConfig(attributes, defaultConfig, true)
+      : null;
+    const children = originalConfig.hasOwnProperty("children")
+      ? originalConfig.children
+      : DEFAULT_CHILDREN;
+    const childrenConfig = children
+      ? normalizeConfig(children, defaultConfig, true)
+      : null;
 
     // --------------------------------------------------------------------------
     // Helpers
@@ -177,14 +204,14 @@ module.exports = {
      */
     function fixByTrimmingWhitespace(fixer, fromLoc, toLoc, mode, spacing) {
       let replacementText = getSourceCode(context).text.slice(fromLoc, toLoc);
-      if (mode === 'start') {
-        replacementText = replacementText.replace(/^\s+/gm, '');
+      if (mode === "start") {
+        replacementText = replacementText.replace(/^\s+/gm, "");
       } else {
-        replacementText = replacementText.replace(/\s+$/gm, '');
+        replacementText = replacementText.replace(/\s+$/gm, "");
       }
       if (spacing === SPACING.always) {
-        if (mode === 'start') {
-          replacementText += ' ';
+        if (mode === "start") {
+          replacementText += " ";
         } else {
           replacementText = ` ${replacementText}`;
         }
@@ -193,14 +220,14 @@ module.exports = {
     }
 
     /**
-    * Reports that there shouldn't be a newline after the first token
-    * @param {ASTNode} node - The node to report in the event of an error.
-    * @param {Token} token - The token to use for the report.
-    * @param {string} spacing
-    * @returns {void}
-    */
+     * Reports that there shouldn't be a newline after the first token
+     * @param {ASTNode} node - The node to report in the event of an error.
+     * @param {Token} token - The token to use for the report.
+     * @param {string} spacing
+     * @returns {void}
+     */
     function reportNoBeginningNewline(node, token, spacing) {
-      report(context, messages.noNewlineAfter, 'noNewlineAfter', {
+      report(context, messages.noNewlineAfter, "noNewlineAfter", {
         node,
         loc: token.loc.start,
         data: {
@@ -208,20 +235,26 @@ module.exports = {
         },
         fix(fixer) {
           const nextToken = getSourceCode(context).getTokenAfter(token);
-          return fixByTrimmingWhitespace(fixer, token.range[1], nextToken.range[0], 'start', spacing);
+          return fixByTrimmingWhitespace(
+            fixer,
+            token.range[1],
+            nextToken.range[0],
+            "start",
+            spacing,
+          );
         },
       });
     }
 
     /**
-    * Reports that there shouldn't be a newline before the last token
-    * @param {ASTNode} node - The node to report in the event of an error.
-    * @param {Token} token - The token to use for the report.
-    * @param {string} spacing
-    * @returns {void}
-    */
+     * Reports that there shouldn't be a newline before the last token
+     * @param {ASTNode} node - The node to report in the event of an error.
+     * @param {Token} token - The token to use for the report.
+     * @param {string} spacing
+     * @returns {void}
+     */
     function reportNoEndingNewline(node, token, spacing) {
-      report(context, messages.noNewlineBefore, 'noNewlineBefore', {
+      report(context, messages.noNewlineBefore, "noNewlineBefore", {
         node,
         loc: token.loc.start,
         data: {
@@ -229,19 +262,25 @@ module.exports = {
         },
         fix(fixer) {
           const previousToken = getSourceCode(context).getTokenBefore(token);
-          return fixByTrimmingWhitespace(fixer, previousToken.range[1], token.range[0], 'end', spacing);
+          return fixByTrimmingWhitespace(
+            fixer,
+            previousToken.range[1],
+            token.range[0],
+            "end",
+            spacing,
+          );
         },
       });
     }
 
     /**
-    * Reports that there shouldn't be a space after the first token
-    * @param {ASTNode} node - The node to report in the event of an error.
-    * @param {Token} token - The token to use for the report.
-    * @returns {void}
-    */
+     * Reports that there shouldn't be a space after the first token
+     * @param {ASTNode} node - The node to report in the event of an error.
+     * @param {Token} token - The token to use for the report.
+     * @returns {void}
+     */
     function reportNoBeginningSpace(node, token) {
-      report(context, messages.noSpaceAfter, 'noSpaceAfter', {
+      report(context, messages.noSpaceAfter, "noSpaceAfter", {
         node,
         loc: token.loc.start,
         data: {
@@ -255,30 +294,43 @@ module.exports = {
           // eslint >=4.x
           if (sourceCode.getCommentsAfter) {
             nextComment = sourceCode.getCommentsAfter(token);
-          // eslint 3.x
+            // eslint 3.x
           } else {
-            const potentialComment = sourceCode.getTokenAfter(token, { includeComments: true });
-            nextComment = nextToken === potentialComment ? [] : [potentialComment];
+            const potentialComment = sourceCode.getTokenAfter(token, {
+              includeComments: true,
+            });
+            nextComment =
+              nextToken === potentialComment ? [] : [potentialComment];
           }
 
           // Take comments into consideration to narrow the fix range to what is actually affected. (See #1414)
           if (nextComment.length > 0) {
-            return fixByTrimmingWhitespace(fixer, token.range[1], Math.min(nextToken.range[0], nextComment[0].range[0]), 'start');
+            return fixByTrimmingWhitespace(
+              fixer,
+              token.range[1],
+              Math.min(nextToken.range[0], nextComment[0].range[0]),
+              "start",
+            );
           }
 
-          return fixByTrimmingWhitespace(fixer, token.range[1], nextToken.range[0], 'start');
+          return fixByTrimmingWhitespace(
+            fixer,
+            token.range[1],
+            nextToken.range[0],
+            "start",
+          );
         },
       });
     }
 
     /**
-    * Reports that there shouldn't be a space before the last token
-    * @param {ASTNode} node - The node to report in the event of an error.
-    * @param {Token} token - The token to use for the report.
-    * @returns {void}
-    */
+     * Reports that there shouldn't be a space before the last token
+     * @param {ASTNode} node - The node to report in the event of an error.
+     * @param {Token} token - The token to use for the report.
+     * @returns {void}
+     */
     function reportNoEndingSpace(node, token) {
-      report(context, messages.noSpaceBefore, 'noSpaceBefore', {
+      report(context, messages.noSpaceBefore, "noSpaceBefore", {
         node,
         loc: token.loc.start,
         data: {
@@ -292,56 +344,69 @@ module.exports = {
           // eslint >=4.x
           if (sourceCode.getCommentsBefore) {
             previousComment = sourceCode.getCommentsBefore(token);
-          // eslint 3.x
+            // eslint 3.x
           } else {
-            const potentialComment = sourceCode.getTokenBefore(token, { includeComments: true });
-            previousComment = previousToken === potentialComment ? [] : [potentialComment];
+            const potentialComment = sourceCode.getTokenBefore(token, {
+              includeComments: true,
+            });
+            previousComment =
+              previousToken === potentialComment ? [] : [potentialComment];
           }
 
           // Take comments into consideration to narrow the fix range to what is actually affected. (See #1414)
           if (previousComment.length > 0) {
-            return fixByTrimmingWhitespace(fixer, Math.max(previousToken.range[1], previousComment[0].range[1]), token.range[0], 'end');
+            return fixByTrimmingWhitespace(
+              fixer,
+              Math.max(previousToken.range[1], previousComment[0].range[1]),
+              token.range[0],
+              "end",
+            );
           }
 
-          return fixByTrimmingWhitespace(fixer, previousToken.range[1], token.range[0], 'end');
+          return fixByTrimmingWhitespace(
+            fixer,
+            previousToken.range[1],
+            token.range[0],
+            "end",
+          );
         },
       });
     }
 
     /**
-    * Reports that there should be a space after the first token
-    * @param {ASTNode} node - The node to report in the event of an error.
-    * @param {Token} token - The token to use for the report.
-    * @returns {void}
-    */
+     * Reports that there should be a space after the first token
+     * @param {ASTNode} node - The node to report in the event of an error.
+     * @param {Token} token - The token to use for the report.
+     * @returns {void}
+     */
     function reportRequiredBeginningSpace(node, token) {
-      report(context, messages.spaceNeededAfter, 'spaceNeededAfter', {
+      report(context, messages.spaceNeededAfter, "spaceNeededAfter", {
         node,
         loc: token.loc.start,
         data: {
           token: token.value,
         },
         fix(fixer) {
-          return fixer.insertTextAfter(token, ' ');
+          return fixer.insertTextAfter(token, " ");
         },
       });
     }
 
     /**
-    * Reports that there should be a space before the last token
-    * @param {ASTNode} node - The node to report in the event of an error.
-    * @param {Token} token - The token to use for the report.
-    * @returns {void}
-    */
+     * Reports that there should be a space before the last token
+     * @param {ASTNode} node - The node to report in the event of an error.
+     * @param {Token} token - The token to use for the report.
+     * @returns {void}
+     */
     function reportRequiredEndingSpace(node, token) {
-      report(context, messages.spaceNeededBefore, 'spaceNeededBefore', {
+      report(context, messages.spaceNeededBefore, "spaceNeededBefore", {
         node,
         loc: token.loc.start,
         data: {
           token: token.value,
         },
         fix(fixer) {
-          return fixer.insertTextBefore(token, ' ');
+          return fixer.insertTextBefore(token, " ");
         },
       });
     }
@@ -354,13 +419,13 @@ module.exports = {
     function validateBraceSpacing(node) {
       let config;
       switch (node.parent.type) {
-        case 'JSXAttribute':
-        case 'JSXOpeningElement':
+        case "JSXAttribute":
+        case "JSXOpeningElement":
           config = attributesConfig;
           break;
 
-        case 'JSXElement':
-        case 'JSXFragment':
+        case "JSXElement":
+        case "JSXFragment":
           config = childrenConfig;
           break;
 
@@ -375,21 +440,31 @@ module.exports = {
       const first = sourceCode.getFirstToken(node);
       const last = sourceCode.getLastToken(node);
       let second = sourceCode.getTokenAfter(first, { includeComments: true });
-      let penultimate = sourceCode.getTokenBefore(last, { includeComments: true });
+      let penultimate = sourceCode.getTokenBefore(last, {
+        includeComments: true,
+      });
 
       if (!second) {
         second = sourceCode.getTokenAfter(first);
-        const leadingComments = sourceCode.getNodeByRangeIndex(second.range[0]).leadingComments;
+        const leadingComments = sourceCode.getNodeByRangeIndex(
+          second.range[0],
+        ).leadingComments;
         second = leadingComments ? leadingComments[0] : second;
       }
       if (!penultimate) {
         penultimate = sourceCode.getTokenBefore(last);
-        const trailingComments = sourceCode.getNodeByRangeIndex(penultimate.range[0]).trailingComments;
-        penultimate = trailingComments ? trailingComments[trailingComments.length - 1] : penultimate;
+        const trailingComments = sourceCode.getNodeByRangeIndex(
+          penultimate.range[0],
+        ).trailingComments;
+        penultimate = trailingComments
+          ? trailingComments[trailingComments.length - 1]
+          : penultimate;
       }
 
       const isObjectLiteral = first.value === second.value;
-      const spacing = isObjectLiteral ? config.objectLiteralSpaces : config.when;
+      const spacing = isObjectLiteral
+        ? config.objectLiteralSpaces
+        : config.when;
       if (spacing === SPACING.always) {
         if (!sourceCode.isSpaceBetweenTokens(first, second)) {
           reportRequiredBeginningSpace(node, first);

@@ -2,10 +2,10 @@
  * @fileoverview Utility functions for AST
  */
 
-'use strict';
+"use strict";
 
-const estraverse = require('estraverse');
-const eslintUtil = require('./eslint');
+const estraverse = require("estraverse");
+const eslintUtil = require("./eslint");
 
 const getFirstTokens = eslintUtil.getFirstTokens;
 const getScope = eslintUtil.getScope;
@@ -19,15 +19,21 @@ const getSourceCode = eslintUtil.getSourceCode;
  * @param {Object} visitor Visitor Object for estraverse
  */
 function traverse(ASTnode, visitor) {
-  const opts = Object.assign({}, {
-    fallback(node) {
-      return Object.keys(node).filter((key) => key === 'children' || key === 'argument');
+  const opts = Object.assign(
+    {},
+    {
+      fallback(node) {
+        return Object.keys(node).filter(
+          (key) => key === "children" || key === "argument",
+        );
+      },
     },
-  }, visitor);
+    visitor,
+  );
 
   opts.keys = Object.assign({}, visitor.keys, {
-    JSXElement: ['children'],
-    JSXFragment: ['children'],
+    JSXElement: ["children"],
+    JSXFragment: ["children"],
   });
 
   estraverse.traverse(ASTnode, opts);
@@ -35,10 +41,10 @@ function traverse(ASTnode, visitor) {
 
 function loopNodes(nodes) {
   for (let i = nodes.length - 1; i >= 0; i--) {
-    if (nodes[i].type === 'ReturnStatement') {
+    if (nodes[i].type === "ReturnStatement") {
       return nodes[i];
     }
-    if (nodes[i].type === 'SwitchStatement') {
+    if (nodes[i].type === "SwitchStatement") {
       const j = nodes[i].cases.length - 1;
       if (j >= 0) {
         return loopNodes(nodes[i].cases[j].consequent);
@@ -56,8 +62,8 @@ function loopNodes(nodes) {
  */
 function findReturnStatement(node) {
   if (
-    (!node.value || !node.value.body || !node.value.body.body)
-    && (!node.body || !node.body.body)
+    (!node.value || !node.value.body || !node.value.body.body) &&
+    (!node.body || !node.body.body)
   ) {
     return false;
   }
@@ -81,12 +87,12 @@ function findReturnStatement(node) {
 function traverseReturns(ASTNode, context, onReturn) {
   const nodeType = ASTNode.type;
 
-  if (nodeType === 'ReturnStatement') {
+  if (nodeType === "ReturnStatement") {
     onReturn(ASTNode.argument, () => {});
     return;
   }
 
-  if (nodeType === 'ArrowFunctionExpression' && ASTNode.expression) {
+  if (nodeType === "ArrowFunctionExpression" && ASTNode.expression) {
     onReturn(ASTNode.body, () => {});
     return;
   }
@@ -110,10 +116,10 @@ function traverseReturns(ASTNode, context, onReturn) {
   */
 
   if (
-    nodeType !== 'FunctionExpression'
-    && nodeType !== 'FunctionDeclaration'
-    && nodeType !== 'ArrowFunctionExpression'
-    && nodeType !== 'MethodDefinition'
+    nodeType !== "FunctionExpression" &&
+    nodeType !== "FunctionDeclaration" &&
+    nodeType !== "ArrowFunctionExpression" &&
+    nodeType !== "MethodDefinition"
   ) {
     return;
   }
@@ -124,16 +130,16 @@ function traverseReturns(ASTNode, context, onReturn) {
         this.break();
       };
       switch (node.type) {
-        case 'ReturnStatement':
+        case "ReturnStatement":
           this.skip();
           onReturn(node.argument, breakTraverse);
           return;
-        case 'BlockStatement':
-        case 'IfStatement':
-        case 'ForStatement':
-        case 'WhileStatement':
-        case 'SwitchStatement':
-        case 'SwitchCase':
+        case "BlockStatement":
+        case "IfStatement":
+        case "ForStatement":
+        case "WhileStatement":
+        case "SwitchStatement":
+        case "SwitchCase":
           return;
         default:
           this.skip();
@@ -149,13 +155,13 @@ function traverseReturns(ASTNode, context, onReturn) {
  */
 function getPropertyNameNode(node) {
   if (
-    node.key
-    || node.type === 'MethodDefinition'
-    || node.type === 'Property'
+    node.key ||
+    node.type === "MethodDefinition" ||
+    node.type === "Property"
   ) {
     return node.key;
   }
-  if (node.type === 'MemberExpression') {
+  if (node.type === "MemberExpression") {
     return node.property;
   }
   return null;
@@ -168,7 +174,7 @@ function getPropertyNameNode(node) {
  */
 function getPropertyName(node) {
   const nameNode = getPropertyNameNode(node);
-  return nameNode ? nameNode.name : '';
+  return nameNode ? nameNode.name : "";
 }
 
 /**
@@ -178,10 +184,10 @@ function getPropertyName(node) {
  */
 function getComponentProperties(node) {
   switch (node.type) {
-    case 'ClassDeclaration':
-    case 'ClassExpression':
+    case "ClassDeclaration":
+    case "ClassExpression":
       return node.body.body;
-    case 'ObjectExpression':
+    case "ObjectExpression":
       return node.properties;
     default:
       return [];
@@ -200,13 +206,8 @@ function getFirstNodeInLine(context, node) {
   let lines;
   do {
     token = sourceCode.getTokenBefore(token);
-    lines = token.type === 'JSXText'
-      ? token.value.split('\n')
-      : null;
-  } while (
-    token.type === 'JSXText'
-        && /^\s*$/.test(lines[lines.length - 1])
-  );
+    lines = token.type === "JSXText" ? token.value.split("\n") : null;
+  } while (token.type === "JSXText" && /^\s*$/.test(lines[lines.length - 1]));
   return token;
 }
 
@@ -229,7 +230,10 @@ function isNodeFirstInLine(context, node) {
  * @return {boolean} true if it's a function-like expression
  */
 function isFunctionLikeExpression(node) {
-  return node.type === 'FunctionExpression' || node.type === 'ArrowFunctionExpression';
+  return (
+    node.type === "FunctionExpression" ||
+    node.type === "ArrowFunctionExpression"
+  );
 }
 
 /**
@@ -238,7 +242,9 @@ function isFunctionLikeExpression(node) {
  * @return {boolean} true if it's a function
  */
 function isFunction(node) {
-  return node.type === 'FunctionExpression' || node.type === 'FunctionDeclaration';
+  return (
+    node.type === "FunctionExpression" || node.type === "FunctionDeclaration"
+  );
 }
 
 /**
@@ -247,7 +253,7 @@ function isFunction(node) {
  * @return {boolean} true if it's a function-like
  */
 function isFunctionLike(node) {
-  return node.type === 'FunctionDeclaration' || isFunctionLikeExpression(node);
+  return node.type === "FunctionDeclaration" || isFunctionLikeExpression(node);
 }
 
 /**
@@ -256,7 +262,7 @@ function isFunctionLike(node) {
  * @return {boolean} true if it's a class
  */
 function isClass(node) {
-  return node.type === 'ClassDeclaration' || node.type === 'ClassExpression';
+  return node.type === "ClassDeclaration" || node.type === "ClassExpression";
 }
 
 /**
@@ -269,7 +275,11 @@ function inConstructor(context, node) {
   let scope = getScope(context, node);
   while (scope) {
     // @ts-ignore
-    if (scope.block && scope.block.parent && scope.block.parent.kind === 'constructor') {
+    if (
+      scope.block &&
+      scope.block.parent &&
+      scope.block.parent.kind === "constructor"
+    ) {
       return true;
     }
     scope = scope.upper;
@@ -283,7 +293,7 @@ function inConstructor(context, node) {
  * @returns {string}
  */
 function stripQuotes(string) {
-  return string.replace(/^'|'$/g, '');
+  return string.replace(/^'|'$/g, "");
 }
 
 /**
@@ -293,24 +303,23 @@ function stripQuotes(string) {
  * @return {string | undefined} the name of the key
  */
 function getKeyValue(context, node) {
-  if (node.type === 'ObjectTypeProperty') {
+  if (node.type === "ObjectTypeProperty") {
     const tokens = getFirstTokens(context, node, 2);
-    return (tokens[0].value === '+' || tokens[0].value === '-'
+    return tokens[0].value === "+" || tokens[0].value === "-"
       ? tokens[1].value
-      : stripQuotes(tokens[0].value)
-    );
+      : stripQuotes(tokens[0].value);
   }
-  if (node.type === 'GenericTypeAnnotation') {
+  if (node.type === "GenericTypeAnnotation") {
     return node.id.name;
   }
-  if (node.type === 'ObjectTypeAnnotation') {
+  if (node.type === "ObjectTypeAnnotation") {
     return;
   }
   const key = node.key || node.argument;
   if (!key) {
     return;
   }
-  return key.type === 'Identifier' ? key.name : key.value;
+  return key.type === "Identifier" ? key.name : key.value;
 }
 
 /**
@@ -325,9 +334,14 @@ function isParenthesized(context, node) {
   const previousToken = sourceCode.getTokenBefore(node);
   const nextToken = sourceCode.getTokenAfter(node);
 
-  return !!previousToken && !!nextToken
-    && previousToken.value === '(' && previousToken.range[1] <= node.range[0]
-    && nextToken.value === ')' && nextToken.range[0] >= node.range[1];
+  return (
+    !!previousToken &&
+    !!nextToken &&
+    previousToken.value === "(" &&
+    previousToken.range[1] <= node.range[0] &&
+    nextToken.value === ")" &&
+    nextToken.range[0] >= node.range[1]
+  );
 }
 
 /**
@@ -337,14 +351,14 @@ function isParenthesized(context, node) {
  */
 function isAssignmentLHS(node) {
   return (
-    node.parent
-    && node.parent.type === 'AssignmentExpression'
-    && node.parent.left === node
+    node.parent &&
+    node.parent.type === "AssignmentExpression" &&
+    node.parent.left === node
   );
 }
 
 function isTSAsExpression(node) {
-  return node && node.type === 'TSAsExpression';
+  return node && node.type === "TSAsExpression";
 }
 
 /**
@@ -353,7 +367,7 @@ function isTSAsExpression(node) {
  * @returns {boolean} True if node is a `CallExpression`, false if not
  */
 function isCallExpression(node) {
-  return node && node.type === 'CallExpression';
+  return node && node.type === "CallExpression";
 }
 
 /**
@@ -369,101 +383,138 @@ function unwrapTSAsExpression(node) {
 function isTSTypeReference(node) {
   if (!node) return false;
 
-  return node.type === 'TSTypeReference';
+  return node.type === "TSTypeReference";
 }
 
 function isTSTypeAnnotation(node) {
-  if (!node) { return false; }
+  if (!node) {
+    return false;
+  }
 
-  return node.type === 'TSTypeAnnotation';
+  return node.type === "TSTypeAnnotation";
 }
 
 function isTSTypeLiteral(node) {
-  if (!node) { return false; }
+  if (!node) {
+    return false;
+  }
 
-  return node.type === 'TSTypeLiteral';
+  return node.type === "TSTypeLiteral";
 }
 
 function isTSIntersectionType(node) {
-  if (!node) { return false; }
+  if (!node) {
+    return false;
+  }
 
-  return node.type === 'TSIntersectionType';
+  return node.type === "TSIntersectionType";
 }
 
 function isTSInterfaceHeritage(node) {
-  if (!node) { return false; }
+  if (!node) {
+    return false;
+  }
 
-  return node.type === 'TSInterfaceHeritage';
+  return node.type === "TSInterfaceHeritage";
 }
 
 function isTSInterfaceDeclaration(node) {
-  if (!node) { return false; }
+  if (!node) {
+    return false;
+  }
 
-  return (node.type === 'ExportNamedDeclaration' && node.declaration
-    ? node.declaration.type
-    : node.type
-  ) === 'TSInterfaceDeclaration';
+  return (
+    (node.type === "ExportNamedDeclaration" && node.declaration
+      ? node.declaration.type
+      : node.type) === "TSInterfaceDeclaration"
+  );
 }
 
 function isTSTypeDeclaration(node) {
-  if (!node) { return false; }
+  if (!node) {
+    return false;
+  }
 
-  const nodeToCheck = node.type === 'ExportNamedDeclaration' && node.declaration
-    ? node.declaration
-    : node;
+  const nodeToCheck =
+    node.type === "ExportNamedDeclaration" && node.declaration
+      ? node.declaration
+      : node;
 
-  return nodeToCheck.type === 'VariableDeclaration' && nodeToCheck.kind === 'type';
+  return (
+    nodeToCheck.type === "VariableDeclaration" && nodeToCheck.kind === "type"
+  );
 }
 
 function isTSTypeAliasDeclaration(node) {
-  if (!node) { return false; }
-
-  if (node.type === 'ExportNamedDeclaration' && node.declaration) {
-    return node.declaration.type === 'TSTypeAliasDeclaration' && node.exportKind === 'type';
+  if (!node) {
+    return false;
   }
-  return node.type === 'TSTypeAliasDeclaration';
+
+  if (node.type === "ExportNamedDeclaration" && node.declaration) {
+    return (
+      node.declaration.type === "TSTypeAliasDeclaration" &&
+      node.exportKind === "type"
+    );
+  }
+  return node.type === "TSTypeAliasDeclaration";
 }
 
 function isTSParenthesizedType(node) {
-  if (!node) { return false; }
+  if (!node) {
+    return false;
+  }
 
-  return node.type === 'TSTypeAliasDeclaration';
+  return node.type === "TSTypeAliasDeclaration";
 }
 
 function isTSFunctionType(node) {
-  if (!node) { return false; }
+  if (!node) {
+    return false;
+  }
 
-  return node.type === 'TSFunctionType';
+  return node.type === "TSFunctionType";
 }
 
 function isTSTypeQuery(node) {
-  if (!node) { return false; }
+  if (!node) {
+    return false;
+  }
 
-  return node.type === 'TSTypeQuery';
+  return node.type === "TSTypeQuery";
 }
 
 function isTSTypeParameterInstantiation(node) {
-  if (!node) { return false; }
+  if (!node) {
+    return false;
+  }
 
-  return node.type === 'TSTypeParameterInstantiation';
+  return node.type === "TSTypeParameterInstantiation";
 }
 
 function isMemberExpression(node) {
-  if (!node) { return false; }
+  if (!node) {
+    return false;
+  }
 
-  return node.type === 'MemberExpression' || node.type === 'OptionalMemberExpression';
+  return (
+    node.type === "MemberExpression" || node.type === "OptionalMemberExpression"
+  );
 }
 
 function isObjectPattern(node) {
-  if (!node) { return false; }
+  if (!node) {
+    return false;
+  }
 
-  return node.type === 'ObjectPattern';
+  return node.type === "ObjectPattern";
 }
 
 function isVariableDeclarator(node) {
-  if (!node) { return false; }
+  if (!node) {
+    return false;
+  }
 
-  return node.type === 'VariableDeclarator';
+  return node.type === "VariableDeclarator";
 }
 
 module.exports = {

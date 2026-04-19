@@ -3,21 +3,21 @@
  * @author Kanitkorn Sujautra
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/state-in-constructor');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/state-in-constructor");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const ruleTesterConfig = {
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: 'module',
+    sourceType: "module",
     ecmaFeatures: {
       jsx: true,
     },
@@ -29,7 +29,7 @@ const ruleTesterConfig = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester(ruleTesterConfig);
-ruleTester.run('state-in-constructor', rule, {
+ruleTester.run("state-in-constructor", rule, {
   valid: parsers.all([
     {
       code: `
@@ -48,7 +48,7 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      options: ['never'],
+      options: ["never"],
     },
     {
       code: `
@@ -62,7 +62,7 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -76,8 +76,8 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      options: ['always'],
+      features: ["class fields"],
+      options: ["always"],
     },
     {
       code: `
@@ -92,7 +92,7 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -119,7 +119,7 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      options: ['never'],
+      options: ["never"],
     },
     {
       code: `
@@ -130,7 +130,7 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -141,8 +141,8 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      options: ['never'],
+      features: ["class fields"],
+      options: ["never"],
     },
     {
       code: `
@@ -153,7 +153,7 @@ ruleTester.run('state-in-constructor', rule, {
       code: `
         const Foo = () => <div>Foo</div>
       `,
-      options: ['never'],
+      options: ["never"],
     },
     {
       code: `
@@ -168,7 +168,7 @@ ruleTester.run('state-in-constructor', rule, {
           return <div>Foo</div>
         }
       `,
-      options: ['never'],
+      options: ["never"],
     },
     {
       code: `
@@ -179,8 +179,8 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      options: ['never'],
+      features: ["class fields"],
+      options: ["never"],
     },
     {
       code: `
@@ -192,8 +192,8 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      options: ['never'],
+      features: ["class fields"],
+      options: ["never"],
     },
     {
       code: `
@@ -208,8 +208,8 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      options: ['never'],
+      features: ["class fields"],
+      options: ["never"],
     },
     {
       code: `
@@ -251,7 +251,7 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      options: ['never'],
+      options: ["never"],
     },
   ]),
 
@@ -268,8 +268,8 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      options: ['never'],
-      errors: [{ messageId: 'stateInitClassProp' }],
+      options: ["never"],
+      errors: [{ messageId: "stateInitClassProp" }],
     },
     {
       code: `
@@ -284,9 +284,9 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      options: ['never'],
-      errors: [{ messageId: 'stateInitClassProp' }],
+      features: ["class fields"],
+      options: ["never"],
+      errors: [{ messageId: "stateInitClassProp" }],
     },
     {
       code: `
@@ -297,8 +297,8 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ messageId: 'stateInitConstructor' }],
+      features: ["class fields"],
+      errors: [{ messageId: "stateInitConstructor" }],
     },
     {
       code: `
@@ -310,8 +310,8 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ messageId: 'stateInitConstructor' }],
+      features: ["class fields"],
+      errors: [{ messageId: "stateInitConstructor" }],
     },
     {
       code: `
@@ -326,8 +326,8 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ messageId: 'stateInitConstructor' }],
+      features: ["class fields"],
+      errors: [{ messageId: "stateInitConstructor" }],
     },
     {
       code: `
@@ -342,8 +342,8 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ messageId: 'stateInitConstructor' }],
+      features: ["class fields"],
+      errors: [{ messageId: "stateInitConstructor" }],
     },
     {
       code: `
@@ -358,9 +358,9 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      options: ['never'],
-      errors: [{ messageId: 'stateInitClassProp' }],
+      features: ["class fields"],
+      options: ["never"],
+      errors: [{ messageId: "stateInitClassProp" }],
     },
     {
       code: `
@@ -376,9 +376,9 @@ ruleTester.run('state-in-constructor', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      options: ['never'],
-      errors: [{ messageId: 'stateInitClassProp' }],
+      features: ["class fields"],
+      options: ["never"],
+      errors: [{ messageId: "stateInitClassProp" }],
     },
   ]),
 });

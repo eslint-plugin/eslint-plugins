@@ -3,20 +3,20 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/sort-comp');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/sort-comp");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('sort-comp', rule, {
+ruleTester.run("sort-comp", rule, {
   valid: parsers.all([
     {
       code: `
@@ -89,11 +89,7 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            'lifecycle',
-            'render',
-            'everything-else',
-          ],
+          order: ["lifecycle", "render", "everything-else"],
         },
       ],
     },
@@ -169,7 +165,7 @@ ruleTester.run('sort-comp', rule, {
           render = () => (<div>Hello</div>)
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -184,12 +180,7 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            'lifecycle',
-            'everything-else',
-            'render',
-            '/on.*/',
-          ],
+          order: ["lifecycle", "everything-else", "render", "/on.*/"],
         },
       ],
     },
@@ -206,16 +197,9 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            'lifecycle',
-            'everything-else',
-            'render',
-            'customGroup',
-          ],
+          order: ["lifecycle", "everything-else", "render", "customGroup"],
           groups: {
-            customGroup: [
-              '/on.*/',
-            ],
+            customGroup: ["/on.*/"],
           },
         },
       ],
@@ -232,11 +216,7 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            '/on.*/',
-            'render',
-            '/.*Click/',
-          ],
+          order: ["/on.*/", "render", "/.*Click/"],
         },
       ],
     },
@@ -253,12 +233,7 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            'constructor',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ["constructor", "lifecycle", "everything-else", "render"],
         },
       ],
     },
@@ -300,15 +275,15 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['types'],
+      features: ["types"],
       options: [
         {
           order: [
-            'type-annotations',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
+            "type-annotations",
+            "static-methods",
+            "lifecycle",
+            "everything-else",
+            "render",
           ],
         },
       ],
@@ -325,15 +300,15 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['types'],
+      features: ["types"],
       options: [
         {
           order: [
-            'type-annotations',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
+            "type-annotations",
+            "static-methods",
+            "lifecycle",
+            "everything-else",
+            "render",
           ],
         },
       ],
@@ -350,7 +325,7 @@ ruleTester.run('sort-comp', rule, {
           state: Object = {};
         }
       `,
-      features: ['types'],
+      features: ["types"],
       parserOptions,
     },
     {
@@ -365,7 +340,7 @@ ruleTester.run('sort-comp', rule, {
           state: Object = {};
         }
       `,
-      features: ['types'],
+      features: ["types"],
       parserOptions,
     },
     {
@@ -382,11 +357,11 @@ ruleTester.run('sort-comp', rule, {
       options: [
         {
           order: [
-            'getters',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
+            "getters",
+            "static-methods",
+            "lifecycle",
+            "everything-else",
+            "render",
           ],
         },
       ],
@@ -405,11 +380,11 @@ ruleTester.run('sort-comp', rule, {
       options: [
         {
           order: [
-            'setters',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
+            "setters",
+            "static-methods",
+            "lifecycle",
+            "everything-else",
+            "render",
           ],
         },
       ],
@@ -427,15 +402,10 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [
         {
-          order: [
-            'instance-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ["instance-methods", "lifecycle", "everything-else", "render"],
         },
       ],
     },
@@ -452,14 +422,14 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [
         {
           order: [
-            'instance-variables',
-            'lifecycle',
-            'everything-else',
-            'render',
+            "instance-variables",
+            "lifecycle",
+            "everything-else",
+            "render",
           ],
         },
       ],
@@ -479,11 +449,11 @@ ruleTester.run('sort-comp', rule, {
       options: [
         {
           order: [
-            'static-methods',
-            'render',
-            '/^get.+$/',
-            '/^on.+$/',
-            '/^render.+$/',
+            "static-methods",
+            "render",
+            "/^get.+$/",
+            "/^on.+$/",
+            "/^render.+$/",
           ],
         },
       ],
@@ -503,11 +473,11 @@ ruleTester.run('sort-comp', rule, {
       options: [
         {
           order: [
-            'static-methods',
-            'render',
-            '/^get.+$/',
-            '/^on.+$/',
-            '/^render.+$/',
+            "static-methods",
+            "render",
+            "/^get.+$/",
+            "/^on.+$/",
+            "/^render.+$/",
           ],
         },
       ],
@@ -542,16 +512,16 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [
         {
           order: [
-            'state',
-            'instance-variables',
-            'static-methods',
-            'lifecycle',
-            'render',
-            'everything-else',
+            "state",
+            "instance-variables",
+            "static-methods",
+            "lifecycle",
+            "render",
+            "everything-else",
           ],
         },
       ],
@@ -567,13 +537,10 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [
         {
-          order: [
-            'static-variables',
-            'static-methods',
-          ],
+          order: ["static-variables", "static-methods"],
         },
       ],
     },
@@ -588,13 +555,10 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [
         {
-          order: [
-            'static-methods',
-            'static-variables',
-          ],
+          order: ["static-methods", "static-variables"],
         },
       ],
     },
@@ -610,14 +574,10 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [
         {
-          order: [
-            'instance-variables',
-            'static-variables',
-            'static-methods',
-          ],
+          order: ["instance-variables", "static-variables", "static-methods"],
         },
       ],
     },
@@ -633,14 +593,10 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [
         {
-          order: [
-            'static-variables',
-            'instance-variables',
-            'static-methods',
-          ],
+          order: ["static-variables", "instance-variables", "static-methods"],
         },
       ],
     },
@@ -655,14 +611,14 @@ ruleTester.run('sort-comp', rule, {
           foo = {};
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [
         {
           order: [
-            'static-methods',
-            'render',
-            'static-variables',
-            'instance-variables',
+            "static-methods",
+            "render",
+            "static-variables",
+            "instance-variables",
           ],
         },
       ],
@@ -684,15 +640,15 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [
         {
           order: [
-            'static-variables',
-            'instance-variables',
-            'constructor',
-            'everything-else',
-            'render',
+            "static-variables",
+            "instance-variables",
+            "constructor",
+            "everything-else",
+            "render",
           ],
         },
       ],
@@ -708,17 +664,17 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['types'],
+      features: ["types"],
       options: [
         {
           order: [
-            'static-variables',
-            'static-methods',
-            'type-annotations',
-            'instance-variables',
-            'lifecycle',
-            'everything-else',
-            'render',
+            "static-variables",
+            "static-methods",
+            "type-annotations",
+            "instance-variables",
+            "lifecycle",
+            "everything-else",
+            "render",
           ],
         },
       ],
@@ -738,11 +694,11 @@ ruleTester.run('sort-comp', rule, {
       `,
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'render',
-            position: 'after',
-            propB: 'displayName',
+            propA: "render",
+            position: "after",
+            propB: "displayName",
           },
         },
       ],
@@ -759,11 +715,11 @@ ruleTester.run('sort-comp', rule, {
       `,
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'render',
-            position: 'after',
-            propB: 'displayName',
+            propA: "render",
+            position: "after",
+            propB: "displayName",
           },
         },
       ],
@@ -780,11 +736,11 @@ ruleTester.run('sort-comp', rule, {
       `,
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'render',
-            position: 'after',
-            propB: 'onClick',
+            propA: "render",
+            position: "after",
+            propB: "onClick",
           },
         },
       ],
@@ -804,11 +760,11 @@ ruleTester.run('sort-comp', rule, {
       parserOptions,
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'render',
-            position: 'after',
-            propB: 'onClick',
+            propA: "render",
+            position: "after",
+            propB: "onClick",
           },
         },
       ],
@@ -826,19 +782,16 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            'lifecycle',
-            'render',
-          ],
+          order: ["lifecycle", "render"],
         },
       ],
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'onClick',
-            position: 'after',
-            propB: 'render',
+            propA: "onClick",
+            position: "after",
+            propB: "render",
           },
         },
       ],
@@ -853,14 +806,14 @@ ruleTester.run('sort-comp', rule, {
           static displayName = 'Hello';
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'render',
-            position: 'after',
-            propB: 'displayName',
+            propA: "render",
+            position: "after",
+            propB: "displayName",
           },
         },
       ],
@@ -877,14 +830,14 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['types'],
+      features: ["types"],
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'props',
-            position: 'after',
-            propB: 'state',
+            propA: "props",
+            position: "after",
+            propB: "state",
           },
         },
       ],
@@ -900,25 +853,25 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['types'],
+      features: ["types"],
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'constructor',
-            position: 'after',
-            propB: 'props',
+            propA: "constructor",
+            position: "after",
+            propB: "props",
           },
         },
       ],
       options: [
         {
           order: [
-            'type-annotations',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
+            "type-annotations",
+            "static-methods",
+            "lifecycle",
+            "everything-else",
+            "render",
           ],
         },
       ],
@@ -935,25 +888,25 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['types'],
+      features: ["types"],
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'state',
-            position: 'after',
-            propB: 'constructor',
+            propA: "state",
+            position: "after",
+            propB: "constructor",
           },
         },
       ],
       options: [
         {
           order: [
-            'type-annotations',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
+            "type-annotations",
+            "static-methods",
+            "lifecycle",
+            "everything-else",
+            "render",
           ],
         },
       ],
@@ -971,24 +924,24 @@ ruleTester.run('sort-comp', rule, {
       `,
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'componentDidMountOk',
-            position: 'after',
-            propB: 'getA',
+            propA: "componentDidMountOk",
+            position: "after",
+            propB: "getA",
           },
         },
       ],
       options: [
         {
           order: [
-            'static-methods',
-            'lifecycle',
-            '/^on.+$/',
-            '/^(get|set)(?!(InitialState$|DefaultProps$|ChildContext$)).+$/',
-            'everything-else',
-            '/^render.+$/',
-            'render',
+            "static-methods",
+            "lifecycle",
+            "/^on.+$/",
+            "/^(get|set)(?!(InitialState$|DefaultProps$|ChildContext$)).+$/",
+            "everything-else",
+            "/^render.+$/",
+            "render",
           ],
         },
       ],
@@ -1006,22 +959,22 @@ ruleTester.run('sort-comp', rule, {
       `,
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'constructor',
-            position: 'after getter',
-            propB: 'functions',
+            propA: "constructor",
+            position: "after getter",
+            propB: "functions",
           },
         },
       ],
       options: [
         {
           order: [
-            'getters',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
+            "getters",
+            "static-methods",
+            "lifecycle",
+            "everything-else",
+            "render",
           ],
         },
       ],
@@ -1039,22 +992,22 @@ ruleTester.run('sort-comp', rule, {
       `,
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'constructor',
-            position: 'after setter',
-            propB: 'functions',
+            propA: "constructor",
+            position: "after setter",
+            propB: "functions",
           },
         },
       ],
       options: [
         {
           order: [
-            'setters',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
+            "setters",
+            "static-methods",
+            "lifecycle",
+            "everything-else",
+            "render",
           ],
         },
       ],
@@ -1072,25 +1025,20 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'foo',
-            position: 'before',
-            propB: 'constructor',
+            propA: "foo",
+            position: "before",
+            propB: "constructor",
           },
         },
       ],
       options: [
         {
-          order: [
-            'instance-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ["instance-methods", "lifecycle", "everything-else", "render"],
         },
       ],
     },
@@ -1107,24 +1055,24 @@ ruleTester.run('sort-comp', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'foo',
-            position: 'before',
-            propB: 'constructor',
+            propA: "foo",
+            position: "before",
+            propB: "constructor",
           },
         },
       ],
       options: [
         {
           order: [
-            'instance-variables',
-            'lifecycle',
-            'everything-else',
-            'render',
+            "instance-variables",
+            "lifecycle",
+            "everything-else",
+            "render",
           ],
         },
       ],
@@ -1140,21 +1088,17 @@ ruleTester.run('sort-comp', rule, {
       `,
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'setters',
-            position: 'after',
-            propB: 'render',
+            propA: "setters",
+            position: "after",
+            propB: "render",
           },
         },
       ],
       options: [
         {
-          order: [
-            'setters',
-            'lifecycle',
-            'render',
-          ],
+          order: ["setters", "lifecycle", "render"],
         },
       ],
     },
@@ -1168,20 +1112,17 @@ ruleTester.run('sort-comp', rule, {
       `,
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'render',
-            position: 'after',
-            propB: 'foo',
+            propA: "render",
+            position: "after",
+            propB: "foo",
           },
         },
       ],
       options: [
         {
-          order: [
-            'foo',
-            'render',
-          ],
+          order: ["foo", "render"],
         },
       ],
     },
@@ -1198,21 +1139,18 @@ ruleTester.run('sort-comp', rule, {
       `,
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'getDerivedStateFromProps',
-            position: 'after',
-            propB: 'foo',
+            propA: "getDerivedStateFromProps",
+            position: "after",
+            propB: "foo",
           },
         },
       ],
-      features: ['class fields'],
+      features: ["class fields"],
       options: [
         {
-          order: [
-            'static-variables',
-            'static-methods',
-          ],
+          order: ["static-variables", "static-methods"],
         },
       ],
     },
@@ -1230,22 +1168,18 @@ ruleTester.run('sort-comp', rule, {
       `,
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'foo',
-            position: 'after',
-            propB: 'bar',
+            propA: "foo",
+            position: "after",
+            propB: "bar",
           },
         },
       ],
-      features: ['class fields'],
+      features: ["class fields"],
       options: [
         {
-          order: [
-            'instance-variables',
-            'static-variables',
-            'static-methods',
-          ],
+          order: ["instance-variables", "static-variables", "static-methods"],
         },
       ],
     },
@@ -1260,24 +1194,24 @@ ruleTester.run('sort-comp', rule, {
           foo = {};
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       errors: [
         {
-          messageId: 'unsortedProps',
+          messageId: "unsortedProps",
           data: {
-            propA: 'bar',
-            position: 'after',
-            propB: 'render',
+            propA: "bar",
+            position: "after",
+            propB: "render",
           },
         },
       ],
       options: [
         {
           order: [
-            'static-methods',
-            'render',
-            'static-variables',
-            'instance-variables',
+            "static-methods",
+            "render",
+            "static-variables",
+            "instance-variables",
           ],
         },
       ],

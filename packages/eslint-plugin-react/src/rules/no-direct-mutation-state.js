@@ -4,29 +4,29 @@
  * @author Nicolas Fernandez <@burabure>
  */
 
-'use strict';
+"use strict";
 
-const Components = require('../util/Components');
-const componentUtil = require('../util/componentUtil');
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
+const Components = require("../util/Components");
+const componentUtil = require("../util/componentUtil");
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  noDirectMutation: 'Do not mutate state directly. Use setState().',
+  noDirectMutation: "Do not mutate state directly. Use setState().",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow direct mutation of this.state',
-      category: 'Possible Errors',
+      description: "Disallow direct mutation of this.state",
+      category: "Possible Errors",
       recommended: true,
-      url: docsUrl('no-direct-mutation-state'),
+      url: docsUrl("no-direct-mutation-state"),
     },
 
     messages,
@@ -50,7 +50,7 @@ module.exports = {
       let mutation;
       for (let i = 0, j = component.mutations.length; i < j; i++) {
         mutation = component.mutations[i];
-        report(context, messages.noDirectMutation, 'noDirectMutation', {
+        report(context, messages.noDirectMutation, "noDirectMutation", {
           node: mutation,
         });
       }
@@ -74,7 +74,9 @@ module.exports = {
      * @returns {boolean} True if we should skip assignment checks.
      */
     function shouldIgnoreComponent(component) {
-      return !component || (component.inConstructor && !component.inCallExpression);
+      return (
+        !component || (component.inConstructor && !component.inCallExpression)
+      );
     }
 
     // --------------------------------------------------------------------------
@@ -82,7 +84,7 @@ module.exports = {
     // --------------------------------------------------------------------------
     return {
       MethodDefinition(node) {
-        if (node.kind === 'constructor') {
+        if (node.kind === "constructor") {
           components.set(node, {
             inConstructor: true,
           });
@@ -97,7 +99,11 @@ module.exports = {
 
       AssignmentExpression(node) {
         const component = components.get(utils.getParentComponent(node));
-        if (shouldIgnoreComponent(component) || !node.left || !node.left.object) {
+        if (
+          shouldIgnoreComponent(component) ||
+          !node.left ||
+          !node.left.object
+        ) {
           return;
         }
         const item = getOuterMemberExpression(node.left);
@@ -113,7 +119,10 @@ module.exports = {
 
       UpdateExpression(node) {
         const component = components.get(utils.getParentComponent(node));
-        if (shouldIgnoreComponent(component) || node.argument.type !== 'MemberExpression') {
+        if (
+          shouldIgnoreComponent(component) ||
+          node.argument.type !== "MemberExpression"
+        ) {
           return;
         }
         const item = getOuterMemberExpression(node.argument);
@@ -127,21 +136,21 @@ module.exports = {
         }
       },
 
-      'CallExpression:exit'(node) {
+      "CallExpression:exit"(node) {
         components.set(node, {
           inCallExpression: false,
         });
       },
 
-      'MethodDefinition:exit'(node) {
-        if (node.kind === 'constructor') {
+      "MethodDefinition:exit"(node) {
+        if (node.kind === "constructor") {
           components.set(node, {
             inConstructor: false,
           });
         }
       },
 
-      'Program:exit'() {
+      "Program:exit"() {
         Object.values(components.list())
           .filter((component) => !isValid(component))
           .forEach((component) => {

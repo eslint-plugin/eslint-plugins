@@ -2,17 +2,17 @@
  * @fileoverview Disallow useless fragments
  */
 
-'use strict';
+"use strict";
 
-const pragmaUtil = require('../util/pragma');
-const astUtil = require('../util/ast');
-const jsxUtil = require('../util/jsx');
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
-const getText = require('../util/eslint').getText;
+const pragmaUtil = require("../util/pragma");
+const astUtil = require("../util/ast");
+const jsxUtil = require("../util/jsx");
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
+const getText = require("../util/eslint").getText;
 
 function isJSXText(node) {
-  return !!node && (node.type === 'JSXText' || node.type === 'Literal');
+  return !!node && (node.type === "JSXText" || node.type === "Literal");
 }
 
 /**
@@ -28,7 +28,10 @@ function isOnlyWhitespace(text) {
  * @returns {boolean}
  */
 function isNonspaceJSXTextOrJSXCurly(node) {
-  return (isJSXText(node) && !isOnlyWhitespace(node.raw)) || node.type === 'JSXExpressionContainer';
+  return (
+    (isJSXText(node) && !isOnlyWhitespace(node.raw)) ||
+    node.type === "JSXExpressionContainer"
+  );
 }
 
 /**
@@ -37,9 +40,11 @@ function isNonspaceJSXTextOrJSXCurly(node) {
  * @returns {boolean}
  */
 function isFragmentWithOnlyTextAndIsNotChild(node) {
-  return node.children.length === 1
-    && isJSXText(node.children[0])
-    && !(node.parent.type === 'JSXElement' || node.parent.type === 'JSXFragment');
+  return (
+    node.children.length === 1 &&
+    isJSXText(node.children[0]) &&
+    !(node.parent.type === "JSXElement" || node.parent.type === "JSXFragment")
+  );
 }
 
 /**
@@ -50,8 +55,10 @@ function trimLikeReact(text) {
   const leadingSpaces = /^\s*/.exec(text)[0];
   const trailingSpaces = /\s*$/.exec(text)[0];
 
-  const start = leadingSpaces.includes( '\n') ? leadingSpaces.length : 0;
-  const end = trailingSpaces.includes( '\n') ? text.length - trailingSpaces.length : text.length;
+  const start = leadingSpaces.includes("\n") ? leadingSpaces.length : 0;
+  const end = trailingSpaces.includes("\n")
+    ? text.length - trailingSpaces.length
+    : text.length;
 
   return text.slice(start, end);
 }
@@ -62,9 +69,11 @@ function trimLikeReact(text) {
  * @returns {boolean}
  */
 function isKeyedElement(node) {
-  return node.type === 'JSXElement'
-    && node.openingElement.attributes
-    && node.openingElement.attributes.some(jsxUtil.isJSXAttributeKey);
+  return (
+    node.type === "JSXElement" &&
+    node.openingElement.attributes &&
+    node.openingElement.attributes.some(jsxUtil.isJSXAttributeKey)
+  );
 }
 
 /**
@@ -72,36 +81,41 @@ function isKeyedElement(node) {
  * @returns {boolean}
  */
 function containsCallExpression(node) {
-  return node
-    && node.type === 'JSXExpressionContainer'
-    && astUtil.isCallExpression(node.expression);
+  return (
+    node &&
+    node.type === "JSXExpressionContainer" &&
+    astUtil.isCallExpression(node.expression)
+  );
 }
 
 const messages = {
-  NeedsMoreChildren: 'Fragments should contain more than one child - otherwise, there’s no need for a Fragment at all.',
-  ChildOfHtmlElement: 'Passing a fragment to an HTML element is useless.',
+  NeedsMoreChildren:
+    "Fragments should contain more than one child - otherwise, there’s no need for a Fragment at all.",
+  ChildOfHtmlElement: "Passing a fragment to an HTML element is useless.",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
-    type: 'suggestion',
-    fixable: 'code',
+    type: "suggestion",
+    fixable: "code",
     docs: {
-      description: 'Disallow unnecessary fragments',
-      category: 'Possible Errors',
+      description: "Disallow unnecessary fragments",
+      category: "Possible Errors",
       recommended: false,
-      url: docsUrl('jsx-no-useless-fragment'),
+      url: docsUrl("jsx-no-useless-fragment"),
     },
     messages,
-    schema: [{
-      type: 'object',
-      properties: {
-        allowExpressions: {
-          type: 'boolean',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          allowExpressions: {
+            type: "boolean",
+          },
         },
       },
-    }],
+    ],
   },
 
   create(context) {
@@ -117,17 +131,18 @@ module.exports = {
      * @returns {boolean}
      */
     function isPaddingSpaces(node) {
-      return isJSXText(node)
-        && isOnlyWhitespace(node.raw)
-        && node.raw.includes( '\n');
+      return (
+        isJSXText(node) && isOnlyWhitespace(node.raw) && node.raw.includes("\n")
+      );
     }
 
     function isFragmentWithSingleExpression(node) {
-      const children = node && node.children.filter((child) => !isPaddingSpaces(child));
+      const children =
+        node && node.children.filter((child) => !isPaddingSpaces(child));
       return (
-        children
-        && children.length === 1
-        && children[0].type === 'JSXExpressionContainer'
+        children &&
+        children.length === 1 &&
+        children[0].type === "JSXExpressionContainer"
       );
     }
 
@@ -143,7 +158,7 @@ module.exports = {
 
       /** @type {ASTNode[]} */
       const nonPaddingChildren = node.children.filter(
-        (child) => !isPaddingSpaces(child)
+        (child) => !isPaddingSpaces(child),
       );
 
       if (nonPaddingChildren.length < 2) {
@@ -156,9 +171,11 @@ module.exports = {
      * @returns {boolean}
      */
     function isChildOfHtmlElement(node) {
-      return node.parent.type === 'JSXElement'
-        && node.parent.openingElement.name.type === 'JSXIdentifier'
-        && /^[a-z]+$/.test(node.parent.openingElement.name.name);
+      return (
+        node.parent.type === "JSXElement" &&
+        node.parent.openingElement.name.type === "JSXIdentifier" &&
+        /^[a-z]+$/.test(node.parent.openingElement.name.name)
+      );
     }
 
     /**
@@ -166,9 +183,11 @@ module.exports = {
      * @return {boolean}
      */
     function isChildOfComponentElement(node) {
-      return node.parent.type === 'JSXElement'
-        && !isChildOfHtmlElement(node)
-        && !jsxUtil.isFragment(node.parent, reactPragma, fragmentPragma);
+      return (
+        node.parent.type === "JSXElement" &&
+        !isChildOfHtmlElement(node) &&
+        !jsxUtil.isFragment(node.parent, reactPragma, fragmentPragma)
+      );
     }
 
     /**
@@ -177,7 +196,12 @@ module.exports = {
      */
     function canFix(node) {
       // Not safe to fix fragments without a jsx parent.
-      if (!(node.parent.type === 'JSXElement' || node.parent.type === 'JSXFragment')) {
+      if (
+        !(
+          node.parent.type === "JSXElement" ||
+          node.parent.type === "JSXFragment"
+        )
+      ) {
         // const a = <></>
         if (node.children.length === 0) {
           return false;
@@ -195,7 +219,10 @@ module.exports = {
       }
 
       // old TS parser can't handle this one
-      if (node.type === 'JSXFragment' && (!node.openingFragment || !node.closingFragment)) {
+      if (
+        node.type === "JSXFragment" &&
+        (!node.openingFragment || !node.closingFragment)
+      ) {
         return false;
       }
 
@@ -212,10 +239,18 @@ module.exports = {
       }
 
       return function fix(fixer) {
-        const opener = node.type === 'JSXFragment' ? node.openingFragment : node.openingElement;
-        const closer = node.type === 'JSXFragment' ? node.closingFragment : node.closingElement;
+        const opener =
+          node.type === "JSXFragment"
+            ? node.openingFragment
+            : node.openingElement;
+        const closer =
+          node.type === "JSXFragment"
+            ? node.closingFragment
+            : node.closingElement;
 
-        const childrenText = opener.selfClosing ? '' : getText(context).slice(opener.range[1], closer.range[0]);
+        const childrenText = opener.selfClosing
+          ? ""
+          : getText(context).slice(opener.range[1], closer.range[0]);
 
         return fixer.replaceText(node, trimLikeReact(childrenText));
       };
@@ -227,18 +262,18 @@ module.exports = {
       }
 
       if (
-        hasLessThanTwoChildren(node)
-        && !isFragmentWithOnlyTextAndIsNotChild(node)
-        && !(allowExpressions && isFragmentWithSingleExpression(node))
+        hasLessThanTwoChildren(node) &&
+        !isFragmentWithOnlyTextAndIsNotChild(node) &&
+        !(allowExpressions && isFragmentWithSingleExpression(node))
       ) {
-        report(context, messages.NeedsMoreChildren, 'NeedsMoreChildren', {
+        report(context, messages.NeedsMoreChildren, "NeedsMoreChildren", {
           node,
           fix: getFix(node),
         });
       }
 
       if (isChildOfHtmlElement(node)) {
-        report(context, messages.ChildOfHtmlElement, 'ChildOfHtmlElement', {
+        report(context, messages.ChildOfHtmlElement, "ChildOfHtmlElement", {
           node,
           fix: getFix(node),
         });

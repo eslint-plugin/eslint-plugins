@@ -3,42 +3,44 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
-const Components = require('../util/Components');
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
+const Components = require("../util/Components");
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  onlyOneComponent: 'Declare only one React component per file',
+  onlyOneComponent: "Declare only one React component per file",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow multiple component definition per file',
-      category: 'Stylistic Issues',
+      description: "Disallow multiple component definition per file",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('no-multi-comp'),
+      url: docsUrl("no-multi-comp"),
     },
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        ignoreStateless: {
-          default: false,
-          type: 'boolean',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          ignoreStateless: {
+            default: false,
+            type: "boolean",
+          },
         },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create: Components.detect((context, components, utils) => {
@@ -52,15 +54,14 @@ module.exports = {
      */
     function isIgnored(component) {
       return (
-        ignoreStateless && (
-          /Function/.test(component.node.type)
-          || utils.isPragmaComponentWrapper(component.node)
-        )
+        ignoreStateless &&
+        (/Function/.test(component.node.type) ||
+          utils.isPragmaComponentWrapper(component.node))
       );
     }
 
     return {
-      'Program:exit'() {
+      "Program:exit"() {
         if (components.length() <= 1) {
           return;
         }
@@ -69,7 +70,7 @@ module.exports = {
           .filter((component) => !isIgnored(component))
           .slice(1)
           .forEach((component) => {
-            report(context, messages.onlyOneComponent, 'onlyOneComponent', {
+            report(context, messages.onlyOneComponent, "onlyOneComponent", {
               node: component.node,
             });
           });

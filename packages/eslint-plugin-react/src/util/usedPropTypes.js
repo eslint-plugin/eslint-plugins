@@ -2,12 +2,12 @@
  * @fileoverview Common used propTypes detection functionality.
  */
 
-'use strict';
+"use strict";
 
-const astUtil = require('./ast');
-const componentUtil = require('./componentUtil');
-const testReactVersion = require('./version').testReactVersion;
-const eslintUtil = require('./eslint');
+const astUtil = require("./ast");
+const componentUtil = require("./componentUtil");
+const testReactVersion = require("./version").testReactVersion;
+const eslintUtil = require("./eslint");
 
 const getScope = eslintUtil.getScope;
 const getSourceCode = eslintUtil.getSourceCode;
@@ -16,8 +16,18 @@ const getSourceCode = eslintUtil.getSourceCode;
 // Constants
 // ------------------------------------------------------------------------------
 
-const LIFE_CYCLE_METHODS = ['componentWillReceiveProps', 'shouldComponentUpdate', 'componentWillUpdate', 'componentDidUpdate'];
-const ASYNC_SAFE_LIFE_CYCLE_METHODS = ['getDerivedStateFromProps', 'getSnapshotBeforeUpdate', 'UNSAFE_componentWillReceiveProps', 'UNSAFE_componentWillUpdate'];
+const LIFE_CYCLE_METHODS = [
+  "componentWillReceiveProps",
+  "shouldComponentUpdate",
+  "componentWillUpdate",
+  "componentDidUpdate",
+];
+const ASYNC_SAFE_LIFE_CYCLE_METHODS = [
+  "getDerivedStateFromProps",
+  "getSnapshotBeforeUpdate",
+  "UNSAFE_componentWillReceiveProps",
+  "UNSAFE_componentWillUpdate",
+];
 
 function createPropVariables() {
   /** @type {Map<string, string[]>} Maps the variable to its definition. `props.a.b` is stored as `['a', 'b']` */
@@ -44,7 +54,10 @@ function createPropVariables() {
       if (!hasBeenWritten) {
         // copy on write
         propVariables = new Map(propVariables);
-        Object.assign(stack[stack.length - 1], { propVariables, hasBeenWritten: true });
+        Object.assign(stack[stack.length - 1], {
+          propVariables,
+          hasBeenWritten: true,
+        });
         stack[stack.length - 1].hasBeenWritten = true;
       }
       return propVariables.set(name, allNames);
@@ -66,7 +79,7 @@ function createPropVariables() {
  * @returns {boolean} True if the prop name matches
  */
 function isCommonVariableNameForProps(name) {
-  return name === 'props' || name === 'nextProps' || name === 'prevProps';
+  return name === "props" || name === "nextProps" || name === "prevProps";
 }
 
 /**
@@ -94,7 +107,10 @@ function inLifeCycleMethod(context, node, checkAsyncSafeLifeCycles) {
       if (LIFE_CYCLE_METHODS.indexOf(name) >= 0) {
         return true;
       }
-      if (checkAsyncSafeLifeCycles && ASYNC_SAFE_LIFE_CYCLE_METHODS.indexOf(name) >= 0) {
+      if (
+        checkAsyncSafeLifeCycles &&
+        ASYNC_SAFE_LIFE_CYCLE_METHODS.indexOf(name) >= 0
+      ) {
         return true;
       }
     }
@@ -111,20 +127,23 @@ function inLifeCycleMethod(context, node, checkAsyncSafeLifeCycles) {
  */
 function isNodeALifeCycleMethod(node, checkAsyncSafeLifeCycles) {
   if (node.key) {
-    if (node.kind === 'constructor') {
+    if (node.kind === "constructor") {
       return true;
     }
 
     const nodeKeyName = node.key.name;
 
-    if (typeof nodeKeyName !== 'string') {
+    if (typeof nodeKeyName !== "string") {
       return false;
     }
 
     if (LIFE_CYCLE_METHODS.indexOf(nodeKeyName) >= 0) {
       return true;
     }
-    if (checkAsyncSafeLifeCycles && ASYNC_SAFE_LIFE_CYCLE_METHODS.indexOf(nodeKeyName) >= 0) {
+    if (
+      checkAsyncSafeLifeCycles &&
+      ASYNC_SAFE_LIFE_CYCLE_METHODS.indexOf(nodeKeyName) >= 0
+    ) {
       return true;
     }
   }
@@ -141,8 +160,8 @@ function isNodeALifeCycleMethod(node, checkAsyncSafeLifeCycles) {
  */
 function isInLifeCycleMethod(node, checkAsyncSafeLifeCycles) {
   if (
-    (node.type === 'MethodDefinition' || node.type === 'Property')
-    && isNodeALifeCycleMethod(node, checkAsyncSafeLifeCycles)
+    (node.type === "MethodDefinition" || node.type === "Property") &&
+    isNodeALifeCycleMethod(node, checkAsyncSafeLifeCycles)
   ) {
     return true;
   }
@@ -160,33 +179,37 @@ function isInLifeCycleMethod(node, checkAsyncSafeLifeCycles) {
  * @return {boolean}
  */
 function isSetStateUpdater(node) {
-  const unwrappedParentCalleeNode = astUtil.isCallExpression(node.parent)
-    && astUtil.unwrapTSAsExpression(node.parent.callee);
+  const unwrappedParentCalleeNode =
+    astUtil.isCallExpression(node.parent) &&
+    astUtil.unwrapTSAsExpression(node.parent.callee);
 
-  return unwrappedParentCalleeNode
-    && unwrappedParentCalleeNode.property
-    && unwrappedParentCalleeNode.property.name === 'setState'
+  return (
+    unwrappedParentCalleeNode &&
+    unwrappedParentCalleeNode.property &&
+    unwrappedParentCalleeNode.property.name === "setState" &&
     // Make sure we are in the updater not the callback
-    && node.parent.arguments[0] === node;
+    node.parent.arguments[0] === node
+  );
 }
 
 function isPropArgumentInSetStateUpdater(context, node, name) {
-  if (typeof name !== 'string') {
+  if (typeof name !== "string") {
     return;
   }
   let scope = getScope(context, node);
   while (scope) {
-    const unwrappedParentCalleeNode = scope.block
-      && astUtil.isCallExpression(scope.block.parent)
-      && astUtil.unwrapTSAsExpression(scope.block.parent.callee);
+    const unwrappedParentCalleeNode =
+      scope.block &&
+      astUtil.isCallExpression(scope.block.parent) &&
+      astUtil.unwrapTSAsExpression(scope.block.parent.callee);
     if (
-      unwrappedParentCalleeNode
-      && unwrappedParentCalleeNode.property
-      && unwrappedParentCalleeNode.property.name === 'setState'
+      unwrappedParentCalleeNode &&
+      unwrappedParentCalleeNode.property &&
+      unwrappedParentCalleeNode.property.name === "setState" &&
       // Make sure we are in the updater not the callback
-      && scope.block.parent.arguments[0].range[0] === scope.block.range[0]
-      && scope.block.parent.arguments[0].params
-      && scope.block.parent.arguments[0].params.length > 1
+      scope.block.parent.arguments[0].range[0] === scope.block.range[0] &&
+      scope.block.parent.arguments[0].params &&
+      scope.block.parent.arguments[0].params.length > 1
     ) {
       return scope.block.parent.arguments[0].params[1].name === name;
     }
@@ -201,7 +224,10 @@ function isPropArgumentInSetStateUpdater(context, node, name) {
  * @returns {boolean}
  */
 function isInClassComponent(context, node) {
-  return !!(componentUtil.getParentES6Component(context, node) || componentUtil.getParentES5Component(context, node));
+  return !!(
+    componentUtil.getParentES6Component(context, node) ||
+    componentUtil.getParentES5Component(context, node)
+  );
 }
 
 /**
@@ -210,10 +236,12 @@ function isInClassComponent(context, node) {
  * @returns {boolean}
  */
 function isThisDotProps(node) {
-  return !!node
-    && node.type === 'MemberExpression'
-    && astUtil.unwrapTSAsExpression(node.object).type === 'ThisExpression'
-    && node.property.name === 'props';
+  return (
+    !!node &&
+    node.type === "MemberExpression" &&
+    astUtil.unwrapTSAsExpression(node.object).type === "ThisExpression" &&
+    node.property.name === "props"
+  );
 }
 
 /**
@@ -224,7 +252,7 @@ function isThisDotProps(node) {
  */
 function hasSpreadOperator(context, node) {
   const tokens = getSourceCode(context).getTokens(node);
-  return tokens.length && tokens[0].value === '...';
+  return tokens.length && tokens[0].value === "...";
 }
 
 /**
@@ -235,7 +263,12 @@ function hasSpreadOperator(context, node) {
  * @param {boolean} checkAsyncSafeLifeCycles
  * @returns {boolean}
  */
-function isPropTypesUsageByMemberExpression(context, node, utils, checkAsyncSafeLifeCycles) {
+function isPropTypesUsageByMemberExpression(
+  context,
+  node,
+  utils,
+  checkAsyncSafeLifeCycles,
+) {
   const unwrappedObjectNode = astUtil.unwrapTSAsExpression(node.object);
 
   if (isInClassComponent(context, node)) {
@@ -245,19 +278,22 @@ function isPropTypesUsageByMemberExpression(context, node, utils, checkAsyncSafe
     }
     // props.* or prevProps.* or nextProps.*
     if (
-      isCommonVariableNameForProps(unwrappedObjectNode.name)
-      && (inLifeCycleMethod(context, node, checkAsyncSafeLifeCycles) || astUtil.inConstructor(context, node))
+      isCommonVariableNameForProps(unwrappedObjectNode.name) &&
+      (inLifeCycleMethod(context, node, checkAsyncSafeLifeCycles) ||
+        astUtil.inConstructor(context, node))
     ) {
       return true;
     }
     // this.setState((_, props) => props.*))
-    if (isPropArgumentInSetStateUpdater(context, node, unwrappedObjectNode.name)) {
+    if (
+      isPropArgumentInSetStateUpdater(context, node, unwrappedObjectNode.name)
+    ) {
       return true;
     }
     return false;
   }
   // props.* in function component
-  return unwrappedObjectNode.name === 'props' && !astUtil.isAssignmentLHS(node);
+  return unwrappedObjectNode.name === "props" && !astUtil.isAssignmentLHS(node);
 }
 
 /**
@@ -272,36 +308,47 @@ function getPropertyName(context, node, utils, checkAsyncSafeLifeCycles) {
   const property = node.property;
   if (property) {
     switch (property.type) {
-      case 'Identifier':
+      case "Identifier":
         if (node.computed) {
-          return '__COMPUTED_PROP__';
+          return "__COMPUTED_PROP__";
         }
         return property.name;
-      case 'MemberExpression':
+      case "MemberExpression":
         return;
-      case 'Literal':
+      case "Literal":
         // Accept computed properties that are literal strings
-        if (typeof property.value === 'string') {
+        if (typeof property.value === "string") {
           return property.value;
         }
         // Accept number as well but only accept props[123]
-        if (typeof property.value === 'number') {
-          if (isPropTypesUsageByMemberExpression(context, node, utils, checkAsyncSafeLifeCycles)) {
+        if (typeof property.value === "number") {
+          if (
+            isPropTypesUsageByMemberExpression(
+              context,
+              node,
+              utils,
+              checkAsyncSafeLifeCycles,
+            )
+          ) {
             return property.raw;
           }
         }
-        // falls through
+      // falls through
       default:
         if (node.computed) {
-          return '__COMPUTED_PROP__';
+          return "__COMPUTED_PROP__";
         }
         break;
     }
   }
 }
 
-module.exports = function usedPropTypesInstructions(context, components, utils) {
-  const checkAsyncSafeLifeCycles = testReactVersion(context, '>= 16.3.0');
+module.exports = function usedPropTypesInstructions(
+  context,
+  components,
+  utils,
+) {
+  const checkAsyncSafeLifeCycles = testReactVersion(context, ">= 16.3.0");
 
   const propVariables = createPropVariables();
   const pushScope = propVariables.pushScope;
@@ -324,17 +371,17 @@ module.exports = function usedPropTypesInstructions(context, components, utils) 
         allNames = parentNames.concat(name);
         const parent = node.parent;
         if (
-        // Match props.foo.bar, don't match bar[props.foo]
-          parent.type === 'MemberExpression'
-            && 'object' in parent
-            && parent.object === node
+          // Match props.foo.bar, don't match bar[props.foo]
+          parent.type === "MemberExpression" &&
+          "object" in parent &&
+          parent.object === node
         ) {
           markPropTypesAsUsed(parent, allNames);
         }
         // Handle the destructuring part of `const {foo} = props.a.b`
         if (
-          astUtil.isVariableDeclarator(parent)
-            && parent.id.type === 'ObjectPattern'
+          astUtil.isVariableDeclarator(parent) &&
+          parent.id.type === "ObjectPattern"
         ) {
           parent.id.parent = parent; // patch for bug in eslint@4 in which ObjectPattern has no parent
           markPropTypesAsUsed(parent.id, allNames);
@@ -342,34 +389,40 @@ module.exports = function usedPropTypesInstructions(context, components, utils) 
 
         // const a = props.a
         if (
-          astUtil.isVariableDeclarator(parent)
-            && parent.id.type === 'Identifier'
+          astUtil.isVariableDeclarator(parent) &&
+          parent.id.type === "Identifier"
         ) {
           propVariables.set(parent.id.name, allNames);
         }
         // Do not mark computed props as used.
-        type = name !== '__COMPUTED_PROP__' ? 'direct' : null;
+        type = name !== "__COMPUTED_PROP__" ? "direct" : null;
       }
     } else if (astUtil.isFunctionLike(node)) {
       if (node.params.length > 0) {
-        type = 'destructuring';
-        const propParam = isSetStateUpdater(node) ? node.params[1] : node.params[0];
-        properties = propParam.type === 'AssignmentPattern'
-          ? propParam.left.properties
-          : propParam.properties;
+        type = "destructuring";
+        const propParam = isSetStateUpdater(node)
+          ? node.params[1]
+          : node.params[0];
+        properties =
+          propParam.type === "AssignmentPattern"
+            ? propParam.left.properties
+            : propParam.properties;
       }
     } else if (astUtil.isObjectPattern(node)) {
-      type = 'destructuring';
+      type = "destructuring";
       properties = node.properties;
-    } else if (node.type !== 'TSEmptyBodyFunctionExpression') {
-      throw new Error(`${node.type} ASTNodes are not handled by markPropTypesAsUsed`);
+    } else if (node.type !== "TSEmptyBodyFunctionExpression") {
+      throw new Error(
+        `${node.type} ASTNodes are not handled by markPropTypesAsUsed`,
+      );
     }
 
     const component = components.get(utils.getParentComponent(node));
     const usedPropTypes = (component && component.usedPropTypes) || [];
-    let ignoreUnusedPropTypesValidation = (component && component.ignoreUnusedPropTypesValidation) || false;
+    let ignoreUnusedPropTypesValidation =
+      (component && component.ignoreUnusedPropTypesValidation) || false;
 
-    if (type === 'direct') {
+    if (type === "direct") {
       // Ignore Object methods
       if (!(name in Object.prototype)) {
         const reportedNode = node.property;
@@ -379,15 +432,18 @@ module.exports = function usedPropTypesInstructions(context, components, utils) 
           node: reportedNode,
         });
       }
-    } else if (type === 'destructuring') {
+    } else if (type === "destructuring") {
       for (let k = 0, l = (properties || []).length; k < l; k++) {
-        if (hasSpreadOperator(context, properties[k]) || properties[k].computed) {
+        if (
+          hasSpreadOperator(context, properties[k]) ||
+          properties[k].computed
+        ) {
           ignoreUnusedPropTypesValidation = true;
           break;
         }
         const propName = astUtil.getKeyValue(context, properties[k]);
 
-        if (!propName || properties[k].type !== 'Property') {
+        if (!propName || properties[k].type !== "Property") {
           break;
         }
 
@@ -397,10 +453,16 @@ module.exports = function usedPropTypesInstructions(context, components, utils) 
           node: properties[k],
         });
 
-        if (properties[k].value.type === 'ObjectPattern') {
-          markPropTypesAsUsed(properties[k].value, parentNames.concat([propName]));
-        } else if (properties[k].value.type === 'Identifier') {
-          propVariables.set(properties[k].value.name, parentNames.concat(propName));
+        if (properties[k].value.type === "ObjectPattern") {
+          markPropTypesAsUsed(
+            properties[k].value,
+            parentNames.concat([propName]),
+          );
+        } else if (properties[k].value.type === "Identifier") {
+          propVariables.set(
+            properties[k].value.name,
+            parentNames.concat(propName),
+          );
         }
       }
     }
@@ -429,14 +491,19 @@ module.exports = function usedPropTypesInstructions(context, components, utils) 
    *   FunctionDeclaration, or FunctionExpression
    */
   function markDestructuredFunctionArgumentsAsUsed(node) {
-    const param = node.params && isSetStateUpdater(node) ? node.params[1] : node.params[0];
+    const param =
+      node.params && isSetStateUpdater(node) ? node.params[1] : node.params[0];
 
-    const destructuring = param && (
-      param.type === 'ObjectPattern'
-      || ((param.type === 'AssignmentPattern') && (param.left.type === 'ObjectPattern'))
-    );
+    const destructuring =
+      param &&
+      (param.type === "ObjectPattern" ||
+        (param.type === "AssignmentPattern" &&
+          param.left.type === "ObjectPattern"));
 
-    if (destructuring && (components.get(node) || components.get(node.parent))) {
+    if (
+      destructuring &&
+      (components.get(node) || components.get(node.parent))
+    ) {
       markPropTypesAsUsed(node);
     }
   }
@@ -479,43 +546,60 @@ module.exports = function usedPropTypesInstructions(context, components, utils) 
       const unwrappedInitNode = astUtil.unwrapTSAsExpression(node.init);
 
       // let props = this.props
-      if (isThisDotProps(unwrappedInitNode) && isInClassComponent(context, node) && node.id.type === 'Identifier') {
+      if (
+        isThisDotProps(unwrappedInitNode) &&
+        isInClassComponent(context, node) &&
+        node.id.type === "Identifier"
+      ) {
         propVariables.set(node.id.name, []);
       }
 
       // Only handles destructuring
-      if (node.id.type !== 'ObjectPattern' || !unwrappedInitNode) {
+      if (node.id.type !== "ObjectPattern" || !unwrappedInitNode) {
         return;
       }
 
       // let {props: {firstname}} = this
-      const propsProperty = node.id.properties.find((property) => (
-        property.key
-        && (property.key.name === 'props' || property.key.value === 'props')
-      ));
+      const propsProperty = node.id.properties.find(
+        (property) =>
+          property.key &&
+          (property.key.name === "props" || property.key.value === "props"),
+      );
 
-      if (unwrappedInitNode.type === 'ThisExpression' && propsProperty && propsProperty.value.type === 'ObjectPattern') {
+      if (
+        unwrappedInitNode.type === "ThisExpression" &&
+        propsProperty &&
+        propsProperty.value.type === "ObjectPattern"
+      ) {
         markPropTypesAsUsed(propsProperty.value);
         return;
       }
 
       // let {props} = this
-      if (unwrappedInitNode.type === 'ThisExpression' && propsProperty && propsProperty.value.name === 'props') {
-        propVariables.set('props', []);
+      if (
+        unwrappedInitNode.type === "ThisExpression" &&
+        propsProperty &&
+        propsProperty.value.name === "props"
+      ) {
+        propVariables.set("props", []);
         return;
       }
 
       // let {firstname} = props
       if (
-        isCommonVariableNameForProps(unwrappedInitNode.name)
-        && (utils.getParentStatelessComponent(node) || isInLifeCycleMethod(node, checkAsyncSafeLifeCycles))
+        isCommonVariableNameForProps(unwrappedInitNode.name) &&
+        (utils.getParentStatelessComponent(node) ||
+          isInLifeCycleMethod(node, checkAsyncSafeLifeCycles))
       ) {
         markPropTypesAsUsed(node.id);
         return;
       }
 
       // let {firstname} = this.props
-      if (isThisDotProps(unwrappedInitNode) && isInClassComponent(context, node)) {
+      if (
+        isThisDotProps(unwrappedInitNode) &&
+        isInClassComponent(context, node)
+      ) {
         markPropTypesAsUsed(node.id);
         return;
       }
@@ -532,26 +616,36 @@ module.exports = function usedPropTypesInstructions(context, components, utils) 
 
     FunctionExpression: handleFunctionLikeExpressions,
 
-    'FunctionDeclaration:exit': popScope,
+    "FunctionDeclaration:exit": popScope,
 
-    'ArrowFunctionExpression:exit': popScope,
+    "ArrowFunctionExpression:exit": popScope,
 
-    'FunctionExpression:exit': popScope,
+    "FunctionExpression:exit": popScope,
 
     JSXSpreadAttribute(node) {
       const component = components.get(utils.getParentComponent(node));
       components.set(component ? component.node : node, {
-        ignoreUnusedPropTypesValidation: node.argument.type !== 'ObjectExpression',
+        ignoreUnusedPropTypesValidation:
+          node.argument.type !== "ObjectExpression",
       });
     },
 
-    'MemberExpression, OptionalMemberExpression'(node) {
-      if (isPropTypesUsageByMemberExpression(context, node, utils, checkAsyncSafeLifeCycles)) {
+    "MemberExpression, OptionalMemberExpression"(node) {
+      if (
+        isPropTypesUsageByMemberExpression(
+          context,
+          node,
+          utils,
+          checkAsyncSafeLifeCycles,
+        )
+      ) {
         markPropTypesAsUsed(node);
         return;
       }
 
-      const propVariable = propVariables.get(astUtil.unwrapTSAsExpression(node.object).name);
+      const propVariable = propVariables.get(
+        astUtil.unwrapTSAsExpression(node.object).name,
+      );
       if (propVariable) {
         markPropTypesAsUsed(node, propVariable);
       }
@@ -560,12 +654,15 @@ module.exports = function usedPropTypesInstructions(context, components, utils) 
     ObjectPattern(node) {
       // If the object pattern is a destructured props object in a lifecycle
       // method -- mark it for used props.
-      if (isNodeALifeCycleMethod(node.parent.parent, checkAsyncSafeLifeCycles) && node.properties.length > 0) {
+      if (
+        isNodeALifeCycleMethod(node.parent.parent, checkAsyncSafeLifeCycles) &&
+        node.properties.length > 0
+      ) {
         markPropTypesAsUsed(node.parent);
       }
     },
 
-    'Program:exit'() {
+    "Program:exit"() {
       Object.values(components.list())
         .filter((component) => mustBeValidated(component))
         .forEach((component) => {

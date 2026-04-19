@@ -2,27 +2,27 @@
  * @fileoverview Report "this" being used in stateless functional components.
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/no-this-in-sfc');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/no-this-in-sfc");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
 };
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('no-this-in-sfc', rule, {
+ruleTester.run("no-this-in-sfc", rule, {
   valid: parsers.all([
     {
       code: `
@@ -66,7 +66,7 @@ ruleTester.run('no-this-in-sfc', rule, {
           }
         });
       `,
-      settings: { react: { createClass: 'createClass' } },
+      settings: { react: { createClass: "createClass" } },
     },
     {
       code: `
@@ -107,16 +107,16 @@ ruleTester.run('no-this-in-sfc', rule, {
       `,
     },
     {
-      code: 'const Foo = (props) => <span>{props.foo}</span>',
+      code: "const Foo = (props) => <span>{props.foo}</span>",
     },
     {
-      code: 'const Foo = ({ foo }) => <span>{foo}</span>',
+      code: "const Foo = ({ foo }) => <span>{foo}</span>",
     },
     {
-      code: 'const Foo = (props) => props.foo ? <span>{props.bar}</span> : null;',
+      code: "const Foo = (props) => props.foo ? <span>{props.bar}</span> : null;",
     },
     {
-      code: 'const Foo = ({ foo, bar }) => foo ? <span>{bar}</span> : null;',
+      code: "const Foo = ({ foo, bar }) => foo ? <span>{bar}</span> : null;",
     },
     {
       code: `
@@ -139,7 +139,7 @@ ruleTester.run('no-this-in-sfc', rule, {
           };
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -184,7 +184,7 @@ ruleTester.run('no-this-in-sfc', rule, {
           return typeof val === 'string' ? val : null;
         };
       `,
-      features: ['types'],
+      features: ["types"],
     },
   ]),
 
@@ -196,7 +196,7 @@ ruleTester.run('no-this-in-sfc', rule, {
           return <div>{foo}</div>;
         }
       `,
-      errors: [{ messageId: 'noThisInSFC' }],
+      errors: [{ messageId: "noThisInSFC" }],
     },
     {
       code: `
@@ -204,7 +204,7 @@ ruleTester.run('no-this-in-sfc', rule, {
           return <div>{this.props.foo}</div>;
         }
       `,
-      errors: [{ messageId: 'noThisInSFC' }],
+      errors: [{ messageId: "noThisInSFC" }],
     },
     {
       code: `
@@ -212,7 +212,7 @@ ruleTester.run('no-this-in-sfc', rule, {
           return <div>{this.state.foo}</div>;
         }
       `,
-      errors: [{ messageId: 'noThisInSFC' }],
+      errors: [{ messageId: "noThisInSFC" }],
     },
     {
       code: `
@@ -221,7 +221,7 @@ ruleTester.run('no-this-in-sfc', rule, {
           return <div>{foo}</div>;
         }
       `,
-      errors: [{ messageId: 'noThisInSFC' }],
+      errors: [{ messageId: "noThisInSFC" }],
     },
     {
       code: `
@@ -229,7 +229,7 @@ ruleTester.run('no-this-in-sfc', rule, {
           return props.foo ? <div>{this.props.bar}</div> : null;
         }
       `,
-      errors: [{ messageId: 'noThisInSFC' }],
+      errors: [{ messageId: "noThisInSFC" }],
     },
     {
       code: `
@@ -240,7 +240,7 @@ ruleTester.run('no-this-in-sfc', rule, {
           return null;
         }
       `,
-      errors: [{ messageId: 'noThisInSFC' }],
+      errors: [{ messageId: "noThisInSFC" }],
     },
     {
       code: `
@@ -251,15 +251,15 @@ ruleTester.run('no-this-in-sfc', rule, {
           return null;
         }
       `,
-      errors: [{ messageId: 'noThisInSFC' }],
+      errors: [{ messageId: "noThisInSFC" }],
     },
     {
-      code: 'const Foo = (props) => <span>{this.props.foo}</span>',
-      errors: [{ messageId: 'noThisInSFC' }],
+      code: "const Foo = (props) => <span>{this.props.foo}</span>",
+      errors: [{ messageId: "noThisInSFC" }],
     },
     {
-      code: 'const Foo = (props) => this.props.foo ? <span>{props.bar}</span> : null;',
-      errors: [{ messageId: 'noThisInSFC' }],
+      code: "const Foo = (props) => this.props.foo ? <span>{props.bar}</span> : null;",
+      errors: [{ messageId: "noThisInSFC" }],
     },
     {
       code: `
@@ -270,10 +270,7 @@ ruleTester.run('no-this-in-sfc', rule, {
           return <div onClick={onClick}>{this.props.foo}</div>;
         }
       `,
-      errors: [
-        { messageId: 'noThisInSFC' },
-        { messageId: 'noThisInSFC' },
-      ],
+      errors: [{ messageId: "noThisInSFC" }, { messageId: "noThisInSFC" }],
     },
   ]),
 });

@@ -3,20 +3,20 @@
  * @author Mark Ivan Allen <Vydia.com>
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-one-expression-per-line');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-one-expression-per-line");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,10 +27,10 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('jsx-one-expression-per-line', rule, {
+ruleTester.run("jsx-one-expression-per-line", rule, {
   valid: parsers.all([
     {
-      code: '<App />',
+      code: "<App />",
     },
     {
       code: `
@@ -75,7 +75,7 @@ ruleTester.run('jsx-one-expression-per-line', rule, {
       `,
     },
     {
-      code: '<App></App>',
+      code: "<App></App>",
     },
     {
       code: '<App foo="bar" />',
@@ -140,48 +140,48 @@ ruleTester.run('jsx-one-expression-per-line', rule, {
       `,
     },
     {
-      code: '<App>foo</App>',
-      options: [{ allow: 'literal' }],
+      code: "<App>foo</App>",
+      options: [{ allow: "literal" }],
     },
     {
-      code: '<App>123</App>',
-      options: [{ allow: 'literal' }],
+      code: "<App>123</App>",
+      options: [{ allow: "literal" }],
     },
     {
-      code: '<App>foo</App>',
-      options: [{ allow: 'single-child' }],
-    },
-    {
-      code: '<App>{"foo"}</App>',
-      options: [{ allow: 'single-child' }],
-    },
-    {
-      code: '<App>123</App>',
-      options: [{ allow: 'non-jsx' }],
-    },
-    {
-      code: '<App>foo</App>',
-      options: [{ allow: 'non-jsx' }],
+      code: "<App>foo</App>",
+      options: [{ allow: "single-child" }],
     },
     {
       code: '<App>{"foo"}</App>',
-      options: [{ allow: 'non-jsx' }],
+      options: [{ allow: "single-child" }],
     },
     {
-      code: '<App>{<Bar />}</App>',
-      options: [{ allow: 'non-jsx' }],
+      code: "<App>123</App>",
+      options: [{ allow: "non-jsx" }],
     },
     {
-      code: '<App>{foo && <Bar />}</App>',
-      options: [{ allow: 'single-child' }],
+      code: "<App>foo</App>",
+      options: [{ allow: "non-jsx" }],
     },
     {
-      code: '<App><Foo /></App>',
-      options: [{ allow: 'single-child' }],
+      code: '<App>{"foo"}</App>',
+      options: [{ allow: "non-jsx" }],
     },
     {
-      code: '<></>',
-      features: ['fragment'],
+      code: "<App>{<Bar />}</App>",
+      options: [{ allow: "non-jsx" }],
+    },
+    {
+      code: "<App>{foo && <Bar />}</App>",
+      options: [{ allow: "single-child" }],
+    },
+    {
+      code: "<App><Foo /></App>",
+      options: [{ allow: "single-child" }],
+    },
+    {
+      code: "<></>",
+      features: ["fragment"],
     },
     {
       code: `
@@ -189,7 +189,7 @@ ruleTester.run('jsx-one-expression-per-line', rule, {
           <Foo />
         </>
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
     },
     {
       code: `
@@ -198,39 +198,39 @@ ruleTester.run('jsx-one-expression-per-line', rule, {
           <Bar />
         </>
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
     },
     {
-      code: '<App>Hello {name}</App>',
-      options: [{ allow: 'non-jsx' }],
+      code: "<App>Hello {name}</App>",
+      options: [{ allow: "non-jsx" }],
     },
     {
       code: `
         <App>
           Hello {name} there!
         </App>`,
-      options: [{ allow: 'non-jsx' }],
+      options: [{ allow: "non-jsx" }],
     },
     {
       code: `
         <App>
           Hello {<Bar />} there!
         </App>`,
-      options: [{ allow: 'non-jsx' }],
+      options: [{ allow: "non-jsx" }],
     },
     {
       code: `
         <App>
           Hello {(<Bar />)} there!
         </App>`,
-      options: [{ allow: 'non-jsx' }],
+      options: [{ allow: "non-jsx" }],
     },
     {
       code: `
         <App>
           Hello {(() => <Bar />)()} there!
         </App>`,
-      options: [{ allow: 'non-jsx' }],
+      options: [{ allow: "non-jsx" }],
     },
   ]),
 
@@ -246,7 +246,7 @@ ruleTester.run('jsx-one-expression-per-line', rule, {
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
+          messageId: "moveToNewLine",
           data: { descriptor: '{"foo"}' },
         },
       ],
@@ -263,8 +263,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'foo' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "foo" },
         },
       ],
       parserOptions,
@@ -277,14 +277,14 @@ foo
       `,
       output: `
         <div>
-          foo${' '/* intentional trailing space */}
+          foo${" " /* intentional trailing space */}
 {' '}
 {"bar"}
         </div>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
+          messageId: "moveToNewLine",
           data: { descriptor: '{"bar"}' },
         },
       ],
@@ -305,8 +305,8 @@ bar
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: ' bar        ' },
+          messageId: "moveToNewLine",
+          data: { descriptor: " bar        " },
         },
       ],
       parserOptions,
@@ -325,8 +325,8 @@ bar
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Bar' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Bar" },
         },
       ],
       parserOptions,
@@ -345,8 +345,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'foo        ' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "foo        " },
         },
       ],
       parserOptions,
@@ -365,7 +365,7 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
+          messageId: "moveToNewLine",
           data: { descriptor: '{"foo"}' },
         },
       ],
@@ -379,15 +379,15 @@ foo
       `,
       output: `
         <div>
-          {"foo"}${' '/* intentional trailing space */}
+          {"foo"}${" " /* intentional trailing space */}
 {' '}
 { I18n.t('baz') }
         </div>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: '{ I18n.t(\'baz\') }' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "{ I18n.t('baz') }" },
         },
       ],
       parserOptions,
@@ -398,50 +398,49 @@ foo
       `,
       output: `
         <Text style={styles.foo}>
-{ bar }${' '/* intentional trailing space */}
+{ bar }${" " /* intentional trailing space */}
 {' '}
-<Text/>${' '/* intentional trailing space */}
+<Text/>${" " /* intentional trailing space */}
 {' '}
 { I18n.t('baz') }
 </Text>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: '{ bar }' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "{ bar }" },
         },
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Text' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Text" },
         },
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: '{ I18n.t(\'baz\') }' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "{ I18n.t('baz') }" },
         },
       ],
       parserOptions,
-
     },
     {
       code: `
         <Text style={styles.foo}> <Bar/> <Baz/></Text>
       `,
       output: `
-        <Text style={styles.foo}>${' '/* intentional trailing space */}
+        <Text style={styles.foo}>${" " /* intentional trailing space */}
 {' '}
-<Bar/>${' '/* intentional trailing space */}
+<Bar/>${" " /* intentional trailing space */}
 {' '}
 <Baz/>
 </Text>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Bar' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Bar" },
         },
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Baz' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Baz" },
         },
       ],
       parserOptions,
@@ -451,13 +450,13 @@ foo
         <Text style={styles.foo}> <Bar/> <Baz/> <Bunk/> <Bruno/> </Text>
       `,
       output: `
-        <Text style={styles.foo}>${' '/* intentional trailing space */}
+        <Text style={styles.foo}>${" " /* intentional trailing space */}
 {' '}
-<Bar/>${' '/* intentional trailing space */}
+<Bar/>${" " /* intentional trailing space */}
 {' '}
-<Baz/>${' '/* intentional trailing space */}
+<Baz/>${" " /* intentional trailing space */}
 {' '}
-<Bunk/>${' '/* intentional trailing space */}
+<Bunk/>${" " /* intentional trailing space */}
 {' '}
 <Bruno/>
 {' '}
@@ -465,20 +464,20 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Bar' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Bar" },
         },
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Baz' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Baz" },
         },
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Bunk' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Bunk" },
         },
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Bruno' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Bruno" },
         },
       ],
       parserOptions,
@@ -488,15 +487,15 @@ foo
         <Text style={styles.foo}> <Bar /></Text>
       `,
       output: `
-        <Text style={styles.foo}>${' '/* intentional trailing space */}
+        <Text style={styles.foo}>${" " /* intentional trailing space */}
 {' '}
 <Bar />
 </Text>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Bar' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Bar" },
         },
       ],
       parserOptions,
@@ -507,15 +506,15 @@ foo
         </Text>
       `,
       output: `
-        <Text style={styles.foo}>${' '/* intentional trailing space */}
+        <Text style={styles.foo}>${" " /* intentional trailing space */}
 {' '}
 <Bar />
         </Text>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Bar' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Bar" },
         },
       ],
       parserOptions,
@@ -528,15 +527,15 @@ foo
       `,
       output: `
         <Text style={styles.foo}>
-          <Bar />${' '/* intentional trailing space */}
+          <Bar />${" " /* intentional trailing space */}
 {' '}
 <Baz />
         </Text>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Baz' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Baz" },
         },
       ],
       parserOptions,
@@ -549,18 +548,18 @@ foo
       `,
       output: `
         <Text style={styles.foo}>
-          <Bar />${' '/* intentional trailing space */}
+          <Bar />${" " /* intentional trailing space */}
 {' '}
 <Baz />
         </Text>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Baz' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Baz" },
         },
       ],
-      options: [{ allow: 'non-jsx' }],
+      options: [{ allow: "non-jsx" }],
       parserOptions,
     },
     {
@@ -571,15 +570,15 @@ foo
       `,
       output: `
         <Text style={styles.foo}>
-          { bar }${' '/* intentional trailing space */}
+          { bar }${" " /* intentional trailing space */}
 {' '}
 { I18n.t('baz') }
         </Text>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: '{ I18n.t(\'baz\') }' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "{ I18n.t('baz') }" },
         },
       ],
       parserOptions,
@@ -598,8 +597,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'input' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "input" },
         },
       ],
       parserOptions,
@@ -618,8 +617,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'span' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "span" },
         },
       ],
       parserOptions,
@@ -632,15 +631,15 @@ foo
       `,
       output: `
         <div>
-          foo${' '/* intentional trailing space */}
+          foo${" " /* intentional trailing space */}
 {' '}
 <input />
         </div>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'input' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "input" },
         },
       ],
       parserOptions,
@@ -660,8 +659,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: ' foo        ' },
+          messageId: "moveToNewLine",
+          data: { descriptor: " foo        " },
         },
       ],
       parserOptions,
@@ -674,15 +673,15 @@ foo
       `,
       output: `
         <div>
-          <span />${' '/* intentional trailing space */}
+          <span />${" " /* intentional trailing space */}
 {' '}
 <input />
         </div>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'input' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "input" },
         },
       ],
       parserOptions,
@@ -703,8 +702,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'input' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "input" },
         },
       ],
       parserOptions,
@@ -717,15 +716,15 @@ foo
       `,
       output: `
         <div>
-          {"foo"}${' '/* intentional trailing space */}
+          {"foo"}${" " /* intentional trailing space */}
 {' '}
 <input />
         </div>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'input' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "input" },
         },
       ],
       parserOptions,
@@ -738,14 +737,14 @@ foo
       `,
       output: `
         <div>
-          <input />${' '/* intentional trailing space */}
+          <input />${" " /* intentional trailing space */}
 {' '}
 {"foo"}
         </div>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
+          messageId: "moveToNewLine",
           data: { descriptor: '{"foo"}' },
         },
       ],
@@ -765,8 +764,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Bar' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Bar" },
         },
       ],
       parserOptions,
@@ -783,8 +782,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Foo' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Foo" },
         },
       ],
       parserOptions,
@@ -801,8 +800,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Foo' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Foo" },
         },
       ],
       parserOptions,
@@ -819,8 +818,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Foo' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Foo" },
         },
       ],
       parserOptions,
@@ -839,8 +838,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Foo' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Foo" },
         },
       ],
       parserOptions,
@@ -859,8 +858,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Foo' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Foo" },
         },
       ],
       parserOptions,
@@ -881,8 +880,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Foo' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Foo" },
         },
       ],
       parserOptions,
@@ -901,8 +900,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Foo' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Foo" },
         },
       ],
       parserOptions,
@@ -921,8 +920,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Foo' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Foo" },
         },
       ],
       parserOptions,
@@ -941,8 +940,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Foo' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Foo" },
         },
       ],
       parserOptions,
@@ -963,8 +962,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Bar' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Bar" },
         },
       ],
       parserOptions,
@@ -985,8 +984,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Bar' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Bar" },
         },
       ],
       parserOptions,
@@ -1012,14 +1011,14 @@ baz
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: ' baz ' },
+          messageId: "moveToNewLine",
+          data: { descriptor: " baz " },
         },
       ],
       parserOptions,
     },
     {
-    // Would be nice to handle in one pass, but multipass works fine.
+      // Would be nice to handle in one pass, but multipass works fine.
       code: `
         <App>
           foo {"bar"} baz
@@ -1027,25 +1026,25 @@ baz
       `,
       output: `
         <App>
-          foo${' '/* intentional trailing space */}
+          foo${" " /* intentional trailing space */}
 {' '}
 {"bar"} baz
         </App>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
+          messageId: "moveToNewLine",
           data: { descriptor: '{"bar"}' },
         },
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: ' baz        ' },
+          messageId: "moveToNewLine",
+          data: { descriptor: " baz        " },
         },
       ],
       parserOptions,
     },
     {
-    // Would be nice to handle in one pass, but multipass works fine.
+      // Would be nice to handle in one pass, but multipass works fine.
       code: `
         <App>
           foo {"bar"}
@@ -1053,21 +1052,21 @@ baz
       `,
       output: `
         <App>
-          foo${' '/* intentional trailing space */}
+          foo${" " /* intentional trailing space */}
 {' '}
 {"bar"}
         </App>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
+          messageId: "moveToNewLine",
           data: { descriptor: '{"bar"}' },
         },
       ],
       parserOptions,
     },
     {
-    // Would be nice to handle in one pass, but multipass works fine.
+      // Would be nice to handle in one pass, but multipass works fine.
       code: `
         <App>
           foo
@@ -1086,14 +1085,14 @@ baz
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: ' baz        ' },
+          messageId: "moveToNewLine",
+          data: { descriptor: " baz        " },
         },
       ],
       parserOptions,
     },
     {
-    // Would be nice to handle in one pass, but multipass works fine.
+      // Would be nice to handle in one pass, but multipass works fine.
       code: `
         <App>
 
@@ -1104,7 +1103,7 @@ baz
       output: `
         <App>
 
-          foo${' '/* intentional trailing space */}
+          foo${" " /* intentional trailing space */}
 {' '}
 {"bar"} baz
 
@@ -1112,18 +1111,18 @@ baz
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
+          messageId: "moveToNewLine",
           data: { descriptor: '{"bar"}' },
         },
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: ' baz        ' },
+          messageId: "moveToNewLine",
+          data: { descriptor: " baz        " },
         },
       ],
       parserOptions,
     },
     {
-    // Would be nice to handle in one pass, but multipass works fine.
+      // Would be nice to handle in one pass, but multipass works fine.
       code: `
         <App>
 
@@ -1146,8 +1145,8 @@ baz
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: ' baz        ' },
+          messageId: "moveToNewLine",
+          data: { descriptor: " baz        " },
         },
       ],
       parserOptions,
@@ -1167,8 +1166,8 @@ baz
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: '{          foo        }' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "{          foo        }" },
         },
       ],
       parserOptions,
@@ -1180,7 +1179,7 @@ baz
         } </App>
       `,
       output: `
-        <App>${' '/* intentional trailing space */}
+        <App>${" " /* intentional trailing space */}
 {' '}
 {
           foo
@@ -1190,8 +1189,8 @@ baz
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: '{          foo        }' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "{          foo        }" },
         },
       ],
       parserOptions,
@@ -1215,8 +1214,8 @@ baz
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: '{          foo        }' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "{          foo        }" },
         },
       ],
       parserOptions,
@@ -1230,11 +1229,11 @@ baz
 <Foo />
 </App>
       `,
-      options: [{ allow: 'none' }],
+      options: [{ allow: "none" }],
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Foo' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Foo" },
         },
       ],
     },
@@ -1247,11 +1246,11 @@ baz
 foo
 </App>
       `,
-      options: [{ allow: 'none' }],
+      options: [{ allow: "none" }],
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'foo' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "foo" },
         },
       ],
     },
@@ -1264,10 +1263,10 @@ foo
 {"foo"}
 </App>
       `,
-      options: [{ allow: 'none' }],
+      options: [{ allow: "none" }],
       errors: [
         {
-          messageId: 'moveToNewLine',
+          messageId: "moveToNewLine",
           data: { descriptor: '{"foo"}' },
         },
       ],
@@ -1282,11 +1281,11 @@ foo
 foo
 </App>
       `,
-      options: [{ allow: 'literal' }],
+      options: [{ allow: "literal" }],
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'foo        ' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "foo        " },
         },
       ],
     },
@@ -1299,11 +1298,11 @@ foo
 <Foo />
 </App>
       `,
-      options: [{ allow: 'literal' }],
+      options: [{ allow: "literal" }],
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Foo' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Foo" },
         },
       ],
     },
@@ -1316,11 +1315,11 @@ foo
 <Foo />
 </App>
       `,
-      options: [{ allow: 'non-jsx' }],
+      options: [{ allow: "non-jsx" }],
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Foo' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Foo" },
         },
       ],
     },
@@ -1331,7 +1330,7 @@ foo
           bar="2"
         >baz</App>
       `,
-      options: [{ allow: 'literal' }],
+      options: [{ allow: "literal" }],
       output: `
         <App
           foo="1"
@@ -1342,8 +1341,8 @@ baz
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'baz' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "baz" },
         },
       ],
     },
@@ -1353,7 +1352,7 @@ baz
         bar
         </App>
       `,
-      options: [{ allow: 'literal' }],
+      options: [{ allow: "literal" }],
       output: `
         <App>
 foo
@@ -1362,8 +1361,8 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'foo        bar        ' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "foo        bar        " },
         },
       ],
     },
@@ -1378,11 +1377,11 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
+          messageId: "moveToNewLine",
           data: { descriptor: '{"foo"}' },
         },
       ],
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
       parserOptions,
     },
     {
@@ -1399,11 +1398,11 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: '<></>' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "<></>" },
         },
       ],
-      features: ['fragment'],
+      features: ["fragment"],
       parserOptions,
     },
     {
@@ -1420,11 +1419,11 @@ foo
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Foo' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Foo" },
         },
       ],
-      features: ['fragment', 'no-ts-old'],
+      features: ["fragment", "no-ts-old"],
       parserOptions,
     },
     {
@@ -1446,18 +1445,18 @@ a
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'a' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "a" },
         },
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: '{a}' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "{a}" },
         },
       ],
       parserOptions,
     },
     {
-    // TODO: handle in a single pass
+      // TODO: handle in a single pass
       code: `
         const IndexPage = () => (
           <h1>{"Hi people"}<button/></h1>
@@ -1471,12 +1470,12 @@ a
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
+          messageId: "moveToNewLine",
           data: { descriptor: '{"Hi people"}' },
         },
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'button' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "button" },
         },
       ],
       parserOptions,
@@ -1498,8 +1497,8 @@ a
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'button' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "button" },
         },
       ],
       parserOptions,
@@ -1527,20 +1526,20 @@ Hi people<button/></h1>
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Welcome to your new Gatsby site.' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Welcome to your new Gatsby site." },
         },
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Now go build something great.' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Now go build something great." },
         },
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Hi people' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Hi people" },
         },
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'button' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "button" },
         },
       ],
       parserOptions,
@@ -1574,8 +1573,8 @@ Hi people
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'button' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "button" },
         },
       ],
       parserOptions,
@@ -1599,12 +1598,12 @@ Hi people
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Link' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Link" },
         },
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Go to page 2' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Go to page 2" },
         },
       ],
       parserOptions,
@@ -1630,8 +1629,8 @@ Go to page 2
       `,
       errors: [
         {
-          messageId: 'moveToNewLine',
-          data: { descriptor: 'Go to page 2' },
+          messageId: "moveToNewLine",
+          data: { descriptor: "Go to page 2" },
         },
       ],
       parserOptions,

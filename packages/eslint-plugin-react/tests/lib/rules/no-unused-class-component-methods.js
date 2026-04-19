@@ -3,19 +3,19 @@
  * @author Paweł Nowak, Berton Zhu
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/no-unused-class-component-methods');
-const parsers = require('../../helpers/parsers');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/no-unused-class-component-methods");
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -26,7 +26,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('no-unused-class-component-methods', rule, {
+ruleTester.run("no-unused-class-component-methods", rule, {
   valid: parsers.all([
     {
       code: `
@@ -39,7 +39,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -123,7 +123,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -158,7 +158,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -172,7 +172,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
     },
     {
       code: `
@@ -184,7 +184,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
     },
     {
       code: `
@@ -196,7 +196,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
     },
     {
       code: `
@@ -205,7 +205,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           anotherAction = () => this.action()
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -216,7 +216,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -265,7 +265,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -288,7 +288,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -299,7 +299,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -310,7 +310,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -321,7 +321,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -332,7 +332,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -343,7 +343,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -489,7 +489,8 @@ ruleTester.run('no-unused-class-component-methods', rule, {
       `,
       errors: [
         {
-          message: 'Unused method or property "getDerivedStateFromProps" of class "Foo"',
+          message:
+            'Unused method or property "getDerivedStateFromProps" of class "Foo"',
           line: 3,
           column: 11,
         },
@@ -504,7 +505,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       errors: [
         {
           message: 'Unused method or property "property" of class "Foo"',
@@ -596,7 +597,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       errors: [
         {
           message: 'Unused method or property "handleClick" of class "Foo"',
@@ -614,7 +615,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       errors: [
         {
           message: 'Unused method or property "action" of class "Foo"',
@@ -708,7 +709,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       errors: [
         {
           message: 'Unused method or property "action" of class "Foo"',
@@ -730,7 +731,8 @@ ruleTester.run('no-unused-class-component-methods', rule, {
        `,
       errors: [
         {
-          message: 'Unused method or property "foo" of class "ClassAssignPropertyInMethodTest"',
+          message:
+            'Unused method or property "foo" of class "ClassAssignPropertyInMethodTest"',
           line: 4,
           column: 19,
         },
@@ -752,7 +754,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           column: 12,
         },
       ],
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -770,7 +772,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           column: 12,
         },
       ],
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -788,7 +790,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           column: 13,
         },
       ],
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -806,7 +808,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           column: 13,
         },
       ],
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -824,7 +826,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           column: 12,
         },
       ],
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -842,7 +844,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           column: 20,
         },
       ],
-      features: ['ts', 'no-babel'],
+      features: ["ts", "no-babel"],
     },
     {
       code: `
@@ -860,7 +862,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           column: 20,
         },
       ],
-      features: ['ts', 'no-babel'],
+      features: ["ts", "no-babel"],
     },
     {
       code: `
@@ -878,7 +880,7 @@ ruleTester.run('no-unused-class-component-methods', rule, {
           column: 20,
         },
       ],
-      features: ['ts', 'no-babel'],
+      features: ["ts", "no-babel"],
     },
   ]),
 });

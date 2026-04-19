@@ -3,23 +3,23 @@
  * @author Evgueni Naverniouk
  */
 
-'use strict';
+"use strict";
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/require-optimization');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/require-optimization");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
 };
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('react-require-optimization', rule, {
+ruleTester.run("react-require-optimization", rule, {
   valid: parsers.all([
     {
       code: `
@@ -51,7 +51,7 @@ ruleTester.run('react-require-optimization', rule, {
           render() {}
         }
       `,
-      features: ['decorators'],
+      features: ["decorators"],
     },
     {
       code: `
@@ -74,7 +74,7 @@ ruleTester.run('react-require-optimization', rule, {
         @reactMixin.decorate(PureRenderMixin)
         class DecoratedComponent extends Component {}
       `,
-      features: ['decorators'],
+      features: ["decorators"],
     },
     {
       code: `
@@ -104,22 +104,22 @@ ruleTester.run('react-require-optimization', rule, {
         @foo
         class DecoratedComponent extends Component {}
       `,
-      features: ['decorators'],
-      options: [{ allowDecorators: ['renderPure', 'pureRender'] }],
+      features: ["decorators"],
+      options: [{ allowDecorators: ["renderPure", "pureRender"] }],
     },
     {
       code: `
         import React from "react";
         class YourComponent extends React.PureComponent {}
       `,
-      options: [{ allowDecorators: ['renderPure', 'pureRender'] }],
+      options: [{ allowDecorators: ["renderPure", "pureRender"] }],
     },
     {
       code: `
         import React, {PureComponent} from "react";
         class YourComponent extends PureComponent {}
       `,
-      options: [{ allowDecorators: ['renderPure', 'pureRender'] }],
+      options: [{ allowDecorators: ["renderPure", "pureRender"] }],
     },
     {
       code: `
@@ -139,8 +139,8 @@ ruleTester.run('react-require-optimization', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ messageId: 'noShouldComponentUpdate' }],
+      features: ["class fields"],
+      errors: [{ messageId: "noShouldComponentUpdate" }],
     },
   ]),
 
@@ -150,7 +150,7 @@ ruleTester.run('react-require-optimization', rule, {
         import React from "react";
         class YourComponent extends React.Component {}
       `,
-      errors: [{ messageId: 'noShouldComponentUpdate' }],
+      errors: [{ messageId: "noShouldComponentUpdate" }],
     },
     {
       code: `
@@ -162,7 +162,7 @@ ruleTester.run('react-require-optimization', rule, {
           }
         }
       `,
-      errors: [{ messageId: 'noShouldComponentUpdate' }],
+      errors: [{ messageId: "noShouldComponentUpdate" }],
     },
     {
       code: `
@@ -174,22 +174,22 @@ ruleTester.run('react-require-optimization', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ messageId: 'noShouldComponentUpdate' }],
+      features: ["class fields"],
+      errors: [{ messageId: "noShouldComponentUpdate" }],
     },
     {
       code: `
         import React, {Component} from "react";
         class YourComponent extends Component {}
       `,
-      errors: [{ messageId: 'noShouldComponentUpdate' }],
+      errors: [{ messageId: "noShouldComponentUpdate" }],
     },
     {
       code: `
         import React from "react";
         createReactClass({})
       `,
-      errors: [{ messageId: 'noShouldComponentUpdate' }],
+      errors: [{ messageId: "noShouldComponentUpdate" }],
     },
     {
       code: `
@@ -198,15 +198,15 @@ ruleTester.run('react-require-optimization', rule, {
           mixins: [RandomMixin]
         })
       `,
-      errors: [{ messageId: 'noShouldComponentUpdate' }],
+      errors: [{ messageId: "noShouldComponentUpdate" }],
     },
     {
       code: `
         @reactMixin.decorate(SomeOtherMixin)
         class DecoratedComponent extends Component {}
       `,
-      errors: [{ messageId: 'noShouldComponentUpdate' }],
-      features: ['decorators'],
+      errors: [{ messageId: "noShouldComponentUpdate" }],
+      features: ["decorators"],
     },
     {
       code: `
@@ -215,9 +215,9 @@ ruleTester.run('react-require-optimization', rule, {
         @foo
         class DecoratedComponent extends Component {}
       `,
-      errors: [{ messageId: 'noShouldComponentUpdate' }],
-      features: ['decorators'],
-      options: [{ allowDecorators: ['renderPure', 'pureRender'] }],
+      errors: [{ messageId: "noShouldComponentUpdate" }],
+      features: ["decorators"],
+      options: [{ allowDecorators: ["renderPure", "pureRender"] }],
     },
   ]),
 });

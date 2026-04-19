@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const plugin = require('../src/index');
+const plugin = require("../src/index");
 
-const legacyConfig = plugin.configs['jsx-runtime'];
+const legacyConfig = plugin.configs["jsx-runtime"];
 
 module.exports = {
   plugins: { react: plugin },
@@ -10,4 +10,4 @@ module.exports = {
   languageOptions: { parserOptions: legacyConfig.parserOptions },
 };
 
-Object.defineProperty(module.exports, 'languageOptions', { enumerable: false });
+Object.defineProperty(module.exports, "languageOptions", { enumerable: false });

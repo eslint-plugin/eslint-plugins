@@ -2,16 +2,16 @@
  * @fileoverview Common propTypes detection functionality.
  */
 
-'use strict';
+"use strict";
 
-const annotations = require('./annotations');
-const propsUtil = require('./props');
-const variableUtil = require('./variable');
-const testFlowVersion = require('./version').testFlowVersion;
-const propWrapperUtil = require('./propWrapper');
-const astUtil = require('./ast');
-const isFirstLetterCapitalized = require('./isFirstLetterCapitalized');
-const eslintUtil = require('./eslint');
+const annotations = require("./annotations");
+const propsUtil = require("./props");
+const variableUtil = require("./variable");
+const testFlowVersion = require("./version").testFlowVersion;
+const propWrapperUtil = require("./propWrapper");
+const astUtil = require("./ast");
+const isFirstLetterCapitalized = require("./isFirstLetterCapitalized");
+const eslintUtil = require("./eslint");
 
 const getFirstTokens = eslintUtil.getFirstTokens;
 const getScope = eslintUtil.getScope;
@@ -26,9 +26,11 @@ const getText = eslintUtil.getText;
 function isFunctionType(node) {
   if (!node) return false;
   const nodeType = node.type;
-  return nodeType === 'FunctionDeclaration'
-    || nodeType === 'FunctionExpression'
-    || nodeType === 'ArrowFunctionExpression';
+  return (
+    nodeType === "FunctionDeclaration" ||
+    nodeType === "FunctionExpression" ||
+    nodeType === "ArrowFunctionExpression"
+  );
 }
 
 /**
@@ -38,7 +40,10 @@ function isFunctionType(node) {
  * @returns {boolean} True if the node is a class with generic prop types, false if not.
  */
 function isSuperTypeParameterPropsDeclaration(node) {
-  if (node && (node.type === 'ClassDeclaration' || node.type === 'ClassExpression')) {
+  if (
+    node &&
+    (node.type === "ClassDeclaration" || node.type === "ClassExpression")
+  ) {
     const parameters = propsUtil.getSuperTypeArguments(node);
     if (parameters && parameters.params.length > 0) {
       return true;
@@ -57,12 +62,15 @@ function isSuperTypeParameterPropsDeclaration(node) {
     argument
  */
 function iterateProperties(context, properties, fn, handleSpreadFn) {
-  if (properties && properties.length && typeof fn === 'function') {
+  if (properties && properties.length && typeof fn === "function") {
     for (let i = 0, j = properties.length; i < j; i++) {
       const node = properties[i];
       const key = astUtil.getKeyValue(context, node);
 
-      if (node.type === 'ObjectTypeSpreadProperty' && typeof handleSpreadFn === 'function') {
+      if (
+        node.type === "ObjectTypeSpreadProperty" &&
+        typeof handleSpreadFn === "function"
+      ) {
         handleSpreadFn(node.argument);
       }
 
@@ -81,7 +89,7 @@ function iterateProperties(context, properties, fn, handleSpreadFn) {
 function isInsideClassBody(node) {
   let parent = node.parent;
   while (parent) {
-    if (parent.type === 'ClassBody') {
+    if (parent.type === "ClassBody") {
       return true;
     }
     parent = parent.parent;
@@ -91,8 +99,8 @@ function isInsideClassBody(node) {
 
 function startWithCapitalizedLetter(node) {
   return (
-    node.parent.type === 'VariableDeclarator'
-    && !isFirstLetterCapitalized(node.parent.id.name)
+    node.parent.type === "VariableDeclarator" &&
+    !isFirstLetterCapitalized(node.parent.id.name)
   );
 }
 
@@ -105,7 +113,20 @@ module.exports = function propTypesInstructions(context, components, utils) {
   const defaults = { customValidators: [] };
   const configuration = Object.assign({}, defaults, context.options[0] || {});
   const customValidators = configuration.customValidators;
-  const allowedGenericTypes = new Set(['ComponentProps', 'ComponentPropsWithRef', 'ComponentPropsWithoutRef', 'forwardRef', 'ForwardRefRenderFunction', 'VFC', 'VoidFunctionComponent', 'PropsWithChildren', 'SFC', 'StatelessComponent', 'FunctionComponent', 'FC']);
+  const allowedGenericTypes = new Set([
+    "ComponentProps",
+    "ComponentPropsWithRef",
+    "ComponentPropsWithoutRef",
+    "forwardRef",
+    "ForwardRefRenderFunction",
+    "VFC",
+    "VoidFunctionComponent",
+    "PropsWithChildren",
+    "SFC",
+    "StatelessComponent",
+    "FunctionComponent",
+    "FC",
+  ]);
   const genericTypeParamIndexWherePropsArePresent = {
     ComponentProps: 0,
     ComponentPropsWithRef: 0,
@@ -166,7 +187,11 @@ module.exports = function propTypesInstructions(context, components, utils) {
   const typeDeclarationBuilders = {
     GenericTypeAnnotation(annotation, parentName, seen) {
       if (getInTypeScope(annotation.id.name)) {
-        return buildTypeAnnotationDeclarationTypes(getInTypeScope(annotation.id.name), parentName, seen);
+        return buildTypeAnnotationDeclarationTypes(
+          getInTypeScope(annotation.id.name),
+          parentName,
+          seen,
+        );
       }
       return {};
     },
@@ -174,18 +199,23 @@ module.exports = function propTypesInstructions(context, components, utils) {
     ObjectTypeAnnotation(annotation, parentName, seen) {
       let containsUnresolvedObjectTypeSpread = false;
       let containsSpread = false;
-      const containsIndexers = !!annotation.indexers && annotation.indexers.length > 0;
+      const containsIndexers =
+        !!annotation.indexers && annotation.indexers.length > 0;
       const shapeTypeDefinition = {
-        type: 'shape',
+        type: "shape",
         children: {},
       };
       iterateProperties(
         context,
         annotation.properties,
         (childKey, childValue, propNode) => {
-          const fullName = [parentName, childKey].join('.');
+          const fullName = [parentName, childKey].join(".");
           if (childKey || childValue) {
-            const types = buildTypeAnnotationDeclarationTypes(childValue, fullName, seen);
+            const types = buildTypeAnnotationDeclarationTypes(
+              childValue,
+              fullName,
+              seen,
+            );
             types.fullName = fullName;
             types.name = childKey;
             types.node = propNode;
@@ -195,19 +225,24 @@ module.exports = function propTypesInstructions(context, components, utils) {
         },
         (spreadNode) => {
           const key = astUtil.getKeyValue(context, spreadNode);
-          const types = buildTypeAnnotationDeclarationTypes(spreadNode, key, seen);
+          const types = buildTypeAnnotationDeclarationTypes(
+            spreadNode,
+            key,
+            seen,
+          );
           if (!types.children) {
             containsUnresolvedObjectTypeSpread = true;
           } else {
             Object.assign(shapeTypeDefinition, types.children);
           }
           containsSpread = true;
-        }
+        },
       );
 
       // Mark if this shape has spread or an indexer. We will know to consider all props from this shape as having propTypes,
       // but still have the ability to detect unused children of this shape.
-      shapeTypeDefinition.containsUnresolvedSpread = containsUnresolvedObjectTypeSpread;
+      shapeTypeDefinition.containsUnresolvedSpread =
+        containsUnresolvedObjectTypeSpread;
       shapeTypeDefinition.containsIndexers = containsIndexers;
       // Deprecated: containsSpread is not used anymore in the codebase, ensure to keep API backward compatibility
       shapeTypeDefinition.containsSpread = containsSpread;
@@ -218,8 +253,10 @@ module.exports = function propTypesInstructions(context, components, utils) {
     UnionTypeAnnotation(annotation, parentName, seen) {
       /** @type {UnionTypeDefinition} */
       const unionTypeDefinition = {
-        type: 'union',
-        children: annotation.types.map((type) => buildTypeAnnotationDeclarationTypes(type, parentName, seen)),
+        type: "union",
+        children: annotation.types.map((type) =>
+          buildTypeAnnotationDeclarationTypes(type, parentName, seen),
+        ),
       };
       if (unionTypeDefinition.children.length === 0) {
         // no complex type found, simply accept everything
@@ -229,13 +266,17 @@ module.exports = function propTypesInstructions(context, components, utils) {
     },
 
     ArrayTypeAnnotation(annotation, parentName, seen) {
-      const fullName = [parentName, '*'].join('.');
-      const child = buildTypeAnnotationDeclarationTypes(annotation.elementType, fullName, seen);
+      const fullName = [parentName, "*"].join(".");
+      const child = buildTypeAnnotationDeclarationTypes(
+        annotation.elementType,
+        fullName,
+        seen,
+      );
       child.fullName = fullName;
-      child.name = '__ANY_KEY__';
+      child.name = "__ANY_KEY__";
       child.node = annotation;
       return {
-        type: 'object',
+        type: "object",
         children: {
           __ANY_KEY__: child,
         },
@@ -255,11 +296,19 @@ module.exports = function propTypesInstructions(context, components, utils) {
    * @returns {ASTNode} The resolved type annotation for the node.
    */
   function resolveTypeAnnotation(node) {
-    let annotation = (node.left && node.left.typeAnnotation) || node.typeAnnotation || node;
-    while (annotation && (annotation.type === 'TypeAnnotation' || annotation.type === 'NullableTypeAnnotation')) {
+    let annotation =
+      (node.left && node.left.typeAnnotation) || node.typeAnnotation || node;
+    while (
+      annotation &&
+      (annotation.type === "TypeAnnotation" ||
+        annotation.type === "NullableTypeAnnotation")
+    ) {
       annotation = annotation.typeAnnotation;
     }
-    if (annotation.type === 'GenericTypeAnnotation' && getInTypeScope(annotation.id.name)) {
+    if (
+      annotation.type === "GenericTypeAnnotation" &&
+      getInTypeScope(annotation.id.name)
+    ) {
       return getInTypeScope(annotation.id.name);
     }
     return annotation;
@@ -275,7 +324,7 @@ module.exports = function propTypesInstructions(context, components, utils) {
    *    the property is declared without the need for further analysis.
    */
   function buildTypeAnnotationDeclarationTypes(annotation, parentName, seen) {
-    if (typeof seen === 'undefined') {
+    if (typeof seen === "undefined") {
       // Keeps track of annotations we've already seen to
       // prevent problems with recursive types.
       seen = new Set();
@@ -287,7 +336,11 @@ module.exports = function propTypesInstructions(context, components, utils) {
     seen.add(annotation);
 
     if (annotation.type in typeDeclarationBuilders) {
-      return typeDeclarationBuilders[annotation.type](annotation, parentName, seen);
+      return typeDeclarationBuilders[annotation.type](
+        annotation,
+        parentName,
+        seen,
+      );
     }
     return {};
   }
@@ -300,31 +353,46 @@ module.exports = function propTypesInstructions(context, components, utils) {
    * @param {Object} declaredPropTypes
    * @returns {boolean} True if propTypes should be ignored (e.g. when a type can't be resolved, when it is imported)
    */
-  function declarePropTypesForObjectTypeAnnotation(propTypes, declaredPropTypes) {
+  function declarePropTypesForObjectTypeAnnotation(
+    propTypes,
+    declaredPropTypes,
+  ) {
     let ignorePropsValidation = false;
 
-    iterateProperties(context, propTypes.properties, (key, value, propNode) => {
-      if (!value) {
-        ignorePropsValidation = ignorePropsValidation || propNode.type !== 'ObjectTypeSpreadProperty';
-        return;
-      }
+    iterateProperties(
+      context,
+      propTypes.properties,
+      (key, value, propNode) => {
+        if (!value) {
+          ignorePropsValidation =
+            ignorePropsValidation ||
+            propNode.type !== "ObjectTypeSpreadProperty";
+          return;
+        }
 
-      const types = buildTypeAnnotationDeclarationTypes(value, key);
-      types.fullName = key;
-      types.name = key;
-      types.node = propNode;
-      types.isRequired = !propNode.optional;
-      declaredPropTypes[key] = types;
-    }, (spreadNode) => {
-      const key = astUtil.getKeyValue(context, spreadNode);
-      const spreadAnnotation = getInTypeScope(key);
-      if (!spreadAnnotation) {
-        ignorePropsValidation = true;
-      } else {
-        const spreadIgnoreValidation = declarePropTypesForObjectTypeAnnotation(spreadAnnotation, declaredPropTypes);
-        ignorePropsValidation = ignorePropsValidation || spreadIgnoreValidation;
-      }
-    });
+        const types = buildTypeAnnotationDeclarationTypes(value, key);
+        types.fullName = key;
+        types.name = key;
+        types.node = propNode;
+        types.isRequired = !propNode.optional;
+        declaredPropTypes[key] = types;
+      },
+      (spreadNode) => {
+        const key = astUtil.getKeyValue(context, spreadNode);
+        const spreadAnnotation = getInTypeScope(key);
+        if (!spreadAnnotation) {
+          ignorePropsValidation = true;
+        } else {
+          const spreadIgnoreValidation =
+            declarePropTypesForObjectTypeAnnotation(
+              spreadAnnotation,
+              declaredPropTypes,
+            );
+          ignorePropsValidation =
+            ignorePropsValidation || spreadIgnoreValidation;
+        }
+      },
+    );
 
     return ignorePropsValidation;
   }
@@ -338,13 +406,19 @@ module.exports = function propTypesInstructions(context, components, utils) {
    * @param {Object} declaredPropTypes
    * @returns {boolean} True if propTypes should be ignored (e.g. when a type can't be resolved, when it is imported)
    */
-  function declarePropTypesForIntersectionTypeAnnotation(propTypes, declaredPropTypes) {
+  function declarePropTypesForIntersectionTypeAnnotation(
+    propTypes,
+    declaredPropTypes,
+  ) {
     return propTypes.types.some((annotation) => {
-      if (annotation.type === 'ObjectTypeAnnotation') {
-        return declarePropTypesForObjectTypeAnnotation(annotation, declaredPropTypes);
+      if (annotation.type === "ObjectTypeAnnotation") {
+        return declarePropTypesForObjectTypeAnnotation(
+          annotation,
+          declaredPropTypes,
+        );
       }
 
-      if (annotation.type === 'UnionTypeAnnotation') {
+      if (annotation.type === "UnionTypeAnnotation") {
         return true;
       }
 
@@ -358,11 +432,17 @@ module.exports = function propTypesInstructions(context, components, utils) {
       if (!typeNode) {
         return true;
       }
-      if (typeNode.type === 'IntersectionTypeAnnotation') {
-        return declarePropTypesForIntersectionTypeAnnotation(typeNode, declaredPropTypes);
+      if (typeNode.type === "IntersectionTypeAnnotation") {
+        return declarePropTypesForIntersectionTypeAnnotation(
+          typeNode,
+          declaredPropTypes,
+        );
       }
 
-      return declarePropTypesForObjectTypeAnnotation(typeNode, declaredPropTypes);
+      return declarePropTypesForObjectTypeAnnotation(
+        typeNode,
+        declaredPropTypes,
+      );
     });
   }
 
@@ -373,14 +453,10 @@ module.exports = function propTypesInstructions(context, components, utils) {
    * @param {Function} callback called with the resolved value only if resolved.
    */
   function resolveValueForIdentifierNode(node, rootNode, callback) {
-    if (
-      rootNode
-      && node
-      && node.type === 'Identifier'
-    ) {
+    if (rootNode && node && node.type === "Identifier") {
       const scope = getScope(context, rootNode);
       const identVariable = scope.variableScope.variables.find(
-        (variable) => variable.name === node.name
+        (variable) => variable.name === node.name,
       );
       if (identVariable) {
         const definition = identVariable.defs[identVariable.defs.length - 1];
@@ -400,10 +476,10 @@ module.exports = function propTypesInstructions(context, components, utils) {
    */
   function buildReactDeclarationTypes(value, parentName, rootNode) {
     if (
-      value
-      && value.callee
-      && value.callee.object
-      && hasCustomValidator(value.callee.object.name)
+      value &&
+      value.callee &&
+      value.callee.object &&
+      hasCustomValidator(value.callee.object.name)
     ) {
       return {};
     }
@@ -426,10 +502,10 @@ module.exports = function propTypesInstructions(context, components, utils) {
     });
 
     if (
-      value
-      && value.type === 'MemberExpression'
-      && value.property
-      && value.property.name === 'isRequired'
+      value &&
+      value.type === "MemberExpression" &&
+      value.property &&
+      value.property.name === "isRequired"
     ) {
       value = value.object;
     }
@@ -448,19 +524,19 @@ module.exports = function propTypesInstructions(context, components, utils) {
 
     // Verify PropTypes that are functions
     if (
-      astUtil.isCallExpression(value)
-      && value.callee
-      && value.callee.property
-      && value.callee.property.name
-      && value.arguments
-      && value.arguments.length > 0
+      astUtil.isCallExpression(value) &&
+      value.callee &&
+      value.callee.property &&
+      value.callee.property.name &&
+      value.arguments &&
+      value.arguments.length > 0
     ) {
       const callName = value.callee.property.name;
       const argument = value.arguments[0];
       switch (callName) {
-        case 'shape':
-        case 'exact': {
-          if (argument.type !== 'ObjectExpression') {
+        case "shape":
+        case "exact": {
+          if (argument.type !== "ObjectExpression") {
             // Invalid proptype or cannot analyse statically
             return {};
           }
@@ -468,45 +544,57 @@ module.exports = function propTypesInstructions(context, components, utils) {
             type: callName,
             children: {},
           };
-          iterateProperties(context, argument.properties, (childKey, childValue, propNode) => {
-            if (childValue) { // skip spread propTypes
-              const fullName = [parentName, childKey].join('.');
-              const types = buildReactDeclarationTypes(childValue, fullName, rootNode);
-              types.fullName = fullName;
-              types.name = childKey;
-              types.node = propNode;
-              shapeTypeDefinition.children[childKey] = types;
-            }
-          });
+          iterateProperties(
+            context,
+            argument.properties,
+            (childKey, childValue, propNode) => {
+              if (childValue) {
+                // skip spread propTypes
+                const fullName = [parentName, childKey].join(".");
+                const types = buildReactDeclarationTypes(
+                  childValue,
+                  fullName,
+                  rootNode,
+                );
+                types.fullName = fullName;
+                types.name = childKey;
+                types.node = propNode;
+                shapeTypeDefinition.children[childKey] = types;
+              }
+            },
+          );
           return shapeTypeDefinition;
         }
-        case 'arrayOf':
-        case 'objectOf': {
-          const fullName = [parentName, '*'].join('.');
-          const child = buildReactDeclarationTypes(argument, fullName, rootNode);
+        case "arrayOf":
+        case "objectOf": {
+          const fullName = [parentName, "*"].join(".");
+          const child = buildReactDeclarationTypes(
+            argument,
+            fullName,
+            rootNode,
+          );
           child.fullName = fullName;
-          child.name = '__ANY_KEY__';
+          child.name = "__ANY_KEY__";
           child.node = argument;
           return {
-            type: 'object',
+            type: "object",
             children: {
               __ANY_KEY__: child,
             },
           };
         }
-        case 'oneOfType': {
-          if (
-            !argument.elements
-            || argument.elements.length === 0
-          ) {
+        case "oneOfType": {
+          if (!argument.elements || argument.elements.length === 0) {
             // Invalid proptype or cannot analyse statically
             return {};
           }
 
           /** @type {UnionTypeDefinition} */
           const unionTypeDefinition = {
-            type: 'union',
-            children: argument.elements.map((element) => buildReactDeclarationTypes(element, parentName, rootNode)),
+            type: "union",
+            children: argument.elements.map((element) =>
+              buildReactDeclarationTypes(element, parentName, rootNode),
+            ),
           };
           if (unionTypeDefinition.children.length === 0) {
             // no complex type found, simply accept everything
@@ -524,16 +612,21 @@ module.exports = function propTypesInstructions(context, components, utils) {
 
   function isValidReactGenericTypeAnnotation(annotation) {
     if (annotation.typeName) {
-      if (annotation.typeName.name) { // if FC<Props>
+      if (annotation.typeName.name) {
+        // if FC<Props>
         const typeName = annotation.typeName.name;
         if (!genericReactTypesImport.has(typeName)) {
           return false;
         }
-      } else if (annotation.typeName.right.name) { // if React.FC<Props>
+      } else if (annotation.typeName.right.name) {
+        // if React.FC<Props>
         const right = annotation.typeName.right.name;
         const left = annotation.typeName.left.name;
 
-        if (!genericReactTypesImport.has(left) || !allowedGenericTypes.has(right)) {
+        if (
+          !genericReactTypesImport.has(left) ||
+          !allowedGenericTypes.has(right)
+        ) {
           return false;
         }
       }
@@ -564,7 +657,8 @@ module.exports = function propTypesInstructions(context, components, utils) {
    */
   function filterInterfaceOrTypeAlias(node) {
     return (
-      astUtil.isTSInterfaceDeclaration(node) || astUtil.isTSTypeAliasDeclaration(node)
+      astUtil.isTSInterfaceDeclaration(node) ||
+      astUtil.isTSTypeAliasDeclaration(node)
     );
   }
 
@@ -576,12 +670,10 @@ module.exports = function propTypesInstructions(context, components, utils) {
    */
   function filterInterfaceOrAliasByName(node, typeName) {
     return (
-      node.id
-      && node.id.name === typeName
-    ) || (
-      node.declaration
-      && node.declaration.id
-      && node.declaration.id.name === typeName
+      (node.id && node.id.name === typeName) ||
+      (node.declaration &&
+        node.declaration.id &&
+        node.declaration.id.name === typeName)
     );
   }
 
@@ -614,7 +706,8 @@ module.exports = function propTypesInstructions(context, components, utils) {
       } else if (astUtil.isTSTypeLiteral(node)) {
         // Check node is an object literal
         if (Array.isArray(node.members)) {
-          this.foundDeclaredPropertiesList = this.foundDeclaredPropertiesList.concat(node.members);
+          this.foundDeclaredPropertiesList =
+            this.foundDeclaredPropertiesList.concat(node.members);
         }
       } else if (astUtil.isTSIntersectionType(node)) {
         this.convertIntersectionTypeToPropTypes(node);
@@ -640,9 +733,14 @@ module.exports = function propTypesInstructions(context, components, utils) {
       if (astUtil.isTSTypeReference(node)) {
         typeName = node.typeName.name;
         const leftMostName = getLeftMostTypeName(node.typeName);
-        const shouldTraverseTypeParams = genericReactTypesImport.has(leftMostName);
+        const shouldTraverseTypeParams =
+          genericReactTypesImport.has(leftMostName);
         const nodeTypeArguments = propsUtil.getTypeArguments(node);
-        if (shouldTraverseTypeParams && nodeTypeArguments && nodeTypeArguments.length !== 0) {
+        if (
+          shouldTraverseTypeParams &&
+          nodeTypeArguments &&
+          nodeTypeArguments.length !== 0
+        ) {
           // All react Generic types are derived from:
           // type PropsWithChildren<P> = P & { children?: ReactNode | undefined }
           // So we should construct an optional children prop
@@ -650,20 +748,19 @@ module.exports = function propTypesInstructions(context, components, utils) {
 
           const rightMostName = getRightMostTypeName(node.typeName);
           if (
-            leftMostName === 'React'
-            && (
-              rightMostName === 'HTMLAttributes'
-              || rightMostName === 'HTMLElement'
-              || rightMostName === 'HTMLProps'
-            )
+            leftMostName === "React" &&
+            (rightMostName === "HTMLAttributes" ||
+              rightMostName === "HTMLElement" ||
+              rightMostName === "HTMLProps")
           ) {
             this.shouldSpecifyClassNameProp = true;
           }
 
           const importedName = localToImportedMap[rightMostName];
-          const idx = genericTypeParamIndexWherePropsArePresent[
-            leftMostName !== rightMostName ? rightMostName : importedName
-          ];
+          const idx =
+            genericTypeParamIndexWherePropsArePresent[
+              leftMostName !== rightMostName ? rightMostName : importedName
+            ];
           const nextNode = nodeTypeArguments.params[idx];
           this.visitTSNode(nextNode);
           return;
@@ -679,7 +776,7 @@ module.exports = function propTypesInstructions(context, components, utils) {
         this.shouldIgnorePropTypes = true;
         return;
       }
-      if (typeName === 'ReturnType') {
+      if (typeName === "ReturnType") {
         this.convertReturnTypeToPropTypes(node, this.rootNode);
         return;
       }
@@ -695,32 +792,36 @@ module.exports = function propTypesInstructions(context, components, utils) {
        * From line 577 to line 581, and line 588 to line 590 are trying to handle typescript-eslint-parser
        * Need to be deprecated after remove typescript-eslint-parser support.
        */
-      const candidateTypes = this.sourceCode.ast.body.filter((item) => astUtil.isTSTypeDeclaration(item));
+      const candidateTypes = this.sourceCode.ast.body.filter((item) =>
+        astUtil.isTSTypeDeclaration(item),
+      );
 
-      const declarations = 
-        candidateTypes.flatMap(
-        (type) => (
-          type.declarations
-          || (
-            type.declaration
-            && type.declaration.declarations
-          )
-          || type.declaration
-        )
+      const declarations = candidateTypes.flatMap(
+        (type) =>
+          type.declarations ||
+          (type.declaration && type.declaration.declarations) ||
+          type.declaration,
       );
 
       // we tried to find either an interface or a type with the TypeReference name
-      const typeDeclaration = declarations.filter((dec) => dec.id.name === typeName);
+      const typeDeclaration = declarations.filter(
+        (dec) => dec.id.name === typeName,
+      );
 
       const interfaceDeclarations = this.sourceCode.ast.body
         .filter(filterInterfaceOrTypeAlias)
         .filter((item) => filterInterfaceOrAliasByName(item, typeName))
-        .map((item) => (item.declaration || item));
+        .map((item) => item.declaration || item);
 
       if (typeDeclaration.length !== 0) {
-        typeDeclaration.map((t) => t.init || t.typeAnnotation).forEach(this.visitTSNode, this);
+        typeDeclaration
+          .map((t) => t.init || t.typeAnnotation)
+          .forEach(this.visitTSNode, this);
       } else if (interfaceDeclarations.length !== 0) {
-        interfaceDeclarations.forEach(this.traverseDeclaredInterfaceOrTypeAlias, this);
+        interfaceDeclarations.forEach(
+          this.traverseDeclaredInterfaceOrTypeAlias,
+          this,
+        );
       } else {
         this.shouldIgnorePropTypes = true;
       }
@@ -734,7 +835,8 @@ module.exports = function propTypesInstructions(context, components, utils) {
     traverseDeclaredInterfaceOrTypeAlias(node) {
       if (astUtil.isTSInterfaceDeclaration(node)) {
         // Handle TSInterfaceDeclaration interface Props { name: string, id: number}, should put in properties list directly;
-        this.foundDeclaredPropertiesList = this.foundDeclaredPropertiesList.concat(node.body.body);
+        this.foundDeclaredPropertiesList =
+          this.foundDeclaredPropertiesList.concat(node.body.body);
       }
       // Handle TSTypeAliasDeclaration type Props = {name:string}
       if (astUtil.isTSTypeAliasDeclaration(node)) {
@@ -772,10 +874,16 @@ module.exports = function propTypesInstructions(context, components, utils) {
           }
           // Handle ReturnType<typeof mapStateToProps>
           if (astUtil.isTSTypeQuery(returnType)) {
-            const returnTypeFunction = flatMap(this.sourceCode.ast.body
-              .filter((item) => item.type === 'VariableDeclaration'
-                && item.declarations.find((dec) => dec.id.name === returnType.exprName.name)
-              ), (type) => type.declarations).map((dec) => dec.init);
+            const returnTypeFunction = flatMap(
+              this.sourceCode.ast.body.filter(
+                (item) =>
+                  item.type === "VariableDeclaration" &&
+                  item.declarations.find(
+                    (dec) => dec.id.name === returnType.exprName.name,
+                  ),
+              ),
+              (type) => type.declarations,
+            ).map((dec) => dec.init);
 
             if (Array.isArray(returnTypeFunction)) {
               if (returnTypeFunction.length === 0) {
@@ -786,38 +894,51 @@ module.exports = function propTypesInstructions(context, components, utils) {
               returnTypeFunction.forEach((func) => {
                 if (isFunctionType(func)) {
                   let res = func.body;
-                  if (res.type === 'BlockStatement') {
+                  if (res.type === "BlockStatement") {
                     res = astUtil.findReturnStatement(func);
                     if (res) {
                       res = res.argument;
                     }
                   }
                   switch (res.type) {
-                    case 'ObjectExpression':
-                      iterateProperties(context, res.properties, (key, value, propNode) => {
-                        if (propNode && astUtil.isCallExpression(propNode.argument)) {
-                          const propNodeTypeArguments = propsUtil.getTypeArguments(propNode.argument);
-                          if (propNodeTypeArguments) {
-                            this.visitTSNode(propNodeTypeArguments);
-                          } else {
-                            // Ignore this CallExpression return value since it doesn't have any typeParameters to let us know it's types.
+                    case "ObjectExpression":
+                      iterateProperties(
+                        context,
+                        res.properties,
+                        (key, value, propNode) => {
+                          if (
+                            propNode &&
+                            astUtil.isCallExpression(propNode.argument)
+                          ) {
+                            const propNodeTypeArguments =
+                              propsUtil.getTypeArguments(propNode.argument);
+                            if (propNodeTypeArguments) {
+                              this.visitTSNode(propNodeTypeArguments);
+                            } else {
+                              // Ignore this CallExpression return value since it doesn't have any typeParameters to let us know it's types.
+                              this.shouldIgnorePropTypes = true;
+                              return;
+                            }
+                          }
+                          if (!value) {
                             this.shouldIgnorePropTypes = true;
                             return;
                           }
-                        }
-                        if (!value) {
-                          this.shouldIgnorePropTypes = true;
-                          return;
-                        }
-                        const types = buildReactDeclarationTypes(value, key, rootNode);
-                        types.fullName = key;
-                        types.name = key;
-                        types.node = propNode;
-                        types.isRequired = propsUtil.isRequiredPropType(value);
-                        this.declaredPropTypes[key] = types;
-                      });
+                          const types = buildReactDeclarationTypes(
+                            value,
+                            key,
+                            rootNode,
+                          );
+                          types.fullName = key;
+                          types.name = key;
+                          types.node = propNode;
+                          types.isRequired =
+                            propsUtil.isRequiredPropType(value);
+                          this.declaredPropTypes[key] = types;
+                        },
+                      );
                       break;
-                    case 'CallExpression':
+                    case "CallExpression":
                       if (propsUtil.getTypeArguments(res)) {
                         this.visitTSNode(propsUtil.getTypeArguments(res));
                       } else {
@@ -853,27 +974,31 @@ module.exports = function propTypesInstructions(context, components, utils) {
     endAndStructDeclaredPropTypes() {
       if (this.shouldSpecifyOptionalChildrenProps) {
         this.declaredPropTypes.children = {
-          fullName: 'children',
-          name: 'children',
+          fullName: "children",
+          name: "children",
           isRequired: false,
         };
       }
       if (this.shouldSpecifyClassNameProp) {
         this.declaredPropTypes.className = {
-          fullName: 'className',
-          name: 'className',
+          fullName: "className",
+          name: "className",
           isRequired: false,
         };
       }
 
       this.foundDeclaredPropertiesList.forEach((tsInterfaceBody) => {
-        if (tsInterfaceBody && (tsInterfaceBody.type === 'TSPropertySignature' || tsInterfaceBody.type === 'TSMethodSignature')) {
-          let accessor = 'name';
-          if (tsInterfaceBody.key.type === 'Literal') {
-            if (typeof tsInterfaceBody.key.value === 'number') {
-              accessor = 'raw';
+        if (
+          tsInterfaceBody &&
+          (tsInterfaceBody.type === "TSPropertySignature" ||
+            tsInterfaceBody.type === "TSMethodSignature")
+        ) {
+          let accessor = "name";
+          if (tsInterfaceBody.key.type === "Literal") {
+            if (typeof tsInterfaceBody.key.value === "number") {
+              accessor = "raw";
             } else {
-              accessor = 'value';
+              accessor = "value";
             }
           }
           this.declaredPropTypes[tsInterfaceBody.key[accessor]] = {
@@ -900,35 +1025,43 @@ module.exports = function propTypesInstructions(context, components, utils) {
     }
     const component = components.get(componentNode);
     let declaredPropTypes = (component && component.declaredPropTypes) || {};
-    let ignorePropsValidation = (component && component.ignorePropsValidation) || false;
+    let ignorePropsValidation =
+      (component && component.ignorePropsValidation) || false;
     switch (propTypes && propTypes.type) {
-      case 'ObjectTypeAnnotation':
-        ignorePropsValidation = declarePropTypesForObjectTypeAnnotation(propTypes, declaredPropTypes);
+      case "ObjectTypeAnnotation":
+        ignorePropsValidation = declarePropTypesForObjectTypeAnnotation(
+          propTypes,
+          declaredPropTypes,
+        );
         break;
-      case 'ObjectExpression':
-        iterateProperties(context, propTypes.properties, (key, value, propNode) => {
-          if (!value) {
-            ignorePropsValidation = true;
-            return;
-          }
-          const types = buildReactDeclarationTypes(value, key, rootNode);
-          types.fullName = key;
-          types.name = key;
-          types.node = propNode;
-          types.isRequired = propsUtil.isRequiredPropType(value);
-          declaredPropTypes[key] = types;
-        });
+      case "ObjectExpression":
+        iterateProperties(
+          context,
+          propTypes.properties,
+          (key, value, propNode) => {
+            if (!value) {
+              ignorePropsValidation = true;
+              return;
+            }
+            const types = buildReactDeclarationTypes(value, key, rootNode);
+            types.fullName = key;
+            types.name = key;
+            types.node = propNode;
+            types.isRequired = propsUtil.isRequiredPropType(value);
+            declaredPropTypes[key] = types;
+          },
+        );
         break;
-      case 'MemberExpression': {
+      case "MemberExpression": {
         let curDeclaredPropTypes = declaredPropTypes;
         // Walk the list of properties, until we reach the assignment
         // ie: ClassX.propTypes.a.b.c = ...
         while (
-          propTypes
-          && propTypes.parent
-          && propTypes.parent.type !== 'AssignmentExpression'
-          && propTypes.property
-          && curDeclaredPropTypes
+          propTypes &&
+          propTypes.parent &&
+          propTypes.parent.type !== "AssignmentExpression" &&
+          propTypes.property &&
+          curDeclaredPropTypes
         ) {
           const propName = propTypes.property.name;
           if (propName in curDeclaredPropTypes) {
@@ -941,28 +1074,44 @@ module.exports = function propTypesInstructions(context, components, utils) {
           }
         }
         if (propTypes && propTypes.parent && propTypes.property) {
-          if (!(propTypes === propTypes.parent.left && propTypes.parent.left.object)) {
+          if (
+            !(
+              propTypes === propTypes.parent.left &&
+              propTypes.parent.left.object
+            )
+          ) {
             ignorePropsValidation = true;
             break;
           }
-          const parentProp = getText(context, propTypes.parent.left.object).replace(/^.*\.propTypes\./, '');
+          const parentProp = getText(
+            context,
+            propTypes.parent.left.object,
+          ).replace(/^.*\.propTypes\./, "");
           const types = buildReactDeclarationTypes(
             propTypes.parent.right,
             parentProp,
-            rootNode
+            rootNode,
           );
 
           types.name = propTypes.property.name;
-          types.fullName = [parentProp, propTypes.property.name].join('.');
+          types.fullName = [parentProp, propTypes.property.name].join(".");
           types.node = propTypes.parent;
-          types.isRequired = propsUtil.isRequiredPropType(propTypes.parent.right);
+          types.isRequired = propsUtil.isRequiredPropType(
+            propTypes.parent.right,
+          );
           curDeclaredPropTypes[propTypes.property.name] = types;
         } else {
           let isUsedInPropTypes = false;
           let n = propTypes;
           while (n) {
-            if (((n.type === 'AssignmentExpression') && propsUtil.isPropTypesDeclaration(n.left))
-              || ((n.type === 'ClassProperty' || n.type === 'PropertyDefinition' || n.type === 'Property') && propsUtil.isPropTypesDeclaration(n))) {
+            if (
+              (n.type === "AssignmentExpression" &&
+                propsUtil.isPropTypesDeclaration(n.left)) ||
+              ((n.type === "ClassProperty" ||
+                n.type === "PropertyDefinition" ||
+                n.type === "Property") &&
+                propsUtil.isPropTypesDeclaration(n))
+            ) {
               // Found a propType used inside of another propType. This is not considered usage, we'll still validate
               // this component.
               isUsedInPropTypes = true;
@@ -976,49 +1125,67 @@ module.exports = function propTypesInstructions(context, components, utils) {
         }
         break;
       }
-      case 'Identifier': {
-        const firstMatchingVariable = variableUtil.getVariableFromContext(context, node, propTypes.name);
+      case "Identifier": {
+        const firstMatchingVariable = variableUtil.getVariableFromContext(
+          context,
+          node,
+          propTypes.name,
+        );
         if (firstMatchingVariable) {
-          const defInScope = firstMatchingVariable.defs[firstMatchingVariable.defs.length - 1];
-          markPropTypesAsDeclared(node, defInScope.node && defInScope.node.init, rootNode);
+          const defInScope =
+            firstMatchingVariable.defs[firstMatchingVariable.defs.length - 1];
+          markPropTypesAsDeclared(
+            node,
+            defInScope.node && defInScope.node.init,
+            rootNode,
+          );
           return;
         }
         ignorePropsValidation = true;
         break;
       }
-      case 'CallExpression': {
+      case "CallExpression": {
         if (
           propWrapperUtil.isPropWrapperFunction(
             context,
-            getText(context, propTypes.callee)
-          )
-          && propTypes.arguments && propTypes.arguments[0]
+            getText(context, propTypes.callee),
+          ) &&
+          propTypes.arguments &&
+          propTypes.arguments[0]
         ) {
           markPropTypesAsDeclared(node, propTypes.arguments[0], rootNode);
           return;
         }
         break;
       }
-      case 'IntersectionTypeAnnotation':
-        ignorePropsValidation = declarePropTypesForIntersectionTypeAnnotation(propTypes, declaredPropTypes);
+      case "IntersectionTypeAnnotation":
+        ignorePropsValidation = declarePropTypesForIntersectionTypeAnnotation(
+          propTypes,
+          declaredPropTypes,
+        );
         break;
-      case 'GenericTypeAnnotation':
-        if (propTypes.id.name === '$ReadOnly') {
+      case "GenericTypeAnnotation":
+        if (propTypes.id.name === "$ReadOnly") {
           const propTypeArguments = propsUtil.getTypeArguments(propTypes);
           ignorePropsValidation = declarePropTypesForObjectTypeAnnotation(
             propTypeArguments.params[0],
-            declaredPropTypes
+            declaredPropTypes,
           );
         } else {
           ignorePropsValidation = true;
         }
         break;
-      case 'TSTypeReference':
-      case 'TSTypeAnnotation': {
-        const tsTypeAnnotation = new DeclarePropTypesForTSTypeAnnotation(propTypes, declaredPropTypes, rootNode);
-        ignorePropsValidation = tsTypeAnnotation.shouldIgnorePropTypes;
-        declaredPropTypes = tsTypeAnnotation.declaredPropTypes;
-      }
+      case "TSTypeReference":
+      case "TSTypeAnnotation":
+        {
+          const tsTypeAnnotation = new DeclarePropTypesForTSTypeAnnotation(
+            propTypes,
+            declaredPropTypes,
+            rootNode,
+          );
+          ignorePropsValidation = tsTypeAnnotation.shouldIgnorePropTypes;
+          declaredPropTypes = tsTypeAnnotation.declaredPropTypes;
+        }
         break;
       case null:
         break;
@@ -1049,21 +1216,22 @@ module.exports = function propTypesInstructions(context, components, utils) {
     }
 
     if (
-      node.parent
-      && node.parent.callee
-      && propTypesArguments
-      && propTypesArguments.params
-      && (
-        node.parent.callee.name === 'forwardRef' || (
-          node.parent.callee.object
-          && node.parent.callee.property
-          && node.parent.callee.object.name === 'React'
-          && node.parent.callee.property.name === 'forwardRef'
-        )
-      )
+      node.parent &&
+      node.parent.callee &&
+      propTypesArguments &&
+      propTypesArguments.params &&
+      (node.parent.callee.name === "forwardRef" ||
+        (node.parent.callee.object &&
+          node.parent.callee.property &&
+          node.parent.callee.object.name === "React" &&
+          node.parent.callee.property.name === "forwardRef"))
     ) {
       const declaredPropTypes = {};
-      const obj = new DeclarePropTypesForTSTypeAnnotation(propTypesArguments.params[1], declaredPropTypes, rootNode);
+      const obj = new DeclarePropTypesForTSTypeAnnotation(
+        propTypesArguments.params[1],
+        declaredPropTypes,
+        rootNode,
+      );
       components.set(node, {
         declaredPropTypes: obj.declaredPropTypes,
         ignorePropsValidation: obj.shouldIgnorePropTypes,
@@ -1072,8 +1240,12 @@ module.exports = function propTypesInstructions(context, components, utils) {
     }
 
     const siblingIdentifier = node.parent && node.parent.id;
-    const siblingHasTypeAnnotation = siblingIdentifier && siblingIdentifier.typeAnnotation;
-    const isNodeAnnotated = annotations.isAnnotatedFunctionPropsDeclaration(node, context);
+    const siblingHasTypeAnnotation =
+      siblingIdentifier && siblingIdentifier.typeAnnotation;
+    const isNodeAnnotated = annotations.isAnnotatedFunctionPropsDeclaration(
+      node,
+      context,
+    );
 
     if (!isNodeAnnotated && !siblingHasTypeAnnotation) {
       return;
@@ -1091,10 +1263,18 @@ module.exports = function propTypesInstructions(context, components, utils) {
 
     if (isNodeAnnotated) {
       const param = node.params[0];
-      if (param.typeAnnotation && param.typeAnnotation.typeAnnotation && param.typeAnnotation.typeAnnotation.type === 'UnionTypeAnnotation') {
+      if (
+        param.typeAnnotation &&
+        param.typeAnnotation.typeAnnotation &&
+        param.typeAnnotation.typeAnnotation.type === "UnionTypeAnnotation"
+      ) {
         param.typeAnnotation.typeAnnotation.types.forEach((annotation) => {
-          if (annotation.type === 'GenericTypeAnnotation') {
-            markPropTypesAsDeclared(node, resolveTypeAnnotation(annotation), rootNode);
+          if (annotation.type === "GenericTypeAnnotation") {
+            markPropTypesAsDeclared(
+              node,
+              resolveTypeAnnotation(annotation),
+              rootNode,
+            );
           } else {
             markPropTypesAsDeclared(node, annotation, rootNode);
           }
@@ -1107,16 +1287,20 @@ module.exports = function propTypesInstructions(context, components, utils) {
       const annotation = siblingIdentifier.typeAnnotation.typeAnnotation;
 
       if (
-        annotation
-        && annotation.type !== 'TSTypeReference'
-        && propsUtil.getTypeArguments(annotation) == null
+        annotation &&
+        annotation.type !== "TSTypeReference" &&
+        propsUtil.getTypeArguments(annotation) == null
       ) {
         return;
       }
 
       if (!isValidReactGenericTypeAnnotation(annotation)) return;
 
-      markPropTypesAsDeclared(node, resolveTypeAnnotation(siblingIdentifier), rootNode);
+      markPropTypesAsDeclared(
+        node,
+        resolveTypeAnnotation(siblingIdentifier),
+        rootNode,
+      );
     }
   }
 
@@ -1133,18 +1317,26 @@ module.exports = function propTypesInstructions(context, components, utils) {
     try {
       // Flow <=0.52 had 3 required TypedParameters of which the second one is the Props.
       // Flow >=0.53 has 2 optional TypedParameters of which the first one is the Props.
-      propsParameterPosition = testFlowVersion(context, '>= 0.53.0') ? 0 : 1;
+      propsParameterPosition = testFlowVersion(context, ">= 0.53.0") ? 0 : 1;
     } catch (e) {
       // In case there is no flow version defined, we can safely assume that when there are 3 Props we are dealing with version <= 0.52
       propsParameterPosition = parameters.params.length <= 2 ? 0 : 1;
     }
 
     let annotation = parameters.params[propsParameterPosition];
-    while (annotation && (annotation.type === 'TypeAnnotation' || annotation.type === 'NullableTypeAnnotation')) {
+    while (
+      annotation &&
+      (annotation.type === "TypeAnnotation" ||
+        annotation.type === "NullableTypeAnnotation")
+    ) {
       annotation = annotation.typeAnnotation;
     }
 
-    if (annotation && annotation.type === 'GenericTypeAnnotation' && getInTypeScope(annotation.id.name)) {
+    if (
+      annotation &&
+      annotation.type === "GenericTypeAnnotation" &&
+      getInTypeScope(annotation.id.name)
+    ) {
       return getInTypeScope(annotation.id.name);
     }
     return annotation;
@@ -1156,13 +1348,15 @@ module.exports = function propTypesInstructions(context, components, utils) {
    * @returns {boolean} True if the node is a type annotated props declaration, false if not.
    */
   function isAnnotatedClassPropsDeclaration(node) {
-    if (node && (node.type === 'ClassProperty' || node.type === 'PropertyDefinition')) {
+    if (
+      node &&
+      (node.type === "ClassProperty" || node.type === "PropertyDefinition")
+    ) {
       const tokens = getFirstTokens(context, node, 2);
       if (
-        node.typeAnnotation && (
-          tokens[0].value === 'props'
-          || (tokens[1] && tokens[1].value === 'props')
-        )
+        node.typeAnnotation &&
+        (tokens[0].value === "props" ||
+          (tokens[1] && tokens[1].value === "props"))
       ) {
         return true;
       }
@@ -1180,11 +1374,15 @@ module.exports = function propTypesInstructions(context, components, utils) {
 
     ClassDeclaration(node) {
       if (isSuperTypeParameterPropsDeclaration(node)) {
-        markPropTypesAsDeclared(node, resolveSuperParameterPropsType(node), node);
+        markPropTypesAsDeclared(
+          node,
+          resolveSuperParameterPropsType(node),
+          node,
+        );
       }
     },
 
-    'ClassProperty, PropertyDefinition'(node) {
+    "ClassProperty, PropertyDefinition"(node) {
       if (isAnnotatedClassPropsDeclaration(node)) {
         markPropTypesAsDeclared(node, resolveTypeAnnotation(node), node);
       } else if (propsUtil.isPropTypesDeclaration(node)) {
@@ -1203,26 +1401,29 @@ module.exports = function propTypesInstructions(context, components, utils) {
     },
 
     FunctionExpression(node) {
-      if (node.parent.type !== 'MethodDefinition') {
+      if (node.parent.type !== "MethodDefinition") {
         markAnnotatedFunctionArgumentsAsDeclared(node, node);
       }
     },
 
     ImportDeclaration(node) {
       // parse `import ... from 'react`
-      if (node.source.value === 'react') {
+      if (node.source.value === "react") {
         node.specifiers.forEach((specifier) => {
           if (
             // handles import * as X from 'react'
-            specifier.type === 'ImportNamespaceSpecifier'
+            specifier.type === "ImportNamespaceSpecifier" ||
             // handles import React from 'react'
-            || specifier.type === 'ImportDefaultSpecifier'
+            specifier.type === "ImportDefaultSpecifier"
           ) {
             genericReactTypesImport.add(specifier.local.name);
           }
 
           // handles import { FC } from 'react' or import { FC as X } from 'react'
-          if (specifier.type === 'ImportSpecifier' && allowedGenericTypes.has(specifier.imported.name)) {
+          if (
+            specifier.type === "ImportSpecifier" &&
+            allowedGenericTypes.has(specifier.imported.name)
+          ) {
             genericReactTypesImport.add(specifier.local.name);
             localToImportedMap[specifier.local.name] = specifier.imported.name;
           }
@@ -1241,21 +1442,31 @@ module.exports = function propTypesInstructions(context, components, utils) {
           return;
         }
         try {
-          markPropTypesAsDeclared(component.node, node.parent.right || node.parent, node);
+          markPropTypesAsDeclared(
+            component.node,
+            node.parent.right || node.parent,
+            node,
+          );
         } catch (e) {
-          if (e.constructor !== RangeError) { throw e; }
+          if (e.constructor !== RangeError) {
+            throw e;
+          }
         }
       }
     },
 
     MethodDefinition(node) {
-      if (!node.static || node.kind !== 'get' || !propsUtil.isPropTypesDeclaration(node)) {
+      if (
+        !node.static ||
+        node.kind !== "get" ||
+        !propsUtil.isPropTypesDeclaration(node)
+      ) {
         return;
       }
 
       let i = node.value.body.body.length - 1;
       for (; i >= 0; i--) {
-        if (node.value.body.body[i].type === 'ReturnStatement') {
+        if (node.value.body.body[i].type === "ReturnStatement") {
           break;
         }
       }
@@ -1273,7 +1484,10 @@ module.exports = function propTypesInstructions(context, components, utils) {
       const identifier = node.params[0];
 
       if (identifier.typeAnnotation) {
-        setInTypeScope(identifier.name, identifier.typeAnnotation.typeAnnotation);
+        setInTypeScope(
+          identifier.name,
+          identifier.typeAnnotation.typeAnnotation,
+        );
       }
     },
 
@@ -1285,14 +1499,18 @@ module.exports = function propTypesInstructions(context, components, utils) {
       stack.push(Object.create(typeScope()));
     },
 
-    'BlockStatement:exit'() {
+    "BlockStatement:exit"() {
       stack.pop();
     },
 
-    'Program:exit'() {
+    "Program:exit"() {
       classExpressions.forEach((node) => {
         if (isSuperTypeParameterPropsDeclaration(node)) {
-          markPropTypesAsDeclared(node, resolveSuperParameterPropsType(node), node);
+          markPropTypesAsDeclared(
+            node,
+            resolveSuperParameterPropsType(node),
+            node,
+          );
         }
       });
     },

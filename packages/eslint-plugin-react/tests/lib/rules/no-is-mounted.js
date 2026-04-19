@@ -3,20 +3,20 @@
  * @author Joe Lencioni
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/no-is-mounted');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/no-is-mounted");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('no-is-mounted', rule, {
+ruleTester.run("no-is-mounted", rule, {
   valid: parsers.all([
     {
       code: `
@@ -84,7 +84,7 @@ ruleTester.run('no-is-mounted', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'noIsMounted' }],
+      errors: [{ messageId: "noIsMounted" }],
     },
     {
       code: `
@@ -99,7 +99,7 @@ ruleTester.run('no-is-mounted', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'noIsMounted' }],
+      errors: [{ messageId: "noIsMounted" }],
     },
     {
       code: `
@@ -114,7 +114,7 @@ ruleTester.run('no-is-mounted', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'noIsMounted' }],
+      errors: [{ messageId: "noIsMounted" }],
     },
   ]),
 });

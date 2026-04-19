@@ -4,11 +4,11 @@
  * @author Joe Lencioni
  */
 
-'use strict';
+"use strict";
 
-const docsUrl = require('../util/docsUrl');
-const isCreateElement = require('../util/isCreateElement');
-const report = require('../util/report');
+const docsUrl = require("../util/docsUrl");
+const isCreateElement = require("../util/isCreateElement");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -43,16 +43,18 @@ function isVoidDOMElement(elementName) {
 // Rule Definition
 // ------------------------------------------------------------------------------
 
-const noChildrenInVoidEl = 'Void DOM element <{{element}} /> cannot receive children.';
+const noChildrenInVoidEl =
+  "Void DOM element <{{element}} /> cannot receive children.";
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow void DOM elements (e.g. `<img />`, `<br />`) from receiving children',
-      category: 'Best Practices',
+      description:
+        "Disallow void DOM elements (e.g. `<img />`, `<br />`) from receiving children",
+      category: "Best Practices",
       recommended: false,
-      url: docsUrl('void-dom-elements-no-children'),
+      url: docsUrl("void-dom-elements-no-children"),
     },
 
     messages: {
@@ -73,7 +75,7 @@ module.exports = {
 
       if (node.children.length > 0) {
         // e.g. <br>Foo</br>
-        report(context, noChildrenInVoidEl, 'noChildrenInVoidEl', {
+        report(context, noChildrenInVoidEl, "noChildrenInVoidEl", {
           node,
           data: {
             element: elementName,
@@ -88,12 +90,15 @@ module.exports = {
           return false;
         }
 
-        return attribute.name.name === 'children' || attribute.name.name === 'dangerouslySetInnerHTML';
+        return (
+          attribute.name.name === "children" ||
+          attribute.name.name === "dangerouslySetInnerHTML"
+        );
       });
 
       if (hasChildrenAttributeOrDanger) {
         // e.g. <br children="Foo" />
-        report(context, noChildrenInVoidEl, 'noChildrenInVoidEl', {
+        report(context, noChildrenInVoidEl, "noChildrenInVoidEl", {
           node,
           data: {
             element: elementName,
@@ -103,7 +108,10 @@ module.exports = {
     },
 
     CallExpression(node) {
-      if (node.callee.type !== 'MemberExpression' && node.callee.type !== 'Identifier') {
+      if (
+        node.callee.type !== "MemberExpression" &&
+        node.callee.type !== "Identifier"
+      ) {
         return;
       }
 
@@ -118,21 +126,21 @@ module.exports = {
         return;
       }
 
-      const elementName = 'value' in args[0] ? args[0].value : undefined;
+      const elementName = "value" in args[0] ? args[0].value : undefined;
 
       if (!isVoidDOMElement(elementName)) {
         // e.g. React.createElement('div');
         return;
       }
 
-      if (args.length < 2 || args[1].type !== 'ObjectExpression') {
+      if (args.length < 2 || args[1].type !== "ObjectExpression") {
         return;
       }
 
       const firstChild = args[2];
       if (firstChild) {
         // e.g. React.createElement('br', undefined, 'Foo')
-        report(context, noChildrenInVoidEl, 'noChildrenInVoidEl', {
+        report(context, noChildrenInVoidEl, "noChildrenInVoidEl", {
           node,
           data: {
             element: elementName,
@@ -143,16 +151,19 @@ module.exports = {
       const props = args[1].properties;
 
       const hasChildrenPropOrDanger = props.some((prop) => {
-        if (!('key' in prop) || !prop.key || !('name' in prop.key)) {
+        if (!("key" in prop) || !prop.key || !("name" in prop.key)) {
           return false;
         }
 
-        return prop.key.name === 'children' || prop.key.name === 'dangerouslySetInnerHTML';
+        return (
+          prop.key.name === "children" ||
+          prop.key.name === "dangerouslySetInnerHTML"
+        );
       });
 
       if (hasChildrenPropOrDanger) {
         // e.g. React.createElement('br', { children: 'Foo' })
-        report(context, noChildrenInVoidEl, 'noChildrenInVoidEl', {
+        report(context, noChildrenInVoidEl, "noChildrenInVoidEl", {
           node,
           data: {
             element: elementName,

@@ -3,20 +3,20 @@
  * @author Tom Hastjarjanto
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/no-string-refs');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/no-string-refs");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('no-refs', rule, {
+ruleTester.run("no-refs", rule, {
   valid: parsers.all([
     {
       code: `
@@ -70,7 +70,7 @@ ruleTester.run('no-refs', rule, {
           }
         });
       `,
-      settings: { react: { version: '18.3.0' } },
+      settings: { react: { version: "18.3.0" } },
     },
   ]),
 
@@ -86,8 +86,8 @@ ruleTester.run('no-refs', rule, {
           }
         });
       `,
-      settings: { react: { version: '18.2.0' } },
-      errors: [{ messageId: 'thisRefsDeprecated' }],
+      settings: { react: { version: "18.2.0" } },
+      errors: [{ messageId: "thisRefsDeprecated" }],
     },
     {
       code: `
@@ -97,8 +97,8 @@ ruleTester.run('no-refs', rule, {
           }
         });
       `,
-      settings: { react: { version: '18.2.0' } },
-      errors: [{ messageId: 'stringInRefDeprecated' }],
+      settings: { react: { version: "18.2.0" } },
+      errors: [{ messageId: "stringInRefDeprecated" }],
     },
     {
       code: `
@@ -108,8 +108,8 @@ ruleTester.run('no-refs', rule, {
           }
         });
       `,
-      settings: { react: { version: '18.2.0' } },
-      errors: [{ messageId: 'stringInRefDeprecated' }],
+      settings: { react: { version: "18.2.0" } },
+      errors: [{ messageId: "stringInRefDeprecated" }],
     },
     {
       code: `
@@ -122,10 +122,10 @@ ruleTester.run('no-refs', rule, {
           }
         });
       `,
-      settings: { react: { version: '18.2.0' } },
+      settings: { react: { version: "18.2.0" } },
       errors: [
-        { messageId: 'thisRefsDeprecated' },
-        { messageId: 'stringInRefDeprecated' },
+        { messageId: "thisRefsDeprecated" },
+        { messageId: "stringInRefDeprecated" },
       ],
     },
     {
@@ -140,10 +140,10 @@ ruleTester.run('no-refs', rule, {
         });
       `,
       options: [{ noTemplateLiterals: true }],
-      settings: { react: { version: '18.2.0' } },
+      settings: { react: { version: "18.2.0" } },
       errors: [
-        { messageId: 'thisRefsDeprecated' },
-        { messageId: 'stringInRefDeprecated' },
+        { messageId: "thisRefsDeprecated" },
+        { messageId: "stringInRefDeprecated" },
       ],
     },
     {
@@ -158,10 +158,10 @@ ruleTester.run('no-refs', rule, {
         });
       `,
       options: [{ noTemplateLiterals: true }],
-      settings: { react: { version: '18.2.0' } },
+      settings: { react: { version: "18.2.0" } },
       errors: [
-        { messageId: 'thisRefsDeprecated' },
-        { messageId: 'stringInRefDeprecated' },
+        { messageId: "thisRefsDeprecated" },
+        { messageId: "stringInRefDeprecated" },
       ],
     },
     {
@@ -176,10 +176,8 @@ ruleTester.run('no-refs', rule, {
         });
       `,
       options: [{ noTemplateLiterals: true }],
-      settings: { react: { version: '18.3.0' } },
-      errors: [
-        { messageId: 'stringInRefDeprecated' },
-      ],
+      settings: { react: { version: "18.3.0" } },
+      errors: [{ messageId: "stringInRefDeprecated" }],
     },
   ]),
 });

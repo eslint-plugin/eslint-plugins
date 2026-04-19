@@ -3,20 +3,20 @@
  * @author Dan Hamilton
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/prefer-es6-class');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/prefer-es6-class");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('prefer-es6-class', rule, {
+ruleTester.run("prefer-es6-class", rule, {
   valid: parsers.all([
     {
       code: `
@@ -63,7 +63,7 @@ ruleTester.run('prefer-es6-class', rule, {
           }
         });
       `,
-      options: ['never'],
+      options: ["never"],
     },
     {
       code: `
@@ -73,7 +73,7 @@ ruleTester.run('prefer-es6-class', rule, {
           }
         }
       `,
-      options: ['always'],
+      options: ["always"],
     },
   ]),
 
@@ -87,7 +87,7 @@ ruleTester.run('prefer-es6-class', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'shouldUseES6Class' }],
+      errors: [{ messageId: "shouldUseES6Class" }],
     },
     {
       code: `
@@ -97,8 +97,8 @@ ruleTester.run('prefer-es6-class', rule, {
           }
         });
       `,
-      options: ['always'],
-      errors: [{ messageId: 'shouldUseES6Class' }],
+      options: ["always"],
+      errors: [{ messageId: "shouldUseES6Class" }],
     },
     {
       code: `
@@ -108,8 +108,8 @@ ruleTester.run('prefer-es6-class', rule, {
           }
         }
       `,
-      options: ['never'],
-      errors: [{ messageId: 'shouldUseCreateClass' }],
+      options: ["never"],
+      errors: [{ messageId: "shouldUseCreateClass" }],
     },
   ]),
 });

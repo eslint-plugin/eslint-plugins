@@ -3,23 +3,23 @@
  * @author Scott Andrews
  */
 
-'use strict';
+"use strict";
 
-const minimatch = require('minimatch');
+const minimatch = require("minimatch");
 
-const docsUrl = require('../util/docsUrl');
-const jsxUtil = require('../util/jsx');
-const report = require('../util/report');
+const docsUrl = require("../util/docsUrl");
+const jsxUtil = require("../util/jsx");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Constants
 // ------------------------------------------------------------------------------
 
-const DANGEROUS_PROPERTY_NAMES = [
-  'dangerouslySetInnerHTML',
-];
+const DANGEROUS_PROPERTY_NAMES = ["dangerouslySetInnerHTML"];
 
-const DANGEROUS_PROPERTIES = Object.fromEntries(DANGEROUS_PROPERTY_NAMES.map((prop) => [prop, prop]));
+const DANGEROUS_PROPERTIES = Object.fromEntries(
+  DANGEROUS_PROPERTY_NAMES.map((prop) => [prop, prop]),
+);
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -39,34 +39,36 @@ function isDangerous(name) {
 // ------------------------------------------------------------------------------
 
 const messages = {
-  dangerousProp: 'Dangerous property \'{{name}}\' found',
+  dangerousProp: "Dangerous property '{{name}}' found",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow usage of dangerous JSX properties',
-      category: 'Best Practices',
+      description: "Disallow usage of dangerous JSX properties",
+      category: "Best Practices",
       recommended: false,
-      url: docsUrl('no-danger'),
+      url: docsUrl("no-danger"),
     },
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        customComponentNames: {
-          items: {
-            type: 'string',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          customComponentNames: {
+            items: {
+              type: "string",
+            },
+            minItems: 0,
+            type: "array",
+            uniqueItems: true,
           },
-          minItems: 0,
-          type: 'array',
-          uniqueItems: true,
         },
       },
-    }],
+    ],
   },
 
   create(context) {
@@ -76,12 +78,19 @@ module.exports = {
     return {
       JSXAttribute(node) {
         const nodeName = node.parent.name;
-        const functionName = nodeName.name || `${nodeName.object.name}.${nodeName.property.name}`;
+        const functionName =
+          nodeName.name || `${nodeName.object.name}.${nodeName.property.name}`;
 
-        const enableCheckingCustomComponent = customComponentNames.some((name) => minimatch(functionName, name));
+        const enableCheckingCustomComponent = customComponentNames.some(
+          (name) => minimatch(functionName, name),
+        );
 
-        if ((enableCheckingCustomComponent || jsxUtil.isDOMComponent(node.parent)) && isDangerous(node.name.name)) {
-          report(context, messages.dangerousProp, 'dangerousProp', {
+        if (
+          (enableCheckingCustomComponent ||
+            jsxUtil.isDOMComponent(node.parent)) &&
+          isDangerous(node.name.name)
+        ) {
+          report(context, messages.dangerousProp, "dangerousProp", {
             node,
             data: {
               name: node.name.name,

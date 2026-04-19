@@ -2,11 +2,11 @@
  * @fileoverview enforce consistent line breaks inside jsx curly
  */
 
-'use strict';
+"use strict";
 
-const docsUrl = require('../util/docsUrl');
-const eslintUtil = require('../util/eslint');
-const report = require('../util/report');
+const docsUrl = require("../util/docsUrl");
+const eslintUtil = require("../util/eslint");
+const report = require("../util/report");
 
 const getSourceCode = eslintUtil.getSourceCode;
 const getText = eslintUtil.getText;
@@ -16,60 +16,61 @@ const getText = eslintUtil.getText;
 // ------------------------------------------------------------------------------
 
 function getNormalizedOption(context) {
-  const rawOption = context.options[0] || 'consistent';
+  const rawOption = context.options[0] || "consistent";
 
-  if (rawOption === 'consistent') {
+  if (rawOption === "consistent") {
     return {
-      multiline: 'consistent',
-      singleline: 'consistent',
+      multiline: "consistent",
+      singleline: "consistent",
     };
   }
 
-  if (rawOption === 'never') {
+  if (rawOption === "never") {
     return {
-      multiline: 'forbid',
-      singleline: 'forbid',
+      multiline: "forbid",
+      singleline: "forbid",
     };
   }
 
   return {
-    multiline: rawOption.multiline || 'consistent',
-    singleline: rawOption.singleline || 'consistent',
+    multiline: rawOption.multiline || "consistent",
+    singleline: rawOption.singleline || "consistent",
   };
 }
 
 const messages = {
-  expectedBefore: 'Expected newline before \'}\'.',
-  expectedAfter: 'Expected newline after \'{\'.',
-  unexpectedBefore: 'Unexpected newline before \'}\'.',
-  unexpectedAfter: 'Unexpected newline after \'{\'.',
+  expectedBefore: "Expected newline before '}'.",
+  expectedAfter: "Expected newline after '{'.",
+  unexpectedBefore: "Unexpected newline before '}'.",
+  unexpectedAfter: "Unexpected newline after '{'.",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
-    type: 'layout',
+    type: "layout",
 
     docs: {
-      description: 'Enforce consistent linebreaks in curly braces in JSX attributes and expressions',
-      category: 'Stylistic Issues',
+      description:
+        "Enforce consistent linebreaks in curly braces in JSX attributes and expressions",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('jsx-curly-newline'),
+      url: docsUrl("jsx-curly-newline"),
     },
 
-    fixable: 'whitespace',
+    fixable: "whitespace",
 
     schema: [
       {
         anyOf: [
           {
-            enum: ['consistent', 'never'],
+            enum: ["consistent", "never"],
           },
           {
-            type: 'object',
+            type: "object",
             properties: {
-              singleline: { enum: ['consistent', 'require', 'forbid'] },
-              multiline: { enum: ['consistent', 'require', 'forbid'] },
+              singleline: { enum: ["consistent", "require", "forbid"] },
+              multiline: { enum: ["consistent", "require", "forbid"] },
             },
             additionalProperties: false,
           },
@@ -108,10 +109,13 @@ module.exports = {
       const isMultiline = expression.loc.start.line !== expression.loc.end.line;
 
       switch (isMultiline ? option.multiline : option.singleline) {
-        case 'forbid': return false;
-        case 'require': return true;
-        case 'consistent':
-        default: return hasLeftNewline;
+        case "forbid":
+          return false;
+        case "require":
+          return true;
+        case "consistent":
+        default:
+          return hasLeftNewline;
       }
     }
 
@@ -127,29 +131,35 @@ module.exports = {
       const tokenAfterLeftCurly = sourceCode.getTokenAfter(leftCurly);
       const tokenBeforeRightCurly = sourceCode.getTokenBefore(rightCurly);
       const hasLeftNewline = !isTokenOnSameLine(leftCurly, tokenAfterLeftCurly);
-      const hasRightNewline = !isTokenOnSameLine(tokenBeforeRightCurly, rightCurly);
+      const hasRightNewline = !isTokenOnSameLine(
+        tokenBeforeRightCurly,
+        rightCurly,
+      );
       const needsNewlines = shouldHaveNewlines(expression, hasLeftNewline);
 
       if (hasLeftNewline && !needsNewlines) {
-        report(context, messages.unexpectedAfter, 'unexpectedAfter', {
+        report(context, messages.unexpectedAfter, "unexpectedAfter", {
           node: leftCurly,
           fix(fixer) {
             return getText(context)
               .slice(leftCurly.range[1], tokenAfterLeftCurly.range[0])
               .trim()
               ? null // If there is a comment between the { and the first element, don't do a fix.
-              : fixer.removeRange([leftCurly.range[1], tokenAfterLeftCurly.range[0]]);
+              : fixer.removeRange([
+                  leftCurly.range[1],
+                  tokenAfterLeftCurly.range[0],
+                ]);
           },
         });
       } else if (!hasLeftNewline && needsNewlines) {
-        report(context, messages.expectedAfter, 'expectedAfter', {
+        report(context, messages.expectedAfter, "expectedAfter", {
           node: leftCurly,
-          fix: (fixer) => fixer.insertTextAfter(leftCurly, '\n'),
+          fix: (fixer) => fixer.insertTextAfter(leftCurly, "\n"),
         });
       }
 
       if (hasRightNewline && !needsNewlines) {
-        report(context, messages.unexpectedBefore, 'unexpectedBefore', {
+        report(context, messages.unexpectedBefore, "unexpectedBefore", {
           node: rightCurly,
           fix(fixer) {
             return getText(context)
@@ -157,15 +167,15 @@ module.exports = {
               .trim()
               ? null // If there is a comment between the last element and the }, don't do a fix.
               : fixer.removeRange([
-                tokenBeforeRightCurly.range[1],
-                rightCurly.range[0],
-              ]);
+                  tokenBeforeRightCurly.range[1],
+                  rightCurly.range[0],
+                ]);
           },
         });
       } else if (!hasRightNewline && needsNewlines) {
-        report(context, messages.expectedBefore, 'expectedBefore', {
+        report(context, messages.expectedBefore, "expectedBefore", {
           node: rightCurly,
-          fix: (fixer) => fixer.insertTextBefore(rightCurly, '\n'),
+          fix: (fixer) => fixer.insertTextBefore(rightCurly, "\n"),
         });
       }
     }

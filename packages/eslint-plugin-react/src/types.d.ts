@@ -1,5 +1,5 @@
-import eslint from 'eslint';
-import estree from 'estree';
+import eslint from "eslint";
+import estree from "estree";
 
 declare global {
   interface ASTNode extends estree.BaseNode {
@@ -16,14 +16,18 @@ declare global {
 
   type Context = eslint.Rule.RuleContext;
 
-  type TypeDeclarationBuilder = (annotation: ASTNode, parentName: string, seen: Set<typeof annotation>) => object;
+  type TypeDeclarationBuilder = (
+    annotation: ASTNode,
+    parentName: string,
+    seen: Set<typeof annotation>,
+  ) => object;
 
   type TypeDeclarationBuilders = {
     [k in string]: TypeDeclarationBuilder;
   };
 
   type UnionTypeDefinition = {
-    type: 'union' | 'shape';
+    type: "union" | "shape";
     children: unknown[];
   };
 }

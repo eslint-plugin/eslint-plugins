@@ -3,20 +3,20 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/no-find-dom-node');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/no-find-dom-node");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('no-find-dom-node', rule, {
+ruleTester.run("no-find-dom-node", rule, {
   valid: parsers.all([
     {
       code: `
@@ -82,7 +82,7 @@ ruleTester.run('no-find-dom-node', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'noFindDOMNode' }],
+      errors: [{ messageId: "noFindDOMNode" }],
     },
     {
       code: `
@@ -95,7 +95,7 @@ ruleTester.run('no-find-dom-node', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'noFindDOMNode' }],
+      errors: [{ messageId: "noFindDOMNode" }],
     },
     {
       code: `
@@ -108,7 +108,7 @@ ruleTester.run('no-find-dom-node', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'noFindDOMNode' }],
+      errors: [{ messageId: "noFindDOMNode" }],
     },
     {
       code: `
@@ -121,7 +121,7 @@ ruleTester.run('no-find-dom-node', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'noFindDOMNode' }],
+      errors: [{ messageId: "noFindDOMNode" }],
     },
   ]),
 });

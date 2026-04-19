@@ -3,20 +3,20 @@
  * @author Sergei Startsev
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-no-script-url');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-no-script-url");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -28,7 +28,7 @@ const parserOptions = {
 
 const ruleTester = new RuleTester({ parserOptions });
 
-ruleTester.run('jsx-no-script-url', rule, {
+ruleTester.run("jsx-no-script-url", rule, {
   valid: parsers.all([
     { code: '<a href="https://reactjs.org"></a>' },
     { code: '<a href="mailto:foo@bar.com"></a>' },
@@ -37,29 +37,29 @@ ruleTester.run('jsx-no-script-url', rule, {
     { code: '<a name="foo"></a>' },
     { code: '<a href={"javascript:"}></a>' },
     { code: '<Foo href="javascript:"></Foo>' },
-    { code: '<a href />' },
+    { code: "<a href />" },
     {
       code: '<Foo other="javascript:"></Foo>',
-      options: [[{ name: 'Foo', props: ['to', 'href'] }]],
+      options: [[{ name: "Foo", props: ["to", "href"] }]],
     },
     {
       code: '<Foo href="javascript:"></Foo>',
       settings: {
-        linkComponents: [{ name: 'Foo', linkAttribute: ['to', 'href'] }],
+        linkComponents: [{ name: "Foo", linkAttribute: ["to", "href"] }],
       },
     },
     {
       code: '<Foo href="javascript:"></Foo>',
       options: [[], { includeFromSettings: false }],
       settings: {
-        linkComponents: [{ name: 'Foo', linkAttribute: ['to', 'href'] }],
+        linkComponents: [{ name: "Foo", linkAttribute: ["to", "href"] }],
       },
     },
     {
       code: '<Foo other="javascript:"></Foo>',
       options: [[], { includeFromSettings: true }],
       settings: {
-        linkComponents: [{ name: 'Foo', linkAttribute: ['to', 'href'] }],
+        linkComponents: [{ name: "Foo", linkAttribute: ["to", "href"] }],
       },
     },
   ]),
@@ -67,58 +67,53 @@ ruleTester.run('jsx-no-script-url', rule, {
     // defaults
     {
       code: '<a href="javascript:"></a>',
-      errors: [{ messageId: 'noScriptURL' }],
+      errors: [{ messageId: "noScriptURL" }],
     },
     {
       code: '<a href="javascript:void(0)"></a>',
-      errors: [{ messageId: 'noScriptURL' }],
+      errors: [{ messageId: "noScriptURL" }],
     },
     {
       code: '<a href="j\n\n\na\rv\tascript:"></a>',
-      errors: [{ messageId: 'noScriptURL' }],
+      errors: [{ messageId: "noScriptURL" }],
     },
 
     // with component passed by options
     {
       code: '<Foo to="javascript:"></Foo>',
-      errors: [{ messageId: 'noScriptURL' }],
-      options: [
-        [{ name: 'Foo', props: ['to', 'href'] }],
-      ],
+      errors: [{ messageId: "noScriptURL" }],
+      options: [[{ name: "Foo", props: ["to", "href"] }]],
     },
     {
       code: '<Foo href="javascript:"></Foo>',
-      errors: [{ messageId: 'noScriptURL' }],
-      options: [
-        [{ name: 'Foo', props: ['to', 'href'] }],
-      ],
+      errors: [{ messageId: "noScriptURL" }],
+      options: [[{ name: "Foo", props: ["to", "href"] }]],
     },
-    { // make sure it still uses defaults when passed options
+    {
+      // make sure it still uses defaults when passed options
       code: '<a href="javascript:void(0)"></a>',
-      errors: [{ messageId: 'noScriptURL' }],
-      options: [
-        [{ name: 'Foo', props: ['to', 'href'] }],
-      ],
+      errors: [{ messageId: "noScriptURL" }],
+      options: [[{ name: "Foo", props: ["to", "href"] }]],
     },
 
     // with components passed by settings
     {
       code: '<Foo to="javascript:"></Foo>',
-      errors: [{ messageId: 'noScriptURL' }],
+      errors: [{ messageId: "noScriptURL" }],
       options: [
-        [{ name: 'Bar', props: ['to', 'href'] }],
+        [{ name: "Bar", props: ["to", "href"] }],
         { includeFromSettings: true },
       ],
       settings: {
-        linkComponents: [{ name: 'Foo', linkAttribute: 'to' }],
+        linkComponents: [{ name: "Foo", linkAttribute: "to" }],
       },
     },
     {
       code: '<Foo href="javascript:"></Foo>',
-      errors: [{ messageId: 'noScriptURL' }],
+      errors: [{ messageId: "noScriptURL" }],
       options: [{ includeFromSettings: true }],
       settings: {
-        linkComponents: [{ name: 'Foo', linkAttribute: ['to', 'href'] }],
+        linkComponents: [{ name: "Foo", linkAttribute: ["to", "href"] }],
       },
     },
     {
@@ -128,16 +123,13 @@ ruleTester.run('jsx-no-script-url', rule, {
         <Bar link="javascript:"></Bar>
       </div>
     `,
-      errors: [
-        { messageId: 'noScriptURL' },
-        { messageId: 'noScriptURL' },
-      ],
+      errors: [{ messageId: "noScriptURL" }, { messageId: "noScriptURL" }],
       options: [
-        [{ name: 'Bar', props: ['link'] }],
+        [{ name: "Bar", props: ["link"] }],
         { includeFromSettings: true },
       ],
       settings: {
-        linkComponents: [{ name: 'Foo', linkAttribute: ['to', 'href'] }],
+        linkComponents: [{ name: "Foo", linkAttribute: ["to", "href"] }],
       },
     },
     {
@@ -147,14 +139,10 @@ ruleTester.run('jsx-no-script-url', rule, {
         <Bar link="javascript:"></Bar>
       </div>
     `,
-      errors: [
-        { messageId: 'noScriptURL' },
-      ],
-      options: [
-        [{ name: 'Bar', props: ['link'] }],
-      ],
+      errors: [{ messageId: "noScriptURL" }],
+      options: [[{ name: "Bar", props: ["link"] }]],
       settings: {
-        linkComponents: [{ name: 'Foo', linkAttribute: ['to', 'href'] }],
+        linkComponents: [{ name: "Foo", linkAttribute: ["to", "href"] }],
       },
     },
   ]),

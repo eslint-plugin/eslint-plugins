@@ -4,11 +4,11 @@
  * @author David Buchan-Swanson
  */
 
-'use strict';
+"use strict";
 
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
-const getText = require('../util/eslint').getText;
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
+const getText = require("../util/eslint").getText;
 
 /** @typedef {import('eslint').Rule.RuleModule} RuleModule */
 
@@ -27,50 +27,61 @@ const getText = require('../util/eslint').getText;
  * @returns {string | unknown}
  */
 function trimIfString(value) {
-  return typeof value === 'string' ? value.trim() : value;
+  return typeof value === "string" ? value.trim() : value;
 }
 
 const reOverridableElement = /^[A-Z][\w.]*$/;
 const reIsWhiteSpace = /^[\s]+$/;
-const jsxElementTypes = new Set(['JSXElement', 'JSXFragment']);
-const standardJSXNodeParentTypes = new Set(['JSXAttribute', 'JSXElement', 'JSXExpressionContainer', 'JSXFragment']);
+const jsxElementTypes = new Set(["JSXElement", "JSXFragment"]);
+const standardJSXNodeParentTypes = new Set([
+  "JSXAttribute",
+  "JSXElement",
+  "JSXExpressionContainer",
+  "JSXFragment",
+]);
 
 const messages = {
   invalidPropValue: 'Invalid prop value: "{{text}}"',
   invalidPropValueInElement: 'Invalid prop value: "{{text}}" in {{element}}',
   noStringsInAttributes: 'Strings not allowed in attributes: "{{text}}"',
-  noStringsInAttributesInElement: 'Strings not allowed in attributes: "{{text}}" in {{element}}',
+  noStringsInAttributesInElement:
+    'Strings not allowed in attributes: "{{text}}" in {{element}}',
   noStringsInJSX: 'Strings not allowed in JSX files: "{{text}}"',
-  noStringsInJSXInElement: 'Strings not allowed in JSX files: "{{text}}" in {{element}}',
-  literalNotInJSXExpression: 'Missing JSX expression container around literal string: "{{text}}"',
-  literalNotInJSXExpressionInElement: 'Missing JSX expression container around literal string: "{{text}}" in {{element}}',
-  restrictedAttributeString: 'Restricted attribute string: "{{text}}" in {{attribute}}',
-  restrictedAttributeStringInElement: 'Restricted attribute string: "{{text}}" in {{attribute}} of {{element}}',
+  noStringsInJSXInElement:
+    'Strings not allowed in JSX files: "{{text}}" in {{element}}',
+  literalNotInJSXExpression:
+    'Missing JSX expression container around literal string: "{{text}}"',
+  literalNotInJSXExpressionInElement:
+    'Missing JSX expression container around literal string: "{{text}}" in {{element}}',
+  restrictedAttributeString:
+    'Restricted attribute string: "{{text}}" in {{attribute}}',
+  restrictedAttributeStringInElement:
+    'Restricted attribute string: "{{text}}" in {{attribute}} of {{element}}',
 };
 
 /** @type {Exclude<RuleModule['meta']['schema'], unknown[] | false>['properties']} */
 const commonPropertiesSchema = {
   noStrings: {
-    type: 'boolean',
+    type: "boolean",
   },
   allowedStrings: {
-    type: 'array',
+    type: "array",
     uniqueItems: true,
     items: {
-      type: 'string',
+      type: "string",
     },
   },
   ignoreProps: {
-    type: 'boolean',
+    type: "boolean",
   },
   noAttributeStrings: {
-    type: 'boolean',
+    type: "boolean",
   },
   restrictedAttributes: {
-    type: 'array',
+    type: "array",
     uniqueItems: true,
     items: {
-      type: 'string',
+      type: "string",
     },
   },
 };
@@ -83,10 +94,10 @@ const commonPropertiesSchema = {
  */
 function normalizeElementConfig(config) {
   return {
-    type: 'element',
+    type: "element",
     noStrings: !!config.noStrings,
     allowedStrings: config.allowedStrings
-      ? new Set((config.allowedStrings).some(trimIfString))
+      ? new Set(config.allowedStrings.some(trimIfString))
       : new Set(),
     ignoreProps: !!config.ignoreProps,
     noAttributeStrings: !!config.noAttributeStrings,
@@ -110,26 +121,28 @@ function normalizeConfig(config) {
 
   if (config.elementOverrides) {
     normalizedConfig.elementOverrides = Object.fromEntries(
-        ( Object.entries(config.elementOverrides)).flatMap(
-        (entry) => {
-          const elementName = entry[0];
-          const rawElementConfig = entry[1];
+      Object.entries(config.elementOverrides).flatMap((entry) => {
+        const elementName = entry[0];
+        const rawElementConfig = entry[1];
 
-          if (!reOverridableElement.test(elementName)) {
-            return [];
-          }
+        if (!reOverridableElement.test(elementName)) {
+          return [];
+        }
 
-          return [[
+        return [
+          [
             elementName,
             Object.assign(normalizeElementConfig(rawElementConfig), {
-              type: 'override',
+              type: "override",
               name: elementName,
               allowElement: !!rawElementConfig.allowElement,
-              applyToNestedElements: typeof rawElementConfig.applyToNestedElements === 'undefined' || !!rawElementConfig.applyToNestedElements,
+              applyToNestedElements:
+                typeof rawElementConfig.applyToNestedElements === "undefined" ||
+                !!rawElementConfig.applyToNestedElements,
             }),
-          ]];
-        }
-      )
+          ],
+        ];
+      }),
     );
   }
 
@@ -137,15 +150,14 @@ function normalizeConfig(config) {
 }
 
 const elementOverrides = {
-  type: 'object',
+  type: "object",
   patternProperties: {
     [reOverridableElement.source]: {
-      type: 'object',
+      type: "object",
       properties: Object.assign(
-        { applyToNestedElements: { type: 'boolean' } },
-        commonPropertiesSchema
+        { applyToNestedElements: { type: "boolean" } },
+        commonPropertiesSchema,
       ),
-
     },
   },
 };
@@ -154,22 +166,21 @@ const elementOverrides = {
 module.exports = {
   meta: /** @type {RuleModule['meta']} */ ({
     docs: {
-      description: 'Disallow usage of string literals in JSX',
-      category: 'Stylistic Issues',
+      description: "Disallow usage of string literals in JSX",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('jsx-no-literals'),
+      url: docsUrl("jsx-no-literals"),
     },
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: Object.assign(
-        { elementOverrides },
-        commonPropertiesSchema
-      ),
-      additionalProperties: false,
-    }],
+    schema: [
+      {
+        type: "object",
+        properties: Object.assign({ elementOverrides }, commonPropertiesSchema),
+        additionalProperties: false,
+      },
+    ],
   }),
 
   create(context) {
@@ -189,12 +200,12 @@ module.exports = {
      * @returns {boolean}
      */
     function isRequireStatement(node) {
-      if (node.type === 'CallExpression') {
-        if (node.callee.type === 'Identifier') {
-          return node.callee.name === 'require';
+      if (node.type === "CallExpression") {
+        if (node.callee.type === "Identifier") {
+          return node.callee.name === "require";
         }
       }
-      if (node.type === 'MemberExpression') {
+      if (node.type === "MemberExpression") {
         return isRequireStatement(node.object);
       }
 
@@ -210,7 +221,7 @@ module.exports = {
      * @returns {ElementNameFragment | undefined}
      */
     function getJSXElementName(node) {
-      if (node.openingElement.name.type === 'JSXIdentifier') {
+      if (node.openingElement.name.type === "JSXIdentifier") {
         const name = node.openingElement.name.name;
         return {
           name: renamedImportMap.get(name) || name,
@@ -221,18 +232,18 @@ module.exports = {
       /** @type {string[]} */
       const nameFragments = [];
 
-      if (node.openingElement.name.type === 'JSXMemberExpression') {
+      if (node.openingElement.name.type === "JSXMemberExpression") {
         /** @type {ASTNode} */
         let current = node.openingElement.name;
-        while (current.type === 'JSXMemberExpression') {
-          if (current.property.type === 'JSXIdentifier') {
+        while (current.type === "JSXMemberExpression") {
+          if (current.property.type === "JSXIdentifier") {
             nameFragments.unshift(current.property.name);
           }
 
           current = current.object;
         }
 
-        if (current.type === 'JSXIdentifier') {
+        if (current.type === "JSXIdentifier") {
           nameFragments.unshift(current.name);
 
           const rootFragment = nameFragments[0];
@@ -247,7 +258,7 @@ module.exports = {
           if (nameFragment) {
             return {
               name: nameFragment,
-              compoundName: nameFragments.join('.'),
+              compoundName: nameFragments.join("."),
             };
           }
         }
@@ -265,7 +276,7 @@ module.exports = {
 
       let current = node;
       while (current) {
-        if (current.type === 'JSXElement') {
+        if (current.type === "JSXElement") {
           ancestors.push(current);
         }
 
@@ -281,7 +292,7 @@ module.exports = {
      */
     function getParentIgnoringBinaryExpressions(node) {
       let current = node;
-      while (current.parent.type === 'BinaryExpression') {
+      while (current.parent.type === "BinaryExpression") {
         current = current.parent;
       }
       return current.parent;
@@ -305,7 +316,9 @@ module.exports = {
      */
     function hasJSXElementParentOrGrandParent(node) {
       const ancestors = getParentAndGrandParent(node);
-      return ([ancestors.parent, ancestors.grandParent]).some( (parent) => jsxElementTypes.has(parent.type));
+      return [ancestors.parent, ancestors.grandParent].some((parent) =>
+        jsxElementTypes.has(parent.type),
+      );
     }
 
     // eslint-disable-next-line valid-jsdoc
@@ -317,18 +330,27 @@ module.exports = {
      * @returns {boolean}
      */
     function isViableTextNode(node, resolvedConfig) {
-      if ([trimIfString(node.raw), trimIfString(node.value)].some( (value) => resolvedConfig.allowedStrings.has(value))) {
+      if (
+        [trimIfString(node.raw), trimIfString(node.value)].some((value) =>
+          resolvedConfig.allowedStrings.has(value),
+        )
+      ) {
         return false;
       }
 
       const parent = getParentIgnoringBinaryExpressions(node);
 
       let isStandardJSXNode = false;
-      if (typeof node.value === 'string' && !reIsWhiteSpace.test(node.value) && standardJSXNodeParentTypes.has(parent.type)) {
+      if (
+        typeof node.value === "string" &&
+        !reIsWhiteSpace.test(node.value) &&
+        standardJSXNodeParentTypes.has(parent.type)
+      ) {
         if (resolvedConfig.noAttributeStrings) {
-          isStandardJSXNode = parent.type === 'JSXAttribute' || parent.type === 'JSXElement';
+          isStandardJSXNode =
+            parent.type === "JSXAttribute" || parent.type === "JSXElement";
         } else {
-          isStandardJSXNode = parent.type !== 'JSXAttribute';
+          isStandardJSXNode = parent.type !== "JSXAttribute";
         }
       }
 
@@ -336,7 +358,7 @@ module.exports = {
         return isStandardJSXNode;
       }
 
-      return isStandardJSXNode && parent.type !== 'JSXExpressionContainer';
+      return isStandardJSXNode && parent.type !== "JSXExpressionContainer";
     }
 
     // eslint-disable-next-line valid-jsdoc
@@ -365,11 +387,15 @@ module.exports = {
           if (ancestor.name) {
             const ancestorElements = config.elementOverrides[ancestor.name];
             const ancestorConfig = ancestor.compoundName
-              ? config.elementOverrides[ancestor.compoundName] || ancestorElements
+              ? config.elementOverrides[ancestor.compoundName] ||
+                ancestorElements
               : ancestorElements;
 
             if (ancestorConfig) {
-              if (isClosestJSXAncestor || ancestorConfig.applyToNestedElements) {
+              if (
+                isClosestJSXAncestor ||
+                ancestorConfig.applyToNestedElements
+              ) {
                 return ancestorConfig;
               }
             }
@@ -384,7 +410,11 @@ module.exports = {
      * @returns {boolean}
      */
     function shouldAllowElement(resolvedConfig) {
-      return resolvedConfig.type === 'override' && 'allowElement' in resolvedConfig && !!resolvedConfig.allowElement;
+      return (
+        resolvedConfig.type === "override" &&
+        "allowElement" in resolvedConfig &&
+        !!resolvedConfig.allowElement
+      );
     }
 
     // eslint-disable-next-line valid-jsdoc
@@ -395,14 +425,20 @@ module.exports = {
      */
     function defaultMessageId(ancestorIsJSXElement, resolvedConfig) {
       if (resolvedConfig.noAttributeStrings && !ancestorIsJSXElement) {
-        return resolvedConfig.type === 'override' ? 'noStringsInAttributesInElement' : 'noStringsInAttributes';
+        return resolvedConfig.type === "override"
+          ? "noStringsInAttributesInElement"
+          : "noStringsInAttributes";
       }
 
       if (resolvedConfig.noStrings) {
-        return resolvedConfig.type === 'override' ? 'noStringsInJSXInElement' : 'noStringsInJSX';
+        return resolvedConfig.type === "override"
+          ? "noStringsInJSXInElement"
+          : "noStringsInJSX";
       }
 
-      return resolvedConfig.type === 'override' ? 'literalNotInJSXExpressionInElement' : 'literalNotInJSXExpression';
+      return resolvedConfig.type === "override"
+        ? "literalNotInJSXExpressionInElement"
+        : "literalNotInJSXExpression";
     }
 
     // eslint-disable-next-line valid-jsdoc
@@ -416,7 +452,10 @@ module.exports = {
         node,
         data: {
           text: getText(context, node).trim(),
-          element: resolvedConfig.type === 'override' && 'name' in resolvedConfig ? resolvedConfig.name : undefined,
+          element:
+            resolvedConfig.type === "override" && "name" in resolvedConfig
+              ? resolvedConfig.name
+              : undefined,
         },
       });
     }
@@ -425,123 +464,170 @@ module.exports = {
     // Public
     // --------------------------------------------------------------------------
 
-    return Object.assign(hasElementOverrides ? {
-      // Get renamed import local names mapped to their imported name
-      ImportDeclaration(node) {
-        node.specifiers
-          .filter((s) => s.type === 'ImportSpecifier')
-          .forEach((specifier) => {
-            renamedImportMap.set(
-              (specifier.local || specifier.imported).name,
-              specifier.imported.name
-            );
-          });
-      },
-
-      // Get renamed destructured local names mapped to their imported name
-      VariableDeclaration(node) {
-        node.declarations
-          .filter((d) => (
-            d.type === 'VariableDeclarator'
-            && isRequireStatement(d.init)
-            && d.id.type === 'ObjectPattern'
-          ))
-          .forEach((declaration) => {
-            declaration.id.properties
-              .filter((property) => (
-                property.type === 'Property'
-                && property.key.type === 'Identifier'
-                && property.value.type === 'Identifier'
-              ))
-              .forEach((property) => {
-                renamedImportMap.set(property.value.name, property.key.name);
-              });
-          });
-      },
-    } : false, {
-      Literal(node) {
-        const resolvedConfig = getOverrideConfig(node) || config;
-
-        const hasJSXParentOrGrandParent = hasJSXElementParentOrGrandParent(node);
-        if (hasJSXParentOrGrandParent && shouldAllowElement(resolvedConfig)) {
-          return;
-        }
-
-        if (isViableTextNode(node, resolvedConfig)) {
-          if (hasJSXParentOrGrandParent || !config.ignoreProps) {
-            reportLiteralNode(node, defaultMessageId(hasJSXParentOrGrandParent, resolvedConfig), resolvedConfig);
-          }
-        }
-      },
-
-      JSXAttribute(node) {
-        const isLiteralString = node.value && node.value.type === 'Literal'
-          && typeof node.value.value === 'string';
-        const isStringLiteral = node.value && node.value.type === 'StringLiteral';
-
-        if (isLiteralString || isStringLiteral) {
-          const resolvedConfig = getOverrideConfig(node) || config;
-          const restrictedAttributes = resolvedConfig.restrictedAttributes;
-
-          if (restrictedAttributes.size > 0 && node.name && node.name.type === 'JSXIdentifier') {
-            const attributeName = node.name.name;
-
-            if (restrictedAttributes.has(attributeName)) {
-              if (!resolvedConfig.allowedStrings.has(String(trimIfString(node.value.value)))) {
-                const messageId = resolvedConfig.type === 'override' ? 'restrictedAttributeStringInElement' : 'restrictedAttributeString';
-                report(context, messages[messageId], messageId, {
-                  node,
-                  data: {
-                    text: getText(context, node.value).trim(),
-                    attribute: attributeName,
-                    element: resolvedConfig.type === 'override' && 'name' in resolvedConfig ? resolvedConfig.name : undefined,
-                  },
+    return Object.assign(
+      hasElementOverrides
+        ? {
+            // Get renamed import local names mapped to their imported name
+            ImportDeclaration(node) {
+              node.specifiers
+                .filter((s) => s.type === "ImportSpecifier")
+                .forEach((specifier) => {
+                  renamedImportMap.set(
+                    (specifier.local || specifier.imported).name,
+                    specifier.imported.name,
+                  );
                 });
-              }
-              return;
+            },
+
+            // Get renamed destructured local names mapped to their imported name
+            VariableDeclaration(node) {
+              node.declarations
+                .filter(
+                  (d) =>
+                    d.type === "VariableDeclarator" &&
+                    isRequireStatement(d.init) &&
+                    d.id.type === "ObjectPattern",
+                )
+                .forEach((declaration) => {
+                  declaration.id.properties
+                    .filter(
+                      (property) =>
+                        property.type === "Property" &&
+                        property.key.type === "Identifier" &&
+                        property.value.type === "Identifier",
+                    )
+                    .forEach((property) => {
+                      renamedImportMap.set(
+                        property.value.name,
+                        property.key.name,
+                      );
+                    });
+                });
+            },
+          }
+        : false,
+      {
+        Literal(node) {
+          const resolvedConfig = getOverrideConfig(node) || config;
+
+          const hasJSXParentOrGrandParent =
+            hasJSXElementParentOrGrandParent(node);
+          if (hasJSXParentOrGrandParent && shouldAllowElement(resolvedConfig)) {
+            return;
+          }
+
+          if (isViableTextNode(node, resolvedConfig)) {
+            if (hasJSXParentOrGrandParent || !config.ignoreProps) {
+              reportLiteralNode(
+                node,
+                defaultMessageId(hasJSXParentOrGrandParent, resolvedConfig),
+                resolvedConfig,
+              );
             }
           }
+        },
 
-          if (
-            resolvedConfig.noStrings
-            && !resolvedConfig.ignoreProps
-            && !resolvedConfig.allowedStrings.has(node.value.value)
-          ) {
-            const messageId = resolvedConfig.type === 'override' ? 'invalidPropValueInElement' : 'invalidPropValue';
-            reportLiteralNode(node, messageId, resolvedConfig);
+        JSXAttribute(node) {
+          const isLiteralString =
+            node.value &&
+            node.value.type === "Literal" &&
+            typeof node.value.value === "string";
+          const isStringLiteral =
+            node.value && node.value.type === "StringLiteral";
+
+          if (isLiteralString || isStringLiteral) {
+            const resolvedConfig = getOverrideConfig(node) || config;
+            const restrictedAttributes = resolvedConfig.restrictedAttributes;
+
+            if (
+              restrictedAttributes.size > 0 &&
+              node.name &&
+              node.name.type === "JSXIdentifier"
+            ) {
+              const attributeName = node.name.name;
+
+              if (restrictedAttributes.has(attributeName)) {
+                if (
+                  !resolvedConfig.allowedStrings.has(
+                    String(trimIfString(node.value.value)),
+                  )
+                ) {
+                  const messageId =
+                    resolvedConfig.type === "override"
+                      ? "restrictedAttributeStringInElement"
+                      : "restrictedAttributeString";
+                  report(context, messages[messageId], messageId, {
+                    node,
+                    data: {
+                      text: getText(context, node.value).trim(),
+                      attribute: attributeName,
+                      element:
+                        resolvedConfig.type === "override" &&
+                        "name" in resolvedConfig
+                          ? resolvedConfig.name
+                          : undefined,
+                    },
+                  });
+                }
+                return;
+              }
+            }
+
+            if (
+              resolvedConfig.noStrings &&
+              !resolvedConfig.ignoreProps &&
+              !resolvedConfig.allowedStrings.has(node.value.value)
+            ) {
+              const messageId =
+                resolvedConfig.type === "override"
+                  ? "invalidPropValueInElement"
+                  : "invalidPropValue";
+              reportLiteralNode(node, messageId, resolvedConfig);
+            }
           }
-        }
-      },
+        },
 
-      JSXText(node) {
-        const resolvedConfig = getOverrideConfig(node) || config;
-
-        if (shouldAllowElement(resolvedConfig)) {
-          return;
-        }
-
-        if (isViableTextNode(node, resolvedConfig)) {
-          const hasJSXParendOrGrantParent = hasJSXElementParentOrGrandParent(node);
-          reportLiteralNode(node, defaultMessageId(hasJSXParendOrGrantParent, resolvedConfig), resolvedConfig);
-        }
-      },
-
-      TemplateLiteral(node) {
-        const ancestors = getParentAndGrandParent(node);
-        const isParentJSXExpressionCont = ancestors.parent.type === 'JSXExpressionContainer';
-        const isParentJSXElement = ancestors.grandParent.type === 'JSXElement';
-
-        if (isParentJSXExpressionCont) {
+        JSXText(node) {
           const resolvedConfig = getOverrideConfig(node) || config;
 
-          if (
-            resolvedConfig.noStrings
-            && (isParentJSXElement || !resolvedConfig.ignoreProps)
-          ) {
-            reportLiteralNode(node, defaultMessageId(isParentJSXElement, resolvedConfig), resolvedConfig);
+          if (shouldAllowElement(resolvedConfig)) {
+            return;
           }
-        }
+
+          if (isViableTextNode(node, resolvedConfig)) {
+            const hasJSXParendOrGrantParent =
+              hasJSXElementParentOrGrandParent(node);
+            reportLiteralNode(
+              node,
+              defaultMessageId(hasJSXParendOrGrantParent, resolvedConfig),
+              resolvedConfig,
+            );
+          }
+        },
+
+        TemplateLiteral(node) {
+          const ancestors = getParentAndGrandParent(node);
+          const isParentJSXExpressionCont =
+            ancestors.parent.type === "JSXExpressionContainer";
+          const isParentJSXElement =
+            ancestors.grandParent.type === "JSXElement";
+
+          if (isParentJSXExpressionCont) {
+            const resolvedConfig = getOverrideConfig(node) || config;
+
+            if (
+              resolvedConfig.noStrings &&
+              (isParentJSXElement || !resolvedConfig.ignoreProps)
+            ) {
+              reportLiteralNode(
+                node,
+                defaultMessageId(isParentJSXElement, resolvedConfig),
+                resolvedConfig,
+              );
+            }
+          }
+        },
       },
-    });
+    );
   },
 };

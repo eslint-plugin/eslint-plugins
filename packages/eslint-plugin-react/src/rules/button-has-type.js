@@ -3,12 +3,12 @@
  * @author Filipp Riabchun
  */
 
-'use strict';
+"use strict";
 
-const { getProp,  getLiteralPropValue } = require('@eslintplugin/jsx-ast-utils');
-const docsUrl = require('../util/docsUrl');
-const isCreateElement = require('../util/isCreateElement');
-const report = require('../util/report');
+const { getProp, getLiteralPropValue } = require("@eslintplugin/jsx-ast-utils");
+const docsUrl = require("../util/docsUrl");
+const isCreateElement = require("../util/isCreateElement");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
@@ -21,8 +21,9 @@ const optionDefaults = {
 };
 
 const messages = {
-  missingType: 'Missing an explicit type attribute for button',
-  complexType: 'The button type attribute must be specified by a static string or a trivial ternary expression',
+  missingType: "Missing an explicit type attribute for button",
+  complexType:
+    "The button type attribute must be specified by a static string or a trivial ternary expression",
   invalidValue: '"{{value}}" is an invalid value for button type attribute',
   forbiddenValue: '"{{value}}" is an invalid value for button type attribute',
 };
@@ -31,59 +32,62 @@ const messages = {
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow usage of `button` elements without an explicit `type` attribute',
-      category: 'Possible Errors',
+      description:
+        "Disallow usage of `button` elements without an explicit `type` attribute",
+      category: "Possible Errors",
       recommended: false,
-      url: docsUrl('button-has-type'),
+      url: docsUrl("button-has-type"),
     },
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        button: {
-          default: optionDefaults.button,
-          type: 'boolean',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          button: {
+            default: optionDefaults.button,
+            type: "boolean",
+          },
+          submit: {
+            default: optionDefaults.submit,
+            type: "boolean",
+          },
+          reset: {
+            default: optionDefaults.reset,
+            type: "boolean",
+          },
         },
-        submit: {
-          default: optionDefaults.submit,
-          type: 'boolean',
-        },
-        reset: {
-          default: optionDefaults.reset,
-          type: 'boolean',
-        },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create(context) {
     const configuration = Object.assign({}, optionDefaults, context.options[0]);
 
     function reportMissing(node) {
-      report(context, messages.missingType, 'missingType', {
+      report(context, messages.missingType, "missingType", {
         node,
       });
     }
 
     function reportComplex(node) {
-      report(context, messages.complexType, 'complexType', {
+      report(context, messages.complexType, "complexType", {
         node,
       });
     }
 
     function checkValue(node, value) {
       if (!(value in configuration)) {
-        report(context, messages.invalidValue, 'invalidValue', {
+        report(context, messages.invalidValue, "invalidValue", {
           node,
           data: {
             value,
           },
         });
       } else if (!configuration[value]) {
-        report(context, messages.forbiddenValue, 'forbiddenValue', {
+        report(context, messages.forbiddenValue, "forbiddenValue", {
           node,
           data: {
             value,
@@ -94,17 +98,17 @@ module.exports = {
 
     function checkExpression(node, expression) {
       switch (expression.type) {
-        case 'Literal':
+        case "Literal":
           checkValue(node, expression.value);
           return;
-        case 'TemplateLiteral':
+        case "TemplateLiteral":
           if (expression.expressions.length === 0) {
             checkValue(node, expression.quasis[0].value.raw);
           } else {
             reportComplex(expression);
           }
           return;
-        case 'ConditionalExpression':
+        case "ConditionalExpression":
           checkExpression(node, expression.consequent);
           checkExpression(node, expression.alternate);
           return;
@@ -115,18 +119,21 @@ module.exports = {
 
     return {
       JSXElement(node) {
-        if (node.openingElement.name.name !== 'button') {
+        if (node.openingElement.name.name !== "button") {
           return;
         }
 
-        const typeProp = getProp(node.openingElement.attributes, 'type');
+        const typeProp = getProp(node.openingElement.attributes, "type");
 
         if (!typeProp) {
           reportMissing(node);
           return;
         }
 
-        if (typeProp.value && typeProp.value.type === 'JSXExpressionContainer') {
+        if (
+          typeProp.value &&
+          typeProp.value.type === "JSXExpressionContainer"
+        ) {
           checkExpression(node, typeProp.value.expression);
           return;
         }
@@ -139,29 +146,36 @@ module.exports = {
           return;
         }
 
-        if (node.arguments[0].type !== 'Literal' || node.arguments[0].value !== 'button') {
+        if (
+          node.arguments[0].type !== "Literal" ||
+          node.arguments[0].value !== "button"
+        ) {
           return;
         }
 
-        if (!node.arguments[1] || node.arguments[1].type !== 'ObjectExpression') {
+        if (
+          !node.arguments[1] ||
+          node.arguments[1].type !== "ObjectExpression"
+        ) {
           reportMissing(node);
           return;
         }
 
         const props = node.arguments[1].properties;
-        const typeProp = props.find((prop) => (
-          'key' in prop
-          && prop.key
-          && 'name' in prop.key
-          && prop.key.name === 'type'
-        ));
+        const typeProp = props.find(
+          (prop) =>
+            "key" in prop &&
+            prop.key &&
+            "name" in prop.key &&
+            prop.key.name === "type",
+        );
 
         if (!typeProp) {
           reportMissing(node);
           return;
         }
 
-        checkExpression(node, 'value' in typeProp ? typeProp.value : undefined);
+        checkExpression(node, "value" in typeProp ? typeProp.value : undefined);
       },
     };
   },

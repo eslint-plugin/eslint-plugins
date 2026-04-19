@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-const assert = require('assert');
-const SourceCode = require('eslint').SourceCode;
-const espree = require('espree');
+const assert = require("assert");
+const SourceCode = require("eslint").SourceCode;
+const espree = require("espree");
 
-const getFromContext = require('../../lib/util/pragma').getFromContext;
+const getFromContext = require("../../lib/util/pragma").getFromContext;
 
 const DEFAULT_CONFIG = {
   ecmaVersion: 6,
@@ -16,7 +16,7 @@ const DEFAULT_CONFIG = {
 
 const DEFAULT_SETTINGS = {
   react: {
-    pragma: 'React',
+    pragma: "React",
   },
 };
 
@@ -28,37 +28,34 @@ const fakeContext = (code) => {
   };
 };
 
-describe('pragma', () => {
-  describe('getFromContext', () => {
-    it('finds the pragma in a block comment', () => {
-      const code = '/* @jsx jsx */';
-      assert.strictEqual(getFromContext(fakeContext(code)), 'jsx');
+describe("pragma", () => {
+  describe("getFromContext", () => {
+    it("finds the pragma in a block comment", () => {
+      const code = "/* @jsx jsx */";
+      assert.strictEqual(getFromContext(fakeContext(code)), "jsx");
     });
 
-    it('finds the pragma in a docstring comment', () => {
-      const code = '/** @jsx jsx */';
-      assert.strictEqual(getFromContext(fakeContext(code)), 'jsx');
+    it("finds the pragma in a docstring comment", () => {
+      const code = "/** @jsx jsx */";
+      assert.strictEqual(getFromContext(fakeContext(code)), "jsx");
     });
 
-    it('finds the pragma in a line comment', () => {
-      const code = '// @jsx jsx';
+    it("finds the pragma in a line comment", () => {
+      const code = "// @jsx jsx";
+      assert.strictEqual(getFromContext(fakeContext(code)), "jsx");
+    });
+
+    it("defaults to the value of settings.react.pragma", () => {
+      const code = "";
       assert.strictEqual(
         getFromContext(fakeContext(code)),
-        'jsx'
+        DEFAULT_SETTINGS.react.pragma,
       );
     });
 
-    it('defaults to the value of settings.react.pragma', () => {
-      const code = '';
-      assert.strictEqual(
-        getFromContext(fakeContext(code)),
-        DEFAULT_SETTINGS.react.pragma
-      );
-    });
-
-    it('returns React if the pragma is invalid', () => {
-      const code = '/* @jsx invalid-jsx-pragma */';
-      assert.equal(getFromContext(fakeContext(code)), 'React');
+    it("returns React if the pragma is invalid", () => {
+      const code = "/* @jsx invalid-jsx-pragma */";
+      assert.equal(getFromContext(fakeContext(code)), "React");
     });
   });
 });

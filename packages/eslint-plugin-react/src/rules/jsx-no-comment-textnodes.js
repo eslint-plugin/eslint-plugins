@@ -3,18 +3,19 @@
  * @author Ben Vinegar
  */
 
-'use strict';
+"use strict";
 
-const docsUrl = require('../util/docsUrl');
-const getText = require('../util/eslint').getText;
-const report = require('../util/report');
+const docsUrl = require("../util/docsUrl");
+const getText = require("../util/eslint").getText;
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  putCommentInBraces: 'Comments inside children section of tag should be placed inside braces',
+  putCommentInBraces:
+    "Comments inside children section of tag should be placed inside braces",
 };
 
 /**
@@ -28,11 +29,11 @@ function checkText(context, node) {
   if (/^\s*\/(\/|\*)/m.test(rawValue)) {
     // inside component, e.g. <div>literal</div>
     if (
-      node.parent.type !== 'JSXAttribute'
-      && node.parent.type !== 'JSXExpressionContainer'
-      && node.parent.type.indexOf('JSX') !== -1
+      node.parent.type !== "JSXAttribute" &&
+      node.parent.type !== "JSXExpressionContainer" &&
+      node.parent.type.indexOf("JSX") !== -1
     ) {
-      report(context, messages.putCommentInBraces, 'putCommentInBraces', {
+      report(context, messages.putCommentInBraces, "putCommentInBraces", {
         node,
       });
     }
@@ -43,10 +44,10 @@ function checkText(context, node) {
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow comments from being inserted as text nodes',
-      category: 'Possible Errors',
+      description: "Disallow comments from being inserted as text nodes",
+      category: "Possible Errors",
       recommended: true,
-      url: docsUrl('jsx-no-comment-textnodes'),
+      url: docsUrl("jsx-no-comment-textnodes"),
     },
 
     messages,

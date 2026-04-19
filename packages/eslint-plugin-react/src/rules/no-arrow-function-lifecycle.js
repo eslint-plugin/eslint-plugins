@@ -3,15 +3,15 @@
  * @author Tan Nguyen
  */
 
-'use strict';
+"use strict";
 
-const Components = require('../util/Components');
-const astUtil = require('../util/ast');
-const componentUtil = require('../util/componentUtil');
-const docsUrl = require('../util/docsUrl');
-const lifecycleMethods = require('../util/lifecycleMethods');
-const report = require('../util/report');
-const eslintUtil = require('../util/eslint');
+const Components = require("../util/Components");
+const astUtil = require("../util/ast");
+const componentUtil = require("../util/componentUtil");
+const docsUrl = require("../util/docsUrl");
+const lifecycleMethods = require("../util/lifecycleMethods");
+const report = require("../util/report");
+const eslintUtil = require("../util/eslint");
 
 const getSourceCode = eslintUtil.getSourceCode;
 const getText = eslintUtil.getText;
@@ -19,33 +19,35 @@ const getText = eslintUtil.getText;
 function getRuleText(node) {
   const params = node.value.params.map((p) => p.name);
 
-  if (node.type === 'Property') {
-    return `: function(${params.join(', ')}) `;
+  if (node.type === "Property") {
+    return `: function(${params.join(", ")}) `;
   }
 
-  if (node.type === 'ClassProperty' || node.type === 'PropertyDefinition') {
-    return `(${params.join(', ')}) `;
+  if (node.type === "ClassProperty" || node.type === "PropertyDefinition") {
+    return `(${params.join(", ")}) `;
   }
 
   return null;
 }
 
 const messages = {
-  lifecycle: '{{propertyName}} is a React lifecycle method, and should not be an arrow function or in a class field. Use an instance method instead.',
+  lifecycle:
+    "{{propertyName}} is a React lifecycle method, and should not be an arrow function or in a class field. Use an instance method instead.",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Lifecycle methods should be methods on the prototype, not class fields',
-      category: 'Best Practices',
+      description:
+        "Lifecycle methods should be methods on the prototype, not class fields",
+      category: "Best Practices",
       recommended: false,
-      url: docsUrl('no-arrow-function-lifecycle'),
+      url: docsUrl("no-arrow-function-lifecycle"),
     },
     messages,
     schema: [],
-    fixable: 'code',
+    fixable: "code",
   },
 
   create: Components.detect((context, components) => {
@@ -60,15 +62,15 @@ module.exports = {
 
         const propertyName = astUtil.getPropertyName(node);
         const nodeType = node.value.type;
-        const isLifecycleMethod = (
-          node.static && !componentUtil.isES5Component(node, context)
+        const isLifecycleMethod =
+          (node.static && !componentUtil.isES5Component(node, context)
             ? lifecycleMethods.static
             : lifecycleMethods.instance
-        ).indexOf(propertyName) > -1;
+          ).indexOf(propertyName) > -1;
 
-        if (nodeType === 'ArrowFunctionExpression' && isLifecycleMethod) {
+        if (nodeType === "ArrowFunctionExpression" && isLifecycleMethod) {
           const body = node.value.body;
-          const isBlockBody = body.type === 'BlockStatement';
+          const isBlockBody = body.type === "BlockStatement";
           const sourceCode = getSourceCode(context);
 
           let nextComment = [];
@@ -82,8 +84,11 @@ module.exports = {
               previousComment = sourceCode.getCommentsBefore(body);
             } else {
               // eslint 3.x
-              const potentialComment = sourceCode.getTokenBefore(body, { includeComments: true });
-              previousComment = previousToken === potentialComment ? [] : [potentialComment];
+              const potentialComment = sourceCode.getTokenBefore(body, {
+                includeComments: true,
+              });
+              previousComment =
+                previousToken === potentialComment ? [] : [potentialComment];
             }
 
             if (sourceCode.getCommentsAfter) {
@@ -91,52 +96,62 @@ module.exports = {
               nextComment = sourceCode.getCommentsAfter(body);
             } else {
               // eslint 3.x
-              const potentialComment = sourceCode.getTokenAfter(body, { includeComments: true });
+              const potentialComment = sourceCode.getTokenAfter(body, {
+                includeComments: true,
+              });
               const nextToken = sourceCode.getTokenAfter(body);
-              nextComment = nextToken === potentialComment ? [] : [potentialComment];
+              nextComment =
+                nextToken === potentialComment ? [] : [potentialComment];
             }
             bodyRange = [
               (previousComment.length > 0 ? previousComment[0] : body).range[0],
-              (nextComment.length > 0 ? nextComment[nextComment.length - 1] : body).range[1]
-                + (node.value.body.type === 'ObjectExpression' ? 1 : 0), // to account for a wrapped end paren
+              (nextComment.length > 0
+                ? nextComment[nextComment.length - 1]
+                : body
+              ).range[1] +
+                (node.value.body.type === "ObjectExpression" ? 1 : 0), // to account for a wrapped end paren
             ];
           }
           const headRange = [
             node.key.range[1],
             (previousComment.length > 0 ? previousComment[0] : body).range[0],
           ];
-          const hasSemi = node.value.expression && getText(context, node).slice(node.value.range[1] - node.range[0]) === ';';
+          const hasSemi =
+            node.value.expression &&
+            getText(context, node).slice(
+              node.value.range[1] - node.range[0],
+            ) === ";";
 
-          report(
-            context,
-            messages.lifecycle,
-            'lifecycle',
-            {
-              node,
-              data: {
-                propertyName,
-              },
-              fix(fixer) {
-                if (!sourceCode.getCommentsAfter) {
-                  // eslint 3.x
-                  return isBlockBody && fixer.replaceTextRange(headRange, getRuleText(node));
-                }
-                return [].concat(
-                  fixer.replaceTextRange(headRange, getRuleText(node)),
-                  isBlockBody ? [] : fixer.replaceTextRange(
-                    [bodyRange[0], bodyRange[1] + (hasSemi ? 1 : 0)],
-                    `{ return ${previousComment.map((x) => getText(context, x)).join('')}${getText(context, body)}${nextComment.map((x) => getText(context, x)).join('')}; }`
-                  )
+          report(context, messages.lifecycle, "lifecycle", {
+            node,
+            data: {
+              propertyName,
+            },
+            fix(fixer) {
+              if (!sourceCode.getCommentsAfter) {
+                // eslint 3.x
+                return (
+                  isBlockBody &&
+                  fixer.replaceTextRange(headRange, getRuleText(node))
                 );
-              },
-            }
-          );
+              }
+              return [].concat(
+                fixer.replaceTextRange(headRange, getRuleText(node)),
+                isBlockBody
+                  ? []
+                  : fixer.replaceTextRange(
+                      [bodyRange[0], bodyRange[1] + (hasSemi ? 1 : 0)],
+                      `{ return ${previousComment.map((x) => getText(context, x)).join("")}${getText(context, body)}${nextComment.map((x) => getText(context, x)).join("")}; }`,
+                    ),
+              );
+            },
+          });
         }
       });
     }
 
     return {
-      'Program:exit'() {
+      "Program:exit"() {
         Object.values(components.list()).forEach((component) => {
           const properties = astUtil.getComponentProperties(component.node);
           reportNoArrowFunctionLifecycle(properties);

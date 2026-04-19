@@ -3,41 +3,42 @@
  * @author Sergei Startsev
  */
 
-'use strict';
+"use strict";
 
-const astUtil = require('../util/ast');
-const componentUtil = require('../util/componentUtil');
-const docsUrl = require('../util/docsUrl');
-const testReactVersion = require('../util/version').testReactVersion;
-const report = require('../util/report');
+const astUtil = require("../util/ast");
+const componentUtil = require("../util/componentUtil");
+const docsUrl = require("../util/docsUrl");
+const testReactVersion = require("../util/version").testReactVersion;
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  unsafeMethod: '{{method}} is unsafe for use in async rendering. Update the component to use {{newMethod}} instead. {{details}}',
+  unsafeMethod:
+    "{{method}} is unsafe for use in async rendering. Update the component to use {{newMethod}} instead. {{details}}",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow usage of unsafe lifecycle methods',
-      category: 'Best Practices',
+      description: "Disallow usage of unsafe lifecycle methods",
+      category: "Best Practices",
       recommended: false,
-      url: docsUrl('no-unsafe'),
+      url: docsUrl("no-unsafe"),
     },
 
     messages,
 
     schema: [
       {
-        type: 'object',
+        type: "object",
         properties: {
           checkAliases: {
             default: false,
-            type: 'boolean',
+            type: "boolean",
           },
         },
         additionalProperties: false,
@@ -49,28 +50,32 @@ module.exports = {
     const config = context.options[0] || {};
     const checkAliases = config.checkAliases || false;
 
-    const isApplicable = testReactVersion(context, '>= 16.3.0');
+    const isApplicable = testReactVersion(context, ">= 16.3.0");
     if (!isApplicable) {
       return {};
     }
 
     const unsafe = {
       UNSAFE_componentWillMount: {
-        newMethod: 'componentDidMount',
-        details: 'See https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html.',
+        newMethod: "componentDidMount",
+        details:
+          "See https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html.",
       },
       UNSAFE_componentWillReceiveProps: {
-        newMethod: 'getDerivedStateFromProps',
-        details: 'See https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html.',
+        newMethod: "getDerivedStateFromProps",
+        details:
+          "See https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html.",
       },
       UNSAFE_componentWillUpdate: {
-        newMethod: 'componentDidUpdate',
-        details: 'See https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html.',
+        newMethod: "componentDidUpdate",
+        details:
+          "See https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html.",
       },
     };
     if (checkAliases) {
       unsafe.componentWillMount = unsafe.UNSAFE_componentWillMount;
-      unsafe.componentWillReceiveProps = unsafe.UNSAFE_componentWillReceiveProps;
+      unsafe.componentWillReceiveProps =
+        unsafe.UNSAFE_componentWillReceiveProps;
       unsafe.componentWillUpdate = unsafe.UNSAFE_componentWillUpdate;
     }
 
@@ -106,10 +111,11 @@ module.exports = {
       const newMethod = meta.newMethod;
       const details = meta.details;
 
-      const propertyNode = astUtil.getComponentProperties(node)
+      const propertyNode = astUtil
+        .getComponentProperties(node)
         .find((property) => astUtil.getPropertyName(property) === method);
 
-      report(context, messages.unsafeMethod, 'unsafeMethod', {
+      report(context, messages.unsafeMethod, "unsafeMethod", {
         node: propertyNode,
         data: {
           method,
@@ -134,7 +140,10 @@ module.exports = {
      * @param {ASTNode} node The AST node being checked.
      */
     function checkLifeCycleMethods(node) {
-      if (componentUtil.isES5Component(node, context) || componentUtil.isES6Component(node, context)) {
+      if (
+        componentUtil.isES5Component(node, context) ||
+        componentUtil.isES6Component(node, context)
+      ) {
         const methods = getLifeCycleMethods(node);
         methods
           .sort((a, b) => a.localeCompare(b))

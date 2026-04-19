@@ -3,20 +3,20 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/prefer-stateless-function');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/prefer-stateless-function");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('prefer-stateless-function', rule, {
+ruleTester.run("prefer-stateless-function", rule, {
   valid: parsers.all([
     {
       // Already a stateless function
@@ -39,7 +39,7 @@ ruleTester.run('prefer-stateless-function', rule, {
     },
     {
       // Already a stateless (arrow) function
-      code: 'const Foo = ({foo}) => <div>{foo}</div>;',
+      code: "const Foo = ({foo}) => <div>{foo}</div>;",
     },
     {
       // Extends from PureComponent and uses props
@@ -173,7 +173,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      features: ['no-default', 'no-babel'],
+      features: ["no-default", "no-babel"],
     },
     {
       // Use this.bar
@@ -228,7 +228,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      settings: { react: { version: '0.14.0' } },
+      settings: { react: { version: "0.14.0" } },
     },
     {
       // Can return null (ES5, React 0.14.0)
@@ -242,7 +242,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         });
       `,
-      settings: { react: { version: '0.14.0' } },
+      settings: { react: { version: "0.14.0" } },
     },
     {
       // Can return null (shorthand if in return, React 0.14.0)
@@ -253,7 +253,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      settings: { react: { version: '0.14.0' } },
+      settings: { react: { version: "0.14.0" } },
     },
     {
       code: `
@@ -290,7 +290,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      features: ['decorators'],
+      features: ["decorators"],
     },
     {
       // Uses a called decorator
@@ -302,7 +302,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      features: ['decorators'],
+      features: ["decorators"],
     },
     {
       // Uses multiple decorators
@@ -315,7 +315,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      features: ['decorators'],
+      features: ["decorators"],
     },
     {
       code: `
@@ -350,7 +350,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [{ ignorePureComponents: true }],
     },
     {
@@ -374,7 +374,7 @@ ruleTester.run('prefer-stateless-function', rule, {
             }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [{ ignorePureComponents: true }],
     },
     {
@@ -396,7 +396,7 @@ ruleTester.run('prefer-stateless-function', rule, {
             }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [{ ignorePureComponents: true }],
     },
     {
@@ -421,7 +421,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      errors: [{ messageId: 'componentShouldBePure' }],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -431,7 +431,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      errors: [{ messageId: 'componentShouldBePure' }],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -441,7 +441,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      errors: [{ messageId: 'componentShouldBePure' }],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -451,7 +451,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      errors: [{ messageId: 'componentShouldBePure' }],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -464,7 +464,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      errors: [{ messageId: 'componentShouldBePure' }],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -475,8 +475,8 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ messageId: 'componentShouldBePure' }],
+      features: ["class fields"],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -491,7 +491,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      errors: [{ messageId: 'componentShouldBePure' }],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -504,8 +504,8 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ messageId: 'componentShouldBePure' }],
+      features: ["class fields"],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -518,8 +518,8 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [{ messageId: 'componentShouldBePure' }],
+      features: ["flow"],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -532,7 +532,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      errors: [{ messageId: 'componentShouldBePure' }],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -543,7 +543,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      errors: [{ messageId: 'componentShouldBePure' }],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -556,7 +556,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      errors: [{ messageId: 'componentShouldBePure' }],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -569,7 +569,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'componentShouldBePure' }],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -579,7 +579,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      errors: [{ messageId: 'componentShouldBePure' }],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -593,8 +593,8 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ messageId: 'componentShouldBePure' }],
+      features: ["class fields"],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -610,7 +610,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      errors: [{ messageId: 'componentShouldBePure' }],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -624,7 +624,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           foo: true
         };
       `,
-      errors: [{ messageId: 'componentShouldBePure' }],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -638,8 +638,8 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ messageId: 'componentShouldBePure' }],
+      features: ["class fields"],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -655,7 +655,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           }
         }
       `,
-      errors: [{ messageId: 'componentShouldBePure' }],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
     {
       code: `
@@ -669,7 +669,7 @@ ruleTester.run('prefer-stateless-function', rule, {
           foo: PropTypes.boolean
         };
       `,
-      errors: [{ messageId: 'componentShouldBePure' }],
+      errors: [{ messageId: "componentShouldBePure" }],
     },
   ]),
 });

@@ -2,281 +2,272 @@
  * @fileoverview Tests for forbid-elements
  */
 
-'use strict';
+"use strict";
 
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/forbid-elements');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/forbid-elements");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
 };
 
-require('babel-eslint');
+require("babel-eslint");
 
 // -----------------------------------------------------------------------------
 // Tests
 // -----------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('forbid-elements', rule, {
+ruleTester.run("forbid-elements", rule, {
   valid: parsers.all([
     {
-      code: '<button />',
+      code: "<button />",
       options: [],
     },
     {
-      code: '<button />',
+      code: "<button />",
       options: [{ forbid: [] }],
     },
     {
-      code: '<Button />',
-      options: [{ forbid: ['button'] }],
+      code: "<Button />",
+      options: [{ forbid: ["button"] }],
     },
     {
-      code: '<Button />',
-      options: [{ forbid: [{ element: 'button' }] }],
+      code: "<Button />",
+      options: [{ forbid: [{ element: "button" }] }],
     },
     {
-      code: 'React.createElement(button)',
-      options: [{ forbid: ['button'] }],
+      code: "React.createElement(button)",
+      options: [{ forbid: ["button"] }],
     },
     {
       code: 'createElement("button")',
-      options: [{ forbid: ['button'] }],
+      options: [{ forbid: ["button"] }],
     },
     {
       code: 'NotReact.createElement("button")',
-      options: [{ forbid: ['button'] }],
+      options: [{ forbid: ["button"] }],
     },
     {
       code: 'React.createElement("_thing")',
-      options: [{ forbid: ['_thing'] }],
+      options: [{ forbid: ["_thing"] }],
     },
     {
       code: 'React.createElement("Modal")',
-      options: [{ forbid: ['Modal'] }],
+      options: [{ forbid: ["Modal"] }],
     },
     {
       code: 'React.createElement("dotted.component")',
-      options: [{ forbid: ['dotted.component'] }],
+      options: [{ forbid: ["dotted.component"] }],
     },
     {
-      code: 'React.createElement(function() {})',
-      options: [{ forbid: ['button'] }],
+      code: "React.createElement(function() {})",
+      options: [{ forbid: ["button"] }],
     },
     {
-      code: 'React.createElement({})',
-      options: [{ forbid: ['button'] }],
+      code: "React.createElement({})",
+      options: [{ forbid: ["button"] }],
     },
     {
-      code: 'React.createElement(1)',
-      options: [{ forbid: ['button'] }],
+      code: "React.createElement(1)",
+      options: [{ forbid: ["button"] }],
     },
     {
-      code: 'React.createElement()',
+      code: "React.createElement()",
     },
   ]),
 
   invalid: parsers.all([
     {
-      code: '<button />',
-      options: [{ forbid: ['button'] }],
+      code: "<button />",
+      options: [{ forbid: ["button"] }],
       errors: [
         {
-          messageId: 'forbiddenElement',
-          data: { element: 'button' },
+          messageId: "forbiddenElement",
+          data: { element: "button" },
         },
       ],
     },
     {
-      code: '[<Modal />, <button />]',
-      options: [{ forbid: ['button', 'Modal'] }],
+      code: "[<Modal />, <button />]",
+      options: [{ forbid: ["button", "Modal"] }],
       errors: [
         {
-          messageId: 'forbiddenElement',
-          data: { element: 'Modal' },
+          messageId: "forbiddenElement",
+          data: { element: "Modal" },
         },
         {
-          messageId: 'forbiddenElement',
-          data: { element: 'button' },
+          messageId: "forbiddenElement",
+          data: { element: "button" },
         },
       ],
     },
     {
-      code: '<dotted.component />',
-      options: [{ forbid: ['dotted.component'] }],
+      code: "<dotted.component />",
+      options: [{ forbid: ["dotted.component"] }],
       errors: [
         {
-          messageId: 'forbiddenElement',
-          data: { element: 'dotted.component' },
+          messageId: "forbiddenElement",
+          data: { element: "dotted.component" },
         },
       ],
     },
     {
-      code: '<dotted.Component />',
+      code: "<dotted.Component />",
+      options: [
+        {
+          forbid: [{ element: "dotted.Component", message: "that ain't cool" }],
+        },
+      ],
+      errors: [
+        {
+          messageId: "forbiddenElement_message",
+          data: { element: "dotted.Component", message: "that ain't cool" },
+        },
+      ],
+    },
+    {
+      code: "<button />",
+      options: [
+        {
+          forbid: [{ element: "button", message: "use <Button> instead" }],
+        },
+      ],
+      errors: [
+        {
+          messageId: "forbiddenElement_message",
+          data: { element: "button", message: "use <Button> instead" },
+        },
+      ],
+    },
+    {
+      code: "<button><input /></button>",
+      options: [
+        {
+          forbid: [{ element: "button" }, { element: "input" }],
+        },
+      ],
+      errors: [
+        {
+          messageId: "forbiddenElement",
+          data: { element: "button" },
+        },
+        {
+          messageId: "forbiddenElement",
+          data: { element: "input" },
+        },
+      ],
+    },
+    {
+      code: "<button><input /></button>",
+      options: [{ forbid: [{ element: "button" }, "input"] }],
+      errors: [
+        {
+          messageId: "forbiddenElement",
+          data: { element: "button" },
+        },
+        {
+          messageId: "forbiddenElement",
+          data: { element: "input" },
+        },
+      ],
+    },
+    {
+      code: "<button><input /></button>",
+      options: [{ forbid: ["input", { element: "button" }] }],
+      errors: [
+        {
+          messageId: "forbiddenElement",
+          data: { element: "button" },
+        },
+        {
+          messageId: "forbiddenElement",
+          data: { element: "input" },
+        },
+      ],
+    },
+    {
+      code: "<button />",
       options: [
         {
           forbid: [
-            { element: 'dotted.Component', message: 'that ain\'t cool' },
+            { element: "button", message: "use <Button> instead" },
+            { element: "button", message: "use <Button2> instead" },
           ],
         },
       ],
       errors: [
         {
-          messageId: 'forbiddenElement_message',
-          data: { element: 'dotted.Component', message: 'that ain\'t cool' },
-        },
-      ],
-    },
-    {
-      code: '<button />',
-      options: [
-        {
-          forbid: [
-            { element: 'button', message: 'use <Button> instead' },
-          ],
-        },
-      ],
-      errors: [
-        {
-          messageId: 'forbiddenElement_message',
-          data: { element: 'button', message: 'use <Button> instead' },
-        },
-      ],
-    },
-    {
-      code: '<button><input /></button>',
-      options: [
-        {
-          forbid: [
-            { element: 'button' },
-            { element: 'input' },
-          ],
-        },
-      ],
-      errors: [
-        {
-          messageId: 'forbiddenElement',
-          data: { element: 'button' },
-        },
-        {
-          messageId: 'forbiddenElement',
-          data: { element: 'input' },
-        },
-      ],
-    },
-    {
-      code: '<button><input /></button>',
-      options: [{ forbid: [{ element: 'button' }, 'input'] }],
-      errors: [
-        {
-          messageId: 'forbiddenElement',
-          data: { element: 'button' },
-        },
-        {
-          messageId: 'forbiddenElement',
-          data: { element: 'input' },
-        },
-      ],
-    },
-    {
-      code: '<button><input /></button>',
-      options: [{ forbid: ['input', { element: 'button' }] }],
-      errors: [
-        {
-          messageId: 'forbiddenElement',
-          data: { element: 'button' },
-        },
-        {
-          messageId: 'forbiddenElement',
-          data: { element: 'input' },
-        },
-      ],
-    },
-    {
-      code: '<button />',
-      options: [
-        {
-          forbid: [
-            { element: 'button', message: 'use <Button> instead' },
-            { element: 'button', message: 'use <Button2> instead' },
-          ],
-        },
-      ],
-      errors: [
-        {
-          messageId: 'forbiddenElement_message',
-          data: { element: 'button', message: 'use <Button2> instead' },
+          messageId: "forbiddenElement_message",
+          data: { element: "button", message: "use <Button2> instead" },
         },
       ],
     },
     {
       code: 'React.createElement("button", {}, child)',
-      options: [{ forbid: ['button'] }],
+      options: [{ forbid: ["button"] }],
       errors: [
         {
-          messageId: 'forbiddenElement',
-          data: { element: 'button' },
+          messageId: "forbiddenElement",
+          data: { element: "button" },
         },
       ],
     },
     {
       code: '[React.createElement(Modal), React.createElement("button")]',
-      options: [{ forbid: ['button', 'Modal'] }],
+      options: [{ forbid: ["button", "Modal"] }],
       errors: [
         {
-          messageId: 'forbiddenElement',
-          data: { element: 'Modal' },
+          messageId: "forbiddenElement",
+          data: { element: "Modal" },
         },
         {
-          messageId: 'forbiddenElement',
-          data: { element: 'button' },
+          messageId: "forbiddenElement",
+          data: { element: "button" },
         },
       ],
     },
     {
-      code: 'React.createElement(dotted.Component)',
+      code: "React.createElement(dotted.Component)",
       options: [
         {
-          forbid: [
-            { element: 'dotted.Component', message: 'that ain\'t cool' },
-          ],
+          forbid: [{ element: "dotted.Component", message: "that ain't cool" }],
         },
       ],
       errors: [
         {
-          messageId: 'forbiddenElement_message',
-          data: { element: 'dotted.Component', message: 'that ain\'t cool' },
-        },
-      ],
-    },
-    {
-      code: 'React.createElement(dotted.component)',
-      options: [{ forbid: ['dotted.component'] }],
-      errors: [
-        {
-          messageId: 'forbiddenElement',
-          data: { element: 'dotted.component' },
+          messageId: "forbiddenElement_message",
+          data: { element: "dotted.Component", message: "that ain't cool" },
         },
       ],
     },
     {
-      code: 'React.createElement(_comp)',
-      options: [{ forbid: ['_comp'] }],
+      code: "React.createElement(dotted.component)",
+      options: [{ forbid: ["dotted.component"] }],
       errors: [
         {
-          messageId: 'forbiddenElement',
-          data: { element: '_comp' },
+          messageId: "forbiddenElement",
+          data: { element: "dotted.component" },
+        },
+      ],
+    },
+    {
+      code: "React.createElement(_comp)",
+      options: [{ forbid: ["_comp"] }],
+      errors: [
+        {
+          messageId: "forbiddenElement",
+          data: { element: "_comp" },
         },
       ],
     },
@@ -284,15 +275,13 @@ ruleTester.run('forbid-elements', rule, {
       code: 'React.createElement("button")',
       options: [
         {
-          forbid: [
-            { element: 'button', message: 'use <Button> instead' },
-          ],
+          forbid: [{ element: "button", message: "use <Button> instead" }],
         },
       ],
       errors: [
         {
-          messageId: 'forbiddenElement_message',
-          data: { element: 'button', message: 'use <Button> instead' },
+          messageId: "forbiddenElement_message",
+          data: { element: "button", message: "use <Button> instead" },
         },
       ],
     },
@@ -300,19 +289,17 @@ ruleTester.run('forbid-elements', rule, {
       code: 'React.createElement("button", {}, React.createElement("input"))',
       options: [
         {
-          forbid: [
-            { element: 'button' }, { element: 'input' },
-          ],
+          forbid: [{ element: "button" }, { element: "input" }],
         },
       ],
       errors: [
         {
-          messageId: 'forbiddenElement',
-          data: { element: 'button' },
+          messageId: "forbiddenElement",
+          data: { element: "button" },
         },
         {
-          messageId: 'forbiddenElement',
-          data: { element: 'input' },
+          messageId: "forbiddenElement",
+          data: { element: "input" },
         },
       ],
     },

@@ -3,20 +3,20 @@
  * @author Jorge Zreik
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/async-server-action');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/async-server-action");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -28,7 +28,7 @@ const parserOptions = {
 
 const ruleTester = new RuleTester({ parserOptions });
 
-ruleTester.run('async-server-action', rule, {
+ruleTester.run("async-server-action", rule, {
   valid: parsers.all([
     {
       code: `
@@ -426,10 +426,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make `addToCart` an `async` function',
+              desc: "Make `addToCart` an `async` function",
               output: `
         async function addToCart(data) {
           'use server';
@@ -449,10 +449,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make `requestUsername` an `async` function',
+              desc: "Make `requestUsername` an `async` function",
               output: `
         async function requestUsername(formData) {
           'use server';
@@ -472,10 +472,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make `addToCart` an `async` function',
+              desc: "Make `addToCart` an `async` function",
               output: `
         async function addToCart(data) {
           "use server";
@@ -495,10 +495,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make `requestUsername` an `async` function',
+              desc: "Make `requestUsername` an `async` function",
               output: `
         async function requestUsername(formData) {
           "use server";
@@ -518,10 +518,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make this function `async`',
+              desc: "Make this function `async`",
               output: `
         const addToCart = async (data) => {
           'use server';
@@ -541,10 +541,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make this function `async`',
+              desc: "Make this function `async`",
               output: `
         const requestUsername = async (formData) => {
           'use server';
@@ -564,10 +564,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make this function `async`',
+              desc: "Make this function `async`",
               output: `
         const addToCart = async (data) => {
           "use server";
@@ -587,10 +587,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make this function `async`',
+              desc: "Make this function `async`",
               output: `
         const requestUsername = async (formData) => {
           "use server";
@@ -610,10 +610,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make this function `async`',
+              desc: "Make this function `async`",
               output: `
         const addToCart = async function (data) {
           'use server';
@@ -633,10 +633,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make this function `async`',
+              desc: "Make this function `async`",
               output: `
         const requestUsername = async function (formData) {
           'use server';
@@ -656,10 +656,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make this function `async`',
+              desc: "Make this function `async`",
               output: `
         const addToCart = async function (data) {
           "use server";
@@ -679,10 +679,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make this function `async`',
+              desc: "Make this function `async`",
               output: `
         const requestUsername = async function (formData) {
           "use server";
@@ -702,10 +702,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make `addToCart` an `async` function',
+              desc: "Make `addToCart` an `async` function",
               output: `
         export async function addToCart(data) {
           'use server';
@@ -724,10 +724,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make `addToCart` an `async` function',
+              desc: "Make `addToCart` an `async` function",
               output: `
         export default async function addToCart(data) {
           'use server';
@@ -746,10 +746,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make this function `async`',
+              desc: "Make this function `async`",
               output: `
         export default async function (data) {
           'use server';
@@ -770,10 +770,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make `action` an `async` function',
+              desc: "Make `action` an `async` function",
               output: `
         const obj = {
           async action() {
@@ -796,10 +796,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make `action` an `async` function',
+              desc: "Make `action` an `async` function",
               output: `
         class Foo {
           async action() {
@@ -822,10 +822,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make `action` an `async` function',
+              desc: "Make `action` an `async` function",
               output: `
         class Foo {
           static async action() {
@@ -848,10 +848,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make `inner` an `async` function',
+              desc: "Make `inner` an `async` function",
               output: `
         function outer() {
           async function inner() {
@@ -872,10 +872,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make `named` an `async` function',
+              desc: "Make `named` an `async` function",
               output: `
         const action = async function named(data) {
           'use server';
@@ -892,10 +892,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make this function `async`',
+              desc: "Make this function `async`",
               output: `
         <form action={async () => { 'use server'; }} />
       `,
@@ -915,10 +915,10 @@ ruleTester.run('async-server-action', rule, {
       `,
       errors: [
         {
-          message: 'Server Actions must be async',
+          message: "Server Actions must be async",
           suggestions: [
             {
-              desc: 'Make this function `async`',
+              desc: "Make this function `async`",
               output: `
         <form
           action={async function () {

@@ -4,19 +4,19 @@
  * @author Joseph Stiles
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-newline');
-const parsers = require('../../helpers/parsers');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-newline");
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -26,7 +26,7 @@ const parserOptions = {
 // Tests
 // ------------------------------------------------------------------------------
 
-new RuleTester({ parserOptions }).run('jsx-newline', rule, {
+new RuleTester({ parserOptions }).run("jsx-newline", rule, {
   valid: parsers.all([
     {
       code: `
@@ -84,7 +84,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           <span>Should be in new line</span>
         </>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
       code: `
@@ -95,7 +95,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
         </>
       `,
       options: [{ prevent: true }],
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
       code: `
@@ -141,7 +141,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           <OneLineComponent />
         </>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
       code: `
@@ -157,7 +157,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           <OneLineComponent />
         </>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
       options: [{ prevent: true, allowMultilines: true }],
     },
     {
@@ -219,9 +219,11 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           <List />
         </div>
       `,
-      errors: [{
-        messageId: 'require',
-      }],
+      errors: [
+        {
+          messageId: "require",
+        },
+      ],
     },
     {
       code: `
@@ -237,7 +239,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           {showSomething === true && <Something />}
         </div>
       `,
-      errors: [{ messageId: 'require' }],
+      errors: [{ messageId: "require" }],
     },
     {
       code: `
@@ -253,7 +255,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           <Button>{data.label}</Button>
         </div>
       `,
-      errors: [{ messageId: 'require' }],
+      errors: [{ messageId: "require" }],
     },
     {
       code: `
@@ -277,7 +279,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           )}
         </div>
       `,
-      errors: [{ messageId: 'require' }],
+      errors: [{ messageId: "require" }],
     },
     {
       code: `
@@ -301,7 +303,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           <OneLineComponent />
         </div>
       `,
-      errors: [{ messageId: 'require' }],
+      errors: [{ messageId: "require" }],
     },
     {
       code: `
@@ -334,7 +336,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
         </div>
       `,
       options: [{ prevent: true, allowMultilines: true }],
-      errors: [{ messageId: 'allowMultilines' }],
+      errors: [{ messageId: "allowMultilines" }],
     },
     {
       code: `
@@ -371,7 +373,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
         </div>
       `,
       options: [{ prevent: true, allowMultilines: true }],
-      errors: [{ messageId: 'allowMultilines' }],
+      errors: [{ messageId: "allowMultilines" }],
     },
     {
       code: `
@@ -402,9 +404,9 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
         </div>
       `,
       errors: [
-        { messageId: 'require' },
-        { messageId: 'require' },
-        { messageId: 'require' },
+        { messageId: "require" },
+        { messageId: "require" },
+        { messageId: "require" },
       ],
     },
     {
@@ -421,7 +423,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           <List />
         </div>
       `,
-      errors: [{ messageId: 'prevent' }],
+      errors: [{ messageId: "prevent" }],
       options: [{ prevent: true }],
     },
     {
@@ -438,7 +440,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           {showSomething === true && <Something />}
         </div>
       `,
-      errors: [{ messageId: 'prevent' }],
+      errors: [{ messageId: "prevent" }],
       options: [{ prevent: true }],
     },
     {
@@ -455,7 +457,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           <Button>{data.label}</Button>
         </div>
       `,
-      errors: [{ messageId: 'prevent' }],
+      errors: [{ messageId: "prevent" }],
       options: [{ prevent: true }],
     },
     {
@@ -480,7 +482,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           )}
         </div>
       `,
-      errors: [{ messageId: 'prevent' }],
+      errors: [{ messageId: "prevent" }],
       options: [{ prevent: true }],
     },
     {
@@ -512,9 +514,9 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
         </div>
       `,
       errors: [
-        { messageId: 'prevent' },
-        { messageId: 'prevent' },
-        { messageId: 'prevent' },
+        { messageId: "prevent" },
+        { messageId: "prevent" },
+        { messageId: "prevent" },
       ],
       options: [{ prevent: true }],
     },
@@ -534,8 +536,8 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           <span>Should be in new line</span>
         </>
       `,
-      errors: [{ messageId: 'require' }],
-      features: ['fragment'],
+      errors: [{ messageId: "require" }],
+      features: ["fragment"],
     },
     {
       output: `
@@ -553,9 +555,9 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           <span>Should be in new line</span>
         </>
       `,
-      errors: [{ messageId: 'prevent' }],
+      errors: [{ messageId: "prevent" }],
       options: [{ prevent: true }],
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
       code: `
@@ -582,10 +584,10 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           <OneLineComponent />
         </>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
       errors: [
-        { messageId: 'allowMultilines' },
-        { messageId: 'allowMultilines' },
+        { messageId: "allowMultilines" },
+        { messageId: "allowMultilines" },
       ],
       options: [{ prevent: true, allowMultilines: true }],
     },
@@ -611,7 +613,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           )}
         </div>
       `,
-      errors: [{ messageId: 'allowMultilines' }],
+      errors: [{ messageId: "allowMultilines" }],
       options: [{ prevent: true, allowMultilines: true }],
     },
     {
@@ -643,9 +645,9 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
         </div>
       `,
       errors: [
-        { messageId: 'prevent' },
-        { messageId: 'allowMultilines' },
-        { messageId: 'prevent' },
+        { messageId: "prevent" },
+        { messageId: "allowMultilines" },
+        { messageId: "prevent" },
       ],
       options: [{ prevent: true, allowMultilines: true }],
     },
@@ -697,7 +699,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
               type="control"
               onClick={ () => this.onClickNavigate('left') }
             />
-${'    '}
+${"    "}
             <sni-sequence-editor-tool
               name="rotate"
               direction="right"
@@ -713,11 +715,11 @@ ${'    '}
           </Fragment>
         )
       `,
-      features: ['types'],
+      features: ["types"],
       options: [{ prevent: true, allowMultilines: true }],
       errors: [
-        { messageId: 'allowMultilines', line: 10 },
-        { messageId: 'prevent', line: 26 },
+        { messageId: "allowMultilines", line: 10 },
+        { messageId: "prevent", line: 26 },
       ],
     },
   ]),

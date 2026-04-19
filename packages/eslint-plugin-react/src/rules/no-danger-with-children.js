@@ -3,28 +3,30 @@
  * @author David Petersen
  */
 
-'use strict';
+"use strict";
 
-const variableUtil = require('../util/variable');
-const jsxUtil = require('../util/jsx');
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
+const variableUtil = require("../util/variable");
+const jsxUtil = require("../util/jsx");
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 const messages = {
-  dangerWithChildren: 'Only set one of `children` or `props.dangerouslySetInnerHTML`',
+  dangerWithChildren:
+    "Only set one of `children` or `props.dangerouslySetInnerHTML`",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow when a DOM element is using both children and dangerouslySetInnerHTML',
-      category: 'Possible Errors',
+      description:
+        "Disallow when a DOM element is using both children and dangerouslySetInnerHTML",
+      category: "Possible Errors",
       recommended: true,
-      url: docsUrl('no-danger-with-children'),
+      url: docsUrl("no-danger-with-children"),
     },
 
     messages,
@@ -47,17 +49,24 @@ module.exports = {
         return false;
       }
       return node.properties.find((prop) => {
-        if (prop.type === 'Property') {
+        if (prop.type === "Property") {
           return prop.key.name === propName;
         }
-        if (prop.type === 'ExperimentalSpreadProperty' || prop.type === 'SpreadElement') {
+        if (
+          prop.type === "ExperimentalSpreadProperty" ||
+          prop.type === "SpreadElement"
+        ) {
           const variable = findSpreadVariable(node, prop.argument.name);
           if (variable && variable.defs.length && variable.defs[0].node.init) {
             if (seenProps.indexOf(prop.argument.name) > -1) {
               return false;
             }
             const newSeenProps = seenProps.concat(prop.argument.name || []);
-            return findObjectProp(variable.defs[0].node.init, propName, newSeenProps);
+            return findObjectProp(
+              variable.defs[0].node.init,
+              propName,
+              newSeenProps,
+            );
           }
         }
         return false;
@@ -73,7 +82,7 @@ module.exports = {
     function findJsxProp(node, propName) {
       const attributes = node.openingElement.attributes;
       return attributes.find((attribute) => {
-        if (attribute.type === 'JSXSpreadAttribute') {
+        if (attribute.type === "JSXSpreadAttribute") {
           const variable = findSpreadVariable(node, attribute.argument.name);
           if (variable && variable.defs.length && variable.defs[0].node.init) {
             return findObjectProp(variable.defs[0].node.init, propName, []);
@@ -89,7 +98,7 @@ module.exports = {
      * @returns {boolean} True if node is a line break, false if not
      */
     function isLineBreak(node) {
-      const isLiteral = node.type === 'Literal' || node.type === 'JSXText';
+      const isLiteral = node.type === "Literal" || node.type === "JSXText";
       const isMultiline = node.loc.start.line !== node.loc.end.line;
       const isWhiteSpaces = jsxUtil.isWhiteSpaces(node.value);
 
@@ -102,43 +111,55 @@ module.exports = {
 
         if (node.children.length && !isLineBreak(node.children[0])) {
           hasChildren = true;
-        } else if (findJsxProp(node, 'children')) {
+        } else if (findJsxProp(node, "children")) {
           hasChildren = true;
         }
 
         if (
-          node.openingElement.attributes
-          && hasChildren
-          && findJsxProp(node, 'dangerouslySetInnerHTML')
+          node.openingElement.attributes &&
+          hasChildren &&
+          findJsxProp(node, "dangerouslySetInnerHTML")
         ) {
-          report(context, messages.dangerWithChildren, 'dangerWithChildren', {
+          report(context, messages.dangerWithChildren, "dangerWithChildren", {
             node,
           });
         }
       },
       CallExpression(node) {
         if (
-          node.callee
-          && node.callee.type === 'MemberExpression'
-          && 'name' in node.callee.property
-          && node.callee.property.name === 'createElement'
-          && node.arguments.length > 1
+          node.callee &&
+          node.callee.type === "MemberExpression" &&
+          "name" in node.callee.property &&
+          node.callee.property.name === "createElement" &&
+          node.arguments.length > 1
         ) {
           let hasChildren = false;
 
           let props = node.arguments[1];
 
-          if (props.type === 'Identifier') {
-            const variable = variableUtil.getVariableFromContext(context, node, props.name);
-            if (variable && variable.defs.length && variable.defs[0].node.init) {
+          if (props.type === "Identifier") {
+            const variable = variableUtil.getVariableFromContext(
+              context,
+              node,
+              props.name,
+            );
+            if (
+              variable &&
+              variable.defs.length &&
+              variable.defs[0].node.init
+            ) {
               props = variable.defs[0].node.init;
             }
           }
 
-          const dangerously = findObjectProp(props, 'dangerouslySetInnerHTML', []);
+          const dangerously = findObjectProp(
+            props,
+            "dangerouslySetInnerHTML",
+            [],
+          );
 
           if (node.arguments.length === 2) {
-            if (findObjectProp(props, 'children', [])) {
+            if (findObjectProp(props, "children", [])) {
               hasChildren = true;
             }
           } else {
@@ -146,7 +167,7 @@ module.exports = {
           }
 
           if (dangerously && hasChildren) {
-            report(context, messages.dangerWithChildren, 'dangerWithChildren', {
+            report(context, messages.dangerWithChildren, "dangerWithChildren", {
               node,
             });
           }

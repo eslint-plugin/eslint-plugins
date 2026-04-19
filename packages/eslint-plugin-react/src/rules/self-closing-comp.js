@@ -3,19 +3,20 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
-const docsUrl = require('../util/docsUrl');
-const jsxUtil = require('../util/jsx');
-const report = require('../util/report');
+const docsUrl = require("../util/docsUrl");
+const jsxUtil = require("../util/jsx");
+const report = require("../util/report");
 
 const optionDefaults = { component: true, html: true };
 
 function isComponent(node) {
   return (
-    node.name
-    && (node.name.type === 'JSXIdentifier' || node.name.type === 'JSXMemberExpression')
-    && !jsxUtil.isDOMComponent(node)
+    node.name &&
+    (node.name.type === "JSXIdentifier" ||
+      node.name.type === "JSXMemberExpression") &&
+    !jsxUtil.isDOMComponent(node)
   );
 }
 
@@ -27,10 +28,10 @@ function childrenIsMultilineSpaces(node) {
   const childrens = node.parent.children;
 
   return (
-    childrens.length === 1
-    && (childrens[0].type === 'Literal' || childrens[0].type === 'JSXText')
-    && childrens[0].value.indexOf('\n') !== -1
-    && childrens[0].value.replace(/(?!\xA0)\s/g, '') === ''
+    childrens.length === 1 &&
+    (childrens[0].type === "Literal" || childrens[0].type === "JSXText") &&
+    childrens[0].value.indexOf("\n") !== -1 &&
+    childrens[0].value.replace(/(?!\xA0)\s/g, "") === ""
   );
 }
 
@@ -39,45 +40,54 @@ function childrenIsMultilineSpaces(node) {
 // ------------------------------------------------------------------------------
 
 const messages = {
-  notSelfClosing: 'Empty components are self-closing',
+  notSelfClosing: "Empty components are self-closing",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow extra closing tags for components without children',
-      category: 'Stylistic Issues',
+      description:
+        "Disallow extra closing tags for components without children",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('self-closing-comp'),
+      url: docsUrl("self-closing-comp"),
     },
-    fixable: 'code',
+    fixable: "code",
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        component: {
-          default: optionDefaults.component,
-          type: 'boolean',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          component: {
+            default: optionDefaults.component,
+            type: "boolean",
+          },
+          html: {
+            default: optionDefaults.html,
+            type: "boolean",
+          },
         },
-        html: {
-          default: optionDefaults.html,
-          type: 'boolean',
-        },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create(context) {
     function isShouldBeSelfClosed(node) {
-      const configuration = Object.assign({}, optionDefaults, context.options[0]);
+      const configuration = Object.assign(
+        {},
+        optionDefaults,
+        context.options[0],
+      );
       return (
-        (configuration.component && isComponent(node))
-        || (configuration.html && jsxUtil.isDOMComponent(node))
-      ) && !node.selfClosing && (childrenIsEmpty(node) || childrenIsMultilineSpaces(node));
+        ((configuration.component && isComponent(node)) ||
+          (configuration.html && jsxUtil.isDOMComponent(node))) &&
+        !node.selfClosing &&
+        (childrenIsEmpty(node) || childrenIsMultilineSpaces(node))
+      );
     }
 
     return {
@@ -85,7 +95,7 @@ module.exports = {
         if (!isShouldBeSelfClosed(node)) {
           return;
         }
-        report(context, messages.notSelfClosing, 'notSelfClosing', {
+        report(context, messages.notSelfClosing, "notSelfClosing", {
           node,
           fix(fixer) {
             // Represents the last character of the JSXOpeningElement, the '>' character
@@ -95,7 +105,7 @@ module.exports = {
 
             // Replace />.*<\/.*>/ with '/>'
             const range = [openingElementEnding, closingElementEnding];
-            return fixer.replaceTextRange(range, ' />');
+            return fixer.replaceTextRange(range, " />");
           },
         });
       },

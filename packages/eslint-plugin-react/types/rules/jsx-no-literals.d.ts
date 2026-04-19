@@ -18,7 +18,7 @@ interface RawElementOverrides {
 export type RawConfig = RawElementConfig & RawElementOverrides;
 
 interface ElementConfigType {
-  type: 'element';
+  type: "element";
 }
 
 interface ElementConfigProperties {
@@ -30,14 +30,14 @@ interface ElementConfigProperties {
 }
 
 interface OverrideConfigProperties {
-  type: 'override';
+  type: "override";
   name: string;
   allowElement: boolean;
   applyToNestedElements: boolean;
 }
 
 export type ElementConfig = {
-  type: 'element';
+  type: "element";
 } & ElementConfigProperties;
 
 export type OverrideConfig = OverrideConfigProperties & ElementConfigProperties;
@@ -49,4 +49,3 @@ interface ElementOverrides {
 export type Config = ElementConfig & ElementOverrides;
 
 export type ResolvedConfig = Config | OverrideConfig;
-

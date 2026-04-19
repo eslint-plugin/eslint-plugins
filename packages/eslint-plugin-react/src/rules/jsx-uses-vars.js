@@ -3,10 +3,10 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
-const docsUrl = require('../util/docsUrl');
-const markVariableAsUsed = require('../util/eslint').markVariableAsUsed;
+const docsUrl = require("../util/docsUrl");
+const markVariableAsUsed = require("../util/eslint").markVariableAsUsed;
 
 // ------------------------------------------------------------------------------
 // Rule Definition
@@ -20,10 +20,11 @@ module.exports = {
   // eslint-disable-next-line eslint-plugin/prefer-message-ids -- https://github.com/not-an-aardvark/eslint-plugin-eslint-plugin/issues/292
   meta: {
     docs: {
-      description: 'Disallow variables used in JSX to be incorrectly marked as unused',
-      category: 'Best Practices',
+      description:
+        "Disallow variables used in JSX to be incorrectly marked as unused",
+      category: "Best Practices",
       recommended: true,
-      url: docsUrl('jsx-uses-vars'),
+      url: docsUrl("jsx-uses-vars"),
     },
     schema: [],
   },
@@ -56,7 +57,6 @@ module.exports = {
 
         markVariableAsUsed(name, node, context);
       },
-
     };
   },
 };

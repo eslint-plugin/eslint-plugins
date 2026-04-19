@@ -3,20 +3,20 @@
  * @author Joachim Seminck
  */
 
-'use strict';
+"use strict";
 
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-first-prop-new-line');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-first-prop-new-line");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -28,23 +28,23 @@ const parserOptions = {
 // -----------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('jsx-first-prop-new-line', rule, {
+ruleTester.run("jsx-first-prop-new-line", rule, {
   valid: parsers.all([
     {
-      code: '<Foo />',
-      options: ['never'],
+      code: "<Foo />",
+      options: ["never"],
     },
     {
       code: '<Foo prop="bar" />',
-      options: ['never'],
+      options: ["never"],
     },
     {
-      code: '<Foo {...this.props} />',
-      options: ['never'],
+      code: "<Foo {...this.props} />",
+      options: ["never"],
     },
     {
-      code: '<Foo a a a />',
-      options: ['never'],
+      code: "<Foo a a a />",
+      options: ["never"],
     },
     {
       code: `
@@ -52,23 +52,23 @@ ruleTester.run('jsx-first-prop-new-line', rule, {
           b
         />
       `,
-      options: ['never'],
+      options: ["never"],
     },
     {
-      code: '<Foo />',
-      options: ['multiline'],
+      code: "<Foo />",
+      options: ["multiline"],
     },
     {
       code: '<Foo prop="one" />',
-      options: ['multiline'],
+      options: ["multiline"],
     },
     {
-      code: '<Foo {...this.props} />',
-      options: ['multiline'],
+      code: "<Foo {...this.props} />",
+      options: ["multiline"],
     },
     {
-      code: '<Foo a a a />',
-      options: ['multiline'],
+      code: "<Foo a a a />",
+      options: ["multiline"],
     },
     {
       code: `
@@ -77,7 +77,7 @@ ruleTester.run('jsx-first-prop-new-line', rule, {
           propTwo="two"
         />
       `,
-      options: ['multiline'],
+      options: ["multiline"],
     },
     {
       code: `
@@ -86,26 +86,26 @@ ruleTester.run('jsx-first-prop-new-line', rule, {
           propTwo="two"
         />
       `,
-      options: ['multiline'],
+      options: ["multiline"],
     },
     {
       code: `
         <Foo bar />
       `,
-      options: ['multiline-multiprop'],
+      options: ["multiline-multiprop"],
     },
     {
       code: `
         <Foo bar baz />
       `,
-      options: ['multiline-multiprop'],
+      options: ["multiline-multiprop"],
     },
     {
       code: `
         <Foo prop={{
         }} />
       `,
-      options: ['multiline-multiprop'],
+      options: ["multiline-multiprop"],
     },
     {
       code: `
@@ -115,11 +115,11 @@ ruleTester.run('jsx-first-prop-new-line', rule, {
           bar
         />
       `,
-      options: ['multiline-multiprop'],
+      options: ["multiline-multiprop"],
     },
     {
-      code: '<Foo />',
-      options: ['always'],
+      code: "<Foo />",
+      options: ["always"],
     },
     {
       code: `
@@ -128,7 +128,7 @@ ruleTester.run('jsx-first-prop-new-line', rule, {
           propTwo="two"
         />
       `,
-      options: ['always'],
+      options: ["always"],
     },
     {
       code: `
@@ -137,25 +137,25 @@ ruleTester.run('jsx-first-prop-new-line', rule, {
           propTwo="two"
         />
       `,
-      options: ['always'],
+      options: ["always"],
     },
     {
       code: `
         <Foo />
       `,
-      options: ['multiprop'],
+      options: ["multiprop"],
     },
     {
       code: `
         <Foo bar />
       `,
-      options: ['multiprop'],
+      options: ["multiprop"],
     },
     {
       code: `
         <Foo {...this.props} />
       `,
-      options: ['multiprop'],
+      options: ["multiprop"],
     },
   ]),
 
@@ -168,8 +168,8 @@ ruleTester.run('jsx-first-prop-new-line', rule, {
         <Foo
 propOne="one" propTwo="two" />
       `,
-      options: ['always'],
-      errors: [{ messageId: 'propOnNewLine' }],
+      options: ["always"],
+      errors: [{ messageId: "propOnNewLine" }],
     },
     {
       code: `
@@ -183,8 +183,8 @@ propOne="one"
           propTwo="two"
         />
       `,
-      options: ['always'],
-      errors: [{ messageId: 'propOnNewLine' }],
+      options: ["always"],
+      errors: [{ messageId: "propOnNewLine" }],
     },
     {
       code: `
@@ -198,8 +198,8 @@ propOne="one"
           propTwo="two"
         />
       `,
-      options: ['never'],
-      errors: [{ messageId: 'propOnSameLine' }],
+      options: ["never"],
+      errors: [{ messageId: "propOnSameLine" }],
     },
     {
       code: `
@@ -211,8 +211,8 @@ propOne="one"
 prop={{
         }} />
       `,
-      options: ['multiline'],
-      errors: [{ messageId: 'propOnNewLine' }],
+      options: ["multiline"],
+      errors: [{ messageId: "propOnNewLine" }],
     },
     {
       code: `
@@ -224,8 +224,8 @@ prop={{
 bar={{
         }} baz />
       `,
-      options: ['multiline-multiprop'],
-      errors: [{ messageId: 'propOnNewLine' }],
+      options: ["multiline-multiprop"],
+      errors: [{ messageId: "propOnNewLine" }],
     },
     {
       code: `
@@ -235,8 +235,8 @@ bar={{
       <Foo
 propOne="one" propTwo="two" />
       `,
-      options: ['multiprop'],
-      errors: [{ messageId: 'propOnNewLine' }],
+      options: ["multiprop"],
+      errors: [{ messageId: "propOnNewLine" }],
     },
     {
       code: `
@@ -246,8 +246,8 @@ bar />
       output: `
       <Foo bar />
       `,
-      options: ['multiprop'],
-      errors: [{ messageId: 'propOnSameLine' }],
+      options: ["multiprop"],
+      errors: [{ messageId: "propOnSameLine" }],
     },
     {
       code: `
@@ -257,8 +257,8 @@ bar />
       output: `
       <Foo {...this.props} />
       `,
-      options: ['multiprop'],
-      errors: [{ messageId: 'propOnSameLine' }],
+      options: ["multiprop"],
+      errors: [{ messageId: "propOnSameLine" }],
     },
     {
       code: `
@@ -269,7 +269,7 @@ bar />
           ]}
         />
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ["ts", "no-babel-old"],
       output: `
         <DataTable<Items>
 fullscreen keyField="id" items={items}
@@ -279,8 +279,8 @@ fullscreen keyField="id" items={items}
           ]}
         />
       `,
-      options: ['multiline'],
-      errors: [{ messageId: 'propOnNewLine' }],
+      options: ["multiline"],
+      errors: [{ messageId: "propOnNewLine" }],
     },
   ]),
 });

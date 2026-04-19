@@ -28,60 +28,70 @@
  THE SOFTWARE.
  */
 
-'use strict';
+"use strict";
 
-const astUtil = require('../util/ast');
-const docsUrl = require('../util/docsUrl');
-const getText = require('../util/eslint').getText;
-const reportC = require('../util/report');
+const astUtil = require("../util/ast");
+const docsUrl = require("../util/docsUrl");
+const getText = require("../util/eslint").getText;
+const reportC = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  wrongIndent: 'Expected indentation of {{needed}} {{type}} {{characters}} but found {{gotten}}.',
+  wrongIndent:
+    "Expected indentation of {{needed}} {{type}} {{characters}} but found {{gotten}}.",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Enforce props indentation in JSX',
-      category: 'Stylistic Issues',
+      description: "Enforce props indentation in JSX",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('jsx-indent-props'),
+      url: docsUrl("jsx-indent-props"),
     },
-    fixable: 'code',
+    fixable: "code",
 
     messages,
 
-    schema: [{
-      anyOf: [{
-        enum: ['tab', 'first'],
-      }, {
-        type: 'integer',
-      }, {
-        type: 'object',
-        properties: {
-          indentMode: {
-            anyOf: [{
-              enum: ['tab', 'first'],
-            }, {
-              type: 'integer',
-            }],
+    schema: [
+      {
+        anyOf: [
+          {
+            enum: ["tab", "first"],
           },
-          ignoreTernaryOperator: {
-            type: 'boolean',
+          {
+            type: "integer",
           },
-        },
-      }],
-    }],
+          {
+            type: "object",
+            properties: {
+              indentMode: {
+                anyOf: [
+                  {
+                    enum: ["tab", "first"],
+                  },
+                  {
+                    type: "integer",
+                  },
+                ],
+              },
+              ignoreTernaryOperator: {
+                type: "boolean",
+              },
+            },
+          },
+        ],
+      },
+    ],
   },
 
   create(context) {
     const extraColumnStart = 0;
-    let indentType = 'space';
+    let indentType = "space";
     /** @type {number|'first'} */
     let indentSize = 4;
     const line = {
@@ -91,20 +101,20 @@ module.exports = {
     let ignoreTernaryOperator = false;
 
     if (context.options.length) {
-      const isConfigObject = typeof context.options[0] === 'object';
+      const isConfigObject = typeof context.options[0] === "object";
       const indentMode = isConfigObject
         ? context.options[0].indentMode
         : context.options[0];
 
-      if (indentMode === 'first') {
-        indentSize = 'first';
-        indentType = 'space';
-      } else if (indentMode === 'tab') {
+      if (indentMode === "first") {
+        indentSize = "first";
+        indentType = "space";
+      } else if (indentMode === "tab") {
         indentSize = 1;
-        indentType = 'tab';
-      } else if (typeof indentMode === 'number') {
+        indentType = "tab";
+      } else if (typeof indentMode === "number") {
         indentSize = indentMode;
-        indentType = 'space';
+        indentType = "space";
       }
 
       if (isConfigObject && context.options[0].ignoreTernaryOperator) {
@@ -122,16 +132,17 @@ module.exports = {
       const msgContext = {
         needed,
         type: indentType,
-        characters: needed === 1 ? 'character' : 'characters',
+        characters: needed === 1 ? "character" : "characters",
         gotten,
       };
 
-      reportC(context, messages.wrongIndent, 'wrongIndent', {
+      reportC(context, messages.wrongIndent, "wrongIndent", {
         node,
         data: msgContext,
         fix(fixer) {
-          return fixer.replaceTextRange([node.range[0] - node.loc.start.column, node.range[0]],
-            (indentType === 'space' ? ' ' : '\t').repeat(needed)
+          return fixer.replaceTextRange(
+            [node.range[0] - node.loc.start.column, node.range[0]],
+            (indentType === "space" ? " " : "\t").repeat(needed),
           );
         },
       });
@@ -143,19 +154,24 @@ module.exports = {
      * @return {number} Indent
      */
     function getNodeIndent(node) {
-      let src = getText(context, node, node.loc.start.column + extraColumnStart);
-      const lines = src.split('\n');
+      let src = getText(
+        context,
+        node,
+        node.loc.start.column + extraColumnStart,
+      );
+      const lines = src.split("\n");
       src = lines[0];
 
       let regExp;
-      if (indentType === 'space') {
+      if (indentType === "space") {
         regExp = /^[ ]+/;
       } else {
         regExp = /^[\t]+/;
       }
 
       const indent = regExp.exec(src);
-      const useOperator = /^([ ]|[\t])*[:]/.test(src) || /^([ ]|[\t])*[?]/.test(src);
+      const useOperator =
+        /^([ ]|[\t])*[:]/.test(src) || /^([ ]|[\t])*[?]/.test(src);
       const useBracket = /[<]/.test(src);
 
       line.currentOperator = false;
@@ -179,17 +195,19 @@ module.exports = {
       nodes.forEach((node) => {
         const nodeIndent = getNodeIndent(node);
         if (
-          line.isUsingOperator
-          && !line.currentOperator
-          && indentSize !== 'first'
-          && !ignoreTernaryOperator
+          line.isUsingOperator &&
+          !line.currentOperator &&
+          indentSize !== "first" &&
+          !ignoreTernaryOperator
         ) {
           nestedIndent += indentSize;
           line.isUsingOperator = false;
         }
         if (
-          node.type !== 'ArrayExpression' && node.type !== 'ObjectExpression'
-          && nodeIndent !== nestedIndent && astUtil.isNodeFirstInLine(context, node)
+          node.type !== "ArrayExpression" &&
+          node.type !== "ObjectExpression" &&
+          nodeIndent !== nestedIndent &&
+          astUtil.isNodeFirstInLine(context, node)
         ) {
           report(node, nestedIndent, nodeIndent);
         }
@@ -202,7 +220,7 @@ module.exports = {
           return;
         }
         let propIndent;
-        if (indentSize === 'first') {
+        if (indentSize === "first") {
           const firstPropNode = node.attributes[0];
           propIndent = firstPropNode.loc.start.column;
         } else {

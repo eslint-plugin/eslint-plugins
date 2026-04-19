@@ -3,11 +3,11 @@
  * @author Sergei Startsev
  */
 
-'use strict';
+"use strict";
 
-const docsUrl = require('../util/docsUrl');
-const linkComponentsUtil = require('../util/linkComponents');
-const report = require('../util/report');
+const docsUrl = require("../util/docsUrl");
+const linkComponentsUtil = require("../util/linkComponents");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
@@ -15,11 +15,15 @@ const report = require('../util/report');
 
 // https://github.com/facebook/react/blob/d0ebde77f6d1232cefc0da184d731943d78e86f2/packages/react-dom/src/shared/sanitizeURL.js#L30
 /* eslint-disable-next-line max-len, no-control-regex */
-const isJavaScriptProtocol = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i;
+const isJavaScriptProtocol =
+  /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i;
 
 function hasJavaScriptProtocol(attr) {
-  return attr.value && attr.value.type === 'Literal'
-    && isJavaScriptProtocol.test(attr.value.value);
+  return (
+    attr.value &&
+    attr.value.type === "Literal" &&
+    isJavaScriptProtocol.test(attr.value.value)
+  );
 }
 
 function shouldVerifyProp(node, config) {
@@ -39,17 +43,18 @@ function parseLegacyOption(config, option) {
 }
 
 const messages = {
-  noScriptURL: 'A future version of React will block javascript: URLs as a security precaution. Use event handlers instead if you can. If you need to generate unsafe HTML, try using dangerouslySetInnerHTML instead.',
+  noScriptURL:
+    "A future version of React will block javascript: URLs as a security precaution. Use event handlers instead if you can. If you need to generate unsafe HTML, try using dangerouslySetInnerHTML instead.",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow usage of `javascript:` URLs',
-      category: 'Best Practices',
+      description: "Disallow usage of `javascript:` URLs",
+      category: "Best Practices",
       recommended: false,
-      url: docsUrl('jsx-no-script-url'),
+      url: docsUrl("jsx-no-script-url"),
     },
 
     messages,
@@ -57,34 +62,34 @@ module.exports = {
     schema: {
       anyOf: [
         {
-          type: 'array',
+          type: "array",
           items: [
             {
-              type: 'array',
+              type: "array",
               uniqueItems: true,
               items: {
-                type: 'object',
+                type: "object",
                 properties: {
                   name: {
-                    type: 'string',
+                    type: "string",
                   },
                   props: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      type: 'string',
+                      type: "string",
                       uniqueItems: true,
                     },
                   },
                 },
-                required: ['name', 'props'],
+                required: ["name", "props"],
                 additionalProperties: false,
               },
             },
             {
-              type: 'object',
+              type: "object",
               properties: {
                 includeFromSettings: {
-                  type: 'boolean',
+                  type: "boolean",
                 },
               },
               additionalItems: false,
@@ -93,13 +98,13 @@ module.exports = {
           additionalItems: false,
         },
         {
-          type: 'array',
+          type: "array",
           items: [
             {
-              type: 'object',
+              type: "object",
               properties: {
                 includeFromSettings: {
-                  type: 'boolean',
+                  type: "boolean",
                 },
               },
               additionalItems: false,
@@ -116,23 +121,28 @@ module.exports = {
     const hasLegacyOption = Array.isArray(options[0]);
     const legacyOptions = hasLegacyOption ? options[0] : [];
     // eslint-disable-next-line no-nested-ternary
-    const objectOption = (hasLegacyOption && options.length > 1)
-      ? options[1]
-      : (options.length > 0
-        ? options[0]
-        : {
-          includeFromSettings: false,
-        }
-      );
+    const objectOption =
+      hasLegacyOption && options.length > 1
+        ? options[1]
+        : options.length > 0
+          ? options[0]
+          : {
+              includeFromSettings: false,
+            };
     const includeFromSettings = objectOption.includeFromSettings;
 
-    const linkComponents = linkComponentsUtil.getLinkComponents(includeFromSettings ? context : {});
+    const linkComponents = linkComponentsUtil.getLinkComponents(
+      includeFromSettings ? context : {},
+    );
     parseLegacyOption(linkComponents, legacyOptions);
 
     return {
       JSXAttribute(node) {
-        if (shouldVerifyProp(node, linkComponents) && hasJavaScriptProtocol(node)) {
-          report(context, messages.noScriptURL, 'noScriptURL', {
+        if (
+          shouldVerifyProp(node, linkComponents) &&
+          hasJavaScriptProtocol(node)
+        ) {
+          report(context, messages.noScriptURL, "noScriptURL", {
             node,
           });
         }

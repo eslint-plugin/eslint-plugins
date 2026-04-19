@@ -3,20 +3,20 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-indent-props');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-indent-props");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('jsx-indent-props', rule, {
+ruleTester.run("jsx-indent-props", rule, {
   valid: parsers.all([
     {
       code: `
@@ -83,13 +83,13 @@ ruleTester.run('jsx-indent-props', rule, {
 \t\t\t\t\tfoo
 \t\t\t\t/>
 \t\t\t`,
-      options: ['tab'],
+      options: ["tab"],
     },
     {
       code: `
         <App/>
       `,
-      options: ['first'],
+      options: ["first"],
     },
     {
       code: `
@@ -98,7 +98,7 @@ ruleTester.run('jsx-indent-props', rule, {
              cc
         />
       `,
-      options: ['first'],
+      options: ["first"],
     },
     {
       code: `
@@ -107,7 +107,7 @@ ruleTester.run('jsx-indent-props', rule, {
                cc
         />
       `,
-      options: ['first'],
+      options: ["first"],
     },
     {
       code: `
@@ -116,7 +116,7 @@ ruleTester.run('jsx-indent-props', rule, {
                           cc
                      />
       `,
-      options: ['first'],
+      options: ["first"],
     },
     {
       code: `
@@ -125,7 +125,7 @@ ruleTester.run('jsx-indent-props', rule, {
              cc
         />
       `,
-      options: ['first'],
+      options: ["first"],
     },
     {
       code: `
@@ -134,7 +134,7 @@ ruleTester.run('jsx-indent-props', rule, {
                           cc
                      />
       `,
-      options: ['first'],
+      options: ["first"],
     },
     {
       code: `
@@ -145,7 +145,7 @@ ruleTester.run('jsx-indent-props', rule, {
                    d/>
         </App>
       `,
-      options: ['first'],
+      options: ["first"],
     },
     {
       code: `
@@ -160,7 +160,7 @@ ruleTester.run('jsx-indent-props', rule, {
           />
         </Fragment>
       `,
-      options: ['first'],
+      options: ["first"],
     },
     {
       code: `
@@ -169,7 +169,7 @@ ruleTester.run('jsx-indent-props', rule, {
           b
         />
       `,
-      options: ['first'],
+      options: ["first"],
     },
     {
       code: `
@@ -253,7 +253,7 @@ ruleTester.run('jsx-indent-props', rule, {
 `,
       options: [
         {
-          indentMode: 'tab',
+          indentMode: "tab",
           ignoreTernaryOperator: false,
         },
       ],
@@ -274,7 +274,7 @@ ruleTester.run('jsx-indent-props', rule, {
 `,
       options: [
         {
-          indentMode: 'tab',
+          indentMode: "tab",
           ignoreTernaryOperator: true,
         },
       ],
@@ -332,7 +332,7 @@ ruleTester.run('jsx-indent-props', rule, {
           <span aria-hidden={'true'}/>
         </a>
       `,
-      options: ['first'],
+      options: ["first"],
     },
   ]),
 
@@ -350,11 +350,11 @@ ruleTester.run('jsx-indent-props', rule, {
       `,
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 12,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 10,
           },
         },
@@ -374,11 +374,11 @@ ruleTester.run('jsx-indent-props', rule, {
       options: [2],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 10,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 12,
           },
         },
@@ -406,20 +406,20 @@ ruleTester.run('jsx-indent-props', rule, {
       options: [2],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 14,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 12,
           },
         },
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 14,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 12,
           },
         },
@@ -447,11 +447,11 @@ ruleTester.run('jsx-indent-props', rule, {
       options: [2],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 14,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 16,
           },
         },
@@ -475,11 +475,11 @@ ruleTester.run('jsx-indent-props', rule, {
       options: [2],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 14,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 12,
           },
         },
@@ -505,20 +505,20 @@ ruleTester.run('jsx-indent-props', rule, {
       options: [2],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 14,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 12,
           },
         },
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 14,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 12,
           },
         },
@@ -544,20 +544,20 @@ ruleTester.run('jsx-indent-props', rule, {
       options: [2],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 14,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 12,
           },
         },
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 14,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 12,
           },
         },
@@ -574,14 +574,14 @@ ruleTester.run('jsx-indent-props', rule, {
 \tfoo
         />
       `,
-      options: ['tab'],
+      options: ["tab"],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 1,
-            type: 'tab',
-            characters: 'character',
+            type: "tab",
+            characters: "character",
             gotten: 0,
           },
         },
@@ -598,14 +598,14 @@ ruleTester.run('jsx-indent-props', rule, {
 \t\t\t\t\tfoo
 \t\t\t\t/>
 \t\t\t`,
-      options: ['tab'],
+      options: ["tab"],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 5,
-            type: 'tab',
-            characters: 'characters',
+            type: "tab",
+            characters: "characters",
             gotten: 7,
           },
         },
@@ -622,14 +622,14 @@ ruleTester.run('jsx-indent-props', rule, {
              b
         />
       `,
-      options: ['first'],
+      options: ["first"],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 13,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 10,
           },
         },
@@ -646,14 +646,14 @@ ruleTester.run('jsx-indent-props', rule, {
               b
         />
       `,
-      options: ['first'],
+      options: ["first"],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 14,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 11,
           },
         },
@@ -672,14 +672,14 @@ ruleTester.run('jsx-indent-props', rule, {
               b
         />
       `,
-      options: ['first'],
+      options: ["first"],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 14,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 11,
           },
         },
@@ -700,23 +700,23 @@ ruleTester.run('jsx-indent-props', rule, {
           c
         />
       `,
-      options: ['first'],
+      options: ["first"],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 10,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 9,
           },
         },
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 10,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 11,
           },
         },
@@ -757,11 +757,11 @@ ruleTester.run('jsx-indent-props', rule, {
       ],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 12,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 14,
           },
         },
@@ -802,11 +802,11 @@ ruleTester.run('jsx-indent-props', rule, {
       ],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 12,
-            type: 'space',
-            characters: 'characters',
+            type: "space",
+            characters: "characters",
             gotten: 14,
           },
         },
@@ -841,17 +841,17 @@ ruleTester.run('jsx-indent-props', rule, {
 `,
       options: [
         {
-          indentMode: 'tab',
+          indentMode: "tab",
           ignoreTernaryOperator: false,
         },
       ],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 6,
-            type: 'tab',
-            characters: 'characters',
+            type: "tab",
+            characters: "characters",
             gotten: 7,
           },
         },
@@ -886,17 +886,17 @@ ruleTester.run('jsx-indent-props', rule, {
 `,
       options: [
         {
-          indentMode: 'tab',
+          indentMode: "tab",
           ignoreTernaryOperator: true,
         },
       ],
       errors: [
         {
-          messageId: 'wrongIndent',
+          messageId: "wrongIndent",
           data: {
             needed: 6,
-            type: 'tab',
-            characters: 'characters',
+            type: "tab",
+            characters: "characters",
             gotten: 7,
           },
         },

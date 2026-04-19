@@ -3,39 +3,40 @@
  * @author Chris<wfsr@foxmail.com>
  */
 
-'use strict';
+"use strict";
 
-const variableUtil = require('../util/variable');
-const jsxUtil = require('../util/jsx');
-const docsUrl = require('../util/docsUrl');
-const reportC = require('../util/report');
+const variableUtil = require("../util/variable");
+const jsxUtil = require("../util/jsx");
+const docsUrl = require("../util/docsUrl");
+const reportC = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  wrongDepth: 'Expected the depth of nested jsx elements to be <= {{needed}}, but found {{found}}.',
+  wrongDepth:
+    "Expected the depth of nested jsx elements to be <= {{needed}}, but found {{found}}.",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Enforce JSX maximum depth',
-      category: 'Stylistic Issues',
+      description: "Enforce JSX maximum depth",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('jsx-max-depth'),
+      url: docsUrl("jsx-max-depth"),
     },
 
     messages,
 
     schema: [
       {
-        type: 'object',
+        type: "object",
         properties: {
           max: {
-            type: 'integer',
+            type: "integer",
             minimum: 0,
           },
         },
@@ -47,14 +48,17 @@ module.exports = {
     const DEFAULT_DEPTH = 2;
 
     const option = context.options[0] || {};
-    const maxDepth = option.hasOwnProperty('max') ? option.max : DEFAULT_DEPTH;
+    const maxDepth = option.hasOwnProperty("max") ? option.max : DEFAULT_DEPTH;
 
     function isExpression(node) {
-      return node.type === 'JSXExpressionContainer';
+      return node.type === "JSXExpressionContainer";
     }
 
     function hasJSX(node) {
-      return jsxUtil.isJSX(node) || (isExpression(node) && jsxUtil.isJSX(node.expression));
+      return (
+        jsxUtil.isJSX(node) ||
+        (isExpression(node) && jsxUtil.isJSX(node.expression))
+      );
     }
 
     function isLeaf(node) {
@@ -77,7 +81,7 @@ module.exports = {
     }
 
     function report(node, depth) {
-      reportC(context, messages.wrongDepth, 'wrongDepth', {
+      reportC(context, messages.wrongDepth, "wrongDepth", {
         node,
         data: {
           found: depth,
@@ -89,29 +93,40 @@ module.exports = {
     function findJSXElementOrFragment(startNode, name, previousReferences) {
       function find(refs, prevRefs) {
         for (let i = refs.length - 1; i >= 0; i--) {
-          if (typeof refs[i].writeExpr !== 'undefined') {
+          if (typeof refs[i].writeExpr !== "undefined") {
             const writeExpr = refs[i].writeExpr;
 
-            return (jsxUtil.isJSX(writeExpr)
-              && writeExpr)
-              || ((writeExpr && writeExpr.type === 'Identifier')
-              && findJSXElementOrFragment(startNode, writeExpr.name, prevRefs));
+            return (
+              (jsxUtil.isJSX(writeExpr) && writeExpr) ||
+              (writeExpr &&
+                writeExpr.type === "Identifier" &&
+                findJSXElementOrFragment(startNode, writeExpr.name, prevRefs))
+            );
           }
         }
 
         return null;
       }
 
-      const variable = variableUtil.getVariableFromContext(context, startNode, name);
+      const variable = variableUtil.getVariableFromContext(
+        context,
+        startNode,
+        name,
+      );
       if (variable && variable.references) {
-        const containDuplicates = previousReferences.some((ref) => variable.references.includes(ref));
+        const containDuplicates = previousReferences.some((ref) =>
+          variable.references.includes(ref),
+        );
 
         // Prevent getting stuck in circular references
         if (containDuplicates) {
           return false;
         }
 
-        return find(variable.references, previousReferences.concat(variable.references));
+        return find(
+          variable.references,
+          previousReferences.concat(variable.references),
+        );
       }
 
       return false;
@@ -119,13 +134,15 @@ module.exports = {
 
     function checkDescendant(baseDepth, children) {
       baseDepth += 1;
-      (children || []).filter((node) => hasJSX(node)).forEach((node) => {
-        if (baseDepth > maxDepth) {
-          report(node, baseDepth);
-        } else if (!isLeaf(node)) {
-          checkDescendant(baseDepth, node.children);
-        }
-      });
+      (children || [])
+        .filter((node) => hasJSX(node))
+        .forEach((node) => {
+          if (baseDepth > maxDepth) {
+            report(node, baseDepth);
+          } else if (!isLeaf(node)) {
+            checkDescendant(baseDepth, node.children);
+          }
+        });
     }
 
     function handleJSX(node) {
@@ -144,11 +161,15 @@ module.exports = {
       JSXFragment: handleJSX,
 
       JSXExpressionContainer(node) {
-        if (node.expression.type !== 'Identifier') {
+        if (node.expression.type !== "Identifier") {
           return;
         }
 
-        const element = findJSXElementOrFragment(node, node.expression.name, []);
+        const element = findJSXElementOrFragment(
+          node,
+          node.expression.name,
+          [],
+        );
 
         if (element) {
           const baseDepth = getDepth(node);

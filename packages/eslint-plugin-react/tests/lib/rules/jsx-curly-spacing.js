@@ -4,20 +4,20 @@
  * @author Erik Wendel
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-curly-spacing');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-curly-spacing");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -28,16 +28,16 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('jsx-curly-spacing', rule, {
+ruleTester.run("jsx-curly-spacing", rule, {
   valid: parsers.all([
     {
-      code: '<App foo={bar} />;',
+      code: "<App foo={bar} />;",
     },
     {
-      code: '<App foo={bar}>{bar}</App>;',
+      code: "<App foo={bar}>{bar}</App>;",
     },
     {
-      code: '<App foo={bar}>{ bar }</App>;',
+      code: "<App foo={bar}>{ bar }</App>;",
     },
     {
       code: `
@@ -49,10 +49,10 @@ ruleTester.run('jsx-curly-spacing', rule, {
       `,
     },
     {
-      code: '<App foo={{ bar: true, baz: true }}>{{ bar: true, baz: true }}</App>;',
+      code: "<App foo={{ bar: true, baz: true }}>{{ bar: true, baz: true }}</App>;",
     },
     {
-      code: '<App foo={{ bar: true, baz: true }}>{ { bar: true, baz: true } }</App>;',
+      code: "<App foo={{ bar: true, baz: true }}>{ { bar: true, baz: true } }</App>;",
     },
     {
       code: `
@@ -71,13 +71,13 @@ ruleTester.run('jsx-curly-spacing', rule, {
       `,
     },
     {
-      code: '<App>{ foo /* comment 1 */ }</App>',
+      code: "<App>{ foo /* comment 1 */ }</App>",
     },
     {
-      code: '<App>{ /* comment 1 */ foo }</App>',
+      code: "<App>{ /* comment 1 */ foo }</App>",
     },
     {
-      code: '<App foo={bar} />;',
+      code: "<App foo={bar} />;",
       options: [{ attributes: true }],
     },
     {
@@ -89,7 +89,7 @@ ruleTester.run('jsx-curly-spacing', rule, {
       options: [{ attributes: true }],
     },
     {
-      code: '<App foo={{ bar: true, baz: true }} />;',
+      code: "<App foo={{ bar: true, baz: true }} />;",
       options: [{ attributes: true }],
     },
     {
@@ -101,7 +101,7 @@ ruleTester.run('jsx-curly-spacing', rule, {
       options: [{ attributes: true }],
     },
     {
-      code: '<App foo={bar} />;',
+      code: "<App foo={bar} />;",
       options: [{ attributes: false }],
     },
     {
@@ -113,7 +113,7 @@ ruleTester.run('jsx-curly-spacing', rule, {
       options: [{ attributes: false }],
     },
     {
-      code: '<App foo={{ bar: true, baz: true }} />;',
+      code: "<App foo={{ bar: true, baz: true }} />;",
       options: [{ attributes: false }],
     },
     {
@@ -125,15 +125,15 @@ ruleTester.run('jsx-curly-spacing', rule, {
       options: [{ attributes: false }],
     },
     {
-      code: '<App foo={ bar } />;',
+      code: "<App foo={ bar } />;",
       options: [{ attributes: false }],
     },
     {
-      code: '<App foo={ { bar: true, baz: true } } />;',
+      code: "<App foo={ { bar: true, baz: true } } />;",
       options: [{ attributes: false }],
     },
     {
-      code: '<App>{bar}</App>;',
+      code: "<App>{bar}</App>;",
       options: [{ children: true }],
     },
     {
@@ -145,7 +145,7 @@ ruleTester.run('jsx-curly-spacing', rule, {
       options: [{ children: true }],
     },
     {
-      code: '<App>{{ bar: true, baz: true }}</App>;',
+      code: "<App>{{ bar: true, baz: true }}</App>;",
       options: [{ children: true }],
     },
     {
@@ -157,7 +157,7 @@ ruleTester.run('jsx-curly-spacing', rule, {
       options: [{ children: true }],
     },
     {
-      code: '<App>{bar}</App>;',
+      code: "<App>{bar}</App>;",
       options: [{ children: false }],
     },
     {
@@ -169,7 +169,7 @@ ruleTester.run('jsx-curly-spacing', rule, {
       options: [{ children: false }],
     },
     {
-      code: '<App>{{ bar: true, baz: true }}</App>;',
+      code: "<App>{{ bar: true, baz: true }}</App>;",
       options: [{ children: false }],
     },
     {
@@ -181,24 +181,24 @@ ruleTester.run('jsx-curly-spacing', rule, {
       options: [{ children: false }],
     },
     {
-      code: '<App>{ bar }</App>;',
+      code: "<App>{ bar }</App>;",
       options: [{ children: false }],
     },
     {
-      code: '<App>{ { bar: true, baz: true } }</App>;',
+      code: "<App>{ { bar: true, baz: true } }</App>;",
       options: [{ children: false }],
     },
     {
-      code: '<App foo={bar} />;',
-      options: [{ when: 'never' }],
+      code: "<App foo={bar} />;",
+      options: [{ when: "never" }],
     },
     {
-      code: '<App foo={bar} />;',
-      options: [{ when: 'never', allowMultiline: false }],
+      code: "<App foo={bar} />;",
+      options: [{ when: "never", allowMultiline: false }],
     },
     {
-      code: '<App foo={bar} />;',
-      options: [{ when: 'never', allowMultiline: true }],
+      code: "<App foo={bar} />;",
+      options: [{ when: "never", allowMultiline: true }],
     },
     {
       code: `
@@ -206,11 +206,11 @@ ruleTester.run('jsx-curly-spacing', rule, {
         bar
         } />;
       `,
-      options: [{ when: 'never', allowMultiline: true }],
+      options: [{ when: "never", allowMultiline: true }],
     },
     {
-      code: '<App foo={{ bar: true, baz: true }} />;',
-      options: [{ when: 'never', spacing: { objectLiterals: 'never' } }],
+      code: "<App foo={{ bar: true, baz: true }} />;",
+      options: [{ when: "never", spacing: { objectLiterals: "never" } }],
     },
     {
       code: `
@@ -218,19 +218,19 @@ ruleTester.run('jsx-curly-spacing', rule, {
         { bar: true, baz: true }
         } />;
       `,
-      options: [{ when: 'never', spacing: { objectLiterals: 'never' } }],
+      options: [{ when: "never", spacing: { objectLiterals: "never" } }],
     },
     {
-      code: '<App foo={ bar } />;',
-      options: [{ when: 'always' }],
+      code: "<App foo={ bar } />;",
+      options: [{ when: "always" }],
     },
     {
-      code: '<App foo={ bar } />;',
-      options: [{ when: 'always', allowMultiline: false }],
+      code: "<App foo={ bar } />;",
+      options: [{ when: "always", allowMultiline: false }],
     },
     {
-      code: '<App foo={ bar } />;',
-      options: [{ when: 'always', allowMultiline: true }],
+      code: "<App foo={ bar } />;",
+      options: [{ when: "always", allowMultiline: true }],
     },
     {
       code: `
@@ -238,11 +238,11 @@ ruleTester.run('jsx-curly-spacing', rule, {
         bar
         } />;
       `,
-      options: [{ when: 'always', allowMultiline: true }],
+      options: [{ when: "always", allowMultiline: true }],
     },
     {
-      code: '<App foo={{ bar: true, baz: true }} />;',
-      options: [{ when: 'always', spacing: { objectLiterals: 'never' } }],
+      code: "<App foo={{ bar: true, baz: true }} />;",
+      options: [{ when: "always", spacing: { objectLiterals: "never" } }],
     },
     {
       code: `
@@ -250,35 +250,23 @@ ruleTester.run('jsx-curly-spacing', rule, {
         { bar: true, baz: true }
         } />;
       `,
-      options: [{ when: 'always', spacing: { objectLiterals: 'never' } }],
+      options: [{ when: "always", spacing: { objectLiterals: "never" } }],
     },
     {
-      code: '<App foo={bar} />;',
-      options: [{ attributes: { when: 'never' } }],
+      code: "<App foo={bar} />;",
+      options: [{ attributes: { when: "never" } }],
     },
     {
-      code: '<App foo={ bar } />;',
-      options: [{ attributes: { when: 'always' } }],
+      code: "<App foo={ bar } />;",
+      options: [{ attributes: { when: "always" } }],
     },
     {
-      code: '<App foo={ bar } />;',
-      options: [{ attributes: { when: 'always', allowMultiline: false } }],
+      code: "<App foo={ bar } />;",
+      options: [{ attributes: { when: "always", allowMultiline: false } }],
     },
     {
-      code: '<App foo={{ bar:baz }} />;',
-      options: [{ attributes: { when: 'never' } }],
-    },
-    {
-      code: `
-        <App foo={
-        { bar: true, baz: true }
-        } />;
-      `,
-      options: [{ attributes: { when: 'never' } }],
-    },
-    {
-      code: '<App foo={ {bar:baz} } />;',
-      options: [{ attributes: { when: 'always' } }],
+      code: "<App foo={{ bar:baz }} />;",
+      options: [{ attributes: { when: "never" } }],
     },
     {
       code: `
@@ -286,59 +274,11 @@ ruleTester.run('jsx-curly-spacing', rule, {
         { bar: true, baz: true }
         } />;
       `,
-      options: [{ attributes: { when: 'always' } }],
+      options: [{ attributes: { when: "never" } }],
     },
     {
-      code: `
-        <App foo={
-        bar
-        } />;
-      `,
-      options: [{ attributes: { when: 'always' } }],
-    },
-    {
-      code: `
-        <App foo={
-        bar
-        } />;
-      `,
-      options: [{ attributes: { when: 'always', allowMultiline: true } }],
-    },
-    {
-      code: `
-        <App foo={
-        bar
-        } />;
-      `,
-      options: [{ attributes: { when: 'never' } }],
-    },
-    {
-      code: `
-        <App foo={
-        bar
-        } />;
-      `,
-      options: [{ attributes: { when: 'never', allowMultiline: true } }],
-    },
-    {
-      code: '<App foo={bar/* comment 2 */} />;',
-      options: [{ attributes: { when: 'never' } }],
-    },
-    {
-      code: '<App foo={ bar } />;',
-      options: [{ attributes: { when: 'always', spacing: {} } }],
-    },
-    {
-      code: `
-        <App foo={
-        bar
-        } />;
-      `,
-      options: [{ attributes: { when: 'always', spacing: {} } }],
-    },
-    {
-      code: '<App foo={{ bar: true, baz: true }} />;',
-      options: [{ attributes: { when: 'always', spacing: { objectLiterals: 'never' } } }],
+      code: "<App foo={ {bar:baz} } />;",
+      options: [{ attributes: { when: "always" } }],
     },
     {
       code: `
@@ -346,23 +286,91 @@ ruleTester.run('jsx-curly-spacing', rule, {
         { bar: true, baz: true }
         } />;
       `,
-      options: [{ attributes: { when: 'always', spacing: { objectLiterals: 'never' } } }],
+      options: [{ attributes: { when: "always" } }],
     },
     {
-      code: '<App>{bar}</App>;',
-      options: [{ children: { when: 'never' } }],
+      code: `
+        <App foo={
+        bar
+        } />;
+      `,
+      options: [{ attributes: { when: "always" } }],
     },
     {
-      code: '<App>{ bar }</App>;',
-      options: [{ children: { when: 'always' } }],
+      code: `
+        <App foo={
+        bar
+        } />;
+      `,
+      options: [{ attributes: { when: "always", allowMultiline: true } }],
     },
     {
-      code: '<App>{ bar }</App>;',
-      options: [{ children: { when: 'always', allowMultiline: false } }],
+      code: `
+        <App foo={
+        bar
+        } />;
+      `,
+      options: [{ attributes: { when: "never" } }],
     },
     {
-      code: '<App>{{ bar:baz }}</App>;',
-      options: [{ children: { when: 'never' } }],
+      code: `
+        <App foo={
+        bar
+        } />;
+      `,
+      options: [{ attributes: { when: "never", allowMultiline: true } }],
+    },
+    {
+      code: "<App foo={bar/* comment 2 */} />;",
+      options: [{ attributes: { when: "never" } }],
+    },
+    {
+      code: "<App foo={ bar } />;",
+      options: [{ attributes: { when: "always", spacing: {} } }],
+    },
+    {
+      code: `
+        <App foo={
+        bar
+        } />;
+      `,
+      options: [{ attributes: { when: "always", spacing: {} } }],
+    },
+    {
+      code: "<App foo={{ bar: true, baz: true }} />;",
+      options: [
+        {
+          attributes: { when: "always", spacing: { objectLiterals: "never" } },
+        },
+      ],
+    },
+    {
+      code: `
+        <App foo={
+        { bar: true, baz: true }
+        } />;
+      `,
+      options: [
+        {
+          attributes: { when: "always", spacing: { objectLiterals: "never" } },
+        },
+      ],
+    },
+    {
+      code: "<App>{bar}</App>;",
+      options: [{ children: { when: "never" } }],
+    },
+    {
+      code: "<App>{ bar }</App>;",
+      options: [{ children: { when: "always" } }],
+    },
+    {
+      code: "<App>{ bar }</App>;",
+      options: [{ children: { when: "always", allowMultiline: false } }],
+    },
+    {
+      code: "<App>{{ bar:baz }}</App>;",
+      options: [{ children: { when: "never" } }],
     },
     {
       code: `
@@ -370,11 +378,11 @@ ruleTester.run('jsx-curly-spacing', rule, {
         { bar: true, baz: true }
         }</App>;
       `,
-      options: [{ children: { when: 'never' } }],
+      options: [{ children: { when: "never" } }],
     },
     {
-      code: '<App>{ {bar:baz} }</App>;',
-      options: [{ children: { when: 'always' } }],
+      code: "<App>{ {bar:baz} }</App>;",
+      options: [{ children: { when: "always" } }],
     },
     {
       code: `
@@ -382,7 +390,7 @@ ruleTester.run('jsx-curly-spacing', rule, {
         { bar: true, baz: true }
         }</App>;
       `,
-      options: [{ children: { when: 'always' } }],
+      options: [{ children: { when: "always" } }],
     },
     {
       code: `
@@ -390,7 +398,7 @@ ruleTester.run('jsx-curly-spacing', rule, {
         bar
         }</App>;
       `,
-      options: [{ children: { when: 'always' } }],
+      options: [{ children: { when: "always" } }],
     },
     {
       code: `
@@ -398,7 +406,7 @@ ruleTester.run('jsx-curly-spacing', rule, {
         bar
         }</App>;
       `,
-      options: [{ children: { when: 'always', allowMultiline: true } }],
+      options: [{ children: { when: "always", allowMultiline: true } }],
     },
     {
       code: `
@@ -406,7 +414,7 @@ ruleTester.run('jsx-curly-spacing', rule, {
         bar
         }</App>;
       `,
-      options: [{ children: { when: 'never' } }],
+      options: [{ children: { when: "never" } }],
     },
     {
       code: `
@@ -414,21 +422,21 @@ ruleTester.run('jsx-curly-spacing', rule, {
         bar
         }</App>;
       `,
-      options: [{ children: { when: 'never', allowMultiline: true } }],
+      options: [{ children: { when: "never", allowMultiline: true } }],
     },
     {
       code: `
         <App>{/* comment 3 */}</App>;
       `,
-      options: [{ children: { when: 'never' } }],
+      options: [{ children: { when: "never" } }],
     },
     {
-      code: '<App>{bar/* comment 4 */}</App>;',
-      options: [{ children: { when: 'never' } }],
+      code: "<App>{bar/* comment 4 */}</App>;",
+      options: [{ children: { when: "never" } }],
     },
     {
-      code: '<App>{ bar }</App>;',
-      options: [{ children: { when: 'always', spacing: {} } }],
+      code: "<App>{ bar }</App>;",
+      options: [{ children: { when: "always", spacing: {} } }],
     },
     {
       code: `
@@ -436,11 +444,13 @@ ruleTester.run('jsx-curly-spacing', rule, {
         bar
         }</App>;
       `,
-      options: [{ children: { when: 'always', spacing: {} } }],
+      options: [{ children: { when: "always", spacing: {} } }],
     },
     {
-      code: '<App>{{ bar: true, baz: true }}</App>;',
-      options: [{ children: { when: 'always', spacing: { objectLiterals: 'never' } } }],
+      code: "<App>{{ bar: true, baz: true }}</App>;",
+      options: [
+        { children: { when: "always", spacing: { objectLiterals: "never" } } },
+      ],
     },
     {
       code: `
@@ -448,30 +458,24 @@ ruleTester.run('jsx-curly-spacing', rule, {
         { bar: true, baz: true }
         }</App>;
       `,
-      options: [{ children: { when: 'always', spacing: { objectLiterals: 'never' } } }],
+      options: [
+        { children: { when: "always", spacing: { objectLiterals: "never" } } },
+      ],
     },
     {
-      code: '<App {...bar} />;',
+      code: "<App {...bar} />;",
     },
     {
-      code: '<App {...bar} />;',
-      options: [{ attributes: { when: 'never' } }],
+      code: "<App {...bar} />;",
+      options: [{ attributes: { when: "never" } }],
     },
     {
-      code: '<App { ...bar } />;',
-      options: [{ attributes: { when: 'always' } }],
+      code: "<App { ...bar } />;",
+      options: [{ attributes: { when: "always" } }],
     },
     {
-      code: '<App { ...bar } />;',
-      options: [{ attributes: { when: 'always', allowMultiline: false } }],
-    },
-    {
-      code: `
-        <App {
-        ...bar
-        } />;
-      `,
-      options: [{ attributes: { when: 'always' } }],
+      code: "<App { ...bar } />;",
+      options: [{ attributes: { when: "always", allowMultiline: false } }],
     },
     {
       code: `
@@ -479,7 +483,7 @@ ruleTester.run('jsx-curly-spacing', rule, {
         ...bar
         } />;
       `,
-      options: [{ attributes: { when: 'always', allowMultiline: true } }],
+      options: [{ attributes: { when: "always" } }],
     },
     {
       code: `
@@ -487,7 +491,7 @@ ruleTester.run('jsx-curly-spacing', rule, {
         ...bar
         } />;
       `,
-      options: [{ attributes: { when: 'never' } }],
+      options: [{ attributes: { when: "always", allowMultiline: true } }],
     },
     {
       code: `
@@ -495,34 +499,42 @@ ruleTester.run('jsx-curly-spacing', rule, {
         ...bar
         } />;
       `,
-      options: [{ attributes: { when: 'never', allowMultiline: true } }],
+      options: [{ attributes: { when: "never" } }],
     },
     {
-      code: '<App {...bar/* comment 5 */} />;',
-      options: [{ attributes: { when: 'never' } }],
+      code: `
+        <App {
+        ...bar
+        } />;
+      `,
+      options: [{ attributes: { when: "never", allowMultiline: true } }],
     },
     {
-      code: '<App foo={bar} {...baz} />;',
+      code: "<App {...bar/* comment 5 */} />;",
+      options: [{ attributes: { when: "never" } }],
     },
     {
-      code: '<App foo={bar} {...baz} />;',
-      options: [{ attributes: { when: 'never' } }],
+      code: "<App foo={bar} {...baz} />;",
     },
     {
-      code: '<App foo={ bar } { ...baz } />;',
-      options: [{ attributes: { when: 'always' } }],
+      code: "<App foo={bar} {...baz} />;",
+      options: [{ attributes: { when: "never" } }],
     },
     {
-      code: '<App foo={ bar } { ...baz } />;',
-      options: [{ attributes: { when: 'always', allowMultiline: false } }],
+      code: "<App foo={ bar } { ...baz } />;",
+      options: [{ attributes: { when: "always" } }],
     },
     {
-      code: '<App foo={{ bar:baz }} {...baz} />;',
-      options: [{ attributes: { when: 'never' } }],
+      code: "<App foo={ bar } { ...baz } />;",
+      options: [{ attributes: { when: "always", allowMultiline: false } }],
     },
     {
-      code: '<App foo={ {bar:baz} } { ...baz } />;',
-      options: [{ attributes: { when: 'always' } }],
+      code: "<App foo={{ bar:baz }} {...baz} />;",
+      options: [{ attributes: { when: "never" } }],
+    },
+    {
+      code: "<App foo={ {bar:baz} } { ...baz } />;",
+      options: [{ attributes: { when: "always" } }],
     },
     {
       code: `
@@ -532,42 +544,46 @@ ruleTester.run('jsx-curly-spacing', rule, {
         ...bar
         } />;
       `,
-      options: [{ attributes: { when: 'always' } }],
+      options: [{ attributes: { when: "always" } }],
     },
     {
-      code: '<App foo={bar/* comment 6 */} {...baz/* comment 7 */} />;',
-      options: [{ attributes: { when: 'never' } }],
+      code: "<App foo={bar/* comment 6 */} {...baz/* comment 7 */} />;",
+      options: [{ attributes: { when: "never" } }],
     },
     {
-      code: '<App foo={3} bar={ {a: 2} } />',
-      options: [{ attributes: { when: 'never', spacing: { objectLiterals: 'always' } } }],
+      code: "<App foo={3} bar={ {a: 2} } />",
+      options: [
+        {
+          attributes: { when: "never", spacing: { objectLiterals: "always" } },
+        },
+      ],
     },
     {
-      code: '<App>{bar/* comment 8 */}</App>;',
-      options: [{ children: { when: 'never' } }],
+      code: "<App>{bar/* comment 8 */}</App>;",
+      options: [{ children: { when: "never" } }],
     },
     {
-      code: '<App>{bar} {baz}</App>;',
+      code: "<App>{bar} {baz}</App>;",
     },
     {
-      code: '<App>{bar} {baz}</App>;',
-      options: [{ children: { when: 'never' } }],
+      code: "<App>{bar} {baz}</App>;",
+      options: [{ children: { when: "never" } }],
     },
     {
-      code: '<App>{ bar } { baz }</App>;',
-      options: [{ children: { when: 'always' } }],
+      code: "<App>{ bar } { baz }</App>;",
+      options: [{ children: { when: "always" } }],
     },
     {
-      code: '<App>{ bar } { baz }</App>;',
-      options: [{ children: { when: 'always', allowMultiline: false } }],
+      code: "<App>{ bar } { baz }</App>;",
+      options: [{ children: { when: "always", allowMultiline: false } }],
     },
     {
-      code: '<App>{{ bar:baz }} {baz}</App>;',
-      options: [{ children: { when: 'never' } }],
+      code: "<App>{{ bar:baz }} {baz}</App>;",
+      options: [{ children: { when: "never" } }],
     },
     {
-      code: '<App>{ {bar:baz} } { baz }</App>;',
-      options: [{ children: { when: 'always' } }],
+      code: "<App>{ {bar:baz} } { baz }</App>;",
+      options: [{ children: { when: "always" } }],
     },
     {
       code: `
@@ -577,19 +593,21 @@ ruleTester.run('jsx-curly-spacing', rule, {
         bar
         }</App>;
       `,
-      options: [{ children: { when: 'always' } }],
+      options: [{ children: { when: "always" } }],
     },
     {
-      code: '<App>{bar/* comment 9 */} {baz/* comment 10 */}</App>;',
-      options: [{ children: { when: 'never' } }],
+      code: "<App>{bar/* comment 9 */} {baz/* comment 10 */}</App>;",
+      options: [{ children: { when: "never" } }],
     },
     {
-      code: '<App>{3} { {a: 2} }</App>',
-      options: [{ children: { when: 'never', spacing: { objectLiterals: 'always' } } }],
+      code: "<App>{3} { {a: 2} }</App>",
+      options: [
+        { children: { when: "never", spacing: { objectLiterals: "always" } } },
+      ],
     },
     {
-      code: '<App foo={ bar }>{bar}</App>',
-      options: [{ attributes: { when: 'always' } }],
+      code: "<App foo={ bar }>{bar}</App>",
+      options: [{ attributes: { when: "always" } }],
     },
     {
       code: `
@@ -599,8 +617,8 @@ ruleTester.run('jsx-curly-spacing', rule, {
       `,
       options: [
         {
-          when: 'never',
-          attributes: { when: 'always', spacing: { objectLiterals: 'never' } },
+          when: "never",
+          attributes: { when: "always", spacing: { objectLiterals: "never" } },
           children: true,
         },
       ],
@@ -613,10 +631,10 @@ ruleTester.run('jsx-curly-spacing', rule, {
       `,
       options: [
         {
-          when: 'never',
-          spacing: { objectLiterals: 'always' },
+          when: "never",
+          spacing: { objectLiterals: "always" },
           attributes: true,
-          children: { when: 'never' },
+          children: { when: "never" },
         },
       ],
     },
@@ -628,15 +646,15 @@ ruleTester.run('jsx-curly-spacing', rule, {
       `,
       options: [
         {
-          spacing: { objectLiterals: 'always' },
-          attributes: { when: 'never', spacing: { objectLiterals: 'always' } },
-          children: { when: 'never' },
+          spacing: { objectLiterals: "always" },
+          attributes: { when: "never", spacing: { objectLiterals: "always" } },
+          children: { when: "never" },
         },
       ],
     },
     {
-      code: '<App foo={bar} />;',
-      options: ['never'],
+      code: "<App foo={bar} />;",
+      options: ["never"],
     },
     {
       code: `
@@ -644,31 +662,19 @@ ruleTester.run('jsx-curly-spacing', rule, {
         { bar: true, baz: true }
         } />;
       `,
-      options: ['never', { spacing: { objectLiterals: 'never' } }],
+      options: ["never", { spacing: { objectLiterals: "never" } }],
     },
     {
-      code: '<App foo={ bar } />;',
-      options: ['always'],
+      code: "<App foo={ bar } />;",
+      options: ["always"],
     },
     {
-      code: '<App foo={ bar } />;',
-      options: ['always', { allowMultiline: false }],
+      code: "<App foo={ bar } />;",
+      options: ["always", { allowMultiline: false }],
     },
     {
-      code: '<App foo={{ bar:baz }} />;',
-      options: ['never'],
-    },
-    {
-      code: `
-        <App foo={
-        { bar: true, baz: true }
-        } />;
-      `,
-      options: ['never'],
-    },
-    {
-      code: '<App foo={ {bar:baz} } />;',
-      options: ['always'],
+      code: "<App foo={{ bar:baz }} />;",
+      options: ["never"],
     },
     {
       code: `
@@ -676,7 +682,19 @@ ruleTester.run('jsx-curly-spacing', rule, {
         { bar: true, baz: true }
         } />;
       `,
-      options: ['always'],
+      options: ["never"],
+    },
+    {
+      code: "<App foo={ {bar:baz} } />;",
+      options: ["always"],
+    },
+    {
+      code: `
+        <App foo={
+        { bar: true, baz: true }
+        } />;
+      `,
+      options: ["always"],
     },
     {
       code: `
@@ -684,7 +702,7 @@ ruleTester.run('jsx-curly-spacing', rule, {
         bar
         } />;
       `,
-      options: ['always'],
+      options: ["always"],
     },
     {
       code: `
@@ -692,33 +710,21 @@ ruleTester.run('jsx-curly-spacing', rule, {
         bar
         } />;
       `,
-      options: ['never'],
+      options: ["never"],
     },
     {
       code: `
         <App>{/* comment 11 */}</App>;
       `,
-      options: ['never'],
+      options: ["never"],
     },
     {
-      code: '<App foo={bar/* comment 12 */} />;',
-      options: ['never'],
+      code: "<App foo={bar/* comment 12 */} />;",
+      options: ["never"],
     },
     {
-      code: '<App foo={ bar } />;',
-      options: ['always', { spacing: {} }],
-    },
-    {
-      code: `
-        <App foo={
-        bar
-        } />;
-      `,
-      options: ['always', { spacing: {} }],
-    },
-    {
-      code: '<App foo={{ bar: true, baz: true }} />;',
-      options: ['always', { spacing: { objectLiterals: 'never' } }],
+      code: "<App foo={ bar } />;",
+      options: ["always", { spacing: {} }],
     },
     {
       code: `
@@ -726,7 +732,19 @@ ruleTester.run('jsx-curly-spacing', rule, {
         bar
         } />;
       `,
-      options: ['always', { allowMultiline: true }],
+      options: ["always", { spacing: {} }],
+    },
+    {
+      code: "<App foo={{ bar: true, baz: true }} />;",
+      options: ["always", { spacing: { objectLiterals: "never" } }],
+    },
+    {
+      code: `
+        <App foo={
+        bar
+        } />;
+      `,
+      options: ["always", { allowMultiline: true }],
     },
     {
       code: `
@@ -734,27 +752,19 @@ ruleTester.run('jsx-curly-spacing', rule, {
         { bar: true, baz: true }
         } />;
       `,
-      options: ['always', { spacing: { objectLiterals: 'never' } }],
+      options: ["always", { spacing: { objectLiterals: "never" } }],
     },
     {
-      code: '<App {...bar} />;',
-      options: ['never'],
+      code: "<App {...bar} />;",
+      options: ["never"],
     },
     {
-      code: '<App { ...bar } />;',
-      options: ['always'],
+      code: "<App { ...bar } />;",
+      options: ["always"],
     },
     {
-      code: '<App { ...bar } />;',
-      options: ['always', { allowMultiline: false }],
-    },
-    {
-      code: `
-        <App {
-        ...bar
-        } />;
-      `,
-      options: ['always'],
+      code: "<App { ...bar } />;",
+      options: ["always", { allowMultiline: false }],
     },
     {
       code: `
@@ -762,31 +772,39 @@ ruleTester.run('jsx-curly-spacing', rule, {
         ...bar
         } />;
       `,
-      options: ['never'],
+      options: ["always"],
     },
     {
-      code: '<App {...bar/* comment 13 */} />;',
-      options: ['never'],
+      code: `
+        <App {
+        ...bar
+        } />;
+      `,
+      options: ["never"],
     },
     {
-      code: '<App foo={bar} {...baz} />;',
-      options: ['never'],
+      code: "<App {...bar/* comment 13 */} />;",
+      options: ["never"],
     },
     {
-      code: '<App foo={ bar } { ...baz } />;',
-      options: ['always'],
+      code: "<App foo={bar} {...baz} />;",
+      options: ["never"],
     },
     {
-      code: '<App foo={ bar } { ...baz } />;',
-      options: ['always', { allowMultiline: false }],
+      code: "<App foo={ bar } { ...baz } />;",
+      options: ["always"],
     },
     {
-      code: '<App foo={{ bar:baz }} {...baz} />;',
-      options: ['never'],
+      code: "<App foo={ bar } { ...baz } />;",
+      options: ["always", { allowMultiline: false }],
     },
     {
-      code: '<App foo={ {bar:baz} } { ...baz } />;',
-      options: ['always'],
+      code: "<App foo={{ bar:baz }} {...baz} />;",
+      options: ["never"],
+    },
+    {
+      code: "<App foo={ {bar:baz} } { ...baz } />;",
+      options: ["always"],
     },
     {
       code: `
@@ -796,19 +814,19 @@ ruleTester.run('jsx-curly-spacing', rule, {
         ...bar
         }/>;
       `,
-      options: ['always'],
+      options: ["always"],
     },
     {
-      code: '<App foo={bar/* comment 14 */} {...baz/* comment 15 */} />;',
-      options: ['never'],
+      code: "<App foo={bar/* comment 14 */} {...baz/* comment 15 */} />;",
+      options: ["never"],
     },
     {
-      code: '<App foo={3} bar={ {a: 2} } />',
-      options: ['never', { spacing: { objectLiterals: 'always' } }],
+      code: "<App foo={3} bar={ {a: 2} } />",
+      options: ["never", { spacing: { objectLiterals: "always" } }],
     },
     {
-      code: '<App foo={ bar }>{bar}</App>',
-      options: ['always'],
+      code: "<App foo={ bar }>{bar}</App>",
+      options: ["always"],
     },
     {
       code: `
@@ -816,162 +834,164 @@ ruleTester.run('jsx-curly-spacing', rule, {
         text
         \`}</App>
       `,
-      options: [{ children: { when: 'never', allowMultiline: false } }],
+      options: [{ children: { when: "never", allowMultiline: false } }],
     },
     {
-      code: '<>{bar} {baz}</>;',
-      features: ['fragment'],
+      code: "<>{bar} {baz}</>;",
+      features: ["fragment"],
     },
     {
-      code: '<div onLayout={() => { /* dummy callback to fix android bug with component measuring */ }} />',
+      code: "<div onLayout={() => { /* dummy callback to fix android bug with component measuring */ }} />",
     },
   ]),
 
   invalid: parsers.all([
     {
-      code: '<App foo={ bar }>{bar}</App>;',
-      output: '<App foo={bar}>{bar}</App>;',
+      code: "<App foo={ bar }>{bar}</App>;",
+      output: "<App foo={bar}>{bar}</App>;",
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar }>{ bar }</App>;',
-      output: '<App foo={bar}>{ bar }</App>;',
+      code: "<App foo={ bar }>{ bar }</App>;",
+      output: "<App foo={bar}>{ bar }</App>;",
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ { bar: true, baz: true } }>{{ bar: true, baz: true }}</App>;',
-      output: '<App foo={{ bar: true, baz: true }}>{{ bar: true, baz: true }}</App>;',
+      code: "<App foo={ { bar: true, baz: true } }>{{ bar: true, baz: true }}</App>;",
+      output:
+        "<App foo={{ bar: true, baz: true }}>{{ bar: true, baz: true }}</App>;",
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ { bar: true, baz: true } }>{ { bar: true, baz: true } }</App>;',
-      output: '<App foo={{ bar: true, baz: true }}>{ { bar: true, baz: true } }</App>;',
+      code: "<App foo={ { bar: true, baz: true } }>{ { bar: true, baz: true } }</App>;",
+      output:
+        "<App foo={{ bar: true, baz: true }}>{ { bar: true, baz: true } }</App>;",
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar } />;',
-      output: '<App foo={bar} />;',
+      code: "<App foo={ bar } />;",
+      output: "<App foo={bar} />;",
       options: [{ attributes: true }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ { bar: true, baz: true } } />;',
-      output: '<App foo={{ bar: true, baz: true }} />;',
+      code: "<App foo={ { bar: true, baz: true } } />;",
+      output: "<App foo={{ bar: true, baz: true }} />;",
       options: [{ attributes: true }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{ bar }</App>;',
-      output: '<App>{bar}</App>;',
+      code: "<App>{ bar }</App>;",
+      output: "<App>{bar}</App>;",
       options: [{ children: true }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<>{ bar }</>;',
-      output: '<>{bar}</>;',
-      features: ['fragment'],
+      code: "<>{ bar }</>;",
+      output: "<>{bar}</>;",
+      features: ["fragment"],
       options: [{ children: true }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{ { bar: true, baz: true } }</App>;',
-      output: '<App>{{ bar: true, baz: true }}</App>;',
+      code: "<App>{ { bar: true, baz: true } }</App>;",
+      output: "<App>{{ bar: true, baz: true }}</App>;",
       options: [{ children: true }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar } />;',
-      output: '<App foo={bar} />;',
-      options: [{ when: 'never' }],
+      code: "<App foo={ bar } />;",
+      output: "<App foo={bar} />;",
+      options: [{ when: "never" }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -984,30 +1004,30 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={bar} />;
       `,
-      options: [{ when: 'never', allowMultiline: false }],
+      options: [{ when: "never", allowMultiline: false }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ { bar: true, baz: true } } />;',
-      output: '<App foo={{ bar: true, baz: true }} />;',
-      options: [{ when: 'never', spacing: { objectLiterals: 'never' } }],
+      code: "<App foo={ { bar: true, baz: true } } />;",
+      output: "<App foo={{ bar: true, baz: true }} />;",
+      options: [{ when: "never", spacing: { objectLiterals: "never" } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -1020,30 +1040,36 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={{ bar: true, baz: true }} />;
       `,
-      options: [{ when: 'never', allowMultiline: false, spacing: { objectLiterals: 'never' } }],
+      options: [
+        {
+          when: "never",
+          allowMultiline: false,
+          spacing: { objectLiterals: "never" },
+        },
+      ],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={{ bar: true, baz: true }} />;',
-      output: '<App foo={ { bar: true, baz: true } } />;',
-      options: [{ when: 'never', spacing: { objectLiterals: 'always' } }],
+      code: "<App foo={{ bar: true, baz: true }} />;",
+      output: "<App foo={ { bar: true, baz: true } } />;",
+      options: [{ when: "never", spacing: { objectLiterals: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -1056,30 +1082,36 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={ { bar: true, baz: true } } />;
       `,
-      options: [{ when: 'never', allowMultiline: false, spacing: { objectLiterals: 'always' } }],
+      options: [
+        {
+          when: "never",
+          allowMultiline: false,
+          spacing: { objectLiterals: "always" },
+        },
+      ],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={bar} />;',
-      output: '<App foo={ bar } />;',
-      options: [{ when: 'always' }],
+      code: "<App foo={bar} />;",
+      output: "<App foo={ bar } />;",
+      options: [{ when: "always" }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -1092,30 +1124,30 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={ bar } />;
       `,
-      options: [{ when: 'always', allowMultiline: false }],
+      options: [{ when: "always", allowMultiline: false }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ { bar: true, baz: true } } />;',
-      output: '<App foo={{ bar: true, baz: true }} />;',
-      options: [{ when: 'always', spacing: { objectLiterals: 'never' } }],
+      code: "<App foo={ { bar: true, baz: true } } />;",
+      output: "<App foo={{ bar: true, baz: true }} />;",
+      options: [{ when: "always", spacing: { objectLiterals: "never" } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -1128,30 +1160,36 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={{ bar: true, baz: true }} />;
       `,
-      options: [{ when: 'always', allowMultiline: false, spacing: { objectLiterals: 'never' } }],
+      options: [
+        {
+          when: "always",
+          allowMultiline: false,
+          spacing: { objectLiterals: "never" },
+        },
+      ],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={{ bar: true, baz: true }} />;',
-      output: '<App foo={ { bar: true, baz: true } } />;',
-      options: [{ when: 'always', spacing: { objectLiterals: 'always' } }],
+      code: "<App foo={{ bar: true, baz: true }} />;",
+      output: "<App foo={ { bar: true, baz: true } } />;",
+      options: [{ when: "always", spacing: { objectLiterals: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -1164,250 +1202,36 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={ { bar: true, baz: true } } />;
       `,
-      options: [{ when: 'always', allowMultiline: false, spacing: { objectLiterals: 'always' } }],
+      options: [
+        {
+          when: "always",
+          allowMultiline: false,
+          spacing: { objectLiterals: "always" },
+        },
+      ],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar } />;',
-      output: '<App foo={bar} />;',
-      options: [{ attributes: true, when: 'never' }],
+      code: "<App foo={ bar } />;",
+      output: "<App foo={bar} />;",
+      options: [{ attributes: true, when: "never" }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: `
-        <App foo={
-        bar
-        } />;
-      `,
-      output: `
-        <App foo={bar} />;
-      `,
-      options: [{ attributes: true, when: 'never', allowMultiline: false }],
-      errors: [
-        {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
-        },
-        {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: '<App foo={ { bar: true, baz: true } } />;',
-      output: '<App foo={{ bar: true, baz: true }} />;',
-      options: [{ attributes: true, when: 'never', spacing: { objectLiterals: 'never' } }],
-      errors: [
-        {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
-        },
-        {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: '<App foo={{ bar: true, baz: true }} />;',
-      output: '<App foo={ { bar: true, baz: true } } />;',
-      options: [{ attributes: true, when: 'never', spacing: { objectLiterals: 'always' } }],
-      errors: [
-        {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
-        },
-        {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: '<App foo={bar} />;',
-      output: '<App foo={ bar } />;',
-      options: [{ attributes: true, when: 'always' }],
-      errors: [
-        {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
-        },
-        {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: `
-        <App foo={
-        bar
-        } />;
-      `,
-      output: `
-        <App foo={ bar } />;
-      `,
-      options: [{ attributes: true, when: 'always', allowMultiline: false }],
-      errors: [
-        {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
-        },
-        {
-          data: { token: '}' },
-          messageId: 'noNewlineBefore',
-        },
-      ],
-    },
-    {
-      code: '<App foo={ { bar: true, baz: true } } />;',
-      output: '<App foo={{ bar: true, baz: true }} />;',
-      options: [{ attributes: true, when: 'always', spacing: { objectLiterals: 'never' } }],
-      errors: [
-        {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
-        },
-        {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: '<App foo={{ bar: true, baz: true }} />;',
-      output: '<App foo={ { bar: true, baz: true } } />;',
-      options: [{ attributes: true, when: 'always', spacing: { objectLiterals: 'always' } }],
-      errors: [
-        {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
-        },
-        {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: '<App foo={ bar } />;',
-      output: '<App foo={bar} />;',
-      options: [{ attributes: { when: 'never' } }],
-      errors: [
-        {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
-        },
-        {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: '<App foo={ bar } />;',
-      output: '<App foo={bar} />;',
-      options: [{ attributes: { when: 'never', allowMultiline: false } }],
-      errors: [
-        {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
-        },
-        {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: '<App foo={bar} />;',
-      output: '<App foo={ bar } />;',
-      options: [{ attributes: { when: 'always' } }],
-      errors: [
-        {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
-        },
-        {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
-        }],
-    },
-    {
-      code: '<App foo={bar} />;',
-      output: '<App foo={ bar } />;',
-      options: [{ attributes: { when: 'always', allowMultiline: false } }],
-      errors: [
-        {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
-        },
-        {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: '<App foo={ bar} />;',
-      output: '<App foo={ bar } />;',
-      options: [{ attributes: { when: 'always' } }],
-      errors: [
-        {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: '<App foo={bar } />;',
-      output: '<App foo={ bar } />;',
-      options: [{ attributes: { when: 'always' } }],
-      errors: [
-        {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
-        },
-      ],
-    },
-    {
-      code: '<App foo={ bar} />;',
-      output: '<App foo={bar} />;',
-      options: [{ attributes: { when: 'never' } }],
-      errors: [
-        {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
-        },
-      ],
-    },
-    {
-      code: '<App foo={bar } />;',
-      output: '<App foo={bar} />;',
-      options: [{ attributes: { when: 'never' } }],
-      errors: [
-        {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -1420,15 +1244,72 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={bar} />;
       `,
-      options: [{ attributes: { when: 'never', allowMultiline: false } }],
+      options: [{ attributes: true, when: "never", allowMultiline: false }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
+        },
+      ],
+    },
+    {
+      code: "<App foo={ { bar: true, baz: true } } />;",
+      output: "<App foo={{ bar: true, baz: true }} />;",
+      options: [
+        {
+          attributes: true,
+          when: "never",
+          spacing: { objectLiterals: "never" },
+        },
+      ],
+      errors: [
+        {
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
+        },
+        {
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
+        },
+      ],
+    },
+    {
+      code: "<App foo={{ bar: true, baz: true }} />;",
+      output: "<App foo={ { bar: true, baz: true } } />;",
+      options: [
+        {
+          attributes: true,
+          when: "never",
+          spacing: { objectLiterals: "always" },
+        },
+      ],
+      errors: [
+        {
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
+        },
+        {
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
+        },
+      ],
+    },
+    {
+      code: "<App foo={bar} />;",
+      output: "<App foo={ bar } />;",
+      options: [{ attributes: true, when: "always" }],
+      errors: [
+        {
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
+        },
+        {
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -1441,82 +1322,274 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={ bar } />;
       `,
-      options: [{ attributes: { when: 'always', allowMultiline: false } }],
+      options: [{ attributes: true, when: "always", allowMultiline: false }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          data: { token: "}" },
+          messageId: "noNewlineBefore",
         },
       ],
     },
     {
-      code: '<App foo={bar} />;',
-      output: '<App foo={ bar } />;',
-      options: [{ attributes: { when: 'always', spacing: {} } }],
+      code: "<App foo={ { bar: true, baz: true } } />;",
+      output: "<App foo={{ bar: true, baz: true }} />;",
+      options: [
+        {
+          attributes: true,
+          when: "always",
+          spacing: { objectLiterals: "never" },
+        },
+      ],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar} />;',
-      output: '<App foo={ bar } />;',
-      options: [{ attributes: { when: 'always', spacing: {} } }],
+      code: "<App foo={{ bar: true, baz: true }} />;",
+      output: "<App foo={ { bar: true, baz: true } } />;",
+      options: [
+        {
+          attributes: true,
+          when: "always",
+          spacing: { objectLiterals: "always" },
+        },
+      ],
       errors: [
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
+        },
+        {
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={bar } />;',
-      output: '<App foo={ bar } />;',
-      options: [{ attributes: { when: 'always', spacing: {} } }],
+      code: "<App foo={ bar } />;",
+      output: "<App foo={bar} />;",
+      options: [{ attributes: { when: "never" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
+        },
+        {
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ {bar: true, baz: true} } />;',
-      output: '<App foo={{bar: true, baz: true}} />;',
-      options: [{ attributes: { when: 'always', spacing: { objectLiterals: 'never' } } }],
+      code: "<App foo={ bar } />;",
+      output: "<App foo={bar} />;",
+      options: [{ attributes: { when: "never", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{ bar }</App>;',
-      output: '<App>{bar}</App>;',
-      options: [{ children: true, when: 'never' }],
+      code: "<App foo={bar} />;",
+      output: "<App foo={ bar } />;",
+      options: [{ attributes: { when: "always" } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
+        },
+      ],
+    },
+    {
+      code: "<App foo={bar} />;",
+      output: "<App foo={ bar } />;",
+      options: [{ attributes: { when: "always", allowMultiline: false } }],
+      errors: [
+        {
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
+        },
+        {
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
+        },
+      ],
+    },
+    {
+      code: "<App foo={ bar} />;",
+      output: "<App foo={ bar } />;",
+      options: [{ attributes: { when: "always" } }],
+      errors: [
+        {
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
+        },
+      ],
+    },
+    {
+      code: "<App foo={bar } />;",
+      output: "<App foo={ bar } />;",
+      options: [{ attributes: { when: "always" } }],
+      errors: [
+        {
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
+        },
+      ],
+    },
+    {
+      code: "<App foo={ bar} />;",
+      output: "<App foo={bar} />;",
+      options: [{ attributes: { when: "never" } }],
+      errors: [
+        {
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
+        },
+      ],
+    },
+    {
+      code: "<App foo={bar } />;",
+      output: "<App foo={bar} />;",
+      options: [{ attributes: { when: "never" } }],
+      errors: [
+        {
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
+        },
+      ],
+    },
+    {
+      code: `
+        <App foo={
+        bar
+        } />;
+      `,
+      output: `
+        <App foo={bar} />;
+      `,
+      options: [{ attributes: { when: "never", allowMultiline: false } }],
+      errors: [
+        {
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
+        },
+        {
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
+        },
+      ],
+    },
+    {
+      code: `
+        <App foo={
+        bar
+        } />;
+      `,
+      output: `
+        <App foo={ bar } />;
+      `,
+      options: [{ attributes: { when: "always", allowMultiline: false } }],
+      errors: [
+        {
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
+        },
+        {
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
+        },
+      ],
+    },
+    {
+      code: "<App foo={bar} />;",
+      output: "<App foo={ bar } />;",
+      options: [{ attributes: { when: "always", spacing: {} } }],
+      errors: [
+        {
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
+        },
+        {
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
+        },
+      ],
+    },
+    {
+      code: "<App foo={ bar} />;",
+      output: "<App foo={ bar } />;",
+      options: [{ attributes: { when: "always", spacing: {} } }],
+      errors: [
+        {
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
+        },
+      ],
+    },
+    {
+      code: "<App foo={bar } />;",
+      output: "<App foo={ bar } />;",
+      options: [{ attributes: { when: "always", spacing: {} } }],
+      errors: [
+        {
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
+        },
+      ],
+    },
+    {
+      code: "<App foo={ {bar: true, baz: true} } />;",
+      output: "<App foo={{bar: true, baz: true}} />;",
+      options: [
+        {
+          attributes: { when: "always", spacing: { objectLiterals: "never" } },
+        },
+      ],
+      errors: [
+        {
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
+        },
+        {
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
+        },
+      ],
+    },
+    {
+      code: "<App>{ bar }</App>;",
+      output: "<App>{bar}</App>;",
+      options: [{ children: true, when: "never" }],
+      errors: [
+        {
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
+        },
+        {
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -1529,60 +1602,68 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App>{bar}</App>;
       `,
-      options: [{ children: true, when: 'never', allowMultiline: false }],
+      options: [{ children: true, when: "never", allowMultiline: false }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{ { bar: true, baz: true } }</App>;',
-      output: '<App>{{ bar: true, baz: true }}</App>;',
-      options: [{ children: true, when: 'never', spacing: { objectLiterals: 'never' } }],
+      code: "<App>{ { bar: true, baz: true } }</App>;",
+      output: "<App>{{ bar: true, baz: true }}</App>;",
+      options: [
+        { children: true, when: "never", spacing: { objectLiterals: "never" } },
+      ],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{{ bar: true, baz: true }}</App>;',
-      output: '<App>{ { bar: true, baz: true } }</App>;',
-      options: [{ children: true, when: 'never', spacing: { objectLiterals: 'always' } }],
+      code: "<App>{{ bar: true, baz: true }}</App>;",
+      output: "<App>{ { bar: true, baz: true } }</App>;",
+      options: [
+        {
+          children: true,
+          when: "never",
+          spacing: { objectLiterals: "always" },
+        },
+      ],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{bar}</App>;',
-      output: '<App>{ bar }</App>;',
-      options: [{ children: true, when: 'always' }],
+      code: "<App>{bar}</App>;",
+      output: "<App>{ bar }</App>;",
+      options: [{ children: true, when: "always" }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -1595,149 +1676,161 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App>{ bar }</App>;
       `,
-      options: [{ children: true, when: 'always', allowMultiline: false }],
+      options: [{ children: true, when: "always", allowMultiline: false }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{ { bar: true, baz: true } }</App>;',
-      output: '<App>{{ bar: true, baz: true }}</App>;',
-      options: [{ children: true, when: 'always', spacing: { objectLiterals: 'never' } }],
+      code: "<App>{ { bar: true, baz: true } }</App>;",
+      output: "<App>{{ bar: true, baz: true }}</App>;",
+      options: [
+        {
+          children: true,
+          when: "always",
+          spacing: { objectLiterals: "never" },
+        },
+      ],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{{ bar: true, baz: true }}</App>;',
-      output: '<App>{ { bar: true, baz: true } }</App>;',
-      options: [{ children: true, when: 'always', spacing: { objectLiterals: 'always' } }],
+      code: "<App>{{ bar: true, baz: true }}</App>;",
+      output: "<App>{ { bar: true, baz: true } }</App>;",
+      options: [
+        {
+          children: true,
+          when: "always",
+          spacing: { objectLiterals: "always" },
+        },
+      ],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{ bar }</App>;',
-      output: '<App>{bar}</App>;',
-      options: [{ children: { when: 'never' } }],
+      code: "<App>{ bar }</App>;",
+      output: "<App>{bar}</App>;",
+      options: [{ children: { when: "never" } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{ bar }</App>;',
-      output: '<App>{bar}</App>;',
-      options: [{ children: { when: 'never', allowMultiline: false } }],
+      code: "<App>{ bar }</App>;",
+      output: "<App>{bar}</App>;",
+      options: [{ children: { when: "never", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{bar}</App>;',
-      output: '<App>{ bar }</App>;',
-      options: [{ children: { when: 'always' } }],
+      code: "<App>{bar}</App>;",
+      output: "<App>{ bar }</App>;",
+      options: [{ children: { when: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{bar}</App>;',
-      output: '<App>{ bar }</App>;',
-      options: [{ children: { when: 'always', allowMultiline: false } }],
+      code: "<App>{bar}</App>;",
+      output: "<App>{ bar }</App>;",
+      options: [{ children: { when: "always", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: '<App>{ bar}</App>;',
-      output: '<App>{ bar }</App>;',
-      options: [{ children: { when: 'always' } }],
-      errors: [
-        {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{bar }</App>;',
-      output: '<App>{ bar }</App>;',
-      options: [{ children: { when: 'always' } }],
+      code: "<App>{ bar}</App>;",
+      output: "<App>{ bar }</App>;",
+      options: [{ children: { when: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{ bar}</App>;',
-      output: '<App>{bar}</App>;',
-      options: [{ children: { when: 'never' } }],
+      code: "<App>{bar }</App>;",
+      output: "<App>{ bar }</App>;",
+      options: [{ children: { when: "always" } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
       ],
     },
     {
-      code: '<App>{bar }</App>;',
-      output: '<App>{bar}</App>;',
-      options: [{ children: { when: 'never' } }],
+      code: "<App>{ bar}</App>;",
+      output: "<App>{bar}</App>;",
+      options: [{ children: { when: "never" } }],
       errors: [
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
+        },
+      ],
+    },
+    {
+      code: "<App>{bar }</App>;",
+      output: "<App>{bar}</App>;",
+      options: [{ children: { when: "never" } }],
+      errors: [
+        {
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -1750,15 +1843,15 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App>{bar}</App>;
       `,
-      options: [{ children: { when: 'never', allowMultiline: false } }],
+      options: [{ children: { when: "never", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -1771,171 +1864,173 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App>{ bar }</App>;
       `,
-      options: [{ children: { when: 'always', allowMultiline: false } }],
+      options: [{ children: { when: "always", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{bar}</App>;',
-      output: '<App>{ bar }</App>;',
-      options: [{ children: { when: 'always', spacing: {} } }],
+      code: "<App>{bar}</App>;",
+      output: "<App>{ bar }</App>;",
+      options: [{ children: { when: "always", spacing: {} } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{ bar}</App>;',
-      output: '<App>{ bar }</App>;',
-      options: [{ children: { when: 'always', spacing: {} } }],
+      code: "<App>{ bar}</App>;",
+      output: "<App>{ bar }</App>;",
+      options: [{ children: { when: "always", spacing: {} } }],
       errors: [
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{bar }</App>;',
-      output: '<App>{ bar }</App>;',
-      options: [{ children: { when: 'always', spacing: {} } }],
+      code: "<App>{bar }</App>;",
+      output: "<App>{ bar }</App>;",
+      options: [{ children: { when: "always", spacing: {} } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
       ],
     },
     {
-      code: '<App>{ {bar: true, baz: true} }</App>;',
-      output: '<App>{{bar: true, baz: true}}</App>;',
-      options: [{ children: { when: 'always', spacing: { objectLiterals: 'never' } } }],
+      code: "<App>{ {bar: true, baz: true} }</App>;",
+      output: "<App>{{bar: true, baz: true}}</App>;",
+      options: [
+        { children: { when: "always", spacing: { objectLiterals: "never" } } },
+      ],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App { ...bar } />;',
-      output: '<App {...bar} />;',
-      options: [{ attributes: { when: 'never' } }],
+      code: "<App { ...bar } />;",
+      output: "<App {...bar} />;",
+      options: [{ attributes: { when: "never" } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App { ...bar } />;',
-      output: '<App {...bar} />;',
-      options: [{ attributes: { when: 'never', allowMultiline: false } }],
+      code: "<App { ...bar } />;",
+      output: "<App {...bar} />;",
+      options: [{ attributes: { when: "never", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App {...bar} />;',
-      output: '<App { ...bar } />;',
-      options: [{ attributes: { when: 'always' } }],
+      code: "<App {...bar} />;",
+      output: "<App { ...bar } />;",
+      options: [{ attributes: { when: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App {...bar} />;',
-      output: '<App { ...bar } />;',
-      options: [{ attributes: { when: 'always', allowMultiline: false } }],
+      code: "<App {...bar} />;",
+      output: "<App { ...bar } />;",
+      options: [{ attributes: { when: "always", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: '<App { ...bar} />;',
-      output: '<App { ...bar } />;',
-      options: [{ attributes: { when: 'always' } }],
-      errors: [
-        {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App {...bar } />;',
-      output: '<App { ...bar } />;',
-      options: [{ attributes: { when: 'always' } }],
+      code: "<App { ...bar} />;",
+      output: "<App { ...bar } />;",
+      options: [{ attributes: { when: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App { ...bar} />;',
-      output: '<App {...bar} />;',
-      options: [{ attributes: { when: 'never' } }],
+      code: "<App {...bar } />;",
+      output: "<App { ...bar } />;",
+      options: [{ attributes: { when: "always" } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
       ],
     },
     {
-      code: '<App {...bar } />;',
-      output: '<App {...bar} />;',
-      options: [{ attributes: { when: 'never' } }],
+      code: "<App { ...bar} />;",
+      output: "<App {...bar} />;",
+      options: [{ attributes: { when: "never" } }],
       errors: [
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
+        },
+      ],
+    },
+    {
+      code: "<App {...bar } />;",
+      output: "<App {...bar} />;",
+      options: [{ attributes: { when: "never" } }],
+      errors: [
+        {
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -1948,15 +2043,15 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App {...bar} />;
       `,
-      options: [{ attributes: { when: 'never', allowMultiline: false } }],
+      options: [{ attributes: { when: "never", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -1969,167 +2064,167 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App { ...bar } />;
       `,
-      options: [{ attributes: { when: 'always', allowMultiline: false } }],
+      options: [{ attributes: { when: "always", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar } { ...baz } />;',
-      output: '<App foo={bar} {...baz} />;',
-      options: [{ attributes: { when: 'never' } }],
+      code: "<App foo={ bar } { ...baz } />;",
+      output: "<App foo={bar} {...baz} />;",
+      options: [{ attributes: { when: "never" } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar } { ...baz } />;',
-      output: '<App foo={bar} {...baz} />;',
-      options: [{ attributes: { when: 'never', allowMultiline: false } }],
+      code: "<App foo={ bar } { ...baz } />;",
+      output: "<App foo={bar} {...baz} />;",
+      options: [{ attributes: { when: "never", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={bar} {...baz} />;',
-      output: '<App foo={ bar } { ...baz } />;',
-      options: [{ attributes: { when: 'always' } }],
+      code: "<App foo={bar} {...baz} />;",
+      output: "<App foo={ bar } { ...baz } />;",
+      options: [{ attributes: { when: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={bar} {...baz} />;',
-      output: '<App foo={ bar } { ...baz } />;',
-      options: [{ attributes: { when: 'always', allowMultiline: false } }],
+      code: "<App foo={bar} {...baz} />;",
+      output: "<App foo={ bar } { ...baz } />;",
+      options: [{ attributes: { when: "always", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar} { ...baz} />;',
-      output: '<App foo={ bar } { ...baz } />;',
-      options: [{ attributes: { when: 'always' } }],
+      code: "<App foo={ bar} { ...baz} />;",
+      output: "<App foo={ bar } { ...baz } />;",
+      options: [{ attributes: { when: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={bar } {...baz } />;',
-      output: '<App foo={ bar } { ...baz } />;',
-      options: [{ attributes: { when: 'always' } }],
+      code: "<App foo={bar } {...baz } />;",
+      output: "<App foo={ bar } { ...baz } />;",
+      options: [{ attributes: { when: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
       ],
     },
     {
-      code: '<App foo={ bar} { ...baz} />;',
-      output: '<App foo={bar} {...baz} />;',
-      options: [{ attributes: { when: 'never' } }],
+      code: "<App foo={ bar} { ...baz} />;",
+      output: "<App foo={bar} {...baz} />;",
+      options: [{ attributes: { when: "never" } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
       ],
     },
     {
-      code: '<App foo={bar } {...baz } />;',
-      output: '<App foo={bar} {...baz} />;',
-      options: [{ attributes: { when: 'never' } }],
+      code: "<App foo={bar } {...baz } />;",
+      output: "<App foo={bar} {...baz} />;",
+      options: [{ attributes: { when: "never" } }],
       errors: [
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -2144,23 +2239,23 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={bar} {...baz} />;
       `,
-      options: [{ attributes: { when: 'never', allowMultiline: false } }],
+      options: [{ attributes: { when: "never", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -2175,256 +2270,260 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={ bar } { ...baz } />;
       `,
-      options: [{ attributes: { when: 'always', allowMultiline: false } }],
+      options: [{ attributes: { when: "always", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ 3 } bar={{a: 2}} />',
-      output: '<App foo={3} bar={ {a: 2} } />',
-      options: [{ attributes: { when: 'never', spacing: { objectLiterals: 'always' } } }],
+      code: "<App foo={ 3 } bar={{a: 2}} />",
+      output: "<App foo={3} bar={ {a: 2} } />",
+      options: [
+        {
+          attributes: { when: "never", spacing: { objectLiterals: "always" } },
+        },
+      ],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ foo /* comment 16 */ } />',
-      output: '<App foo={foo /* comment 16 */} />',
+      code: "<App foo={ foo /* comment 16 */ } />",
+      output: "<App foo={foo /* comment 16 */} />",
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={foo /* comment 17 */} />',
-      output: '<App foo={ foo /* comment 17 */ } />',
-      options: [{ attributes: { when: 'always' } }],
+      code: "<App foo={foo /* comment 17 */} />",
+      output: "<App foo={ foo /* comment 17 */ } />",
+      options: [{ attributes: { when: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ /* comment 18 */ foo } />',
-      output: '<App foo={/* comment 18 */ foo} />',
+      code: "<App foo={ /* comment 18 */ foo } />",
+      output: "<App foo={/* comment 18 */ foo} />",
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={/* comment 19 */ foo} />',
-      output: '<App foo={ /* comment 19 */ foo } />',
-      options: [{ attributes: { when: 'always' } }],
+      code: "<App foo={/* comment 19 */ foo} />",
+      output: "<App foo={ /* comment 19 */ foo } />",
+      options: [{ attributes: { when: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{ bar } { baz }</App>;',
-      output: '<App>{bar} {baz}</App>;',
-      options: [{ children: { when: 'never' } }],
+      code: "<App>{ bar } { baz }</App>;",
+      output: "<App>{bar} {baz}</App>;",
+      options: [{ children: { when: "never" } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{ bar } { baz }</App>;',
-      output: '<App>{bar} {baz}</App>;',
-      options: [{ children: { when: 'never', allowMultiline: false } }],
+      code: "<App>{ bar } { baz }</App>;",
+      output: "<App>{bar} {baz}</App>;",
+      options: [{ children: { when: "never", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{bar} {baz}</App>;',
-      output: '<App>{ bar } { baz }</App>;',
-      options: [{ children: { when: 'always' } }],
+      code: "<App>{bar} {baz}</App>;",
+      output: "<App>{ bar } { baz }</App>;",
+      options: [{ children: { when: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{bar} {baz}</App>;',
-      output: '<App>{ bar } { baz }</App>;',
-      options: [{ children: { when: 'always', allowMultiline: false } }],
+      code: "<App>{bar} {baz}</App>;",
+      output: "<App>{ bar } { baz }</App>;",
+      options: [{ children: { when: "always", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{ bar} { baz}</App>;',
-      output: '<App>{ bar } { baz }</App>;',
-      options: [{ children: { when: 'always' } }],
+      code: "<App>{ bar} { baz}</App>;",
+      output: "<App>{ bar } { baz }</App>;",
+      options: [{ children: { when: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{bar } {baz }</App>;',
-      output: '<App>{ bar } { baz }</App>;',
-      options: [{ children: { when: 'always' } }],
+      code: "<App>{bar } {baz }</App>;",
+      output: "<App>{ bar } { baz }</App>;",
+      options: [{ children: { when: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
       ],
     },
     {
-      code: '<App>{ bar} { baz}</App>;',
-      output: '<App>{bar} {baz}</App>;',
-      options: [{ children: { when: 'never' } }],
+      code: "<App>{ bar} { baz}</App>;",
+      output: "<App>{bar} {baz}</App>;",
+      options: [{ children: { when: "never" } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
       ],
     },
     {
-      code: '<App>{bar } {baz }</App>;',
-      output: '<App>{bar} {baz}</App>;',
-      options: [{ children: { when: 'never' } }],
+      code: "<App>{bar } {baz }</App>;",
+      output: "<App>{bar} {baz}</App>;",
+      options: [{ children: { when: "never" } }],
       errors: [
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -2439,23 +2538,23 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App>{bar} {baz}</App>;
       `,
-      options: [{ children: { when: 'never', allowMultiline: false } }],
+      options: [{ children: { when: "never", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -2470,148 +2569,108 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App>{ bar } { baz }</App>;
       `,
-      options: [{ children: { when: 'always', allowMultiline: false } }],
+      options: [{ children: { when: "always", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{ 3 } bar={{a: 2}}</App>',
-      output: '<App>{3} bar={ {a: 2} }</App>',
-      options: [{ children: { when: 'never', spacing: { objectLiterals: 'always' } } }],
+      code: "<App>{ 3 } bar={{a: 2}}</App>",
+      output: "<App>{3} bar={ {a: 2} }</App>",
+      options: [
+        { children: { when: "never", spacing: { objectLiterals: "always" } } },
+      ],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{foo /* comment 20 */}</App>',
-      output: '<App>{ foo /* comment 20 */ }</App>',
-      options: [{ children: { when: 'always' } }],
+      code: "<App>{foo /* comment 20 */}</App>",
+      output: "<App>{ foo /* comment 20 */ }</App>",
+      options: [{ children: { when: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{/* comment 21 */ foo}</App>',
-      output: '<App>{ /* comment 21 */ foo }</App>',
-      options: [{ children: { when: 'always' } }],
+      code: "<App>{/* comment 21 */ foo}</App>",
+      output: "<App>{ /* comment 21 */ foo }</App>",
+      options: [{ children: { when: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar } />;',
-      output: '<App foo={bar} />;',
-      options: ['never'],
+      code: "<App foo={ bar } />;",
+      output: "<App foo={bar} />;",
+      options: ["never"],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar } />;',
-      output: '<App foo={bar} />;',
-      options: ['never', { allowMultiline: false }],
+      code: "<App foo={ bar } />;",
+      output: "<App foo={bar} />;",
+      options: ["never", { allowMultiline: false }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: `
-        <App foo={
-        { bar: true, baz: true }
-        } />;
-      `,
-      output: `
-        <App foo={{ bar: true, baz: true }} />;
-      `,
-      options: ['never', { allowMultiline: false, spacing: { objectLiterals: 'never' } }],
-      errors: [
-        {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
-        },
-        {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: `
-        <App foo={
-        { bar: true, baz: true }
-        } />;
-      `,
-      output: `
-        <App foo={ { bar: true, baz: true } } />;
-      `,
-      options: ['never', { allowMultiline: false, spacing: { objectLiterals: 'always' } }],
-      errors: [
-        {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
-        },
-        {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -2624,15 +2683,18 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={{ bar: true, baz: true }} />;
       `,
-      options: ['always', { allowMultiline: false, spacing: { objectLiterals: 'never' } }],
+      options: [
+        "never",
+        { allowMultiline: false, spacing: { objectLiterals: "never" } },
+      ],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -2645,89 +2707,140 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={ { bar: true, baz: true } } />;
       `,
-      options: ['always', { allowMultiline: false, spacing: { objectLiterals: 'always' } }],
+      options: [
+        "never",
+        { allowMultiline: false, spacing: { objectLiterals: "always" } },
+      ],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={bar} />;',
-      output: '<App foo={ bar } />;',
-      options: ['always'],
+      code: `
+        <App foo={
+        { bar: true, baz: true }
+        } />;
+      `,
+      output: `
+        <App foo={{ bar: true, baz: true }} />;
+      `,
+      options: [
+        "always",
+        { allowMultiline: false, spacing: { objectLiterals: "never" } },
+      ],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={bar} />;',
-      output: '<App foo={ bar } />;',
-      options: ['always', { allowMultiline: false }],
+      code: `
+        <App foo={
+        { bar: true, baz: true }
+        } />;
+      `,
+      output: `
+        <App foo={ { bar: true, baz: true } } />;
+      `,
+      options: [
+        "always",
+        { allowMultiline: false, spacing: { objectLiterals: "always" } },
+      ],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar} />;',
-      output: '<App foo={ bar } />;',
-      options: ['always'],
+      code: "<App foo={bar} />;",
+      output: "<App foo={ bar } />;",
+      options: ["always"],
       errors: [
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
+        },
+        {
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={bar } />;',
-      output: '<App foo={ bar } />;',
-      options: ['always'],
+      code: "<App foo={bar} />;",
+      output: "<App foo={ bar } />;",
+      options: ["always", { allowMultiline: false }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
+        },
+        {
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar} />;',
-      output: '<App foo={bar} />;',
-      options: ['never'],
+      code: "<App foo={ bar} />;",
+      output: "<App foo={ bar } />;",
+      options: ["always"],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={bar } />;',
-      output: '<App foo={bar} />;',
-      options: ['never'],
+      code: "<App foo={bar } />;",
+      output: "<App foo={ bar } />;",
+      options: ["always"],
       errors: [
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
+        },
+      ],
+    },
+    {
+      code: "<App foo={ bar} />;",
+      output: "<App foo={bar} />;",
+      options: ["never"],
+      errors: [
+        {
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
+        },
+      ],
+    },
+    {
+      code: "<App foo={bar } />;",
+      output: "<App foo={bar} />;",
+      options: ["never"],
+      errors: [
+        {
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -2740,15 +2853,15 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={bar} />;
       `,
-      options: ['never', { allowMultiline: false }],
+      options: ["never", { allowMultiline: false }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -2761,171 +2874,171 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={ bar } />;
       `,
-      options: ['always', { allowMultiline: false }],
+      options: ["always", { allowMultiline: false }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={bar} />;',
-      output: '<App foo={ bar } />;',
-      options: ['always', { spacing: {} }],
+      code: "<App foo={bar} />;",
+      output: "<App foo={ bar } />;",
+      options: ["always", { spacing: {} }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar} />;',
-      output: '<App foo={ bar } />;',
-      options: ['always', { spacing: {} }],
+      code: "<App foo={ bar} />;",
+      output: "<App foo={ bar } />;",
+      options: ["always", { spacing: {} }],
       errors: [
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={bar } />;',
-      output: '<App foo={ bar } />;',
-      options: ['always', { spacing: {} }],
+      code: "<App foo={bar } />;",
+      output: "<App foo={ bar } />;",
+      options: ["always", { spacing: {} }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
       ],
     },
     {
-      code: '<App foo={ {bar: true, baz: true} } />;',
-      output: '<App foo={{bar: true, baz: true}} />;',
-      options: ['always', { spacing: { objectLiterals: 'never' } }],
+      code: "<App foo={ {bar: true, baz: true} } />;",
+      output: "<App foo={{bar: true, baz: true}} />;",
+      options: ["always", { spacing: { objectLiterals: "never" } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App { ...bar } />;',
-      output: '<App {...bar} />;',
-      options: ['never'],
+      code: "<App { ...bar } />;",
+      output: "<App {...bar} />;",
+      options: ["never"],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App { ...bar } />;',
-      output: '<App {...bar} />;',
-      options: ['never', { allowMultiline: false }],
+      code: "<App { ...bar } />;",
+      output: "<App {...bar} />;",
+      options: ["never", { allowMultiline: false }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App {...bar} />;',
-      output: '<App { ...bar } />;',
-      options: ['always'],
+      code: "<App {...bar} />;",
+      output: "<App { ...bar } />;",
+      options: ["always"],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App {...bar} />;',
-      output: '<App { ...bar } />;',
-      options: ['always', { allowMultiline: false }],
+      code: "<App {...bar} />;",
+      output: "<App { ...bar } />;",
+      options: ["always", { allowMultiline: false }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
-        },
-      ],
-    },
-    {
-      code: '<App { ...bar} />;',
-      output: '<App { ...bar } />;',
-      options: ['always'],
-      errors: [
-        {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App {...bar } />;',
-      output: '<App { ...bar } />;',
-      options: ['always'],
+      code: "<App { ...bar} />;",
+      output: "<App { ...bar } />;",
+      options: ["always"],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App { ...bar} />;',
-      output: '<App {...bar} />;',
-      options: ['never'],
+      code: "<App {...bar } />;",
+      output: "<App { ...bar } />;",
+      options: ["always"],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
       ],
     },
     {
-      code: '<App {...bar } />;',
-      output: '<App {...bar} />;',
-      options: ['never'],
+      code: "<App { ...bar} />;",
+      output: "<App {...bar} />;",
+      options: ["never"],
       errors: [
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
+        },
+      ],
+    },
+    {
+      code: "<App {...bar } />;",
+      output: "<App {...bar} />;",
+      options: ["never"],
+      errors: [
+        {
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -2938,15 +3051,15 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App {...bar} />;
       `,
-      options: ['never', { allowMultiline: false }],
+      options: ["never", { allowMultiline: false }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -2959,167 +3072,167 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App { ...bar } />;
       `,
-      options: ['always', { allowMultiline: false }],
+      options: ["always", { allowMultiline: false }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar } { ...baz } />;',
-      output: '<App foo={bar} {...baz} />;',
-      options: ['never'],
+      code: "<App foo={ bar } { ...baz } />;",
+      output: "<App foo={bar} {...baz} />;",
+      options: ["never"],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar } { ...baz } />;',
-      output: '<App foo={bar} {...baz} />;',
-      options: ['never', { allowMultiline: false }],
+      code: "<App foo={ bar } { ...baz } />;",
+      output: "<App foo={bar} {...baz} />;",
+      options: ["never", { allowMultiline: false }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={bar} {...baz} />;',
-      output: '<App foo={ bar } { ...baz } />;',
-      options: ['always'],
+      code: "<App foo={bar} {...baz} />;",
+      output: "<App foo={ bar } { ...baz } />;",
+      options: ["always"],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={bar} {...baz} />;',
-      output: '<App foo={ bar } { ...baz } />;',
-      options: ['always', { allowMultiline: false }],
+      code: "<App foo={bar} {...baz} />;",
+      output: "<App foo={ bar } { ...baz } />;",
+      options: ["always", { allowMultiline: false }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ bar} { ...baz} />;',
-      output: '<App foo={ bar } { ...baz } />;',
-      options: ['always'],
+      code: "<App foo={ bar} { ...baz} />;",
+      output: "<App foo={ bar } { ...baz } />;",
+      options: ["always"],
       errors: [
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={bar } {...baz } />;',
-      output: '<App foo={ bar } { ...baz } />;',
-      options: ['always'],
+      code: "<App foo={bar } {...baz } />;",
+      output: "<App foo={ bar } { ...baz } />;",
+      options: ["always"],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
       ],
     },
     {
-      code: '<App foo={ bar} { ...baz} />;',
-      output: '<App foo={bar} {...baz} />;',
-      options: ['never'],
+      code: "<App foo={ bar} { ...baz} />;",
+      output: "<App foo={bar} {...baz} />;",
+      options: ["never"],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
       ],
     },
     {
-      code: '<App foo={bar } {...baz } />;',
-      output: '<App foo={bar} {...baz} />;',
-      options: ['never'],
+      code: "<App foo={bar } {...baz } />;",
+      output: "<App foo={bar} {...baz} />;",
+      options: ["never"],
       errors: [
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -3134,23 +3247,23 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={bar} {...baz} />;
       `,
-      options: ['never', { allowMultiline: false }],
+      options: ["never", { allowMultiline: false }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -3165,113 +3278,113 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <App foo={ bar } { ...baz } />;
       `,
-      options: ['always', { allowMultiline: false }],
+      options: ["always", { allowMultiline: false }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={ 3 } bar={{a: 2}} />',
-      output: '<App foo={3} bar={ {a: 2} } />',
-      options: ['never', { spacing: { objectLiterals: 'always' } }],
+      code: "<App foo={ 3 } bar={{a: 2}} />",
+      output: "<App foo={3} bar={ {a: 2} } />",
+      options: ["never", { spacing: { objectLiterals: "always" } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={foo /* comment 22 */} />',
-      output: '<App foo={ foo /* comment 22 */ } />',
-      options: ['always'],
+      code: "<App foo={foo /* comment 22 */} />",
+      output: "<App foo={ foo /* comment 22 */ } />",
+      options: ["always"],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App foo={/* comment 23 */ foo} />',
-      output: '<App foo={ /* comment 23 */ foo } />',
-      options: ['always'],
+      code: "<App foo={/* comment 23 */ foo} />",
+      output: "<App foo={ /* comment 23 */ foo } />",
+      options: ["always"],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{/*comment24*/ }</App>',
-      output: '<App>{/*comment24*/}</App>',
-      options: [{ children: { when: 'never' } }],
+      code: "<App>{/*comment24*/ }</App>",
+      output: "<App>{/*comment24*/}</App>",
+      options: [{ children: { when: "never" } }],
       errors: [
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
     {
-      code: '<App>{ /*comment25*/}</App>',
-      output: '<App>{/*comment25*/}</App>',
-      options: [{ children: { when: 'never' } }],
+      code: "<App>{ /*comment25*/}</App>",
+      output: "<App>{/*comment25*/}</App>",
+      options: [{ children: { when: "never" } }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
       ],
     },
     {
-      code: '<App>{/*comment26*/}</App>',
-      output: '<App>{ /*comment26*/ }</App>',
-      options: [{ children: { when: 'always' } }],
+      code: "<App>{/*comment26*/}</App>",
+      output: "<App>{ /*comment26*/ }</App>",
+      options: [{ children: { when: "always" } }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -3286,15 +3399,15 @@ ruleTester.run('jsx-curly-spacing', rule, {
         {/* comment 27 */}
         </App>;
       `,
-      options: [{ when: 'never', children: true }],
+      options: [{ when: "never", children: true }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -3309,15 +3422,15 @@ ruleTester.run('jsx-curly-spacing', rule, {
         { /* comment 28 */ }
         </App>;
       `,
-      options: [{ when: 'always', children: true }],
+      options: [{ when: "always", children: true }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -3333,11 +3446,11 @@ ruleTester.run('jsx-curly-spacing', rule, {
         {/*comment29*/}
         </App>
       `,
-      options: [{ children: { when: 'never', allowMultiline: false } }],
+      options: [{ children: { when: "never", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'noNewlineBefore',
-          data: { token: '}' },
+          messageId: "noNewlineBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -3353,11 +3466,11 @@ ruleTester.run('jsx-curly-spacing', rule, {
         {/*comment30*/}
         </App>
       `,
-      options: [{ children: { when: 'never', allowMultiline: false } }],
+      options: [{ children: { when: "never", allowMultiline: false } }],
       errors: [
         {
-          messageId: 'noNewlineAfter',
-          data: { token: '{' },
+          messageId: "noNewlineAfter",
+          data: { token: "{" },
         },
       ],
     },
@@ -3376,15 +3489,15 @@ ruleTester.run('jsx-curly-spacing', rule, {
         baz
         /* comment 32 */}</App>;
       `,
-      options: [{ when: 'never', children: true }],
+      options: [{ when: "never", children: true }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -3403,15 +3516,15 @@ ruleTester.run('jsx-curly-spacing', rule, {
         baz
         /* comment 33 */ }</App>;
       `,
-      options: [{ when: 'always', children: true }],
+      options: [{ when: "always", children: true }],
       errors: [
         {
-          messageId: 'spaceNeededAfter',
-          data: { token: '{' },
+          messageId: "spaceNeededAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'spaceNeededBefore',
-          data: { token: '}' },
+          messageId: "spaceNeededBefore",
+          data: { token: "}" },
         },
       ],
     },
@@ -3422,15 +3535,15 @@ ruleTester.run('jsx-curly-spacing', rule, {
       output: `
         <div className={this.state.renderInfo ? "infoPanel col-xs-12" : "unToggled col-xs-12"} />
       `,
-      options: ['never', { allowMultiline: true }],
+      options: ["never", { allowMultiline: true }],
       errors: [
         {
-          messageId: 'noSpaceAfter',
-          data: { token: '{' },
+          messageId: "noSpaceAfter",
+          data: { token: "{" },
         },
         {
-          messageId: 'noSpaceBefore',
-          data: { token: '}' },
+          messageId: "noSpaceBefore",
+          data: { token: "}" },
         },
       ],
     },

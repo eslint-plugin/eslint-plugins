@@ -3,40 +3,42 @@
  * @author Markus Ånöstam
  */
 
-'use strict';
+"use strict";
 
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  noDuplicateProps: 'No duplicate props allowed',
+  noDuplicateProps: "No duplicate props allowed",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow duplicate properties in JSX',
-      category: 'Possible Errors',
+      description: "Disallow duplicate properties in JSX",
+      category: "Possible Errors",
       recommended: true,
-      url: docsUrl('jsx-no-duplicate-props'),
+      url: docsUrl("jsx-no-duplicate-props"),
     },
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        ignoreCase: {
-          type: 'boolean',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          ignoreCase: {
+            type: "boolean",
+          },
         },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create(context) {
@@ -48,13 +50,13 @@ module.exports = {
         const props = {};
 
         node.attributes.forEach((decl) => {
-          if (decl.type === 'JSXSpreadAttribute') {
+          if (decl.type === "JSXSpreadAttribute") {
             return;
           }
 
           let name = decl.name.name;
 
-          if (typeof name !== 'string') {
+          if (typeof name !== "string") {
             return;
           }
 
@@ -63,7 +65,7 @@ module.exports = {
           }
 
           if (props.hasOwnProperty(name)) {
-            report(context, messages.noDuplicateProps, 'noDuplicateProps', {
+            report(context, messages.noDuplicateProps, "noDuplicateProps", {
               node: decl,
             });
           } else {

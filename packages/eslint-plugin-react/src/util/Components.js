@@ -3,25 +3,25 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
-const variableUtil = require('./variable');
-const pragmaUtil = require('./pragma');
-const astUtil = require('./ast');
-const componentUtil = require('./componentUtil');
-const propTypesUtil = require('./propTypes');
-const jsxUtil = require('./jsx');
-const usedPropTypesUtil = require('./usedPropTypes');
-const defaultPropsUtil = require('./defaultProps');
-const isFirstLetterCapitalized = require('./isFirstLetterCapitalized');
-const isDestructuredFromPragmaImport = require('./isDestructuredFromPragmaImport');
-const eslintUtil = require('./eslint');
+const variableUtil = require("./variable");
+const pragmaUtil = require("./pragma");
+const astUtil = require("./ast");
+const componentUtil = require("./componentUtil");
+const propTypesUtil = require("./propTypes");
+const jsxUtil = require("./jsx");
+const usedPropTypesUtil = require("./usedPropTypes");
+const defaultPropsUtil = require("./defaultProps");
+const isFirstLetterCapitalized = require("./isFirstLetterCapitalized");
+const isDestructuredFromPragmaImport = require("./isDestructuredFromPragmaImport");
+const eslintUtil = require("./eslint");
 
 const getScope = eslintUtil.getScope;
 const getText = eslintUtil.getText;
 
 function getId(node) {
-  return node ? `${node.range[0]}:${node.range[1]}` : '';
+  return node ? `${node.range[0]}:${node.range[1]}` : "";
 }
 
 function usedPropTypesAreEquivalent(propA, propB) {
@@ -29,7 +29,11 @@ function usedPropTypesAreEquivalent(propA, propB) {
     if (!propA.allNames && !propB.allNames) {
       return true;
     }
-    if (Array.isArray(propA.allNames) && Array.isArray(propB.allNames) && propA.allNames.join('') === propB.allNames.join('')) {
+    if (
+      Array.isArray(propA.allNames) &&
+      Array.isArray(propB.allNames) &&
+      propA.allNames.join("") === propB.allNames.join("")
+    ) {
       return true;
     }
     return false;
@@ -39,7 +43,9 @@ function usedPropTypesAreEquivalent(propA, propB) {
 
 function mergeUsedPropTypes(propsList, newPropsList) {
   const propsToAdd = newPropsList.filter((newProp) => {
-    const newPropIsAlreadyInTheList = propsList.some((prop) => usedPropTypesAreEquivalent(prop, newProp));
+    const newPropIsAlreadyInTheList = propsList.some((prop) =>
+      usedPropTypesAreEquivalent(prop, newProp),
+    );
     return !newPropIsAlreadyInTheList;
   });
 
@@ -117,16 +123,12 @@ class Components {
       component = list[getId(node)];
     }
 
-    Object.assign(
-      component,
-      props,
-      {
-        usedPropTypes: mergeUsedPropTypes(
-          component.usedPropTypes || [],
-          props.usedPropTypes || []
-        ),
-      }
-    );
+    Object.assign(component, props, {
+      usedPropTypes: mergeUsedPropTypes(
+        component.usedPropTypes || [],
+        props.usedPropTypes || [],
+      ),
+    });
   }
 
   /**
@@ -141,35 +143,47 @@ class Components {
     const usedPropTypes = {};
 
     // Find props used in components for which we are not confident
-    Object.keys(thisList).filter((i) => thisList[i].confidence < 2).forEach((i) => {
-      let component = null;
-      let node = null;
-      node = thisList[i].node;
-      while (!component && node.parent) {
-        node = node.parent;
-        // Stop moving up if we reach a decorator
-        if (node.type === 'Decorator') {
-          break;
+    Object.keys(thisList)
+      .filter((i) => thisList[i].confidence < 2)
+      .forEach((i) => {
+        let component = null;
+        let node = null;
+        node = thisList[i].node;
+        while (!component && node.parent) {
+          node = node.parent;
+          // Stop moving up if we reach a decorator
+          if (node.type === "Decorator") {
+            break;
+          }
+          component = this.get(node);
         }
-        component = this.get(node);
-      }
-      if (component) {
-        const newUsedProps = (thisList[i].usedPropTypes || []).filter((propType) => !propType.node || propType.node.kind !== 'init');
+        if (component) {
+          const newUsedProps = (thisList[i].usedPropTypes || []).filter(
+            (propType) => !propType.node || propType.node.kind !== "init",
+          );
 
-        const componentId = getId(component.node);
+          const componentId = getId(component.node);
 
-        usedPropTypes[componentId] = mergeUsedPropTypes(usedPropTypes[componentId] || [], newUsedProps);
-      }
-    });
+          usedPropTypes[componentId] = mergeUsedPropTypes(
+            usedPropTypes[componentId] || [],
+            newUsedProps,
+          );
+        }
+      });
 
     // Assign used props in not confident components to the parent component
-    Object.keys(thisList).filter((j) => thisList[j].confidence >= 2).forEach((j) => {
-      const id = getId(thisList[j].node);
-      list[j] = thisList[j];
-      if (usedPropTypes[id]) {
-        list[j].usedPropTypes = mergeUsedPropTypes(list[j].usedPropTypes || [], usedPropTypes[id]);
-      }
-    });
+    Object.keys(thisList)
+      .filter((j) => thisList[j].confidence >= 2)
+      .forEach((j) => {
+        const id = getId(thisList[j].node);
+        list[j] = thisList[j];
+        if (usedPropTypes[id]) {
+          list[j].usedPropTypes = mergeUsedPropTypes(
+            list[j].usedPropTypes || [],
+            usedPropTypes[id],
+          );
+        }
+      });
     return list;
   }
 
@@ -181,7 +195,8 @@ class Components {
    */
   length() {
     const list = Lists.get(this);
-    return Object.values(list).filter((component) => component.confidence >= 2).length;
+    return Object.values(list).filter((component) => component.confidence >= 2)
+      .length;
   }
 
   /**
@@ -212,9 +227,12 @@ class Components {
    */
   addDefaultReactImport(specifier) {
     const info = ReactImports.get(this);
-    ReactImports.set(this, Object.assign({}, info, {
-      defaultReactImports: (info.defaultReactImports || []).concat(specifier),
-    }));
+    ReactImports.set(
+      this,
+      Object.assign({}, info, {
+        defaultReactImports: (info.defaultReactImports || []).concat(specifier),
+      }),
+    );
   }
 
   /**
@@ -225,26 +243,35 @@ class Components {
    */
   addNamedReactImport(specifier) {
     const info = ReactImports.get(this);
-    ReactImports.set(this, Object.assign({}, info, {
-      namedReactImports: (info.namedReactImports || []).concat(specifier),
-    }));
+    ReactImports.set(
+      this,
+      Object.assign({}, info, {
+        namedReactImports: (info.namedReactImports || []).concat(specifier),
+      }),
+    );
   }
 }
 
 function getWrapperFunctions(context, pragma) {
-  const componentWrapperFunctions = context.settings.componentWrapperFunctions || [];
+  const componentWrapperFunctions =
+    context.settings.componentWrapperFunctions || [];
 
   // eslint-disable-next-line arrow-body-style
-  return componentWrapperFunctions.map((wrapperFunction) => {
-    return typeof wrapperFunction === 'string'
-      ? { property: wrapperFunction }
-      : Object.assign({}, wrapperFunction, {
-        object: wrapperFunction.object === '<pragma>' ? pragma : wrapperFunction.object,
-      });
-  }).concat([
-    { property: 'forwardRef', object: pragma },
-    { property: 'memo', object: pragma },
-  ]);
+  return componentWrapperFunctions
+    .map((wrapperFunction) => {
+      return typeof wrapperFunction === "string"
+        ? { property: wrapperFunction }
+        : Object.assign({}, wrapperFunction, {
+            object:
+              wrapperFunction.object === "<pragma>"
+                ? pragma
+                : wrapperFunction.object,
+          });
+    })
+    .concat([
+      { property: "forwardRef", object: pragma },
+      { property: "memo", object: pragma },
+    ]);
 }
 
 // eslint-disable-next-line valid-jsdoc
@@ -268,12 +295,14 @@ function mergeRules(rules) {
   });
 
   /** @type {{ [key: string]: Function }} */
-  return Object.fromEntries([...handlersByKey].map(([key, fns]) => [
-    key,
-    function mergedHandler(node) {
-      fns.forEach(fn => fn(node));
-    }
-  ]));
+  return Object.fromEntries(
+    [...handlersByKey].map(([key, fns]) => [
+      key,
+      function mergedHandler(node) {
+        fns.forEach((fn) => fn(node));
+      },
+    ]),
+  );
 }
 
 function componentRule(rule, context) {
@@ -327,10 +356,14 @@ function componentRule(rule, context) {
     },
 
     getComponentNameFromJSXElement(node) {
-      if (node.type !== 'JSXElement') {
+      if (node.type !== "JSXElement") {
         return null;
       }
-      if (node.openingElement && node.openingElement.name && node.openingElement.name.name) {
+      if (
+        node.openingElement &&
+        node.openingElement.name &&
+        node.openingElement.name.name
+      ) {
         return node.openingElement.name.name;
       }
       return null;
@@ -349,14 +382,18 @@ function componentRule(rule, context) {
       if (!body) {
         return null;
       }
-      if (body.type === 'JSXElement') {
+      if (body.type === "JSXElement") {
         return this.getComponentNameFromJSXElement(body);
       }
-      if (body.type === 'BlockStatement') {
-        const jsxElement = body.body.find((item) => item.type === 'ReturnStatement');
-        return jsxElement
-          && jsxElement.argument
-          && this.getComponentNameFromJSXElement(jsxElement.argument);
+      if (body.type === "BlockStatement") {
+        const jsxElement = body.body.find(
+          (item) => item.type === "ReturnStatement",
+        );
+        return (
+          jsxElement &&
+          jsxElement.argument &&
+          this.getComponentNameFromJSXElement(jsxElement.argument)
+        );
       }
       return null;
     },
@@ -367,23 +404,26 @@ function componentRule(rule, context) {
      */
     getDetectedComponents() {
       const list = components.list();
-      return Object.values(list).filter((val) => {
-        if (val.node.type === 'ClassDeclaration') {
-          return true;
-        }
-        if (
-          val.node.type === 'ArrowFunctionExpression'
-          && val.node.parent
-          && val.node.parent.type === 'VariableDeclarator'
-          && val.node.parent.id
-        ) {
-          return true;
-        }
-        return false;
-      }).map((val) => {
-        if (val.node.type === 'ArrowFunctionExpression') return val.node.parent.id.name;
-        return val.node.id && val.node.id.name;
-      });
+      return Object.values(list)
+        .filter((val) => {
+          if (val.node.type === "ClassDeclaration") {
+            return true;
+          }
+          if (
+            val.node.type === "ArrowFunctionExpression" &&
+            val.node.parent &&
+            val.node.parent.type === "VariableDeclarator" &&
+            val.node.parent.id
+          ) {
+            return true;
+          }
+          return false;
+        })
+        .map((val) => {
+          if (val.node.type === "ArrowFunctionExpression")
+            return val.node.parent.id.name;
+          return val.node.id && val.node.id.name;
+        });
     },
 
     /**
@@ -404,17 +444,21 @@ function componentRule(rule, context) {
       }
 
       return wrapperFunctions.some((wrapperFunction) => {
-        if (node.callee.type === 'MemberExpression') {
-          return wrapperFunction.object
-            && wrapperFunction.object === node.callee.object.name
-            && wrapperFunction.property === node.callee.property.name
-            && !this.nodeWrapsComponent(node);
-        }
-        return wrapperFunction.property === node.callee.name
-          && (!wrapperFunction.object
-            // Functions coming from the current pragma need special handling
-            || (wrapperFunction.object === pragma && this.isDestructuredFromPragmaImport(node, node.callee.name))
+        if (node.callee.type === "MemberExpression") {
+          return (
+            wrapperFunction.object &&
+            wrapperFunction.object === node.callee.object.name &&
+            wrapperFunction.property === node.callee.property.name &&
+            !this.nodeWrapsComponent(node)
           );
+        }
+        return (
+          wrapperFunction.property === node.callee.name &&
+          (!wrapperFunction.object ||
+            // Functions coming from the current pragma need special handling
+            (wrapperFunction.object === pragma &&
+              this.isDestructuredFromPragmaImport(node, node.callee.name)))
+        );
       });
     },
 
@@ -433,9 +477,9 @@ function componentRule(rule, context) {
      */
     getParentComponent(node) {
       return (
-        componentUtil.getParentES6Component(context, node)
-        || componentUtil.getParentES5Component(context, node)
-        || utils.getParentStatelessComponent(node)
+        componentUtil.getParentES6Component(context, node) ||
+        componentUtil.getParentES5Component(context, node) ||
+        utils.getParentStatelessComponent(node)
       );
     },
 
@@ -445,17 +489,19 @@ function componentRule(rule, context) {
      */
     isInAllowedPositionForComponent(node) {
       switch (node.parent.type) {
-        case 'VariableDeclarator':
-        case 'AssignmentExpression':
-        case 'Property':
-        case 'ReturnStatement':
-        case 'ExportDefaultDeclaration':
-        case 'ArrowFunctionExpression': {
+        case "VariableDeclarator":
+        case "AssignmentExpression":
+        case "Property":
+        case "ReturnStatement":
+        case "ExportDefaultDeclaration":
+        case "ArrowFunctionExpression": {
           return true;
         }
-        case 'SequenceExpression': {
-          return utils.isInAllowedPositionForComponent(node.parent)
-            && node === node.parent.expressions[node.parent.expressions.length - 1];
+        case "SequenceExpression": {
+          return (
+            utils.isInAllowedPositionForComponent(node.parent) &&
+            node === node.parent.expressions[node.parent.expressions.length - 1]
+          );
         }
         default:
           return false;
@@ -471,28 +517,36 @@ function componentRule(rule, context) {
     getStatelessComponent(node) {
       const parent = node.parent;
       if (
-        node.type === 'FunctionDeclaration'
-        && (!node.id || isFirstLetterCapitalized(node.id.name))
-        && utils.isReturningJSXOrNull(node)
+        node.type === "FunctionDeclaration" &&
+        (!node.id || isFirstLetterCapitalized(node.id.name)) &&
+        utils.isReturningJSXOrNull(node)
       ) {
         return node;
       }
 
-      if (node.type === 'FunctionExpression' || node.type === 'ArrowFunctionExpression') {
-        const isPropertyAssignment = parent.type === 'AssignmentExpression'
-          && parent.left.type === 'MemberExpression';
-        const isModuleExportsAssignment = isPropertyAssignment
-          && parent.left.object.name === 'module'
-          && parent.left.property.name === 'exports';
+      if (
+        node.type === "FunctionExpression" ||
+        node.type === "ArrowFunctionExpression"
+      ) {
+        const isPropertyAssignment =
+          parent.type === "AssignmentExpression" &&
+          parent.left.type === "MemberExpression";
+        const isModuleExportsAssignment =
+          isPropertyAssignment &&
+          parent.left.object.name === "module" &&
+          parent.left.property.name === "exports";
 
-        if (node.parent.type === 'ExportDefaultDeclaration') {
+        if (node.parent.type === "ExportDefaultDeclaration") {
           if (utils.isReturningJSX(node)) {
             return node;
           }
           return undefined;
         }
 
-        if (node.parent.type === 'VariableDeclarator' && utils.isReturningJSXOrNull(node)) {
+        if (
+          node.parent.type === "VariableDeclarator" &&
+          utils.isReturningJSXOrNull(node)
+        ) {
           if (isFirstLetterCapitalized(node.parent.id.name)) {
             return node;
           }
@@ -502,15 +556,21 @@ function componentRule(rule, context) {
         // case: const any = () => { return (props) => null }
         // case: const any = () => (props) => null
         if (
-          (node.parent.type === 'ReturnStatement' || (node.parent.type === 'ArrowFunctionExpression' && node.parent.expression))
-          && !utils.isReturningJSX(node)
+          (node.parent.type === "ReturnStatement" ||
+            (node.parent.type === "ArrowFunctionExpression" &&
+              node.parent.expression)) &&
+          !utils.isReturningJSX(node)
         ) {
           return undefined;
         }
 
         // case: any = () => { return => null }
         // case: any = () => null
-        if (node.parent.type === 'AssignmentExpression' && !isPropertyAssignment && utils.isReturningJSXOrNull(node)) {
+        if (
+          node.parent.type === "AssignmentExpression" &&
+          !isPropertyAssignment &&
+          utils.isReturningJSXOrNull(node)
+        ) {
           if (isFirstLetterCapitalized(node.parent.left.name)) {
             return node;
           }
@@ -518,7 +578,12 @@ function componentRule(rule, context) {
         }
 
         // case: any = () => () => null
-        if (node.parent.type === 'ArrowFunctionExpression' && node.parent.parent.type === 'AssignmentExpression' && !isPropertyAssignment && utils.isReturningJSXOrNull(node)) {
+        if (
+          node.parent.type === "ArrowFunctionExpression" &&
+          node.parent.parent.type === "AssignmentExpression" &&
+          !isPropertyAssignment &&
+          utils.isReturningJSXOrNull(node)
+        ) {
           if (isFirstLetterCapitalized(node.parent.parent.left.name)) {
             return node;
           }
@@ -526,7 +591,12 @@ function componentRule(rule, context) {
         }
 
         // case: { any: () => () => null }
-        if (node.parent.type === 'ArrowFunctionExpression' && node.parent.parent.type === 'Property' && !isPropertyAssignment && utils.isReturningJSXOrNull(node)) {
+        if (
+          node.parent.type === "ArrowFunctionExpression" &&
+          node.parent.parent.type === "Property" &&
+          !isPropertyAssignment &&
+          utils.isReturningJSXOrNull(node)
+        ) {
           if (isFirstLetterCapitalized(node.parent.parent.key.name)) {
             return node;
           }
@@ -534,12 +604,16 @@ function componentRule(rule, context) {
         }
 
         // case: any = function() {return function() {return null;};}
-        if (node.parent.type === 'ReturnStatement') {
+        if (node.parent.type === "ReturnStatement") {
           if (isFirstLetterCapitalized(node.id && node.id.name)) {
             return node;
           }
           const functionExpr = node.parent.parent.parent;
-          if (functionExpr.parent.type === 'AssignmentExpression' && !isPropertyAssignment && utils.isReturningJSXOrNull(node)) {
+          if (
+            functionExpr.parent.type === "AssignmentExpression" &&
+            !isPropertyAssignment &&
+            utils.isReturningJSXOrNull(node)
+          ) {
             if (isFirstLetterCapitalized(functionExpr.parent.left.name)) {
               return node;
             }
@@ -548,9 +622,13 @@ function componentRule(rule, context) {
         }
 
         // case: { any: function() {return function() {return null;};} }
-        if (node.parent.type === 'ReturnStatement') {
+        if (node.parent.type === "ReturnStatement") {
           const functionExpr = node.parent.parent.parent;
-          if (functionExpr.parent.type === 'Property' && !isPropertyAssignment && utils.isReturningJSXOrNull(node)) {
+          if (
+            functionExpr.parent.type === "Property" &&
+            !isPropertyAssignment &&
+            utils.isReturningJSXOrNull(node)
+          ) {
             if (isFirstLetterCapitalized(functionExpr.parent.key.name)) {
               return node;
             }
@@ -560,24 +638,23 @@ function componentRule(rule, context) {
 
         // for case abc = { [someobject.somekey]: props => { ... return not-jsx } }
         if (
-          node.parent
-          && node.parent.key
-          && node.parent.key.type === 'MemberExpression'
-          && !utils.isReturningJSX(node)
-          && !utils.isReturningOnlyNull(node)
+          node.parent &&
+          node.parent.key &&
+          node.parent.key.type === "MemberExpression" &&
+          !utils.isReturningJSX(node) &&
+          !utils.isReturningOnlyNull(node)
         ) {
           return undefined;
         }
 
         if (
-          node.parent.type === 'Property' && (
-            (node.parent.method && !node.parent.computed) // case: { f() { return ... } }
-            || (!node.id && !node.parent.computed) // case: { f: () => ... }
-          )
+          node.parent.type === "Property" &&
+          ((node.parent.method && !node.parent.computed) || // case: { f() { return ... } }
+            (!node.id && !node.parent.computed)) // case: { f: () => ... }
         ) {
           if (
-            isFirstLetterCapitalized(node.parent.key.name)
-            && utils.isReturningJSX(node)
+            isFirstLetterCapitalized(node.parent.key.name) &&
+            utils.isReturningJSX(node)
           ) {
             return node;
           }
@@ -590,7 +667,12 @@ function componentRule(rule, context) {
           return pragmaComponentWrapper;
         }
 
-        if (!(utils.isInAllowedPositionForComponent(node) && utils.isReturningJSXOrNull(node))) {
+        if (
+          !(
+            utils.isInAllowedPositionForComponent(node) &&
+            utils.isReturningJSXOrNull(node)
+          )
+        ) {
           return undefined;
         }
 
@@ -603,14 +685,14 @@ function componentRule(rule, context) {
         }
 
         if (
-          isPropertyAssignment
-          && !isModuleExportsAssignment
-          && !isFirstLetterCapitalized(parent.left.property.name)
+          isPropertyAssignment &&
+          !isModuleExportsAssignment &&
+          !isFirstLetterCapitalized(parent.left.property.name)
         ) {
           return undefined;
         }
 
-        if (parent.type === 'Property' && utils.isReturningOnlyNull(node)) {
+        if (parent.type === "Property" && utils.isReturningOnlyNull(node)) {
           return undefined;
         }
 
@@ -654,23 +736,29 @@ function componentRule(rule, context) {
       const componentPath = [];
       let nodeTemp = node;
       while (nodeTemp) {
-        if (nodeTemp.property && nodeTemp.property.type === 'Identifier') {
+        if (nodeTemp.property && nodeTemp.property.type === "Identifier") {
           componentPath.push(nodeTemp.property.name);
         }
-        if (nodeTemp.object && nodeTemp.object.type === 'Identifier') {
+        if (nodeTemp.object && nodeTemp.object.type === "Identifier") {
           componentPath.push(nodeTemp.object.name);
         }
         nodeTemp = nodeTemp.object;
       }
       componentPath.reverse();
-      const componentName = componentPath.slice(0, componentPath.length - 1).join('.');
+      const componentName = componentPath
+        .slice(0, componentPath.length - 1)
+        .join(".");
 
       // Find the variable in the current scope
       const variableName = componentPath.shift();
       if (!variableName) {
         return null;
       }
-      const variableInScope = variableUtil.getVariableFromContext(context, node, variableName);
+      const variableInScope = variableUtil.getVariableFromContext(
+        context,
+        node,
+        variableName,
+      );
       if (!variableInScope) {
         return null;
       }
@@ -678,19 +766,19 @@ function componentRule(rule, context) {
       // Try to find the component using variable references
       variableInScope.references.some((ref) => {
         let refId = ref.identifier;
-        if (refId.parent && refId.parent.type === 'MemberExpression') {
+        if (refId.parent && refId.parent.type === "MemberExpression") {
           refId = refId.parent;
         }
         if (getText(context, refId) !== componentName) {
           return false;
         }
-        if (refId.type === 'MemberExpression') {
+        if (refId.type === "MemberExpression") {
           componentNode = refId.parent.right;
         } else if (
-          refId.parent
-          && refId.parent.type === 'VariableDeclarator'
-          && refId.parent.init
-          && refId.parent.init.type !== 'Identifier'
+          refId.parent &&
+          refId.parent.type === "VariableDeclarator" &&
+          refId.parent.init &&
+          refId.parent.init.type !== "Identifier"
         ) {
           componentNode = refId.parent.init;
         }
@@ -704,11 +792,12 @@ function componentRule(rule, context) {
 
       // Try to find the component using variable declarations
       const defs = variableInScope.defs;
-      const defInScope = defs.find((def) => (
-        def.type === 'ClassName'
-        || def.type === 'FunctionName'
-        || def.type === 'Variable'
-      ));
+      const defInScope = defs.find(
+        (def) =>
+          def.type === "ClassName" ||
+          def.type === "FunctionName" ||
+          def.type === "Variable",
+      );
       if (!defInScope || !defInScope.node) {
         return null;
       }
@@ -720,7 +809,10 @@ function componentRule(rule, context) {
           continue; // eslint-disable-line no-continue
         }
         for (k = 0, l = componentNode.properties.length; k < l; k++) {
-          if (componentNode.properties[k].key && componentNode.properties[k].key.name === componentPath[i]) {
+          if (
+            componentNode.properties[k].key &&
+            componentNode.properties[k].key.name === componentPath[i]
+          ) {
             componentNode = componentNode.properties[k];
             break;
           }
@@ -737,13 +829,14 @@ function componentRule(rule, context) {
 
     isParentComponentNotStatelessComponent(node) {
       return !!(
-        node.parent
-        && node.parent.key
-        && node.parent.key.type === 'Identifier'
+        node.parent &&
+        node.parent.key &&
+        node.parent.key.type === "Identifier" &&
         // custom component functions must start with a capital letter (returns false otherwise)
-        && node.parent.key.name.charAt(0) === node.parent.key.name.charAt(0).toLowerCase()
+        node.parent.key.name.charAt(0) ===
+          node.parent.key.name.charAt(0).toLowerCase() &&
         // react render function cannot have params
-        && !!(node.params || []).length
+        !!(node.params || []).length
       );
     },
 
@@ -762,60 +855,77 @@ function componentRule(rule, context) {
       const defaultReactImports = components.getDefaultReactImports();
       const namedReactImports = components.getNamedReactImports();
 
-      const defaultReactImportName = defaultReactImports
-        && defaultReactImports[0]
-        && defaultReactImports[0].local.name;
-      const reactHookImportSpecifiers = namedReactImports
-        && namedReactImports.filter((specifier) => USE_HOOK_PREFIX_REGEX.test(specifier.imported.name));
-      const reactHookImportNames = reactHookImportSpecifiers
-        && Object.fromEntries(reactHookImportSpecifiers.map((specifier) => [specifier.local.name, specifier.imported.name]));
+      const defaultReactImportName =
+        defaultReactImports &&
+        defaultReactImports[0] &&
+        defaultReactImports[0].local.name;
+      const reactHookImportSpecifiers =
+        namedReactImports &&
+        namedReactImports.filter((specifier) =>
+          USE_HOOK_PREFIX_REGEX.test(specifier.imported.name),
+        );
+      const reactHookImportNames =
+        reactHookImportSpecifiers &&
+        Object.fromEntries(
+          reactHookImportSpecifiers.map((specifier) => [
+            specifier.local.name,
+            specifier.imported.name,
+          ]),
+        );
 
-      const isPotentialReactHookCall = defaultReactImportName
-        && node.callee.type === 'MemberExpression'
-        && node.callee.object.type === 'Identifier'
-        && node.callee.object.name === defaultReactImportName
-        && node.callee.property.type === 'Identifier'
-        && node.callee.property.name.match(USE_HOOK_PREFIX_REGEX);
+      const isPotentialReactHookCall =
+        defaultReactImportName &&
+        node.callee.type === "MemberExpression" &&
+        node.callee.object.type === "Identifier" &&
+        node.callee.object.name === defaultReactImportName &&
+        node.callee.property.type === "Identifier" &&
+        node.callee.property.name.match(USE_HOOK_PREFIX_REGEX);
 
-      const isPotentialHookCall = reactHookImportNames
-        && node.callee.type === 'Identifier'
-        && node.callee.name.match(USE_HOOK_PREFIX_REGEX);
+      const isPotentialHookCall =
+        reactHookImportNames &&
+        node.callee.type === "Identifier" &&
+        node.callee.name.match(USE_HOOK_PREFIX_REGEX);
 
-      const scope = (isPotentialReactHookCall || isPotentialHookCall) && getScope(context, node);
+      const scope =
+        (isPotentialReactHookCall || isPotentialHookCall) &&
+        getScope(context, node);
 
-      const reactResolvedDefs = isPotentialReactHookCall
-        && scope.references
-        && scope.references.find(
-          (reference) => reference.identifier.name === defaultReactImportName
+      const reactResolvedDefs =
+        isPotentialReactHookCall &&
+        scope.references &&
+        scope.references.find(
+          (reference) => reference.identifier.name === defaultReactImportName,
         ).resolved.defs;
 
-      const isReactShadowed = isPotentialReactHookCall && reactResolvedDefs
-        && reactResolvedDefs.some((reactDef) => reactDef.type !== 'ImportBinding');
+      const isReactShadowed =
+        isPotentialReactHookCall &&
+        reactResolvedDefs &&
+        reactResolvedDefs.some((reactDef) => reactDef.type !== "ImportBinding");
 
-      const potentialHookReference = isPotentialHookCall
-        && scope.references
-        && scope.references.find(
-          (reference) => reactHookImportNames[reference.identifier.name]
+      const potentialHookReference =
+        isPotentialHookCall &&
+        scope.references &&
+        scope.references.find(
+          (reference) => reactHookImportNames[reference.identifier.name],
         );
 
-      const hookResolvedDefs = potentialHookReference && potentialHookReference.resolved.defs;
-      const localHookName = (
-        isPotentialReactHookCall
-        && node.callee.property.name
-      ) || (
-        isPotentialHookCall
-        && potentialHookReference
-        && node.callee.name
-      );
-      const isHookShadowed = isPotentialHookCall
-        && hookResolvedDefs
-        && hookResolvedDefs.some(
-          (hookDef) => hookDef.name.name === localHookName
-          && hookDef.type !== 'ImportBinding'
+      const hookResolvedDefs =
+        potentialHookReference && potentialHookReference.resolved.defs;
+      const localHookName =
+        (isPotentialReactHookCall && node.callee.property.name) ||
+        (isPotentialHookCall && potentialHookReference && node.callee.name);
+      const isHookShadowed =
+        isPotentialHookCall &&
+        hookResolvedDefs &&
+        hookResolvedDefs.some(
+          (hookDef) =>
+            hookDef.name.name === localHookName &&
+            hookDef.type !== "ImportBinding",
         );
 
-      const isHookCall = (isPotentialReactHookCall && !isReactShadowed)
-        || (isPotentialHookCall && localHookName && !isHookShadowed);
+      const isHookCall =
+        (isPotentialReactHookCall && !isReactShadowed) ||
+        (isPotentialHookCall && localHookName && !isHookShadowed);
 
       if (!isHookCall) {
         return false;
@@ -826,7 +936,8 @@ function componentRule(rule, context) {
       }
 
       return expectedHookNames.includes(
-        (reactHookImportNames && reactHookImportNames[localHookName]) || localHookName
+        (reactHookImportNames && reactHookImportNames[localHookName]) ||
+          localHookName,
       );
     },
   };
@@ -837,7 +948,10 @@ function componentRule(rule, context) {
       if (!utils.isPragmaComponentWrapper(node)) {
         return;
       }
-      if (node.arguments.length > 0 && astUtil.isFunctionLikeExpression(node.arguments[0])) {
+      if (
+        node.arguments.length > 0 &&
+        astUtil.isFunctionLikeExpression(node.arguments[0])
+      ) {
         components.add(node, 2);
       }
     },
@@ -899,7 +1013,11 @@ function componentRule(rule, context) {
 
     ThisExpression(node) {
       const component = utils.getParentStatelessComponent(node);
-      if (!component || !/Function/.test(component.type) || !node.parent.property) {
+      if (
+        !component ||
+        !/Function/.test(component.type) ||
+        !node.parent.property
+      ) {
         return;
       }
       // Ban functions accessing a property on a ThisExpression
@@ -910,16 +1028,17 @@ function componentRule(rule, context) {
   // Detect React import specifiers
   const reactImportInstructions = {
     ImportDeclaration(node) {
-      const isReactImported = node.source.type === 'Literal' && node.source.value === 'react';
+      const isReactImported =
+        node.source.type === "Literal" && node.source.value === "react";
       if (!isReactImported) {
         return;
       }
 
       node.specifiers.forEach((specifier) => {
-        if (specifier.type === 'ImportDefaultSpecifier') {
+        if (specifier.type === "ImportDefaultSpecifier") {
           components.addDefaultReactImport(specifier);
         }
-        if (specifier.type === 'ImportSpecifier') {
+        if (specifier.type === "ImportSpecifier") {
           components.addNamedReactImport(specifier);
         }
       });
@@ -928,7 +1047,11 @@ function componentRule(rule, context) {
 
   const ruleInstructions = rule(context, components, utils);
   const propTypesInstructions = propTypesUtil(context, components, utils);
-  const usedPropTypesInstructions = usedPropTypesUtil(context, components, utils);
+  const usedPropTypesInstructions = usedPropTypesUtil(
+    context,
+    components,
+    utils,
+  );
   const defaultPropsInstructions = defaultPropsUtil(context, components, utils);
 
   const mergedRule = mergeRules([

@@ -3,47 +3,42 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
-const Components = require('../util/Components');
-const astUtil = require('../util/ast');
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
+const Components = require("../util/Components");
+const astUtil = require("../util/ast");
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
 
 const defaultConfig = {
-  order: [
-    'static-methods',
-    'lifecycle',
-    'everything-else',
-    'render',
-  ],
+  order: ["static-methods", "lifecycle", "everything-else", "render"],
   groups: {
     lifecycle: [
-      'displayName',
-      'propTypes',
-      'contextTypes',
-      'childContextTypes',
-      'mixins',
-      'statics',
-      'defaultProps',
-      'constructor',
-      'getDefaultProps',
-      'state',
-      'getInitialState',
-      'getChildContext',
-      'getDerivedStateFromProps',
-      'componentWillMount',
-      'UNSAFE_componentWillMount',
-      'componentDidMount',
-      'componentWillReceiveProps',
-      'UNSAFE_componentWillReceiveProps',
-      'shouldComponentUpdate',
-      'componentWillUpdate',
-      'UNSAFE_componentWillUpdate',
-      'getSnapshotBeforeUpdate',
-      'componentDidUpdate',
-      'componentDidCatch',
-      'componentWillUnmount',
+      "displayName",
+      "propTypes",
+      "contextTypes",
+      "childContextTypes",
+      "mixins",
+      "statics",
+      "defaultProps",
+      "constructor",
+      "getDefaultProps",
+      "state",
+      "getInitialState",
+      "getChildContext",
+      "getDerivedStateFromProps",
+      "componentWillMount",
+      "UNSAFE_componentWillMount",
+      "componentDidMount",
+      "componentWillReceiveProps",
+      "UNSAFE_componentWillReceiveProps",
+      "shouldComponentUpdate",
+      "componentWillUpdate",
+      "UNSAFE_componentWillUpdate",
+      "getSnapshotBeforeUpdate",
+      "componentDidUpdate",
+      "componentDidCatch",
+      "componentWillUnmount",
     ],
   },
 };
@@ -78,44 +73,46 @@ function getMethodsOrder(userConfig) {
 // ------------------------------------------------------------------------------
 
 const messages = {
-  unsortedProps: '{{propA}} should be placed {{position}} {{propB}}',
+  unsortedProps: "{{propA}} should be placed {{position}} {{propB}}",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Enforce component methods order',
-      category: 'Stylistic Issues',
+      description: "Enforce component methods order",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('sort-comp'),
+      url: docsUrl("sort-comp"),
     },
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        order: {
-          type: 'array',
-          items: {
-            type: 'string',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          order: {
+            type: "array",
+            items: {
+              type: "string",
+            },
           },
-        },
-        groups: {
-          type: 'object',
-          patternProperties: {
-            '^.*$': {
-              type: 'array',
-              items: {
-                type: 'string',
+          groups: {
+            type: "object",
+            patternProperties: {
+              "^.*$": {
+                type: "array",
+                items: {
+                  type: "string",
+                },
               },
             },
           },
         },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create: Components.detect((context, components) => {
@@ -138,62 +135,64 @@ module.exports = {
       const methodGroupIndexes = [];
 
       methodsOrder.forEach((currentGroup, groupIndex) => {
-        if (currentGroup === 'getters') {
+        if (currentGroup === "getters") {
           if (method.getter) {
             methodGroupIndexes.push(groupIndex);
           }
-        } else if (currentGroup === 'setters') {
+        } else if (currentGroup === "setters") {
           if (method.setter) {
             methodGroupIndexes.push(groupIndex);
           }
-        } else if (currentGroup === 'type-annotations') {
+        } else if (currentGroup === "type-annotations") {
           if (method.typeAnnotation) {
             methodGroupIndexes.push(groupIndex);
           }
-        } else if (currentGroup === 'static-variables') {
+        } else if (currentGroup === "static-variables") {
           if (method.staticVariable) {
             methodGroupIndexes.push(groupIndex);
           }
-        } else if (currentGroup === 'static-methods') {
+        } else if (currentGroup === "static-methods") {
           if (method.staticMethod) {
             methodGroupIndexes.push(groupIndex);
           }
-        } else if (currentGroup === 'instance-variables') {
+        } else if (currentGroup === "instance-variables") {
           if (method.instanceVariable) {
             methodGroupIndexes.push(groupIndex);
           }
-        } else if (currentGroup === 'instance-methods') {
+        } else if (currentGroup === "instance-methods") {
           if (method.instanceMethod) {
             methodGroupIndexes.push(groupIndex);
           }
-        } else if ([
-          'displayName',
-          'propTypes',
-          'contextTypes',
-          'childContextTypes',
-          'mixins',
-          'statics',
-          'defaultProps',
-          'constructor',
-          'getDefaultProps',
-          'state',
-          'getInitialState',
-          'getChildContext',
-          'getDerivedStateFromProps',
-          'componentWillMount',
-          'UNSAFE_componentWillMount',
-          'componentDidMount',
-          'componentWillReceiveProps',
-          'UNSAFE_componentWillReceiveProps',
-          'shouldComponentUpdate',
-          'componentWillUpdate',
-          'UNSAFE_componentWillUpdate',
-          'getSnapshotBeforeUpdate',
-          'componentDidUpdate',
-          'componentDidCatch',
-          'componentWillUnmount',
-          'render',
-        ].includes(currentGroup)) {
+        } else if (
+          [
+            "displayName",
+            "propTypes",
+            "contextTypes",
+            "childContextTypes",
+            "mixins",
+            "statics",
+            "defaultProps",
+            "constructor",
+            "getDefaultProps",
+            "state",
+            "getInitialState",
+            "getChildContext",
+            "getDerivedStateFromProps",
+            "componentWillMount",
+            "UNSAFE_componentWillMount",
+            "componentDidMount",
+            "componentWillReceiveProps",
+            "UNSAFE_componentWillReceiveProps",
+            "shouldComponentUpdate",
+            "componentWillUpdate",
+            "UNSAFE_componentWillUpdate",
+            "getSnapshotBeforeUpdate",
+            "componentDidUpdate",
+            "componentDidCatch",
+            "componentWillUnmount",
+            "render",
+          ].includes(currentGroup)
+        ) {
           if (currentGroup === method.name) {
             methodGroupIndexes.push(groupIndex);
           }
@@ -201,7 +200,9 @@ module.exports = {
           // Is the group a regex?
           const isRegExp = currentGroup.match(regExpRegExp);
           if (isRegExp) {
-            const isMatching = new RegExp(isRegExp[1], isRegExp[2]).test(method.name);
+            const isMatching = new RegExp(isRegExp[1], isRegExp[2]).test(
+              method.name,
+            );
             if (isMatching) {
               methodGroupIndexes.push(groupIndex);
             }
@@ -213,7 +214,7 @@ module.exports = {
 
       // No matching pattern, return 'everything-else' index
       if (methodGroupIndexes.length === 0) {
-        const everythingElseIndex = methodsOrder.indexOf('everything-else');
+        const everythingElseIndex = methodsOrder.indexOf("everything-else");
 
         if (everythingElseIndex !== -1) {
           methodGroupIndexes.push(everythingElseIndex);
@@ -232,12 +233,12 @@ module.exports = {
      * @returns {string} Property name.
      */
     function getPropertyName(node) {
-      if (node.kind === 'get') {
-        return 'getter functions';
+      if (node.kind === "get") {
+        return "getter functions";
       }
 
-      if (node.kind === 'set') {
-        return 'setter functions';
+      if (node.kind === "set") {
+        return "setter functions";
       }
 
       return astUtil.getPropertyName(node);
@@ -266,15 +267,23 @@ module.exports = {
       // Increment the prop score
       errors[propA.index].score += 1;
       // Stop here if we already have pushed another node at this position
-      if (getPropertyName(errors[propA.index].node) !== getPropertyName(propA.node)) {
+      if (
+        getPropertyName(errors[propA.index].node) !==
+        getPropertyName(propA.node)
+      ) {
         return;
       }
       // Stop here if we already have a closer reference
-      if (Math.abs(propA.index - propB.index) > errors[propA.index].closest.distance) {
+      if (
+        Math.abs(propA.index - propB.index) >
+        errors[propA.index].closest.distance
+      ) {
         return;
       }
       // Update the closest reference
-      errors[propA.index].closest.distance = Math.abs(propA.index - propB.index);
+      errors[propA.index].closest.distance = Math.abs(
+        propA.index - propB.index,
+      );
       errors[propA.index].closest.ref.node = propB.node;
       errors[propA.index].closest.ref.index = propB.index;
     }
@@ -310,12 +319,12 @@ module.exports = {
         const indexA = entry[0];
         const indexB = entry[1].closest.ref.index;
 
-        report(context, messages.unsortedProps, 'unsortedProps', {
+        report(context, messages.unsortedProps, "unsortedProps", {
           node: nodeA,
           data: {
             propA: getPropertyName(nodeA),
             propB: getPropertyName(nodeB),
-            position: indexA < indexB ? 'before' : 'after',
+            position: indexA < indexB ? "before" : "after",
           },
         });
       });
@@ -354,11 +363,11 @@ module.exports = {
 
           if (
             // Comparing the same properties
-            refIndexA === refIndexB
+            refIndexA === refIndexB ||
             // 1st property is placed before the 2nd one in reference and in current component
-            || ((refIndexA < refIndexB) && (classIndexA < classIndexB))
+            (refIndexA < refIndexB && classIndexA < classIndexB) ||
             // 1st property is placed after the 2nd one in reference and in current component
-            || ((refIndexA > refIndexB) && (classIndexA > classIndexB))
+            (refIndexA > refIndexB && classIndexA > classIndexB)
           ) {
             return {
               correct: true,
@@ -384,22 +393,31 @@ module.exports = {
     function checkPropsOrder(properties) {
       const propertiesInfos = properties.map((node) => ({
         name: getPropertyName(node),
-        getter: node.kind === 'get',
-        setter: node.kind === 'set',
-        staticVariable: node.static
-          && (node.type === 'ClassProperty' || node.type === 'PropertyDefinition')
-          && (!node.value || !astUtil.isFunctionLikeExpression(node.value)),
-        staticMethod: node.static
-          && (node.type === 'ClassProperty' || node.type === 'PropertyDefinition' || node.type === 'MethodDefinition')
-          && node.value
-          && (astUtil.isFunctionLikeExpression(node.value)),
-        instanceVariable: !node.static
-          && (node.type === 'ClassProperty' || node.type === 'PropertyDefinition')
-          && (!node.value || !astUtil.isFunctionLikeExpression(node.value)),
-        instanceMethod: !node.static
-          && (node.type === 'ClassProperty' || node.type === 'PropertyDefinition')
-          && node.value
-          && (astUtil.isFunctionLikeExpression(node.value)),
+        getter: node.kind === "get",
+        setter: node.kind === "set",
+        staticVariable:
+          node.static &&
+          (node.type === "ClassProperty" ||
+            node.type === "PropertyDefinition") &&
+          (!node.value || !astUtil.isFunctionLikeExpression(node.value)),
+        staticMethod:
+          node.static &&
+          (node.type === "ClassProperty" ||
+            node.type === "PropertyDefinition" ||
+            node.type === "MethodDefinition") &&
+          node.value &&
+          astUtil.isFunctionLikeExpression(node.value),
+        instanceVariable:
+          !node.static &&
+          (node.type === "ClassProperty" ||
+            node.type === "PropertyDefinition") &&
+          (!node.value || !astUtil.isFunctionLikeExpression(node.value)),
+        instanceMethod:
+          !node.static &&
+          (node.type === "ClassProperty" ||
+            node.type === "PropertyDefinition") &&
+          node.value &&
+          astUtil.isFunctionLikeExpression(node.value),
         typeAnnotation: !!node.typeAnnotation && node.value === null,
       }));
 
@@ -416,20 +434,23 @@ module.exports = {
 
           if (!order.correct) {
             // Store an error if the order is incorrect
-            storeError({
-              node: properties[i],
-              index: order.indexA,
-            }, {
-              node: properties[k],
-              index: order.indexB,
-            });
+            storeError(
+              {
+                node: properties[i],
+                index: order.indexA,
+              },
+              {
+                node: properties[k],
+                index: order.indexB,
+              },
+            );
           }
         });
       });
     }
 
     return {
-      'Program:exit'() {
+      "Program:exit"() {
         Object.values(components.list()).forEach((component) => {
           const properties = astUtil.getComponentProperties(component.node);
           checkPropsOrder(properties);

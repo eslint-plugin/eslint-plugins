@@ -2,12 +2,16 @@
  * @fileoverview Utility functions for propWrapperFunctions setting
  */
 
-'use strict';
+"use strict";
 
 function searchPropWrapperFunctions(name, propWrapperFunctions) {
-  const splitName = name.split('.');
+  const splitName = name.split(".");
   return propWrapperFunctions.values().some((func) => {
-    if (splitName.length === 2 && func.object === splitName[0] && func.property === splitName[1]) {
+    if (
+      splitName.length === 2 &&
+      func.object === splitName[0] &&
+      func.property === splitName[1]
+    ) {
       return true;
     }
     return name === func || func.property === name;
@@ -19,7 +23,7 @@ function getPropWrapperFunctions(context) {
 }
 
 function isPropWrapperFunction(context, name) {
-  if (typeof name !== 'string') {
+  if (typeof name !== "string") {
     return false;
   }
   const propWrapperFunctions = getPropWrapperFunctions(context);
@@ -28,7 +32,9 @@ function isPropWrapperFunction(context, name) {
 
 function getExactPropWrapperFunctions(context) {
   const propWrapperFunctions = getPropWrapperFunctions(context);
-  const exactPropWrappers = propWrapperFunctions.values().filter((func) => func.exact === true);
+  const exactPropWrappers = propWrapperFunctions
+    .values()
+    .filter((func) => func.exact === true);
   return new Set(exactPropWrappers);
 }
 
@@ -46,7 +52,7 @@ function formatPropWrapperFunctions(propWrapperFunctions) {
       return `'${func.property}'`;
     }
     return `'${func}'`;
-  }).join(', ');
+  }).join(", ");
 }
 
 module.exports = {

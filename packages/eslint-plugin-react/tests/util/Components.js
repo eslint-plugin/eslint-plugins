@@ -1,23 +1,23 @@
-'use strict';
+"use strict";
 
-const assert = require('assert');
+const assert = require("assert");
 
-const RuleTester = require('../helpers/ruleTester');
-const Components = require('../../lib/util/Components');
-const parsers = require('../helpers/parsers');
+const RuleTester = require("../helpers/ruleTester");
+const Components = require("../../lib/util/Components");
+const parsers = require("../helpers/parsers");
 
 const ruleTester = new RuleTester({
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: 'module',
+    sourceType: "module",
     ecmaFeatures: {
       jsx: true,
     },
   },
 });
 
-describe('Components', () => {
-  describe('static detect', () => {
+describe("Components", () => {
+  describe("static detect", () => {
     function testComponentsDetect(test, instructionsOrDone, orDone) {
       const done = orDone || instructionsOrDone;
       const instructions = orDone ? instructionsOrDone : instructionsOrDone;
@@ -30,16 +30,27 @@ describe('Components', () => {
             Object.entries(instructions || {}).map((nodeTypeAndHandler) => {
               const nodeType = nodeTypeAndHandler[0];
               const handler = nodeTypeAndHandler[1];
-              return [nodeType, (node) => {
-                instructionResults.push({ type: nodeType, result: handler(node, context, components, util) });
-              }];
-            })
+              return [
+                nodeType,
+                (node) => {
+                  instructionResults.push({
+                    type: nodeType,
+                    result: handler(node, context, components, util),
+                  });
+                },
+              ];
+            }),
           );
 
           return Object.assign({}, augmentedInstructions, {
-            'Program:exit'(node) {
-              if (augmentedInstructions['Program:exit']) {
-                augmentedInstructions['Program:exit'](node, context, components, util);
+            "Program:exit"(node) {
+              if (augmentedInstructions["Program:exit"]) {
+                augmentedInstructions["Program:exit"](
+                  node,
+                  context,
+                  components,
+                  util,
+                );
               }
               done(components, instructionResults);
             },
@@ -48,140 +59,191 @@ describe('Components', () => {
       };
 
       const tests = {
-        valid: parsers.all([Object.assign({}, test, {
-          settings: {
-            react: {
-              version: 'detect',
+        valid: parsers.all([
+          Object.assign({}, test, {
+            settings: {
+              react: {
+                version: "detect",
+              },
             },
-          },
-        })]),
+          }),
+        ]),
         invalid: [],
       };
 
       ruleTester.run(test.code, rule, tests);
     }
 
-    it('should detect Stateless Function Component', () => {
-      testComponentsDetect({
-        code: `import React from 'react'
+    it("should detect Stateless Function Component", () => {
+      testComponentsDetect(
+        {
+          code: `import React from 'react'
           function MyStatelessComponent() {
             return <React.Fragment />;
           }`,
-      }, (components) => {
-        assert.equal(components.length(), 1, 'MyStatelessComponent should be detected component');
-        Object.values(components.list()).forEach((component) => {
+        },
+        (components) => {
           assert.equal(
-            component.node.id.name,
-            'MyStatelessComponent',
-            'MyStatelessComponent should be detected component'
+            components.length(),
+            1,
+            "MyStatelessComponent should be detected component",
           );
-        });
-      });
+          Object.values(components.list()).forEach((component) => {
+            assert.equal(
+              component.node.id.name,
+              "MyStatelessComponent",
+              "MyStatelessComponent should be detected component",
+            );
+          });
+        },
+      );
     });
 
-    it('should detect Class Components', () => {
-      testComponentsDetect({
-        code: `import React from 'react'
+    it("should detect Class Components", () => {
+      testComponentsDetect(
+        {
+          code: `import React from 'react'
         class MyClassComponent extends React.Component {
           render() {
             return <React.Fragment />;
           }
         }`,
-      }, (components) => {
-        assert(components.length() === 1, 'MyClassComponent should be detected component');
-        Object.values(components.list()).forEach((component) => {
-          assert.equal(
-            component.node.id.name,
-            'MyClassComponent',
-            'MyClassComponent should be detected component'
+        },
+        (components) => {
+          assert(
+            components.length() === 1,
+            "MyClassComponent should be detected component",
           );
-        });
-      });
+          Object.values(components.list()).forEach((component) => {
+            assert.equal(
+              component.node.id.name,
+              "MyClassComponent",
+              "MyClassComponent should be detected component",
+            );
+          });
+        },
+      );
     });
 
-    it('should detect React Imports', () => {
-      testComponentsDetect({
-        code: 'import React, { useCallback, useState } from \'react\'',
-      }, (components) => {
-        assert.deepEqual(
-          components.getDefaultReactImports().map((specifier) => specifier.local.name),
-          ['React'],
-          'default React import identifier should be "React"'
-        );
+    it("should detect React Imports", () => {
+      testComponentsDetect(
+        {
+          code: "import React, { useCallback, useState } from 'react'",
+        },
+        (components) => {
+          assert.deepEqual(
+            components
+              .getDefaultReactImports()
+              .map((specifier) => specifier.local.name),
+            ["React"],
+            'default React import identifier should be "React"',
+          );
 
-        assert.deepEqual(
-          components.getNamedReactImports().map((specifier) => specifier.local.name),
-          ['useCallback', 'useState'],
-          'named React import identifiers should be "useCallback" and "useState"'
-        );
-      });
+          assert.deepEqual(
+            components
+              .getNamedReactImports()
+              .map((specifier) => specifier.local.name),
+            ["useCallback", "useState"],
+            'named React import identifiers should be "useCallback" and "useState"',
+          );
+        },
+      );
     });
 
-    describe('utils', () => {
-      describe('isReactHookCall', () => {
-        it('should not identify hook-like call', () => {
-          testComponentsDetect({
-            code: `
+    describe("utils", () => {
+      describe("isReactHookCall", () => {
+        it("should not identify hook-like call", () => {
+          testComponentsDetect(
+            {
+              code: `
               import { useRef } from 'react'
               function useColor() {
                 return useState()
               }
             `,
-          }, {
-            CallExpression: (node, _context, _components, util) => util.isReactHookCall(node),
-          }, (_components, instructionResults) => {
-            assert.deepEqual(instructionResults, [{ type: 'CallExpression', result: false }]);
-          });
+            },
+            {
+              CallExpression: (node, _context, _components, util) =>
+                util.isReactHookCall(node),
+            },
+            (_components, instructionResults) => {
+              assert.deepEqual(instructionResults, [
+                { type: "CallExpression", result: false },
+              ]);
+            },
+          );
         });
 
-        it('should identify hook call', () => {
-          testComponentsDetect({
-            code: `
+        it("should identify hook call", () => {
+          testComponentsDetect(
+            {
+              code: `
               import { useState } from 'react'
               function useColor() {
                 return useState()
               }
             `,
-          }, {
-            CallExpression: (node, _context, _components, util) => util.isReactHookCall(node),
-          }, (_components, instructionResults) => {
-            assert.deepEqual(instructionResults, [{ type: 'CallExpression', result: true }]);
-          });
+            },
+            {
+              CallExpression: (node, _context, _components, util) =>
+                util.isReactHookCall(node),
+            },
+            (_components, instructionResults) => {
+              assert.deepEqual(instructionResults, [
+                { type: "CallExpression", result: true },
+              ]);
+            },
+          );
         });
 
-        it('should identify aliased hook call', () => {
-          testComponentsDetect({
-            code: `
+        it("should identify aliased hook call", () => {
+          testComponentsDetect(
+            {
+              code: `
               import { useState as useStateAlternative } from 'react'
               function useColor() {
                 return useStateAlternative()
               }
             `,
-          }, {
-            CallExpression: (node, _context, _components, util) => util.isReactHookCall(node),
-          }, (_components, instructionResults) => {
-            assert.deepEqual(instructionResults, [{ type: 'CallExpression', result: true }]);
-          });
+            },
+            {
+              CallExpression: (node, _context, _components, util) =>
+                util.isReactHookCall(node),
+            },
+            (_components, instructionResults) => {
+              assert.deepEqual(instructionResults, [
+                { type: "CallExpression", result: true },
+              ]);
+            },
+          );
         });
 
-        it('should identify aliased present named hook call', () => {
-          testComponentsDetect({
-            code: `
+        it("should identify aliased present named hook call", () => {
+          testComponentsDetect(
+            {
+              code: `
               import { useState as useStateAlternative } from 'react'
               function useColor() {
                 return useStateAlternative()
               }
             `,
-          }, {
-            CallExpression: (node, _context, _components, util) => util.isReactHookCall(node, ['useState']),
-          }, (_components, instructionResults) => {
-            assert.deepEqual(instructionResults, [{ type: 'CallExpression', result: true }]);
-          });
+            },
+            {
+              CallExpression: (node, _context, _components, util) =>
+                util.isReactHookCall(node, ["useState"]),
+            },
+            (_components, instructionResults) => {
+              assert.deepEqual(instructionResults, [
+                { type: "CallExpression", result: true },
+              ]);
+            },
+          );
         });
 
-        it('should not identify shadowed hook call', () => {
-          testComponentsDetect({
-            code: `
+        it("should not identify shadowed hook call", () => {
+          testComponentsDetect(
+            {
+              code: `
               import { useState } from 'react'
               function useColor() {
                 function useState() {
@@ -190,16 +252,23 @@ describe('Components', () => {
                 return useState()
               }
             `,
-          }, {
-            CallExpression: (node, _context, _components, util) => util.isReactHookCall(node),
-          }, (_components, instructionResults) => {
-            assert.deepEqual(instructionResults, [{ type: 'CallExpression', result: false }]);
-          });
+            },
+            {
+              CallExpression: (node, _context, _components, util) =>
+                util.isReactHookCall(node),
+            },
+            (_components, instructionResults) => {
+              assert.deepEqual(instructionResults, [
+                { type: "CallExpression", result: false },
+              ]);
+            },
+          );
         });
 
-        it('should not identify shadowed aliased present named hook call', () => {
-          testComponentsDetect({
-            code: `
+        it("should not identify shadowed aliased present named hook call", () => {
+          testComponentsDetect(
+            {
+              code: `
               import { useState as useStateAlternative } from 'react'
               function useColor() {
                 function useStateAlternative() {
@@ -208,46 +277,67 @@ describe('Components', () => {
                 return useStateAlternative()
               }
             `,
-          }, {
-            CallExpression: (node, _context, _components, util) => util.isReactHookCall(node, ['useState']),
-          }, (_components, instructionResults) => {
-            assert.deepEqual(instructionResults, [{ type: 'CallExpression', result: false }]);
-          });
+            },
+            {
+              CallExpression: (node, _context, _components, util) =>
+                util.isReactHookCall(node, ["useState"]),
+            },
+            (_components, instructionResults) => {
+              assert.deepEqual(instructionResults, [
+                { type: "CallExpression", result: false },
+              ]);
+            },
+          );
         });
 
-        it('should identify React hook call', () => {
-          testComponentsDetect({
-            code: `
+        it("should identify React hook call", () => {
+          testComponentsDetect(
+            {
+              code: `
               import React from 'react'
               function useColor() {
                 return React.useState()
               }
             `,
-          }, {
-            CallExpression: (node, _context, _components, util) => util.isReactHookCall(node),
-          }, (_components, instructionResults) => {
-            assert.deepEqual(instructionResults, [{ type: 'CallExpression', result: true }]);
-          });
+            },
+            {
+              CallExpression: (node, _context, _components, util) =>
+                util.isReactHookCall(node),
+            },
+            (_components, instructionResults) => {
+              assert.deepEqual(instructionResults, [
+                { type: "CallExpression", result: true },
+              ]);
+            },
+          );
         });
 
-        it('should identify aliased React hook call', () => {
-          testComponentsDetect({
-            code: `
+        it("should identify aliased React hook call", () => {
+          testComponentsDetect(
+            {
+              code: `
               import ReactAlternative from 'react'
               function useColor() {
                 return ReactAlternative.useState()
               }
             `,
-          }, {
-            CallExpression: (node, _context, _components, util) => util.isReactHookCall(node),
-          }, (_components, instructionResults) => {
-            assert.deepEqual(instructionResults, [{ type: 'CallExpression', result: true }]);
-          });
+            },
+            {
+              CallExpression: (node, _context, _components, util) =>
+                util.isReactHookCall(node),
+            },
+            (_components, instructionResults) => {
+              assert.deepEqual(instructionResults, [
+                { type: "CallExpression", result: true },
+              ]);
+            },
+          );
         });
 
-        it('should not identify shadowed React hook call', () => {
-          testComponentsDetect({
-            code: `
+        it("should not identify shadowed React hook call", () => {
+          testComponentsDetect(
+            {
+              code: `
               import React from 'react'
               function useColor() {
                 const React = {
@@ -256,69 +346,102 @@ describe('Components', () => {
                 return React.useState()
               }
             `,
-          }, {
-            CallExpression: (node, _context, _components, util) => util.isReactHookCall(node),
-          }, (_components, instructionResults) => {
-            assert.deepEqual(instructionResults, [{ type: 'CallExpression', result: false }]);
-          });
+            },
+            {
+              CallExpression: (node, _context, _components, util) =>
+                util.isReactHookCall(node),
+            },
+            (_components, instructionResults) => {
+              assert.deepEqual(instructionResults, [
+                { type: "CallExpression", result: false },
+              ]);
+            },
+          );
         });
 
-        it('should identify present named hook call', () => {
-          testComponentsDetect({
-            code: `
+        it("should identify present named hook call", () => {
+          testComponentsDetect(
+            {
+              code: `
               import { useState } from 'react'
               function useColor() {
                 return useState()
               }
             `,
-          }, {
-            CallExpression: (node, _context, _components, util) => util.isReactHookCall(node, ['useState']),
-          }, (_components, instructionResults) => {
-            assert.deepEqual(instructionResults, [{ type: 'CallExpression', result: true }]);
-          });
+            },
+            {
+              CallExpression: (node, _context, _components, util) =>
+                util.isReactHookCall(node, ["useState"]),
+            },
+            (_components, instructionResults) => {
+              assert.deepEqual(instructionResults, [
+                { type: "CallExpression", result: true },
+              ]);
+            },
+          );
         });
 
-        it('should identify present named React hook call', () => {
-          testComponentsDetect({
-            code: `
+        it("should identify present named React hook call", () => {
+          testComponentsDetect(
+            {
+              code: `
               import React from 'react'
               function useColor() {
                 return React.useState()
               }
             `,
-          }, {
-            CallExpression: (node, _context, _components, util) => util.isReactHookCall(node, ['useState']),
-          }, (_components, instructionResults) => {
-            assert.deepEqual(instructionResults, [{ type: 'CallExpression', result: true }]);
-          });
+            },
+            {
+              CallExpression: (node, _context, _components, util) =>
+                util.isReactHookCall(node, ["useState"]),
+            },
+            (_components, instructionResults) => {
+              assert.deepEqual(instructionResults, [
+                { type: "CallExpression", result: true },
+              ]);
+            },
+          );
         });
 
-        it('should not identify missing named hook call', () => {
-          testComponentsDetect({
-            code: `
+        it("should not identify missing named hook call", () => {
+          testComponentsDetect(
+            {
+              code: `
               import { useState } from 'react'
               function useColor() {
                 return useState()
               }
             `,
-          }, {
-            CallExpression: (node, _context, _components, util) => util.isReactHookCall(node, ['useRef']),
-          }, (_components, instructionResults) => {
-            assert.deepEqual(instructionResults, [{ type: 'CallExpression', result: false }]);
-          });
+            },
+            {
+              CallExpression: (node, _context, _components, util) =>
+                util.isReactHookCall(node, ["useRef"]),
+            },
+            (_components, instructionResults) => {
+              assert.deepEqual(instructionResults, [
+                { type: "CallExpression", result: false },
+              ]);
+            },
+          );
         });
       });
     });
 
-    describe('testComponentsDetect', () => {
-      it('should log Program:exit instruction', () => {
-        testComponentsDetect({
-          code: '',
-        }, {
-          'Program:exit': () => true,
-        }, (_components, instructionResults) => {
-          assert.deepEqual(instructionResults, [{ type: 'Program:exit', result: true }]);
-        });
+    describe("testComponentsDetect", () => {
+      it("should log Program:exit instruction", () => {
+        testComponentsDetect(
+          {
+            code: "",
+          },
+          {
+            "Program:exit": () => true,
+          },
+          (_components, instructionResults) => {
+            assert.deepEqual(instructionResults, [
+              { type: "Program:exit", result: true },
+            ]);
+          },
+        );
       });
     });
   });

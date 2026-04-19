@@ -3,20 +3,20 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/no-multi-comp');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/no-multi-comp");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('no-multi-comp', rule, {
+ruleTester.run("no-multi-comp", rule, {
   valid: parsers.all([
     {
       code: `
@@ -88,7 +88,7 @@ ruleTester.run('no-multi-comp', rule, {
       options: [{ ignoreStateless: true }],
     },
     {
-    // multiple non-components
+      // multiple non-components
       code: `
         import React, { createElement } from "react"
         const helperFoo = () => {
@@ -101,7 +101,7 @@ ruleTester.run('no-multi-comp', rule, {
           return createElement("img");
         };
       `,
-      parserOptions: Object.assign({ sourceType: 'module' }, parserOptions),
+      parserOptions: Object.assign({ sourceType: "module" }, parserOptions),
     },
     {
       code: `
@@ -201,7 +201,7 @@ ruleTester.run('no-multi-comp', rule, {
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
     },
     {
       code: `
@@ -280,10 +280,12 @@ ruleTester.run('no-multi-comp', rule, {
             return <Hello name="John" />;
           }
         });
-      `.split('\n').join('\r'),
+      `
+        .split("\n")
+        .join("\r"),
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 7,
         },
       ],
@@ -305,14 +307,16 @@ ruleTester.run('no-multi-comp', rule, {
             return <Hello name="Johnny" />;
           }
         }
-      `.split('\n').join('\r'),
+      `
+        .split("\n")
+        .join("\r"),
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 7,
         },
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 12,
         },
       ],
@@ -328,7 +332,7 @@ ruleTester.run('no-multi-comp', rule, {
       `,
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 5,
         },
       ],
@@ -346,7 +350,7 @@ ruleTester.run('no-multi-comp', rule, {
       `,
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 5,
         },
       ],
@@ -366,7 +370,7 @@ ruleTester.run('no-multi-comp', rule, {
       `,
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 7,
         },
       ],
@@ -383,10 +387,10 @@ ruleTester.run('no-multi-comp', rule, {
           }
         }
       `,
-      features: ['fragment'],
+      features: ["fragment"],
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 7,
         },
       ],
@@ -401,7 +405,7 @@ ruleTester.run('no-multi-comp', rule, {
       options: [{ ignoreStateless: false }],
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 5,
         },
       ],
@@ -416,7 +420,7 @@ ruleTester.run('no-multi-comp', rule, {
       options: [{ ignoreStateless: false }],
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 5,
         },
       ],
@@ -429,10 +433,10 @@ ruleTester.run('no-multi-comp', rule, {
         const HelloComponent2 = React.forwardRef((props, ref) => <><HelloComponent></HelloComponent></>);
       `,
       options: [{ ignoreStateless: false }],
-      features: ['fragment'],
+      features: ["fragment"],
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 5,
         },
       ],
@@ -448,7 +452,7 @@ ruleTester.run('no-multi-comp', rule, {
       options: [{ ignoreStateless: false }],
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 6,
         },
       ],
@@ -464,7 +468,7 @@ ruleTester.run('no-multi-comp', rule, {
       options: [{ ignoreStateless: false }],
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 6,
         },
       ],
@@ -480,7 +484,7 @@ ruleTester.run('no-multi-comp', rule, {
       options: [{ ignoreStateless: false }],
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 6,
         },
       ],
@@ -496,7 +500,7 @@ ruleTester.run('no-multi-comp', rule, {
       options: [{ ignoreStateless: false }],
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 6,
         },
       ],
@@ -512,7 +516,7 @@ ruleTester.run('no-multi-comp', rule, {
       options: [{ ignoreStateless: false }],
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 6,
         },
       ],
@@ -528,7 +532,7 @@ ruleTester.run('no-multi-comp', rule, {
       options: [{ ignoreStateless: false }],
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 6,
         },
       ],
@@ -544,7 +548,7 @@ ruleTester.run('no-multi-comp', rule, {
       options: [{ ignoreStateless: false }],
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 6,
         },
       ],
@@ -560,7 +564,7 @@ ruleTester.run('no-multi-comp', rule, {
       options: [{ ignoreStateless: false }],
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 6,
         },
       ],
@@ -576,7 +580,7 @@ ruleTester.run('no-multi-comp', rule, {
       options: [{ ignoreStateless: false }],
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 6,
         },
       ],
@@ -592,7 +596,7 @@ ruleTester.run('no-multi-comp', rule, {
       options: [{ ignoreStateless: false }],
       errors: [
         {
-          messageId: 'onlyOneComponent',
+          messageId: "onlyOneComponent",
           line: 6,
         },
       ],
@@ -607,10 +611,10 @@ ruleTester.run('no-multi-comp', rule, {
       `,
       settings: {
         react: {
-          pragma: 'Foo',
+          pragma: "Foo",
         },
       },
-      errors: [{ messageId: 'onlyOneComponent' }],
+      errors: [{ messageId: "onlyOneComponent" }],
     },
   ]),
 });

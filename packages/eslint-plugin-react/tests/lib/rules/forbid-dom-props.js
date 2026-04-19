@@ -2,20 +2,20 @@
  * @fileoverview Tests for forbid-dom-props
  */
 
-'use strict';
+"use strict";
 
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/forbid-dom-props');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/forbid-dom-props");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -26,7 +26,7 @@ const parserOptions = {
 // -----------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('forbid-dom-props', rule, {
+ruleTester.run("forbid-dom-props", rule, {
   valid: parsers.all([
     {
       code: `
@@ -36,7 +36,7 @@ ruleTester.run('forbid-dom-props', rule, {
           }
         });
       `,
-      options: [{ forbid: ['id'] }],
+      options: [{ forbid: ["id"] }],
     },
     {
       code: `
@@ -47,7 +47,7 @@ ruleTester.run('forbid-dom-props', rule, {
           }
         });
       `,
-      options: [{ forbid: ['style', 'id'] }],
+      options: [{ forbid: ["style", "id"] }],
     },
     {
       code: `
@@ -58,7 +58,7 @@ ruleTester.run('forbid-dom-props', rule, {
           }
         });
       `,
-      options: [{ forbid: ['id'] }],
+      options: [{ forbid: ["id"] }],
     },
     {
       code: `
@@ -68,7 +68,7 @@ ruleTester.run('forbid-dom-props', rule, {
           }
         }
       `,
-      options: [{ forbid: ['id'] }],
+      options: [{ forbid: ["id"] }],
     },
     {
       code: `
@@ -76,7 +76,7 @@ ruleTester.run('forbid-dom-props', rule, {
           <this.Foo {...props} />
         );
       `,
-      options: [{ forbid: ['id'] }],
+      options: [{ forbid: ["id"] }],
     },
     {
       code: `
@@ -84,8 +84,8 @@ ruleTester.run('forbid-dom-props', rule, {
           <fbt:param name="name">{props.name}</fbt:param>
         );
       `,
-      options: [{ forbid: ['id'] }],
-      features: ['jsx namespace'],
+      options: [{ forbid: ["id"] }],
+      features: ["jsx namespace"],
     },
     {
       code: `
@@ -93,7 +93,7 @@ ruleTester.run('forbid-dom-props', rule, {
           <div name="foo" />
         );
       `,
-      options: [{ forbid: ['id'] }],
+      options: [{ forbid: ["id"] }],
     },
     {
       code: `
@@ -105,8 +105,8 @@ ruleTester.run('forbid-dom-props', rule, {
         {
           forbid: [
             {
-              propName: 'otherProp',
-              disallowedFor: ['span'],
+              propName: "otherProp",
+              disallowedFor: ["span"],
             },
           ],
         },
@@ -122,7 +122,7 @@ ruleTester.run('forbid-dom-props', rule, {
         {
           forbid: [
             {
-              propName: 'someProp',
+              propName: "someProp",
               disallowedValues: [],
             },
           ],
@@ -139,8 +139,8 @@ ruleTester.run('forbid-dom-props', rule, {
         {
           forbid: [
             {
-              propName: 'someProp',
-              disallowedValues: ['someValue'],
+              propName: "someProp",
+              disallowedValues: ["someValue"],
             },
           ],
         },
@@ -156,8 +156,8 @@ ruleTester.run('forbid-dom-props', rule, {
         {
           forbid: [
             {
-              propName: 'someProp',
-              disallowedValues: ['someValue'],
+              propName: "someProp",
+              disallowedValues: ["someValue"],
             },
           ],
         },
@@ -173,9 +173,9 @@ ruleTester.run('forbid-dom-props', rule, {
         {
           forbid: [
             {
-              propName: 'someProp',
-              disallowedValues: ['someValue'],
-              disallowedFor: ['span'],
+              propName: "someProp",
+              disallowedValues: ["someValue"],
+              disallowedFor: ["span"],
             },
           ],
         },
@@ -193,14 +193,14 @@ ruleTester.run('forbid-dom-props', rule, {
           }
         });
       `,
-      options: [{ forbid: ['id'] }],
+      options: [{ forbid: ["id"] }],
       errors: [
         {
-          messageId: 'propIsForbidden',
-          data: { prop: 'id' },
+          messageId: "propIsForbidden",
+          data: { prop: "id" },
           line: 5,
           column: 25,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
       ],
     },
@@ -212,14 +212,14 @@ ruleTester.run('forbid-dom-props', rule, {
           }
         }
       `,
-      options: [{ forbid: ['id'] }],
+      options: [{ forbid: ["id"] }],
       errors: [
         {
-          messageId: 'propIsForbidden',
-          data: { prop: 'id' },
+          messageId: "propIsForbidden",
+          data: { prop: "id" },
           line: 4,
           column: 25,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
       ],
     },
@@ -229,14 +229,14 @@ ruleTester.run('forbid-dom-props', rule, {
           <div id="foo" />
         );
       `,
-      options: [{ forbid: ['id'] }],
+      options: [{ forbid: ["id"] }],
       errors: [
         {
-          messageId: 'propIsForbidden',
-          data: { prop: 'id' },
+          messageId: "propIsForbidden",
+          data: { prop: "id" },
           line: 3,
           column: 16,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
       ],
     },
@@ -248,15 +248,20 @@ ruleTester.run('forbid-dom-props', rule, {
       `,
       options: [
         {
-          forbid: [{ propName: 'className', message: 'Please use class instead of ClassName' }],
+          forbid: [
+            {
+              propName: "className",
+              message: "Please use class instead of ClassName",
+            },
+          ],
         },
       ],
       errors: [
         {
-          message: 'Please use class instead of ClassName',
+          message: "Please use class instead of ClassName",
           line: 3,
           column: 16,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
       ],
     },
@@ -270,19 +275,19 @@ ruleTester.run('forbid-dom-props', rule, {
         {
           forbid: [
             {
-              propName: 'otherProp',
-              disallowedFor: ['span'],
+              propName: "otherProp",
+              disallowedFor: ["span"],
             },
           ],
         },
       ],
       errors: [
         {
-          messageId: 'propIsForbidden',
-          data: { prop: 'otherProp' },
+          messageId: "propIsForbidden",
+          data: { prop: "otherProp" },
           line: 3,
           column: 17,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
       ],
     },
@@ -296,19 +301,19 @@ ruleTester.run('forbid-dom-props', rule, {
         {
           forbid: [
             {
-              propName: 'someProp',
-              disallowedValues: ['someValue'],
+              propName: "someProp",
+              disallowedValues: ["someValue"],
             },
           ],
         },
       ],
       errors: [
         {
-          messageId: 'propIsForbiddenWithValue',
-          data: { prop: 'someProp', propValue: 'someValue' },
+          messageId: "propIsForbiddenWithValue",
+          data: { prop: "someProp", propValue: "someValue" },
           line: 3,
           column: 16,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
       ],
     },
@@ -323,23 +328,26 @@ ruleTester.run('forbid-dom-props', rule, {
       options: [
         {
           forbid: [
-            { propName: 'className', message: 'Please use class instead of ClassName' },
-            { propName: 'otherProp', message: 'Avoid using otherProp' },
+            {
+              propName: "className",
+              message: "Please use class instead of ClassName",
+            },
+            { propName: "otherProp", message: "Avoid using otherProp" },
           ],
         },
       ],
       errors: [
         {
-          message: 'Please use class instead of ClassName',
+          message: "Please use class instead of ClassName",
           line: 3,
           column: 16,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
         {
-          message: 'Avoid using otherProp',
+          message: "Avoid using otherProp",
           line: 4,
           column: 18,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
       ],
     },
@@ -354,24 +362,24 @@ ruleTester.run('forbid-dom-props', rule, {
       options: [
         {
           forbid: [
-            { propName: 'className' },
-            { propName: 'otherProp', message: 'Avoid using otherProp' },
+            { propName: "className" },
+            { propName: "otherProp", message: "Avoid using otherProp" },
           ],
         },
       ],
       errors: [
         {
-          messageId: 'propIsForbidden',
-          data: { prop: 'className' },
+          messageId: "propIsForbidden",
+          data: { prop: "className" },
           line: 3,
           column: 16,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
         {
-          message: 'Avoid using otherProp',
+          message: "Avoid using otherProp",
           line: 4,
           column: 18,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
       ],
     },
@@ -386,19 +394,21 @@ ruleTester.run('forbid-dom-props', rule, {
       `,
       options: [
         {
-          forbid: [{
-            propName: 'accept',
-            disallowedFor: ['form'],
-            message: 'Avoid using the accept attribute on <form>',
-          }],
+          forbid: [
+            {
+              propName: "accept",
+              disallowedFor: ["form"],
+              message: "Avoid using the accept attribute on <form>",
+            },
+          ],
         },
       ],
       errors: [
         {
-          message: 'Avoid using the accept attribute on <form>',
+          message: "Avoid using the accept attribute on <form>",
           line: 3,
           column: 17,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
       ],
     },
@@ -416,32 +426,32 @@ ruleTester.run('forbid-dom-props', rule, {
         {
           forbid: [
             {
-              propName: 'className',
-              disallowedFor: ['div', 'span'],
-              message: 'Please use class instead of ClassName',
+              propName: "className",
+              disallowedFor: ["div", "span"],
+              message: "Please use class instead of ClassName",
             },
-            { propName: 'otherProp', message: 'Avoid using otherProp' },
+            { propName: "otherProp", message: "Avoid using otherProp" },
           ],
         },
       ],
       errors: [
         {
-          message: 'Please use class instead of ClassName',
+          message: "Please use class instead of ClassName",
           line: 3,
           column: 16,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
         {
-          message: 'Please use class instead of ClassName',
+          message: "Please use class instead of ClassName",
           line: 5,
           column: 19,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
         {
-          message: 'Avoid using otherProp',
+          message: "Avoid using otherProp",
           line: 6,
           column: 18,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
       ],
     },
@@ -463,50 +473,50 @@ ruleTester.run('forbid-dom-props', rule, {
         {
           forbid: [
             {
-              propName: 'className',
-              disallowedFor: ['div', 'span'],
-              message: 'Please use class instead of ClassName',
+              propName: "className",
+              disallowedFor: ["div", "span"],
+              message: "Please use class instead of ClassName",
             },
-            { propName: 'otherProp', message: 'Avoid using otherProp' },
+            { propName: "otherProp", message: "Avoid using otherProp" },
             {
-              propName: 'thirdProp',
-              disallowedFor: ['p'],
-              disallowedValues: ['bar', 'baz'],
-              message: 'Do not use thirdProp with values bar and baz on p',
+              propName: "thirdProp",
+              disallowedFor: ["p"],
+              disallowedValues: ["bar", "baz"],
+              message: "Do not use thirdProp with values bar and baz on p",
             },
           ],
         },
       ],
       errors: [
         {
-          message: 'Please use class instead of ClassName',
+          message: "Please use class instead of ClassName",
           line: 3,
           column: 16,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
         {
-          message: 'Please use class instead of ClassName',
+          message: "Please use class instead of ClassName",
           line: 5,
           column: 19,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
         {
-          message: 'Avoid using otherProp',
+          message: "Avoid using otherProp",
           line: 6,
           column: 18,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
         {
-          message: 'Do not use thirdProp with values bar and baz on p',
+          message: "Do not use thirdProp with values bar and baz on p",
           line: 9,
           column: 16,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
         {
-          message: 'Do not use thirdProp with values bar and baz on p',
+          message: "Do not use thirdProp with values bar and baz on p",
           line: 10,
           column: 16,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
       ],
     },

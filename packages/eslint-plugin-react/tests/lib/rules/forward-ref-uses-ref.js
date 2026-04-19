@@ -3,15 +3,15 @@
  * @author Tiger Oakes
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/forward-ref-uses-ref');
-const parsers = require('../../helpers/parsers');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/forward-ref-uses-ref");
+const parsers = require("../../helpers/parsers");
 
 // ------------------------------------------------------------------------------
 // Tests
@@ -20,11 +20,11 @@ const parsers = require('../../helpers/parsers');
 const ruleTester = new RuleTester({
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: 'module',
+    sourceType: "module",
   },
 });
 
-ruleTester.run('forward-ref-uses-ref', rule, {
+ruleTester.run("forward-ref-uses-ref", rule, {
   valid: parsers.all([
     {
       code: `
@@ -111,10 +111,11 @@ ruleTester.run('forward-ref-uses-ref', rule, {
       `,
       errors: [
         {
-          message: 'forwardRef is used with this component but no ref parameter is set',
+          message:
+            "forwardRef is used with this component but no ref parameter is set",
           suggestions: [
             {
-              messageId: 'addRefParameter',
+              messageId: "addRefParameter",
               output: `
         import { forwardRef } from 'react'
         forwardRef((props, ref) => {
@@ -123,7 +124,7 @@ ruleTester.run('forward-ref-uses-ref', rule, {
       `,
             },
             {
-              messageId: 'removeForwardRef',
+              messageId: "removeForwardRef",
               output: `
         import { forwardRef } from 'react'
         (props) => {
@@ -144,10 +145,11 @@ ruleTester.run('forward-ref-uses-ref', rule, {
       `,
       errors: [
         {
-          message: 'forwardRef is used with this component but no ref parameter is set',
+          message:
+            "forwardRef is used with this component but no ref parameter is set",
           suggestions: [
             {
-              messageId: 'addRefParameter',
+              messageId: "addRefParameter",
               output: `
         import { forwardRef } from 'react'
         forwardRef((props, ref) => {
@@ -156,7 +158,7 @@ ruleTester.run('forward-ref-uses-ref', rule, {
       `,
             },
             {
-              messageId: 'removeForwardRef',
+              messageId: "removeForwardRef",
               output: `
         import { forwardRef } from 'react'
         props => {
@@ -175,17 +177,18 @@ ruleTester.run('forward-ref-uses-ref', rule, {
       `,
       errors: [
         {
-          message: 'forwardRef is used with this component but no ref parameter is set',
+          message:
+            "forwardRef is used with this component but no ref parameter is set",
           suggestions: [
             {
-              messageId: 'addRefParameter',
+              messageId: "addRefParameter",
               output: `
         import * as React from 'react'
         React.forwardRef((props, ref) => null);
       `,
             },
             {
-              messageId: 'removeForwardRef',
+              messageId: "removeForwardRef",
               output: `
         import * as React from 'react'
         (props) => null;
@@ -204,10 +207,11 @@ ruleTester.run('forward-ref-uses-ref', rule, {
       `,
       errors: [
         {
-          message: 'forwardRef is used with this component but no ref parameter is set',
+          message:
+            "forwardRef is used with this component but no ref parameter is set",
           suggestions: [
             {
-              messageId: 'addRefParameter',
+              messageId: "addRefParameter",
               output: `
         import { forwardRef } from 'react'
         const Component = forwardRef(function (props, ref) {
@@ -216,7 +220,7 @@ ruleTester.run('forward-ref-uses-ref', rule, {
       `,
             },
             {
-              messageId: 'removeForwardRef',
+              messageId: "removeForwardRef",
               output: `
         import { forwardRef } from 'react'
         const Component = function (props) {
@@ -237,10 +241,11 @@ ruleTester.run('forward-ref-uses-ref', rule, {
       `,
       errors: [
         {
-          message: 'forwardRef is used with this component but no ref parameter is set',
+          message:
+            "forwardRef is used with this component but no ref parameter is set",
           suggestions: [
             {
-              messageId: 'addRefParameter',
+              messageId: "addRefParameter",
               output: `
         import * as React from 'react'
         React.forwardRef(function Component(props, ref) {
@@ -249,7 +254,7 @@ ruleTester.run('forward-ref-uses-ref', rule, {
       `,
             },
             {
-              messageId: 'removeForwardRef',
+              messageId: "removeForwardRef",
               output: `
         import * as React from 'react'
         function Component(props) {

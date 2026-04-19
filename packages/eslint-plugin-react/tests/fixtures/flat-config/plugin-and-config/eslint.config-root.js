@@ -1,15 +1,15 @@
-'use strict';
+"use strict";
 
-const react = require('../../../../src/index');
-const reactRecommended = require('../../../../configs/recommended');
+const react = require("../../../../src/index");
+const reactRecommended = require("../../../../configs/recommended");
 
 module.exports = [
   {
-    files: ['**/*.jsx'],
-    plugins: { react }
+    files: ["**/*.jsx"],
+    plugins: { react },
   },
   {
-    files: ['**/*.jsx'],
-    ...react.configs.flat.recommended
-  }
+    files: ["**/*.jsx"],
+    ...react.configs.flat.recommended,
+  },
 ];

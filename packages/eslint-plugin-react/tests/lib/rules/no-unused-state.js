@@ -2,14 +2,15 @@
  * @fileoverview Tests for no-unused-state
  */
 
-'use strict';
+"use strict";
 
-const semver = require('semver');
-const tsEslintVersion = require('@typescript-eslint/parser/package.json').version;
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/no-unused-state');
+const semver = require("semver");
+const tsEslintVersion =
+  require("@typescript-eslint/parser/package.json").version;
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/no-unused-state");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
@@ -22,40 +23,41 @@ const eslintTester = new RuleTester({ parserOptions });
 
 function getErrorMessages(unusedFields) {
   return unusedFields.map((field) => ({
-    messageId: 'unusedStateField',
+    messageId: "unusedStateField",
     data: { name: field },
   }));
 }
 
-eslintTester.run('no-unused-state', rule, {
-  valid: parsers.all([].concat(
-    {
-      code: `
+eslintTester.run("no-unused-state", rule, {
+  valid: parsers.all(
+    [].concat(
+      {
+        code: `
         function StatelessFnUnaffectedTest(props) {
           return <SomeComponent foo={props.foo} />;
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var NoStateTest = createReactClass({
           render: function() {
             return <SomeComponent />;
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var NoStateMethodTest = createReactClass({
           render() {
             return <SomeComponent />;
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var GetInitialStateTest = createReactClass({
           getInitialState: function() {
             return { foo: 0 };
@@ -65,9 +67,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var ComputedKeyFromVariableTest = createReactClass({
           getInitialState: function() {
             return { [foo]: 0 };
@@ -77,9 +79,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var ComputedKeyFromBooleanLiteralTest = createReactClass({
           getInitialState: function() {
             return { [true]: 0 };
@@ -89,9 +91,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var ComputedKeyFromNumberLiteralTest = createReactClass({
           getInitialState: function() {
             return { [123]: 0 };
@@ -101,9 +103,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var ComputedKeyFromExpressionTest = createReactClass({
           getInitialState: function() {
             return { [foo + bar]: 0 };
@@ -113,9 +115,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var ComputedKeyFromBinaryExpressionTest = createReactClass({
           getInitialState: function() {
             return { ['foo' + 'bar' * 8]: 0 };
@@ -125,9 +127,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var ComputedKeyFromStringLiteralTest = createReactClass({
           getInitialState: function() {
             return { ['foo']: 0 };
@@ -137,9 +139,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var ComputedKeyFromTemplateLiteralTest = createReactClass({
           getInitialState: function() {
             return { [\`foo\${bar}\`]: 0 };
@@ -149,9 +151,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var ComputedKeyFromTemplateLiteralTest = createReactClass({
           getInitialState: function() {
             return { [\`foo\`]: 0 };
@@ -161,9 +163,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var GetInitialStateMethodTest = createReactClass({
           getInitialState() {
             return { foo: 0 };
@@ -173,9 +175,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var SetStateTest = createReactClass({
           onFooChange(newFoo) {
             this.setState({ foo: newFoo });
@@ -185,9 +187,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var MultipleSetState = createReactClass({
           getInitialState() {
             return { foo: 0 };
@@ -200,18 +202,18 @@ eslintTester.run('no-unused-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class NoStateTest extends React.Component {
           render() {
             return <SomeComponent />;
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class CtorStateTest extends React.Component {
           constructor() {
             this.state = { foo: 0 };
@@ -221,9 +223,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class ComputedKeyFromVariableTest extends React.Component {
           constructor() {
             this.state = { [foo]: 0 };
@@ -233,9 +235,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class ComputedKeyFromBooleanLiteralTest extends React.Component {
           constructor() {
             this.state = { [false]: 0 };
@@ -245,9 +247,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class ComputedKeyFromNumberLiteralTest extends React.Component {
           constructor() {
             this.state = { [345]: 0 };
@@ -257,9 +259,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class ComputedKeyFromExpressionTest extends React.Component {
           constructor() {
             this.state = { [foo + bar]: 0 };
@@ -269,9 +271,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class ComputedKeyFromBinaryExpressionTest extends React.Component {
           constructor() {
             this.state = { [1 + 2 * 8]: 0 };
@@ -281,9 +283,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class ComputedKeyFromStringLiteralTest extends React.Component {
           constructor() {
             this.state = { ['foo']: 0 };
@@ -293,9 +295,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class ComputedKeyFromTemplateLiteralTest extends React.Component {
           constructor() {
             this.state = { [\`foo\${bar}\`]: 0 };
@@ -305,9 +307,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class ComputedKeyFromTemplateLiteralTest extends React.Component {
           constructor() {
             this.state = { [\`foo\`]: 0 };
@@ -317,9 +319,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class SetStateTest extends React.Component {
           onFooChange(newFoo) {
             this.setState({ foo: newFoo });
@@ -329,9 +331,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class ClassPropertyStateTest extends React.Component {
           state = { foo: 0 };
           render() {
@@ -339,10 +341,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      code: `
+        features: ["class fields"],
+      },
+      {
+        code: `
         class OptionalChaining extends React.Component {
           constructor() {
             this.state = { foo: 0 };
@@ -352,10 +354,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['optional chaining'],
-    },
-    {
-      code: `
+        features: ["optional chaining"],
+      },
+      {
+        code: `
         class VariableDeclarationTest extends React.Component {
           constructor() {
             this.state = { foo: 0 };
@@ -366,8 +368,8 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-    },
-    `
+      },
+      `
       class DestructuringTest extends React.Component {
         constructor() {
           this.state = { foo: 0 };
@@ -378,7 +380,7 @@ eslintTester.run('no-unused-state', rule, {
         }
       }
     `,
-    `
+      `
       class ShorthandDestructuringTest extends React.Component {
         constructor() {
           this.state = { foo: 0 };
@@ -389,7 +391,7 @@ eslintTester.run('no-unused-state', rule, {
         }
       }
     `,
-    `
+      `
       class AliasDeclarationTest extends React.Component {
         constructor() {
           this.state = { foo: 0 };
@@ -400,7 +402,7 @@ eslintTester.run('no-unused-state', rule, {
         }
       }
     `,
-    `
+      `
       class AliasAssignmentTest extends React.Component {
         constructor() {
           this.state = { foo: 0 };
@@ -412,7 +414,7 @@ eslintTester.run('no-unused-state', rule, {
         }
       }
     `,
-    `
+      `
       class DestructuringAliasTest extends React.Component {
         constructor() {
           this.state = { foo: 0 };
@@ -423,7 +425,7 @@ eslintTester.run('no-unused-state', rule, {
         }
       }
     `,
-    `
+      `
       class ShorthandDestructuringAliasTest extends React.Component {
         constructor() {
           this.state = { foo: 0 };
@@ -434,7 +436,7 @@ eslintTester.run('no-unused-state', rule, {
         }
       }
     `,
-    `
+      `
       class RestPropertyTest extends React.Component {
         constructor() {
           this.state = {
@@ -448,8 +450,8 @@ eslintTester.run('no-unused-state', rule, {
         }
       }
     `,
-    {
-      code: `
+      {
+        code: `
         class DeepDestructuringTest extends React.Component {
           state = { foo: 0, bar: 0 };
           render() {
@@ -458,11 +460,11 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields'],
-    },
-    // A cleverer analysis might recognize that the following should be errors,
-    // but they're out of scope for this lint rule.
-    `
+        features: ["class fields"],
+      },
+      // A cleverer analysis might recognize that the following should be errors,
+      // but they're out of scope for this lint rule.
+      `
       class MethodArgFalseNegativeTest extends React.Component {
         constructor() {
           this.state = { foo: 0 };
@@ -474,7 +476,7 @@ eslintTester.run('no-unused-state', rule, {
         }
       }
     `,
-    `
+      `
       class AssignedToObjectFalseNegativeTest extends React.Component {
         constructor() {
           this.state = { foo: 0 };
@@ -485,7 +487,7 @@ eslintTester.run('no-unused-state', rule, {
         }
       }
     `,
-    `
+      `
       class ComputedAccessFalseNegativeTest extends React.Component {
         constructor() {
           this.state = { foo: 0, bar: 1 };
@@ -496,7 +498,7 @@ eslintTester.run('no-unused-state', rule, {
         }
       }
     `,
-    `
+      `
       class JsxSpreadFalseNegativeTest extends React.Component {
         constructor() {
           this.state = { foo: 0 };
@@ -506,7 +508,7 @@ eslintTester.run('no-unused-state', rule, {
         }
       }
     `,
-    `
+      `
       class AliasedJsxSpreadFalseNegativeTest extends React.Component {
         constructor() {
           this.state = { foo: 0 };
@@ -517,7 +519,7 @@ eslintTester.run('no-unused-state', rule, {
         }
       }
     `,
-    `
+      `
       class ObjectSpreadFalseNegativeTest extends React.Component {
         constructor() {
           this.state = { foo: 0 };
@@ -528,7 +530,7 @@ eslintTester.run('no-unused-state', rule, {
         }
       }
     `,
-    `
+      `
       class ShadowingFalseNegativeTest extends React.Component {
         constructor() {
           this.state = { foo: 0 };
@@ -544,7 +546,7 @@ eslintTester.run('no-unused-state', rule, {
         }
       }
     `,
-    `
+      `
       class NonRenderClassMethodFalseNegativeTest extends React.Component {
         constructor() {
           this.state = { foo: 0, bar: 0 };
@@ -562,8 +564,8 @@ eslintTester.run('no-unused-state', rule, {
         }
       }
     `,
-    {
-      code: `
+      {
+        code: `
         class TypeCastExpressionSpreadFalseNegativeTest extends React.Component {
           constructor() {
             this.state = { foo: 0 };
@@ -573,10 +575,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ["flow"],
+      },
+      {
+        code: `
         class ArrowFunctionClassMethodDestructuringFalseNegativeTest extends React.Component {
           constructor() {
             this.state = { foo: 0 };
@@ -593,10 +595,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
-    },
-    {
-      code: `
+        features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
+      },
+      {
+        code: `
         class ArrowFunctionClassMethodWithClassPropertyTransformFalseNegativeTest extends React.Component {
           state = { foo: 0 };
 
@@ -611,10 +613,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
-    },
-    {
-      code: `
+        features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
+      },
+      {
+        code: `
         class ArrowFunctionClassMethodDeepDestructuringFalseNegativeTest extends React.Component {
           state = { foo: { bar: 0 } };
 
@@ -629,10 +631,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
-    },
-    {
-      code: `
+        features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
+      },
+      {
+        code: `
         class ArrowFunctionClassMethodDestructuringAssignmentFalseNegativeTest extends React.Component {
           state = { foo: 0 };
 
@@ -647,10 +649,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
-    },
-    {
-      code: `
+        features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
+      },
+      {
+        code: `
         class ThisStateAsAnObject extends React.Component {
           state = {
             active: true
@@ -661,10 +663,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      code: `
+        features: ["class fields"],
+      },
+      {
+        code: `
         class GetDerivedStateFromPropsTest extends Component {
           constructor(props) {
             super(props);
@@ -687,9 +689,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class ComponentDidUpdateTest extends Component {
           constructor(props) {
             super(props);
@@ -710,9 +712,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class ShouldComponentUpdateTest extends Component {
           constructor(props) {
             super(props);
@@ -730,9 +732,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class NestedScopesTest extends Component {
           constructor(props) {
             super(props);
@@ -752,9 +754,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Foo extends Component {
           state = {
             initial: 'foo',
@@ -770,10 +772,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
-    },
-    {
-      code: `
+        features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
+      },
+      {
+        code: `
         class Foo extends Component {
           constructor(props) {
             super(props);
@@ -792,10 +794,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
-    },
-    {
-      code: `
+        features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
+      },
+      {
+        code: `
         class Foo extends Component {
           constructor(props) {
             super(props);
@@ -814,10 +816,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
-    },
-    {
-      code: `
+        features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
+      },
+      {
+        code: `
         var Foo = createReactClass({
           getInitialState: function() {
             return { initial: 'foo' };
@@ -833,9 +835,9 @@ eslintTester.run('no-unused-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Foo = createReactClass({
           getInitialState: function() {
             return { initial: 'foo' };
@@ -851,10 +853,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         });
       `,
-      features: ['no-ts-old'], // TODO: FIXME: remove "no-ts-old"
-    },
-    {
-      code: `
+        features: ["no-ts-old"], // TODO: FIXME: remove "no-ts-old"
+      },
+      {
+        code: `
         class SetStateDestructuringCallback extends Component {
           state = {
               used: 1, unused: 2
@@ -869,10 +871,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
-    },
-    {
-      code: `
+        features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
+      },
+      {
+        code: `
         class SetStateCallbackStateCondition extends Component {
           state = {
               isUsed: true,
@@ -886,11 +888,11 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
-    },
-    {
-      // Don't error out
-      code: `
+        features: ["class fields", "no-ts-old"], // TODO: FIXME: remove "no-ts-old"
+      },
+      {
+        // Don't error out
+        code: `
         class Foo extends Component {
           handleChange = function() {
             this.setState(() => ({ foo: value }));
@@ -900,11 +902,11 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      // Don't error out
-      code: `
+        features: ["class fields"],
+      },
+      {
+        // Don't error out
+        code: `
         class Foo extends Component {
           handleChange = function() {
             this.setState(state => ({ foo: value }));
@@ -914,11 +916,11 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      // Don't error out
-      code: `
+        features: ["class fields"],
+      },
+      {
+        // Don't error out
+        code: `
         class Foo extends Component {
           static handleChange = () => {
             this.setState(state => ({ foo: value }));
@@ -928,10 +930,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      code: `
+        features: ["class fields"],
+      },
+      {
+        code: `
         class Foo extends Component {
           state = {
             thisStateAliasProp,
@@ -981,10 +983,11 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    semver.satisfies(tsEslintVersion, '>= 5') ? {
-      code: `
+        features: ["ts", "no-babel"],
+      },
+      semver.satisfies(tsEslintVersion, ">= 5")
+        ? {
+            code: `
         interface Props {}
 
         interface State {
@@ -1005,10 +1008,11 @@ eslintTester.run('no-unused-state', rule, {
           };
         }
       `,
-      features: ['ts', 'no-babel-old', 'no-ts-old'],
-    } : [],
-    {
-      code: `
+            features: ["ts", "no-babel-old", "no-ts-old"],
+          }
+        : [],
+      {
+        code: `
         class Foo extends React.Component {
           onCancel = (data) => {
             console.log('Cancelled', data)
@@ -1020,10 +1024,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      code: `
+        features: ["class fields"],
+      },
+      {
+        code: `
         class KarmaRefundPillComponent extends GenericPillComponent {
           renderContent = () => {
             const { action } = this.props
@@ -1040,30 +1044,30 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['ts'],
-    },
-    {
-      code: `
+        features: ["ts"],
+      },
+      {
+        code: `
         class AutoControlledComponent<P = {}, S = {}> extends UIComponent<P, S> {
           static getDerivedStateFromProps: React.GetDerivedStateFromProps<any, any>
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ["types"],
+      },
+      {
+        code: `
         export const commonMixinWrapper = ComposeComponent => class extends ComposeComponent {
           static getDerivedStateFromProps = ComposeComponent.getDerivedStateFromProps;
           render() { return <div />; }
         }
       `,
-      features: ['class fields'],
-      parserOptions: {
-        sourceType: 'module',
+        features: ["class fields"],
+        parserOptions: {
+          sourceType: "module",
+        },
       },
-    },
-    {
-      code: `
+      {
+        code: `
         import React, { PureComponent } from 'react';
 
         class TestNoUnusedState extends React.Component {
@@ -1091,13 +1095,13 @@ eslintTester.run('no-unused-state', rule, {
 
         export default TestNoUnusedState;
       `,
-      features: ['class fields'],
-      parserOptions: {
-        sourceType: 'module',
+        features: ["class fields"],
+        parserOptions: {
+          sourceType: "module",
+        },
       },
-    },
-    {
-      code: `
+      {
+        code: `
         class Component extends React.Component {
           static getDerivedStateFromProps = ({value, disableAnimation}: ToggleProps, {isControlled, isOn}: ToggleState) => {
             return { isControlled, isOn };
@@ -1109,9 +1113,10 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['types', 'class fields'],
-    }
-  )),
+        features: ["types", "class fields"],
+      },
+    ),
+  ),
 
   invalid: parsers.all([
     {
@@ -1125,7 +1130,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         })
       `,
-      errors: getErrorMessages(['foo']),
+      errors: getErrorMessages(["foo"]),
     },
     {
       code: `
@@ -1138,7 +1143,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         })
       `,
-      errors: getErrorMessages(['foo']),
+      errors: getErrorMessages(["foo"]),
     },
     {
       code: `
@@ -1151,7 +1156,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         })
       `,
-      errors: getErrorMessages(['foo']),
+      errors: getErrorMessages(["foo"]),
     },
     {
       code: `
@@ -1164,7 +1169,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         })
       `,
-      errors: getErrorMessages(['123']),
+      errors: getErrorMessages(["123"]),
     },
     {
       code: `
@@ -1177,7 +1182,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         })
       `,
-      errors: getErrorMessages(['true']),
+      errors: getErrorMessages(["true"]),
     },
     {
       code: `
@@ -1190,7 +1195,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         })
       `,
-      errors: getErrorMessages(['foo']),
+      errors: getErrorMessages(["foo"]),
     },
     {
       code: `
@@ -1203,7 +1208,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         });
       `,
-      errors: getErrorMessages(['foo']),
+      errors: getErrorMessages(["foo"]),
     },
     {
       code: `
@@ -1216,7 +1221,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['foo']),
+      errors: getErrorMessages(["foo"]),
     },
     {
       code: `
@@ -1229,7 +1234,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['foo']),
+      errors: getErrorMessages(["foo"]),
     },
     {
       code: `
@@ -1240,8 +1245,8 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['foo']),
-      features: ['class fields'],
+      errors: getErrorMessages(["foo"]),
+      features: ["class fields"],
     },
     {
       code: `
@@ -1252,8 +1257,8 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['foo']),
-      features: ['class fields'],
+      errors: getErrorMessages(["foo"]),
+      features: ["class fields"],
     },
     {
       code: `
@@ -1264,8 +1269,8 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['foo']),
-      features: ['class fields'],
+      errors: getErrorMessages(["foo"]),
+      features: ["class fields"],
     },
     {
       code: `
@@ -1276,8 +1281,8 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['foo \\n bar']),
-      features: ['class fields'],
+      errors: getErrorMessages(["foo \\n bar"]),
+      features: ["class fields"],
     },
     {
       code: `
@@ -1288,8 +1293,8 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['true']),
-      features: ['class fields'],
+      errors: getErrorMessages(["true"]),
+      features: ["class fields"],
     },
     {
       code: `
@@ -1300,8 +1305,8 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['123']),
-      features: ['class fields'],
+      errors: getErrorMessages(["123"]),
+      features: ["class fields"],
     },
     {
       code: `
@@ -1312,8 +1317,8 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['123.12']),
-      features: ['class fields'],
+      errors: getErrorMessages(["123.12"]),
+      features: ["class fields"],
     },
     {
       code: `
@@ -1326,7 +1331,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['foo']),
+      errors: getErrorMessages(["foo"]),
     },
     {
       code: `
@@ -1343,7 +1348,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['foo']),
+      errors: getErrorMessages(["foo"]),
     },
     {
       code: `
@@ -1362,7 +1367,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['foo', 'bar']),
+      errors: getErrorMessages(["foo", "bar"]),
     },
     {
       code: `
@@ -1378,7 +1383,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['foo', 'foo']),
+      errors: getErrorMessages(["foo", "foo"]),
     },
     {
       code: `
@@ -1395,7 +1400,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['foo']),
+      errors: getErrorMessages(["foo"]),
     },
     {
       code: `
@@ -1411,8 +1416,8 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['foo']),
-      features: ['class fields'],
+      errors: getErrorMessages(["foo"]),
+      features: ["class fields"],
     },
     {
       code: `
@@ -1434,8 +1439,8 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['qux']),
-      features: ['flow'],
+      errors: getErrorMessages(["qux"]),
+      features: ["flow"],
     },
     {
       code: `
@@ -1447,8 +1452,8 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['bar']),
-      features: ['class fields'],
+      errors: getErrorMessages(["bar"]),
+      features: ["class fields"],
     },
     {
       code: `
@@ -1474,7 +1479,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['foo']),
+      errors: getErrorMessages(["foo"]),
     },
     {
       code: `
@@ -1495,7 +1500,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['foo']),
+      errors: getErrorMessages(["foo"]),
     },
     {
       code: `
@@ -1518,7 +1523,7 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      errors: getErrorMessages(['id']),
+      errors: getErrorMessages(["id"]),
     },
     {
       code: `
@@ -1537,8 +1542,8 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: getErrorMessages(['initial']),
+      features: ["class fields"],
+      errors: getErrorMessages(["initial"]),
     },
     {
       code: `
@@ -1548,8 +1553,8 @@ eslintTester.run('no-unused-state', rule, {
             };
         });
       `,
-      features: ['class fields'],
-      errors: getErrorMessages(['dummy']),
+      features: ["class fields"],
+      errors: getErrorMessages(["dummy"]),
     },
     {
       code: `
@@ -1602,18 +1607,18 @@ eslintTester.run('no-unused-state', rule, {
           }
         }
       `,
-      features: ['ts', 'no-babel'],
+      features: ["ts", "no-babel"],
       errors: getErrorMessages([
-        'thisStateAliasPropUnused',
-        'thisStateAliasRestPropUnused',
-        'thisDestructStateAliasPropUnused',
-        'thisDestructStateAliasRestPropUnused',
-        'thisDestructStateDestructRestPropUnused',
-        'thisSetStatePropUnused',
-        'thisSetStateRestPropUnused',
-        'thisStatePropUnused',
-        'thisStateDestructPropUnused',
-        'thisDestructStateDestructPropUnused',
+        "thisStateAliasPropUnused",
+        "thisStateAliasRestPropUnused",
+        "thisDestructStateAliasPropUnused",
+        "thisDestructStateAliasRestPropUnused",
+        "thisDestructStateDestructRestPropUnused",
+        "thisSetStatePropUnused",
+        "thisSetStateRestPropUnused",
+        "thisStatePropUnused",
+        "thisStateDestructPropUnused",
+        "thisDestructStateDestructPropUnused",
       ]),
     },
   ]),

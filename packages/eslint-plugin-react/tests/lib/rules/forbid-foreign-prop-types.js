@@ -2,20 +2,20 @@
  * @fileoverview Tests for forbid-foreign-prop-types
  */
 
-'use strict';
+"use strict";
 
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/forbid-foreign-prop-types');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/forbid-foreign-prop-types");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -26,7 +26,7 @@ const parserOptions = {
 // -----------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('forbid-foreign-prop-types', rule, {
+ruleTester.run("forbid-foreign-prop-types", rule, {
   valid: parsers.all([
     {
       code: 'import { propTypes } from "SomeComponent";',
@@ -35,22 +35,22 @@ ruleTester.run('forbid-foreign-prop-types', rule, {
       code: 'import { propTypes as someComponentPropTypes } from "SomeComponent";',
     },
     {
-      code: 'const foo = propTypes',
+      code: "const foo = propTypes",
     },
     {
-      code: 'foo(propTypes)',
+      code: "foo(propTypes)",
     },
     {
-      code: 'foo + propTypes',
+      code: "foo + propTypes",
     },
     {
-      code: 'const foo = [propTypes]',
+      code: "const foo = [propTypes]",
     },
     {
-      code: 'const foo = { propTypes }',
+      code: "const foo = { propTypes }",
     },
     {
-      code: 'Foo.propTypes = propTypes',
+      code: "Foo.propTypes = propTypes",
     },
     {
       code: 'Foo["propTypes"] = propTypes',
@@ -79,7 +79,7 @@ ruleTester.run('forbid-foreign-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [{ allowInPropTypes: true }],
     },
   ]),
@@ -96,8 +96,8 @@ ruleTester.run('forbid-foreign-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          type: 'Identifier',
+          messageId: "forbiddenPropType",
+          type: "Identifier",
         },
       ],
     },
@@ -112,8 +112,8 @@ ruleTester.run('forbid-foreign-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          type: 'Literal',
+          messageId: "forbiddenPropType",
+          type: "Literal",
         },
       ],
     },
@@ -129,8 +129,8 @@ ruleTester.run('forbid-foreign-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          type: 'Property',
+          messageId: "forbiddenPropType",
+          type: "Property",
         },
       ],
     },
@@ -146,8 +146,8 @@ ruleTester.run('forbid-foreign-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          type: 'Property',
+          messageId: "forbiddenPropType",
+          type: "Property",
         },
       ],
     },
@@ -159,11 +159,11 @@ ruleTester.run('forbid-foreign-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields', 'no-ts'], // TODO: FIXME: remove "no-ts" and fix
+      features: ["class fields", "no-ts"], // TODO: FIXME: remove "no-ts" and fix
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          type: 'Identifier',
+          messageId: "forbiddenPropType",
+          type: "Identifier",
         },
       ],
     },
@@ -179,8 +179,8 @@ ruleTester.run('forbid-foreign-prop-types', rule, {
       `,
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          type: 'Property',
+          messageId: "forbiddenPropType",
+          type: "Property",
         },
       ],
     },
@@ -198,8 +198,8 @@ ruleTester.run('forbid-foreign-prop-types', rule, {
       options: [{ allowInPropTypes: false }],
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          type: 'Identifier',
+          messageId: "forbiddenPropType",
+          type: "Identifier",
         },
       ],
     },
@@ -211,12 +211,12 @@ ruleTester.run('forbid-foreign-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields', 'no-ts'], // TODO: FIXME: remove "no-ts" and fix
+      features: ["class fields", "no-ts"], // TODO: FIXME: remove "no-ts" and fix
       options: [{ allowInPropTypes: false }],
       errors: [
         {
-          messageId: 'forbiddenPropType',
-          type: 'Identifier',
+          messageId: "forbiddenPropType",
+          type: "Identifier",
         },
       ],
     },

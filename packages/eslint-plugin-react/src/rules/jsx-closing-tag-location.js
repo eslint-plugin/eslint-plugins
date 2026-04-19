@@ -3,74 +3,78 @@
  * @author Ross Solomon
  */
 
-'use strict';
+"use strict";
 
-const astUtil = require('../util/ast');
-const docsUrl = require('../util/docsUrl');
-const getSourceCode = require('../util/eslint').getSourceCode;
-const report = require('../util/report');
+const astUtil = require("../util/ast");
+const docsUrl = require("../util/docsUrl");
+const getSourceCode = require("../util/eslint").getSourceCode;
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  onOwnLine: 'Closing tag of a multiline JSX expression must be on its own line.',
-  matchIndent: 'Expected closing tag to match indentation of opening.',
-  alignWithOpening: 'Expected closing tag to be aligned with the line containing the opening tag',
+  onOwnLine:
+    "Closing tag of a multiline JSX expression must be on its own line.",
+  matchIndent: "Expected closing tag to match indentation of opening.",
+  alignWithOpening:
+    "Expected closing tag to be aligned with the line containing the opening tag",
 };
 
-const defaultOption = 'tag-aligned';
+const defaultOption = "tag-aligned";
 
 const optionMessageMap = {
-  'tag-aligned': 'matchIndent',
-  'line-aligned': 'alignWithOpening',
+  "tag-aligned": "matchIndent",
+  "line-aligned": "alignWithOpening",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Enforce closing tag location for multiline JSX',
-      category: 'Stylistic Issues',
+      description: "Enforce closing tag location for multiline JSX",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('jsx-closing-tag-location'),
+      url: docsUrl("jsx-closing-tag-location"),
     },
-    fixable: 'whitespace',
+    fixable: "whitespace",
     messages,
-    schema: [{
-      anyOf: [
-        {
-          enum: ['tag-aligned', 'line-aligned'],
-        },
-        {
-          type: 'object',
-          properties: {
-            location: {
-              enum: ['tag-aligned', 'line-aligned'],
-            },
+    schema: [
+      {
+        anyOf: [
+          {
+            enum: ["tag-aligned", "line-aligned"],
           },
-          additionalProperties: false,
-        },
-      ],
-    }],
+          {
+            type: "object",
+            properties: {
+              location: {
+                enum: ["tag-aligned", "line-aligned"],
+              },
+            },
+            additionalProperties: false,
+          },
+        ],
+      },
+    ],
   },
 
   create(context) {
     const config = context.options[0];
     let option = defaultOption;
 
-    if (typeof config === 'string') {
+    if (typeof config === "string") {
       option = config;
-    } else if (typeof config === 'object') {
-      if (config.hasOwnProperty('location')) {
+    } else if (typeof config === "object") {
+      if (config.hasOwnProperty("location")) {
         option = config.location;
       }
     }
 
     function getIndentation(openingStartOfLine, opening) {
-      if (option === 'line-aligned') return openingStartOfLine.column;
-      if (option === 'tag-aligned') return opening.loc.start.column;
+      if (option === "line-aligned") return openingStartOfLine.column;
+      if (option === "tag-aligned") return opening.loc.start.column;
     }
 
     function handleClosingElement(node) {
@@ -93,36 +97,35 @@ module.exports = {
       }
 
       if (
-        opening.loc.start.column === node.loc.start.column
-        && option === 'tag-aligned'
+        opening.loc.start.column === node.loc.start.column &&
+        option === "tag-aligned"
       ) {
         return;
       }
 
       if (
-        openingStartOfLine.column === node.loc.start.column
-        && option === 'line-aligned'
+        openingStartOfLine.column === node.loc.start.column &&
+        option === "line-aligned"
       ) {
         return;
       }
 
       const messageId = astUtil.isNodeFirstInLine(context, node)
         ? optionMessageMap[option]
-        : 'onOwnLine';
+        : "onOwnLine";
 
       report(context, messages[messageId], messageId, {
         node,
         loc: node.loc,
         fix(fixer) {
-          const indent = 
-            ' '.repeat(
-            getIndentation(openingStartOfLine, opening)
+          const indent = " ".repeat(
+            getIndentation(openingStartOfLine, opening),
           );
 
           if (astUtil.isNodeFirstInLine(context, node)) {
             return fixer.replaceTextRange(
               [node.range[0] - node.loc.start.column, node.range[0]],
-              indent
+              indent,
             );
           }
 

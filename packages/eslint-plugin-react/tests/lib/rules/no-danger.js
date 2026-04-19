@@ -3,20 +3,20 @@
  * @author Scott Andrews
  */
 
-'use strict';
+"use strict";
 
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/no-danger');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/no-danger");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,14 +27,14 @@ const parserOptions = {
 // -----------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('no-danger', rule, {
+ruleTester.run("no-danger", rule, {
   valid: parsers.all([
-    { code: '<App />;' },
+    { code: "<App />;" },
     { code: '<App dangerouslySetInnerHTML={{ __html: "" }} />;' },
     { code: '<div className="bar"></div>;' },
     {
       code: '<div className="bar"></div>;',
-      options: [{ customComponentNames: ['*'] }],
+      options: [{ customComponentNames: ["*"] }],
     },
     {
       code: `
@@ -42,7 +42,7 @@ ruleTester.run('no-danger', rule, {
           return <Title dangerouslySetInnerHTML={{ __html: "<span>hello</span>" }} />;
         }
       `,
-      options: [{ customComponentNames: ['Home'] }],
+      options: [{ customComponentNames: ["Home"] }],
     },
     {
       code: `
@@ -50,7 +50,7 @@ ruleTester.run('no-danger', rule, {
           return <TextMUI dangerouslySetInnerHTML={{ __html: "<span>hello</span>" }} />;
         }
       `,
-      options: [{ customComponentNames: ['MUI*'] }],
+      options: [{ customComponentNames: ["MUI*"] }],
     },
   ]),
   invalid: parsers.all([
@@ -58,18 +58,18 @@ ruleTester.run('no-danger', rule, {
       code: '<div dangerouslySetInnerHTML={{ __html: "" }}></div>;',
       errors: [
         {
-          messageId: 'dangerousProp',
-          data: { name: 'dangerouslySetInnerHTML' },
+          messageId: "dangerousProp",
+          data: { name: "dangerouslySetInnerHTML" },
         },
       ],
     },
     {
       code: '<App dangerouslySetInnerHTML={{ __html: "<span>hello</span>" }} />;',
-      options: [{ customComponentNames: ['*'] }],
+      options: [{ customComponentNames: ["*"] }],
       errors: [
         {
-          messageId: 'dangerousProp',
-          data: { name: 'dangerouslySetInnerHTML' },
+          messageId: "dangerousProp",
+          data: { name: "dangerouslySetInnerHTML" },
         },
       ],
     },
@@ -79,11 +79,11 @@ ruleTester.run('no-danger', rule, {
           return <Title dangerouslySetInnerHTML={{ __html: "<span>hello</span>" }} />;
         }
       `,
-      options: [{ customComponentNames: ['Title'] }],
+      options: [{ customComponentNames: ["Title"] }],
       errors: [
         {
-          messageId: 'dangerousProp',
-          data: { name: 'dangerouslySetInnerHTML' },
+          messageId: "dangerousProp",
+          data: { name: "dangerouslySetInnerHTML" },
         },
       ],
     },
@@ -93,11 +93,11 @@ ruleTester.run('no-danger', rule, {
           return <TextFoo dangerouslySetInnerHTML={{ __html: "<span>hello</span>" }} />;
         }
       `,
-      options: [{ customComponentNames: ['*Foo'] }],
+      options: [{ customComponentNames: ["*Foo"] }],
       errors: [
         {
-          messageId: 'dangerousProp',
-          data: { name: 'dangerouslySetInnerHTML' },
+          messageId: "dangerousProp",
+          data: { name: "dangerouslySetInnerHTML" },
         },
       ],
     },
@@ -107,11 +107,11 @@ ruleTester.run('no-danger', rule, {
           return <FooText dangerouslySetInnerHTML={{ __html: "<span>hello</span>" }} />;
         }
       `,
-      options: [{ customComponentNames: ['Foo*'] }],
+      options: [{ customComponentNames: ["Foo*"] }],
       errors: [
         {
-          messageId: 'dangerousProp',
-          data: { name: 'dangerouslySetInnerHTML' },
+          messageId: "dangerousProp",
+          data: { name: "dangerouslySetInnerHTML" },
         },
       ],
     },
@@ -121,11 +121,11 @@ ruleTester.run('no-danger', rule, {
           return <TextMUI dangerouslySetInnerHTML={{ __html: "<span>hello</span>" }} />;
         }
       `,
-      options: [{ customComponentNames: ['*MUI'] }],
+      options: [{ customComponentNames: ["*MUI"] }],
       errors: [
         {
-          messageId: 'dangerousProp',
-          data: { name: 'dangerouslySetInnerHTML' },
+          messageId: "dangerousProp",
+          data: { name: "dangerouslySetInnerHTML" },
         },
       ],
     },
@@ -153,22 +153,22 @@ ruleTester.run('no-danger', rule, {
           );
         }
       `,
-      features: ['fragment', 'types'],
-      options: [{ customComponentNames: ['*'] }],
+      features: ["fragment", "types"],
+      options: [{ customComponentNames: ["*"] }],
       errors: [
         {
-          messageId: 'dangerousProp',
-          data: { name: 'dangerouslySetInnerHTML' },
+          messageId: "dangerousProp",
+          data: { name: "dangerouslySetInnerHTML" },
           line: 14,
         },
         {
-          messageId: 'dangerousProp',
-          data: { name: 'dangerouslySetInnerHTML' },
+          messageId: "dangerousProp",
+          data: { name: "dangerouslySetInnerHTML" },
           line: 15,
         },
         {
-          messageId: 'dangerousProp',
-          data: { name: 'dangerouslySetInnerHTML' },
+          messageId: "dangerousProp",
+          data: { name: "dangerouslySetInnerHTML" },
           line: 18,
         },
       ],

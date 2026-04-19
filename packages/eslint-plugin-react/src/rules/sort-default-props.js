@@ -4,12 +4,12 @@
  * @deprecated
  */
 
-'use strict';
+"use strict";
 
-const variableUtil = require('../util/variable');
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
-const eslintUtil = require('../util/eslint');
+const variableUtil = require("../util/variable");
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
+const eslintUtil = require("../util/eslint");
 
 const getFirstTokens = eslintUtil.getFirstTokens;
 const getText = eslintUtil.getText;
@@ -19,31 +19,34 @@ const getText = eslintUtil.getText;
 // ------------------------------------------------------------------------------
 
 const messages = {
-  propsNotSorted: 'Default prop types declarations should be sorted alphabetically',
+  propsNotSorted:
+    "Default prop types declarations should be sorted alphabetically",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Enforce defaultProps declarations alphabetical sorting',
-      category: 'Stylistic Issues',
+      description: "Enforce defaultProps declarations alphabetical sorting",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('sort-default-props'),
+      url: docsUrl("sort-default-props"),
     },
     // fixable: 'code',
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        ignoreCase: {
-          type: 'boolean',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          ignoreCase: {
+            type: "boolean",
+          },
         },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create(context) {
@@ -56,19 +59,24 @@ module.exports = {
      * @returns {string} Property name.
      */
     function getPropertyName(node) {
-      if (node.key || ['MethodDefinition', 'Property'].indexOf(node.type) !== -1) {
+      if (
+        node.key ||
+        ["MethodDefinition", "Property"].indexOf(node.type) !== -1
+      ) {
         return node.key.name;
       }
-      if (node.type === 'MemberExpression') {
+      if (node.type === "MemberExpression") {
         return node.property.name;
-      // Special case for class properties
-      // (babel-eslint@5 does not expose property name so we have to rely on tokens)
+        // Special case for class properties
+        // (babel-eslint@5 does not expose property name so we have to rely on tokens)
       }
-      if (node.type === 'ClassProperty') {
+      if (node.type === "ClassProperty") {
         const tokens = getFirstTokens(context, node, 2);
-        return tokens[1] && tokens[1].type === 'Identifier' ? tokens[1].value : tokens[0].value;
+        return tokens[1] && tokens[1].type === "Identifier"
+          ? tokens[1].value
+          : tokens[0].value;
       }
-      return '';
+      return "";
     }
 
     /**
@@ -78,7 +86,7 @@ module.exports = {
      */
     function isDefaultPropsDeclaration(node) {
       const propName = getPropertyName(node);
-      return (propName === 'defaultProps' || propName === 'getDefaultProps');
+      return propName === "defaultProps" || propName === "getDefaultProps";
     }
 
     function getKey(node) {
@@ -98,7 +106,7 @@ module.exports = {
         return null;
       }
 
-      if (variable.defs[0].node.type === 'TypeAlias') {
+      if (variable.defs[0].node.type === "TypeAlias") {
         return variable.defs[0].node.right;
       }
 
@@ -129,7 +137,7 @@ module.exports = {
         }
 
         if (currentPropName < prevPropName) {
-          report(context, messages.propsNotSorted, 'propsNotSorted', {
+          report(context, messages.propsNotSorted, "propsNotSorted", {
             node: curr,
             // fix
           });
@@ -145,9 +153,9 @@ module.exports = {
       if (!node) {
         return;
       }
-      if (node.type === 'ObjectExpression') {
+      if (node.type === "ObjectExpression") {
         checkSorted(node.properties);
-      } else if (node.type === 'Identifier') {
+      } else if (node.type === "Identifier") {
         const propTypesObject = findVariableByName(node, node.name);
         if (propTypesObject && propTypesObject.properties) {
           checkSorted(propTypesObject.properties);
@@ -160,7 +168,7 @@ module.exports = {
     // --------------------------------------------------------------------------
 
     return {
-      'ClassProperty, PropertyDefinition'(node) {
+      "ClassProperty, PropertyDefinition"(node) {
         if (!isDefaultPropsDeclaration(node)) {
           return;
         }
@@ -173,7 +181,7 @@ module.exports = {
           return;
         }
 
-        checkNode('right' in node.parent && node.parent.right);
+        checkNode("right" in node.parent && node.parent.right);
       },
     };
   },

@@ -3,71 +3,96 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
-const docsUrl = require('../util/docsUrl');
-const getSourceCode = require('../util/eslint').getSourceCode;
-const report = require('../util/report');
+const docsUrl = require("../util/docsUrl");
+const getSourceCode = require("../util/eslint").getSourceCode;
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  bracketLocation: 'The closing bracket must be {{location}}{{details}}',
+  bracketLocation: "The closing bracket must be {{location}}{{details}}",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Enforce closing bracket location in JSX',
-      category: 'Stylistic Issues',
+      description: "Enforce closing bracket location in JSX",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('jsx-closing-bracket-location'),
+      url: docsUrl("jsx-closing-bracket-location"),
     },
-    fixable: 'code',
+    fixable: "code",
 
     messages,
 
-    schema: [{
-      anyOf: [
-        {
-          enum: ['after-props', 'props-aligned', 'tag-aligned', 'line-aligned'],
-        },
-        {
-          type: 'object',
-          properties: {
-            location: {
-              enum: ['after-props', 'props-aligned', 'tag-aligned', 'line-aligned'],
-            },
+    schema: [
+      {
+        anyOf: [
+          {
+            enum: [
+              "after-props",
+              "props-aligned",
+              "tag-aligned",
+              "line-aligned",
+            ],
           },
-          additionalProperties: false,
-        }, {
-          type: 'object',
-          properties: {
-            nonEmpty: {
-              enum: ['after-props', 'props-aligned', 'tag-aligned', 'line-aligned', false],
+          {
+            type: "object",
+            properties: {
+              location: {
+                enum: [
+                  "after-props",
+                  "props-aligned",
+                  "tag-aligned",
+                  "line-aligned",
+                ],
+              },
             },
-            selfClosing: {
-              enum: ['after-props', 'props-aligned', 'tag-aligned', 'line-aligned', false],
-            },
+            additionalProperties: false,
           },
-          additionalProperties: false,
-        },
-      ],
-    }],
+          {
+            type: "object",
+            properties: {
+              nonEmpty: {
+                enum: [
+                  "after-props",
+                  "props-aligned",
+                  "tag-aligned",
+                  "line-aligned",
+                  false,
+                ],
+              },
+              selfClosing: {
+                enum: [
+                  "after-props",
+                  "props-aligned",
+                  "tag-aligned",
+                  "line-aligned",
+                  false,
+                ],
+              },
+            },
+            additionalProperties: false,
+          },
+        ],
+      },
+    ],
   },
 
   create(context) {
     const MESSAGE_LOCATION = {
-      'after-props': 'placed after the last prop',
-      'after-tag': 'placed after the opening tag',
-      'props-aligned': 'aligned with the last prop',
-      'tag-aligned': 'aligned with the opening tag',
-      'line-aligned': 'aligned with the line containing the opening tag',
+      "after-props": "placed after the last prop",
+      "after-tag": "placed after the opening tag",
+      "props-aligned": "aligned with the last prop",
+      "tag-aligned": "aligned with the opening tag",
+      "line-aligned": "aligned with the line containing the opening tag",
     };
-    const DEFAULT_LOCATION = 'tag-aligned';
+    const DEFAULT_LOCATION = "tag-aligned";
 
     const config = context.options[0];
     const options = {
@@ -75,22 +100,22 @@ module.exports = {
       selfClosing: DEFAULT_LOCATION,
     };
 
-    if (typeof config === 'string') {
+    if (typeof config === "string") {
       // simple shorthand [1, 'something']
       options.nonEmpty = config;
       options.selfClosing = config;
-    } else if (typeof config === 'object') {
+    } else if (typeof config === "object") {
       // [1, {location: 'something'}] (back-compat)
-      if (config.hasOwnProperty('location')) {
+      if (config.hasOwnProperty("location")) {
         options.nonEmpty = config.location;
         options.selfClosing = config.location;
       }
       // [1, {nonEmpty: 'something'}]
-      if (config.hasOwnProperty('nonEmpty')) {
+      if (config.hasOwnProperty("nonEmpty")) {
         options.nonEmpty = config.nonEmpty;
       }
       // [1, {selfClosing: 'something'}]
-      if (config.hasOwnProperty('selfClosing')) {
+      if (config.hasOwnProperty("selfClosing")) {
         options.selfClosing = config.selfClosing;
       }
     }
@@ -103,12 +128,12 @@ module.exports = {
     function getExpectedLocation(tokens) {
       let location;
       // Is always after the opening tag if there is no props
-      if (typeof tokens.lastProp === 'undefined') {
-        location = 'after-tag';
-      // Is always after the last prop if this one is on the same line as the opening bracket
+      if (typeof tokens.lastProp === "undefined") {
+        location = "after-tag";
+        // Is always after the last prop if this one is on the same line as the opening bracket
       } else if (tokens.opening.line === tokens.lastProp.lastLine) {
-        location = 'after-props';
-      // Else use configuration dependent on selfClosing property
+        location = "after-props";
+        // Else use configuration dependent on selfClosing property
       } else {
         location = tokens.selfClosing ? options.selfClosing : options.nonEmpty;
       }
@@ -124,11 +149,11 @@ module.exports = {
      */
     function getCorrectColumn(tokens, expectedLocation) {
       switch (expectedLocation) {
-        case 'props-aligned':
+        case "props-aligned":
           return tokens.lastProp.column;
-        case 'tag-aligned':
+        case "tag-aligned":
           return tokens.opening.column;
-        case 'line-aligned':
+        case "line-aligned":
           return tokens.openingStartOfLine.column;
         default:
           return null;
@@ -143,13 +168,13 @@ module.exports = {
      */
     function hasCorrectLocation(tokens, expectedLocation) {
       switch (expectedLocation) {
-        case 'after-tag':
+        case "after-tag":
           return tokens.tag.line === tokens.closing.line;
-        case 'after-props':
+        case "after-props":
           return tokens.lastProp.lastLine === tokens.closing.line;
-        case 'props-aligned':
-        case 'tag-aligned':
-        case 'line-aligned': {
+        case "props-aligned":
+        case "tag-aligned":
+        case "line-aligned": {
           const correctColumn = getCorrectColumn(tokens, expectedLocation);
           return correctColumn === tokens.closing.column;
         }
@@ -168,21 +193,25 @@ module.exports = {
     function getIndentation(tokens, expectedLocation, correctColumn) {
       const newColumn = correctColumn || 0;
       let indentation;
-      let spaces = '';
+      let spaces = "";
       switch (expectedLocation) {
-        case 'props-aligned':
-          indentation = /^\s*/.exec(getSourceCode(context).lines[tokens.lastProp.firstLine - 1])[0];
+        case "props-aligned":
+          indentation = /^\s*/.exec(
+            getSourceCode(context).lines[tokens.lastProp.firstLine - 1],
+          )[0];
           break;
-        case 'tag-aligned':
-        case 'line-aligned':
-          indentation = /^\s*/.exec(getSourceCode(context).lines[tokens.opening.line - 1])[0];
+        case "tag-aligned":
+        case "line-aligned":
+          indentation = /^\s*/.exec(
+            getSourceCode(context).lines[tokens.opening.line - 1],
+          )[0];
           break;
         default:
-          indentation = '';
+          indentation = "";
       }
       if (indentation.length + 1 < newColumn) {
         // Non-whitespace characters were included in the column offset
-        spaces = ' '.repeat( +correctColumn - indentation.length);
+        spaces = " ".repeat(+correctColumn - indentation.length);
       }
       return indentation + spaces;
     }
@@ -197,7 +226,10 @@ module.exports = {
     function getTokensLocations(node) {
       const sourceCode = getSourceCode(context);
       const opening = sourceCode.getFirstToken(node).loc.start;
-      const closing = sourceCode.getLastTokens(node, node.selfClosing ? 2 : 1)[0].loc.start;
+      const closing = sourceCode.getLastTokens(
+        node,
+        node.selfClosing ? 2 : 1,
+      )[0].loc.start;
       const tag = sourceCode.getFirstToken(node.name).loc.start;
       let lastProp;
       if (node.attributes.length) {
@@ -236,7 +268,7 @@ module.exports = {
      * @returns {string} Unique ID (based on its range)
      */
     function getOpeningElementId(node) {
-      return node.range.join(':');
+      return node.range.join(":");
     }
 
     const lastAttributeNode = {};
@@ -250,57 +282,70 @@ module.exports = {
         lastAttributeNode[getOpeningElementId(node.parent)] = node;
       },
 
-      'JSXOpeningElement:exit'(node) {
+      "JSXOpeningElement:exit"(node) {
         const attributeNode = lastAttributeNode[getOpeningElementId(node)];
-        const cachedLastAttributeEndPos = attributeNode ? attributeNode.range[1] : null;
+        const cachedLastAttributeEndPos = attributeNode
+          ? attributeNode.range[1]
+          : null;
 
         let expectedNextLine;
         const tokens = getTokensLocations(node);
         const expectedLocation = getExpectedLocation(tokens);
         let usingSameIndentation = true;
 
-        if (expectedLocation === 'tag-aligned') {
+        if (expectedLocation === "tag-aligned") {
           usingSameIndentation = tokens.isTab.openTab === tokens.isTab.closeTab;
         }
 
-        if (hasCorrectLocation(tokens, expectedLocation) && usingSameIndentation) {
+        if (
+          hasCorrectLocation(tokens, expectedLocation) &&
+          usingSameIndentation
+        ) {
           return;
         }
 
         const data = {
           location: MESSAGE_LOCATION[expectedLocation],
-          details: '',
+          details: "",
         };
         const correctColumn = getCorrectColumn(tokens, expectedLocation);
 
         if (correctColumn !== null) {
-          expectedNextLine = tokens.lastProp
-            && (tokens.lastProp.lastLine === tokens.closing.line);
-          data.details = ` (expected column ${correctColumn + 1}${expectedNextLine ? ' on the next line)' : ')'}`;
+          expectedNextLine =
+            tokens.lastProp && tokens.lastProp.lastLine === tokens.closing.line;
+          data.details = ` (expected column ${correctColumn + 1}${expectedNextLine ? " on the next line)" : ")"}`;
         }
 
-        report(context, messages.bracketLocation, 'bracketLocation', {
+        report(context, messages.bracketLocation, "bracketLocation", {
           node,
           loc: tokens.closing,
           data,
           fix(fixer) {
-            const closingTag = tokens.selfClosing ? '/>' : '>';
+            const closingTag = tokens.selfClosing ? "/>" : ">";
             switch (expectedLocation) {
-              case 'after-tag':
+              case "after-tag":
                 if (cachedLastAttributeEndPos) {
-                  return fixer.replaceTextRange([cachedLastAttributeEndPos, node.range[1]],
-                    (expectedNextLine ? '\n' : '') + closingTag);
+                  return fixer.replaceTextRange(
+                    [cachedLastAttributeEndPos, node.range[1]],
+                    (expectedNextLine ? "\n" : "") + closingTag,
+                  );
                 }
-                return fixer.replaceTextRange([node.name.range[1], node.range[1]],
-                  (expectedNextLine ? '\n' : ' ') + closingTag);
-              case 'after-props':
-                return fixer.replaceTextRange([cachedLastAttributeEndPos, node.range[1]],
-                  (expectedNextLine ? '\n' : '') + closingTag);
-              case 'props-aligned':
-              case 'tag-aligned':
-              case 'line-aligned':
-                return fixer.replaceTextRange([cachedLastAttributeEndPos, node.range[1]],
-                  `\n${getIndentation(tokens, expectedLocation, correctColumn)}${closingTag}`);
+                return fixer.replaceTextRange(
+                  [node.name.range[1], node.range[1]],
+                  (expectedNextLine ? "\n" : " ") + closingTag,
+                );
+              case "after-props":
+                return fixer.replaceTextRange(
+                  [cachedLastAttributeEndPos, node.range[1]],
+                  (expectedNextLine ? "\n" : "") + closingTag,
+                );
+              case "props-aligned":
+              case "tag-aligned":
+              case "line-aligned":
+                return fixer.replaceTextRange(
+                  [cachedLastAttributeEndPos, node.range[1]],
+                  `\n${getIndentation(tokens, expectedLocation, correctColumn)}${closingTag}`,
+                );
               default:
                 return true;
             }

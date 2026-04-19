@@ -3,22 +3,22 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const semver = require('semver');
-const eslintVersion = require('eslint/package.json').version;
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-indent');
+const semver = require("semver");
+const eslintVersion = require("eslint/package.json").version;
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-indent");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -29,7 +29,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('jsx-indent', rule, {
+ruleTester.run("jsx-indent", rule, {
   valid: parsers.all([
     {
       code: `
@@ -40,7 +40,7 @@ ruleTester.run('jsx-indent', rule, {
       code: `
         <></>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
       code: `
@@ -53,7 +53,7 @@ ruleTester.run('jsx-indent', rule, {
         <>
         </>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
       code: `
@@ -69,7 +69,7 @@ ruleTester.run('jsx-indent', rule, {
           <></>
         </App>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
       options: [2],
     },
     {
@@ -78,7 +78,7 @@ ruleTester.run('jsx-indent', rule, {
           <Foo />
         </>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
       options: [2],
     },
     {
@@ -103,7 +103,7 @@ ruleTester.run('jsx-indent', rule, {
 \t\t\t\t\t<Foo />
 \t\t\t\t</App>
 \t\t\t`,
-      options: ['tab'],
+      options: ["tab"],
     },
     {
       code: `
@@ -123,7 +123,7 @@ ruleTester.run('jsx-indent', rule, {
           </App>;
         }
       `,
-      features: ['fragment'],
+      features: ["fragment"],
       options: [2],
     },
     {
@@ -144,7 +144,7 @@ ruleTester.run('jsx-indent', rule, {
           </App>);
         }
       `,
-      features: ['fragment'],
+      features: ["fragment"],
       options: [2],
     },
     {
@@ -169,7 +169,7 @@ ruleTester.run('jsx-indent', rule, {
           );
         }
       `,
-      features: ['fragment'],
+      features: ["fragment"],
       options: [2],
     },
     {
@@ -194,7 +194,7 @@ ruleTester.run('jsx-indent', rule, {
           )
         )
       `,
-      features: ['fragment'],
+      features: ["fragment"],
       options: [2],
     },
     {
@@ -239,7 +239,7 @@ ruleTester.run('jsx-indent', rule, {
           </>
         }
       `,
-      features: ['fragment'],
+      features: ["fragment"],
       options: [2],
     },
     {
@@ -292,7 +292,7 @@ ruleTester.run('jsx-indent', rule, {
           <></>
         ]
       `,
-      features: ['fragment'],
+      features: ["fragment"],
       options: [2],
     },
     {
@@ -330,7 +330,7 @@ ruleTester.run('jsx-indent', rule, {
             }
         </div>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
       code: `
@@ -351,11 +351,11 @@ ruleTester.run('jsx-indent', rule, {
                 bar </>
         </>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (colon at the end of the first expression)
+      // Multiline ternary
+      // (colon at the end of the first expression)
       code: `
         foo ?
             <Foo /> :
@@ -368,11 +368,11 @@ ruleTester.run('jsx-indent', rule, {
             <></> :
             <></>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (colon at the start of the second expression)
+      // Multiline ternary
+      // (colon at the start of the second expression)
       code: `
         foo ?
             <Foo />
@@ -385,11 +385,11 @@ ruleTester.run('jsx-indent', rule, {
             <></>
             : <></>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (colon on its own line)
+      // Multiline ternary
+      // (colon on its own line)
       code: `
         foo ?
             <Foo />
@@ -404,11 +404,11 @@ ruleTester.run('jsx-indent', rule, {
         :
             <></>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (multiline JSX, colon on its own line)
+      // Multiline ternary
+      // (multiline JSX, colon on its own line)
       code: `
         {!foo ?
             <Foo
@@ -422,8 +422,8 @@ ruleTester.run('jsx-indent', rule, {
       `,
     },
     {
-    // Multiline ternary
-    // (first expression on test line, colon at the end of the first expression)
+      // Multiline ternary
+      // (first expression on test line, colon at the end of the first expression)
       code: `
         foo ? <Foo /> :
         <Bar />
@@ -434,11 +434,11 @@ ruleTester.run('jsx-indent', rule, {
         foo ? <></> :
         <></>
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
     },
     {
-    // Multiline ternary
-    // (first expression on test line, colon at the start of the second expression)
+      // Multiline ternary
+      // (first expression on test line, colon at the start of the second expression)
       code: `
         foo ? <Foo />
         : <Bar />
@@ -449,11 +449,11 @@ ruleTester.run('jsx-indent', rule, {
         foo ? <></>
         : <></>
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
     },
     {
-    // Multiline ternary
-    // (first expression on test line, colon on its own line)
+      // Multiline ternary
+      // (first expression on test line, colon on its own line)
       code: `
         foo ? <Foo />
         :
@@ -466,11 +466,11 @@ ruleTester.run('jsx-indent', rule, {
         :
         <></>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (colon at the end of the first expression, parenthesized first expression)
+      // Multiline ternary
+      // (colon at the end of the first expression, parenthesized first expression)
       code: `
         foo ? (
             <Foo />
@@ -485,11 +485,11 @@ ruleTester.run('jsx-indent', rule, {
         ) :
             <></>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (colon at the start of the second expression, parenthesized first expression)
+      // Multiline ternary
+      // (colon at the start of the second expression, parenthesized first expression)
       code: `
         foo ? (
             <Foo />
@@ -504,11 +504,11 @@ ruleTester.run('jsx-indent', rule, {
         )
             : <></>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (colon on its own line, parenthesized first expression)
+      // Multiline ternary
+      // (colon on its own line, parenthesized first expression)
       code: `
         foo ? (
             <Foo />
@@ -525,11 +525,11 @@ ruleTester.run('jsx-indent', rule, {
         :
             <></>
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (colon at the end of the first expression, parenthesized second expression)
+      // Multiline ternary
+      // (colon at the end of the first expression, parenthesized second expression)
       code: `
         foo ?
             <Foo /> : (
@@ -544,11 +544,11 @@ ruleTester.run('jsx-indent', rule, {
                 <></>
             )
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (colon on its own line, parenthesized second expression)
+      // Multiline ternary
+      // (colon on its own line, parenthesized second expression)
       code: `
         foo ?
             <Foo />
@@ -565,11 +565,11 @@ ruleTester.run('jsx-indent', rule, {
             <></>
         )
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (colon indented on its own line, parenthesized second expression)
+      // Multiline ternary
+      // (colon indented on its own line, parenthesized second expression)
       code: `
         foo ?
             <Foo />
@@ -586,11 +586,11 @@ ruleTester.run('jsx-indent', rule, {
                 <></>
             )
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (colon at the end of the first expression, both expression parenthesized)
+      // Multiline ternary
+      // (colon at the end of the first expression, both expression parenthesized)
       code: `
         foo ? (
             <Foo />
@@ -607,11 +607,11 @@ ruleTester.run('jsx-indent', rule, {
             <></>
         )
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (colon on its own line, both expression parenthesized)
+      // Multiline ternary
+      // (colon on its own line, both expression parenthesized)
       code: `
         foo ? (
             <Foo />
@@ -630,11 +630,11 @@ ruleTester.run('jsx-indent', rule, {
             <></>
         )
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (colon on its own line, both expression parenthesized)
+      // Multiline ternary
+      // (colon on its own line, both expression parenthesized)
       code: `
         foo ? (
             <Foo />
@@ -655,11 +655,11 @@ ruleTester.run('jsx-indent', rule, {
             <></>
         )
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (first expression on test line, colon at the end of the first expression, parenthesized second expression)
+      // Multiline ternary
+      // (first expression on test line, colon at the end of the first expression, parenthesized second expression)
       code: `
         foo ? <Foo /> : (
             <Bar />
@@ -672,11 +672,11 @@ ruleTester.run('jsx-indent', rule, {
             <></>
         )
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (first expression on test line, colon at the start of the second expression, parenthesized second expression)
+      // Multiline ternary
+      // (first expression on test line, colon at the start of the second expression, parenthesized second expression)
       code: `
         foo ? <Foo />
         : (<Bar />)
@@ -687,11 +687,11 @@ ruleTester.run('jsx-indent', rule, {
         foo ? <></>
         : (<></>)
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
-    // Multiline ternary
-    // (first expression on test line, colon on its own line, parenthesized second expression)
+      // Multiline ternary
+      // (first expression on test line, colon on its own line, parenthesized second expression)
       code: `
         foo ? <Foo />
         : (
@@ -706,7 +706,7 @@ ruleTester.run('jsx-indent', rule, {
             <></>
         )
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
       code: `
@@ -762,7 +762,7 @@ ruleTester.run('jsx-indent', rule, {
           </span>
         }
       `,
-      features: ['fragment'],
+      features: ["fragment"],
       options: [2],
     },
     {
@@ -774,7 +774,7 @@ ruleTester.run('jsx-indent', rule, {
             }}
         </span>
       `,
-      features: ['do expressions'],
+      features: ["do expressions"],
     },
     {
       code: `
@@ -785,7 +785,7 @@ ruleTester.run('jsx-indent', rule, {
             })}
         </span>
       `,
-      features: ['do expressions'],
+      features: ["do expressions"],
     },
     {
       code: `
@@ -800,7 +800,7 @@ ruleTester.run('jsx-indent', rule, {
             }}
         </span>
       `,
-      features: ['do expressions'],
+      features: ["do expressions"],
     },
     {
       code: `
@@ -815,7 +815,7 @@ ruleTester.run('jsx-indent', rule, {
             })}
         </span>
       `,
-      features: ['do expressions'],
+      features: ["do expressions"],
     },
     {
       code: `
@@ -825,7 +825,7 @@ ruleTester.run('jsx-indent', rule, {
             }}
         </span>
       `,
-      features: ['do expressions'],
+      features: ["do expressions"],
     },
     {
       code: `
@@ -835,7 +835,7 @@ ruleTester.run('jsx-indent', rule, {
             })}
         </span>
       `,
-      features: ['do expressions'],
+      features: ["do expressions"],
     },
     {
       code: `
@@ -846,7 +846,7 @@ ruleTester.run('jsx-indent', rule, {
             }}
         </span>
       `,
-      features: ['do expressions'],
+      features: ["do expressions"],
     },
     {
       code: `
@@ -857,7 +857,7 @@ ruleTester.run('jsx-indent', rule, {
             })}
         </span>
       `,
-      features: ['do expressions'],
+      features: ["do expressions"],
     },
     {
       code: `
@@ -869,7 +869,7 @@ ruleTester.run('jsx-indent', rule, {
             }}
         </span>
       `,
-      features: ['do expressions'],
+      features: ["do expressions"],
     },
     {
       code: `
@@ -881,7 +881,7 @@ ruleTester.run('jsx-indent', rule, {
             })}
         </span>
       `,
-      features: ['do expressions'],
+      features: ["do expressions"],
     },
     {
       code: `
@@ -911,7 +911,7 @@ ruleTester.run('jsx-indent', rule, {
           }
         }
       `,
-      features: ['fragment'],
+      features: ["fragment"],
       options: [2],
     },
     {
@@ -966,7 +966,7 @@ const Component = () => (
 \t/>
 );
     `,
-      options: ['tab'],
+      options: ["tab"],
     },
     {
       code: `
@@ -1020,7 +1020,7 @@ const Component = () => (
 \t/>
 );
     `,
-      options: ['tab', { checkAttributes: false }],
+      options: ["tab", { checkAttributes: false }],
     },
     {
       code: `
@@ -1071,7 +1071,7 @@ const Component = () => (
 \t\t\t\t\ttext
 \t\t\t\t</App>
 \t\t\t`,
-      options: ['tab'],
+      options: ["tab"],
     },
     {
       code: `
@@ -1085,10 +1085,10 @@ const Component = () => (
 \t\t\t\t\t{"foo"}
 \t\t\t\t</App>
 \t\t\t`,
-      options: ['tab'],
+      options: ["tab"],
     },
     {
-    // don't check literals not within JSX. See #2563
+      // don't check literals not within JSX. See #2563
       code: `
         function foo() {
           const a = \`aa\`;
@@ -1160,7 +1160,9 @@ const Component = () => (
           // JSX
         );
       `,
-      features: ['flow'].concat(semver.satisfies(eslintVersion, '< 8') ? 'no-babel-old' : []),
+      features: ["flow"].concat(
+        semver.satisfies(eslintVersion, "< 8") ? "no-babel-old" : [],
+      ),
     },
     {
       code: `
@@ -1206,7 +1208,7 @@ const Component = () => (
           }
         }
       `,
-      features: ['class fields'],
+      features: ["class fields"],
       options: [2],
     },
     {
@@ -1231,9 +1233,10 @@ const Component = () => (
     },
   ]),
 
-  invalid: parsers.all([].concat(
-    {
-      code: `
+  invalid: parsers.all(
+    [].concat(
+      {
+        code: `
         <div>
         bar <div>
            bar
@@ -1241,7 +1244,7 @@ const Component = () => (
            bar </div>
         </div>
       `,
-      output: `
+        output: `
         <div>
             bar <div>
             bar
@@ -1249,244 +1252,244 @@ const Component = () => (
             bar </div>
         </div>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 11,
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 11,
+            },
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 11,
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 11,
+            },
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 11,
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 11,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <App>
           <Foo />
         </App>
       `,
-      output: `
+        output: `
         <App>
             <Foo />
         </App>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 10,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 10,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <App>
           <></>
         </App>
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      output: `
+        features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
+        output: `
         <App>
             <></>
         </App>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 10,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 10,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <>
           <Foo />
         </>
       `,
-      features: ['fragment'],
-      output: `
+        features: ["fragment"],
+        output: `
         <>
             <Foo />
         </>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 10,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 10,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <App>
             <Foo />
         </App>
       `,
-      output: `
+        output: `
         <App>
           <Foo />
         </App>
       `,
-      options: [2],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 10,
-            type: 'space',
-            characters: 'characters',
-            gotten: 12,
+        options: [2],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 10,
+              type: "space",
+              characters: "characters",
+              gotten: 12,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <App>
             <Foo />
         </App>
       `,
-      output: `
+        output: `
         <App>
 \t<Foo />
         </App>
       `,
-      options: ['tab'],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 1,
-            type: 'tab',
-            characters: 'character',
-            gotten: 0,
+        options: ["tab"],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 1,
+              type: "tab",
+              characters: "character",
+              gotten: 0,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         function App() {
           return <App>
             <Foo />
                  </App>;
         }
       `,
-      output: `
+        output: `
         function App() {
           return <App>
             <Foo />
           </App>;
         }
       `,
-      options: [2],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          line: 3,
-          data: {
-            needed: 10,
-            type: 'space',
-            characters: 'characters',
-            gotten: 17,
+        options: [2],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            line: 3,
+            data: {
+              needed: 10,
+              type: "space",
+              characters: "characters",
+              gotten: 17,
+            },
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          line: 5,
-          data: {
-            needed: 10,
-            type: 'space',
-            characters: 'characters',
-            gotten: 17,
+          {
+            messageId: "wrongIndent",
+            line: 5,
+            data: {
+              needed: 10,
+              type: "space",
+              characters: "characters",
+              gotten: 17,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         function App() {
           return (<App>
             <Foo />
             </App>);
         }
       `,
-      output: `
+        output: `
         function App() {
           return (<App>
             <Foo />
           </App>);
         }
       `,
-      options: [2],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          line: 3,
-          data: {
-            needed: 10,
-            type: 'space',
-            characters: 'characters',
-            gotten: 12,
+        options: [2],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            line: 3,
+            data: {
+              needed: 10,
+              type: "space",
+              characters: "characters",
+              gotten: 12,
+            },
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          line: 5,
-          data: {
-            needed: 10,
-            type: 'space',
-            characters: 'characters',
-            gotten: 12,
+          {
+            messageId: "wrongIndent",
+            line: 5,
+            data: {
+              needed: 10,
+              type: "space",
+              characters: "characters",
+              gotten: 12,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         function App() {
           return (
         <App>
@@ -1495,11 +1498,11 @@ const Component = () => (
           );
         }
       `,
-      // The detection logic only thinks <App> is indented wrong, not the other
-      // two lines following. I *think* because it incorrectly uses <App>'s indention
-      // as the baseline for the next two, instead of the realizing the entire three
-      // lines are wrong together. See #608
-      output: `
+        // The detection logic only thinks <App> is indented wrong, not the other
+        // two lines following. I *think* because it incorrectly uses <App>'s indention
+        // as the baseline for the next two, instead of the realizing the entire three
+        // lines are wrong together. See #608
+        output: `
         function App() {
           return (
             <App>
@@ -1508,44 +1511,44 @@ const Component = () => (
           );
         }
       `,
-      options: [2],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        options: [2],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <App>
            {test}
         </App>
       `,
-      output: `
+        output: `
         <App>
             {test}
         </App>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 11,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 11,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <App>
             {options.map((option, index) => (
                 <option key={index} value={option.key}>
@@ -1554,7 +1557,7 @@ const Component = () => (
             ))}
         </App>
       `,
-      output: `
+        output: `
         <App>
             {options.map((option, index) => (
                 <option key={index} value={option.key}>
@@ -1563,44 +1566,44 @@ const Component = () => (
             ))}
         </App>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 20,
-            type: 'space',
-            characters: 'characters',
-            gotten: 19,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 20,
+              type: "space",
+              characters: "characters",
+              gotten: 19,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <App>
         {test}
         </App>
       `,
-      output: `
+        output: `
         <App>
 \t{test}
         </App>
       `,
-      options: ['tab'],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 1,
-            type: 'tab',
-            characters: 'character',
-            gotten: 0,
+        options: ["tab"],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 1,
+              type: "tab",
+              characters: "character",
+              gotten: 0,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
 \t\t\t\t<App>
 \t\t\t\t\t{options.map((option, index) => (
 \t\t\t\t\t\t<option key={index} value={option.key}>
@@ -1609,7 +1612,7 @@ const Component = () => (
 \t\t\t\t\t))}
 \t\t\t\t</App>
 \t\t\t`,
-      output: `
+        output: `
 \t\t\t\t<App>
 \t\t\t\t\t{options.map((option, index) => (
 \t\t\t\t\t\t<option key={index} value={option.key}>
@@ -1618,154 +1621,154 @@ const Component = () => (
 \t\t\t\t\t))}
 \t\t\t\t</App>
 \t\t\t`,
-      options: ['tab'],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 7,
-            type: 'tab',
-            characters: 'characters',
-            gotten: 6,
+        options: ["tab"],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 7,
+              type: "tab",
+              characters: "characters",
+              gotten: 6,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
 \t\t\t\t<App>\n
 \t\t\t\t<Foo />\n
 \t\t\t\t</App>
 \t\t\t`,
-      output: `
+        output: `
 \t\t\t\t<App>\n
 \t\t\t\t\t<Foo />\n
 \t\t\t\t</App>
 \t\t\t`,
-      options: ['tab'],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 5,
-            type: 'tab',
-            characters: 'characters',
-            gotten: 4,
+        options: ["tab"],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 5,
+              type: "tab",
+              characters: "characters",
+              gotten: 4,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         [
           <div />,
             <div />
         ]
       `,
-      output: `
+        output: `
         [
           <div />,
           <div />
         ]
       `,
-      options: [2],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 10,
-            type: 'space',
-            characters: 'characters',
-            gotten: 12,
+        options: [2],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 10,
+              type: "space",
+              characters: "characters",
+              gotten: 12,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         [
           <div />,
             <></>
         ]
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      output: `
+        features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
+        output: `
         [
           <div />,
           <></>
         ]
       `,
-      options: [2],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 10,
-            type: 'space',
-            characters: 'characters',
-            gotten: 12,
+        options: [2],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 10,
+              type: "space",
+              characters: "characters",
+              gotten: 12,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <App>
 
          <Foo />
 
         </App>
       `,
-      output: `
+        output: `
         <App>
 
 \t<Foo />
 
         </App>
       `,
-      options: ['tab'],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 1,
-            type: 'tab',
-            characters: 'character',
-            gotten: 0,
+        options: ["tab"],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 1,
+              type: "tab",
+              characters: "character",
+              gotten: 0,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <App>
 
         \t<Foo />
 
         </App>
       `,
-      output: `
+        output: `
         <App>
 
           <Foo />
 
         </App>
       `,
-      options: [2],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 10,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        options: [2],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 10,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <div>
             {
                 [
@@ -1775,7 +1778,7 @@ const Component = () => (
             }
         </div>
       `,
-      output: `
+        output: `
         <div>
             {
                 [
@@ -1785,20 +1788,20 @@ const Component = () => (
             }
         </div>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 20,
-            type: 'space',
-            characters: 'characters',
-            gotten: 16,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 20,
+              type: "space",
+              characters: "characters",
+              gotten: 16,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <div>
             {foo &&
                 [
@@ -1808,7 +1811,7 @@ const Component = () => (
             }
         </div>
       `,
-      output: `
+        output: `
         <div>
             {foo &&
                 [
@@ -1818,468 +1821,468 @@ const Component = () => (
             }
         </div>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 20,
-            type: 'space',
-            characters: 'characters',
-            gotten: 16,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 20,
+              type: "space",
+              characters: "characters",
+              gotten: 16,
+            },
           },
-        },
-      ],
-    },
-    {
-    // Multiline ternary
-    // (colon at the end of the first expression)
-      code: `
+        ],
+      },
+      {
+        // Multiline ternary
+        // (colon at the end of the first expression)
+        code: `
         foo ?
             <Foo /> :
         <Bar />
       `,
-      output: `
+        output: `
         foo ?
             <Foo /> :
             <Bar />
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         foo ?
             <Foo /> :
         <></>
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      output: `
+        features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
+        output: `
         foo ?
             <Foo /> :
             <></>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-    // Multiline ternary
-    // (colon on its own line)
-      code: `
+        ],
+      },
+      {
+        // Multiline ternary
+        // (colon on its own line)
+        code: `
         foo ?
             <Foo />
         :
         <Bar />
       `,
-      output: `
+        output: `
         foo ?
             <Foo />
         :
             <Bar />
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-    // Multiline ternary
-    // (first expression on test line, colon at the end of the first expression)
-      code: `
+        ],
+      },
+      {
+        // Multiline ternary
+        // (first expression on test line, colon at the end of the first expression)
+        code: `
         foo ? <Foo /> :
             <Bar />
       `,
-      output: `
+        output: `
         foo ? <Foo /> :
         <Bar />
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 8,
-            type: 'space',
-            characters: 'characters',
-            gotten: 12,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 8,
+              type: "space",
+              characters: "characters",
+              gotten: 12,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         foo ?
             <Foo />
         :
         <></>
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      output: `
+        features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
+        output: `
         foo ?
             <Foo />
         :
             <></>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-    // Multiline ternary
-    // (first expression on test line, colon on its own line)
-      code: `
+        ],
+      },
+      {
+        // Multiline ternary
+        // (first expression on test line, colon on its own line)
+        code: `
         foo ? <Foo />
         :
               <Bar />
       `,
-      output: `
+        output: `
         foo ? <Foo />
         :
         <Bar />
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 8,
-            type: 'space',
-            characters: 'characters',
-            gotten: 14,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 8,
+              type: "space",
+              characters: "characters",
+              gotten: 14,
+            },
           },
-        },
-      ],
-    },
-    {
-    // Multiline ternary
-    // (colon at the end of the first expression, parenthesized first expression)
-      code: `
+        ],
+      },
+      {
+        // Multiline ternary
+        // (colon at the end of the first expression, parenthesized first expression)
+        code: `
         foo ? (
             <Foo />
         ) :
         <Bar />
       `,
-      output: `
+        output: `
         foo ? (
             <Foo />
         ) :
             <Bar />
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         foo ? (
             <Foo />
         ) :
         <></>
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      output: `
+        features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
+        output: `
         foo ? (
             <Foo />
         ) :
             <></>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-    // Multiline ternary
-    // (colon on its own line, parenthesized first expression)
-      code: `
+        ],
+      },
+      {
+        // Multiline ternary
+        // (colon on its own line, parenthesized first expression)
+        code: `
         foo ? (
             <Foo />
         )
         :
         <Bar />
       `,
-      output: `
+        output: `
         foo ? (
             <Foo />
         )
         :
             <Bar />
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-    // Multiline ternary
-    // (colon at the end of the first expression, parenthesized second expression)
-      code: `
+        ],
+      },
+      {
+        // Multiline ternary
+        // (colon at the end of the first expression, parenthesized second expression)
+        code: `
         foo ?
             <Foo /> : (
             <Bar />
             )
       `,
-      output: `
+        output: `
         foo ?
             <Foo /> : (
                 <Bar />
             )
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 16,
-            type: 'space',
-            characters: 'characters',
-            gotten: 12,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 16,
+              type: "space",
+              characters: "characters",
+              gotten: 12,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         foo ?
             <Foo /> : (
             <></>
             )
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      output: `
+        features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
+        output: `
         foo ?
             <Foo /> : (
                 <></>
             )
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 16,
-            type: 'space',
-            characters: 'characters',
-            gotten: 12,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 16,
+              type: "space",
+              characters: "characters",
+              gotten: 12,
+            },
           },
-        },
-      ],
-    },
-    {
-    // Multiline ternary
-    // (colon on its own line, parenthesized second expression)
-      code: `
+        ],
+      },
+      {
+        // Multiline ternary
+        // (colon on its own line, parenthesized second expression)
+        code: `
         foo ?
             <Foo />
         : (
         <Bar />
         )
       `,
-      output: `
+        output: `
         foo ?
             <Foo />
         : (
             <Bar />
         )
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-    // Multiline ternary
-    // (colon indented on its own line, parenthesized second expression)
-      code: `
+        ],
+      },
+      {
+        // Multiline ternary
+        // (colon indented on its own line, parenthesized second expression)
+        code: `
         foo ?
             <Foo />
             : (
             <Bar />
             )
       `,
-      output: `
+        output: `
         foo ?
             <Foo />
             : (
                 <Bar />
             )
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 16,
-            type: 'space',
-            characters: 'characters',
-            gotten: 12,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 16,
+              type: "space",
+              characters: "characters",
+              gotten: 12,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         foo ?
             <Foo />
             : (
             <></>
             )
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      output: `
+        features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
+        output: `
         foo ?
             <Foo />
             : (
                 <></>
             )
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 16,
-            type: 'space',
-            characters: 'characters',
-            gotten: 12,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 16,
+              type: "space",
+              characters: "characters",
+              gotten: 12,
+            },
           },
-        },
-      ],
-    },
-    {
-    // Multiline ternary
-    // (colon at the end of the first expression, both expression parenthesized)
-      code: `
+        ],
+      },
+      {
+        // Multiline ternary
+        // (colon at the end of the first expression, both expression parenthesized)
+        code: `
         foo ? (
         <Foo />
         ) : (
         <Bar />
         )
       `,
-      output: `
+        output: `
         foo ? (
             <Foo />
         ) : (
             <Bar />
         )
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         foo ? (
         <></>
         ) : (
         <></>
         )
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      output: `
+        features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
+        output: `
         foo ? (
             <></>
         ) : (
             <></>
         )
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-    // Multiline ternary
-    // (colon on its own line, both expression parenthesized)
-      code: `
+        ],
+      },
+      {
+        // Multiline ternary
+        // (colon on its own line, both expression parenthesized)
+        code: `
         foo ? (
         <Foo />
         )
@@ -2287,7 +2290,7 @@ const Component = () => (
         <Bar />
         )
       `,
-      output: `
+        output: `
         foo ? (
             <Foo />
         )
@@ -2295,31 +2298,31 @@ const Component = () => (
             <Bar />
         )
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-    // Multiline ternary
-    // (colon on its own line, both expression parenthesized)
-      code: `
+        ],
+      },
+      {
+        // Multiline ternary
+        // (colon on its own line, both expression parenthesized)
+        code: `
         foo ? (
         <Foo />
         )
@@ -2328,7 +2331,7 @@ const Component = () => (
         <Bar />
         )
       `,
-      output: `
+        output: `
         foo ? (
             <Foo />
         )
@@ -2337,29 +2340,29 @@ const Component = () => (
             <Bar />
         )
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         foo ? (
         <></>
         )
@@ -2368,8 +2371,8 @@ const Component = () => (
         <></>
         )
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      output: `
+        features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
+        output: `
         foo ? (
             <></>
         )
@@ -2378,158 +2381,158 @@ const Component = () => (
             <></>
         )
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-    // Multiline ternary
-    // (first expression on test line, colon at the end of the first expression, parenthesized second expression)
-      code: `
+        ],
+      },
+      {
+        // Multiline ternary
+        // (first expression on test line, colon at the end of the first expression, parenthesized second expression)
+        code: `
         foo ? <Foo /> : (
         <Bar />
         )
       `,
-      output: `
+        output: `
         foo ? <Foo /> : (
             <Bar />
         )
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         foo ? <Foo /> : (
         <></>
         )
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      output: `
+        features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
+        output: `
         foo ? <Foo /> : (
             <></>
         )
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-      // Multiline ternary
-      // (first expression on test line, colon on its own line, parenthesized second expression)
-      code: `
+        ],
+      },
+      {
+        // Multiline ternary
+        // (first expression on test line, colon on its own line, parenthesized second expression)
+        code: `
         foo ? <Foo />
         : (
         <Bar />
         )
       `,
-      output: `
+        output: `
         foo ? <Foo />
         : (
             <Bar />
         )
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         foo ? <Foo />
         : (
         <></>
         )
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      output: `
+        features: ["fragment", "no-ts-old"], // TODO: FIXME: remove no-ts-old and fix
+        output: `
         foo ? <Foo />
         : (
             <></>
         )
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <p>
             <div>
                 <SelfClosingTag />Text
           </div>
         </p>
       `,
-      output: `
+        output: `
         <p>
             <div>
                 <SelfClosingTag />Text
             </div>
         </p>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 10,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 10,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         const Component = () => (
           <View
             ListFooterComponent={(
@@ -2541,7 +2544,7 @@ const Component = () => (
           />
         );
       `,
-      output: `
+        output: `
         const Component = () => (
           <View
             ListFooterComponent={(
@@ -2553,21 +2556,21 @@ const Component = () => (
           />
         );
       `,
-      options: [2, { checkAttributes: true }],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        options: [2, { checkAttributes: true }],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
 const Component = () => (
 \t<View
 \t\tListFooterComponent={(
@@ -2579,7 +2582,7 @@ const Component = () => (
 \t/>
 );
     `,
-      output: `
+        output: `
 const Component = () => (
 \t<View
 \t\tListFooterComponent={(
@@ -2591,21 +2594,21 @@ const Component = () => (
 \t/>
 );
     `,
-      options: ['tab', { checkAttributes: true }],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 2,
-            type: 'tab',
-            characters: 'characters',
-            gotten: 0,
+        options: ["tab", { checkAttributes: true }],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 2,
+              type: "tab",
+              characters: "characters",
+              gotten: 0,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         function Foo() {
           return (
             <div>
@@ -2616,7 +2619,7 @@ const Component = () => (
           );
         }
       `,
-      output: `
+        output: `
         function Foo() {
           return (
             <div>
@@ -2627,21 +2630,21 @@ const Component = () => (
           );
         }
       `,
-      options: [2, { indentLogicalExpressions: true }],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 16,
-            type: 'space',
-            characters: 'characters',
-            gotten: 14,
+        options: [2, { indentLogicalExpressions: true }],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 16,
+              type: "space",
+              characters: "characters",
+              gotten: 14,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <span>
             {do {
                 const num = rollDice();
@@ -2649,7 +2652,7 @@ const Component = () => (
             }}
         </span>
       `,
-      output: `
+        output: `
         <span>
             {do {
                 const num = rollDice();
@@ -2657,21 +2660,21 @@ const Component = () => (
             }}
         </span>
       `,
-      features: ['do expressions'],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 16,
-            type: 'space',
-            characters: 'characters',
-            gotten: 20,
+        features: ["do expressions"],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 16,
+              type: "space",
+              characters: "characters",
+              gotten: 20,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <span>
             {(do {
                 const num = rollDice();
@@ -2679,7 +2682,7 @@ const Component = () => (
             })}
         </span>
       `,
-      output: `
+        output: `
         <span>
             {(do {
                 const num = rollDice();
@@ -2687,216 +2690,220 @@ const Component = () => (
             })}
         </span>
       `,
-      features: ['do expressions'],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 16,
-            type: 'space',
-            characters: 'characters',
-            gotten: 20,
+        features: ["do expressions"],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 16,
+              type: "space",
+              characters: "characters",
+              gotten: 20,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <span>
             {do {
             <Thing num={getPurposeOfLife()} />;
             }}
         </span>
       `,
-      features: ['do expressions'],
-      output: `
+        features: ["do expressions"],
+        output: `
         <span>
             {do {
                 <Thing num={getPurposeOfLife()} />;
             }}
         </span>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 16,
-            type: 'space',
-            characters: 'characters',
-            gotten: 12,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 16,
+              type: "space",
+              characters: "characters",
+              gotten: 12,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <span>
             {(do {
             <Thing num={getPurposeOfLife()} />;
             })}
         </span>
       `,
-      output: `
+        output: `
         <span>
             {(do {
                 <Thing num={getPurposeOfLife()} />;
             })}
         </span>
       `,
-      features: ['do expressions'],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 16,
-            type: 'space',
-            characters: 'characters',
-            gotten: 12,
+        features: ["do expressions"],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 16,
+              type: "space",
+              characters: "characters",
+              gotten: 12,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <div>
         text
         </div>
       `,
-      output: `
+        output: `
         <div>
             text
         </div>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    parsers.skipDueToMultiErrorSorting ? [] : {
-      code: `
+        ],
+      },
+      parsers.skipDueToMultiErrorSorting
+        ? []
+        : {
+            code: `
         <div>
           text
         text
         </div>
       `,
-      output: `
+            output: `
         <div>
             text
             text
         </div>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 10,
+            errors: [
+              {
+                messageId: "wrongIndent",
+                data: {
+                  needed: 12,
+                  type: "space",
+                  characters: "characters",
+                  gotten: 10,
+                },
+              },
+              {
+                messageId: "wrongIndent",
+                data: {
+                  needed: 12,
+                  type: "space",
+                  characters: "characters",
+                  gotten: 8,
+                },
+              },
+            ],
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
-          },
-        },
-      ],
-    },
-    parsers.skipDueToMultiErrorSorting ? [] : {
-      code: `
+      parsers.skipDueToMultiErrorSorting
+        ? []
+        : {
+            code: `
         <div>
         \t  text
           \t  text
         </div>
       `,
-      output: `
+            output: `
         <div>
             text
             text
         </div>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+            errors: [
+              {
+                messageId: "wrongIndent",
+                data: {
+                  needed: 12,
+                  type: "space",
+                  characters: "characters",
+                  gotten: 8,
+                },
+              },
+              {
+                messageId: "wrongIndent",
+                data: {
+                  needed: 12,
+                  type: "space",
+                  characters: "characters",
+                  gotten: 10,
+                },
+              },
+            ],
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 10,
-          },
-        },
-      ],
-    },
-    {
-      code: `
+      {
+        code: `
         <div>
         \t\ttext
         </div>
       `,
-      options: ['tab'],
-      output: `
+        options: ["tab"],
+        output: `
         <div>
 \ttext
         </div>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 1,
-            type: 'tab',
-            characters: 'character',
-            gotten: 0,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 1,
+              type: "tab",
+              characters: "character",
+              gotten: 0,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         <>
         aaa
         </>
       `,
-      features: ['fragment'],
-      output: `
+        features: ["fragment"],
+        output: `
         <>
             aaa
         </>
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         const StatelessComponent = () => {
           if (new Date() % 2) {
               return (
@@ -2906,7 +2913,7 @@ const Component = () => (
           return null;
         };
       `,
-      output: `
+        output: `
         const StatelessComponent = () => {
           if (new Date() % 2) {
               return (
@@ -2916,58 +2923,67 @@ const Component = () => (
           return null;
         };
       `,
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 18,
-            gotten: 8,
-            type: 'space',
-            characters: 'characters',
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 18,
+              gotten: 8,
+              type: "space",
+              characters: "characters",
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         function App() {
           return (
             <App />
             );
         }
       `,
-      output: `
+        output: `
         function App() {
           return (
             <App />
           );
         }
       `,
-      options: [2],
-      parserOptions,
-      errors: [{ message: 'Expected indentation of 10 space characters but found 12.' }],
-    },
-    {
-      code: `
+        options: [2],
+        parserOptions,
+        errors: [
+          {
+            message:
+              "Expected indentation of 10 space characters but found 12.",
+          },
+        ],
+      },
+      {
+        code: `
         function App() {
           return (
             <App />
         );
         }
       `,
-      output: `
+        output: `
         function App() {
           return (
             <App />
           );
         }
       `,
-      options: [2],
-      parserOptions,
-      errors: [{ message: 'Expected indentation of 10 space characters but found 8.' }],
-    },
-    {
-      code: `
+        options: [2],
+        parserOptions,
+        errors: [
+          {
+            message: "Expected indentation of 10 space characters but found 8.",
+          },
+        ],
+      },
+      {
+        code: `
         {condition && [
             <Tag key="a" onClick={() => {
               // some code
@@ -2978,7 +2994,7 @@ const Component = () => (
           ]
         }
       `,
-      output: `
+        output: `
         {condition && [
           <Tag key="a" onClick={() => {
               // some code
@@ -2989,20 +3005,22 @@ const Component = () => (
           ]
         }
       `,
-      options: [2],
-      errors: [
-        {
-          message: 'Expected indentation of 10 space characters but found 12.',
-          line: 3,
-        },
-        {
-          message: 'Expected indentation of 10 space characters but found 12.',
-          line: 6,
-        },
-      ],
-    },
-    {
-      code: `
+        options: [2],
+        errors: [
+          {
+            message:
+              "Expected indentation of 10 space characters but found 12.",
+            line: 3,
+          },
+          {
+            message:
+              "Expected indentation of 10 space characters but found 12.",
+            line: 6,
+          },
+        ],
+      },
+      {
+        code: `
         const IndexPage = () => (
           <h1>
         {"Hi people"}
@@ -3010,7 +3028,7 @@ const Component = () => (
         </h1>
         );
       `,
-      output: `
+        output: `
         const IndexPage = () => (
           <h1>
             {"Hi people"}
@@ -3018,40 +3036,40 @@ const Component = () => (
           </h1>
         );
       `,
-      options: [2],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        options: [2],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 10,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 10,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    // Would be nice to handle in one pass, but multipass works fine.
-    {
-      code: `
+        ],
+      },
+      // Would be nice to handle in one pass, but multipass works fine.
+      {
+        code: `
         const IndexPage = () => (
           <h1>
         Hi people
@@ -3060,7 +3078,7 @@ const Component = () => (
         );
       `,
 
-      output: `
+        output: `
         const IndexPage = () => (
           <h1>
             Hi people
@@ -3068,39 +3086,39 @@ const Component = () => (
           </h1>
         );
       `,
-      options: [2],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        options: [2],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 10,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 10,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         const IndexPage = () => (
           <h1>
             Hi people
@@ -3109,7 +3127,7 @@ const Component = () => (
         );
       `,
 
-      output: `
+        output: `
         const IndexPage = () => (
           <h1>
             Hi people
@@ -3117,21 +3135,22 @@ const Component = () => (
           </h1>
         );
       `,
-      options: [2],
-      errors: [
-        {
-          messageId: 'wrongIndent',
-          data: {
-            needed: 12,
-            type: 'space',
-            characters: 'characters',
-            gotten: 8,
+        options: [2],
+        errors: [
+          {
+            messageId: "wrongIndent",
+            data: {
+              needed: 12,
+              type: "space",
+              characters: "characters",
+              gotten: 8,
+            },
           },
-        },
-      ],
-    },
-    semver.satisfies(eslintVersion, '> 4') ? {
-      code: `
+        ],
+      },
+      semver.satisfies(eslintVersion, "> 4")
+        ? {
+            code: `
         import React from 'react';
 
         export default function () {
@@ -3144,8 +3163,8 @@ const Component = () => (
             );
         }
       `,
-      // TODO: remove two spaces from the Test2 output line
-      output: `
+            // TODO: remove two spaces from the Test2 output line
+            output: `
         import React from 'react';
 
         export default function () {
@@ -3158,11 +3177,13 @@ const Component = () => (
             );
         }
       `,
-      options: [4],
-      errors: [
-        { messageId: 'wrongIndent', line: 6 },
-        { messageId: 'wrongIndent', line: 9 },
-      ],
-    } : []
-  )),
+            options: [4],
+            errors: [
+              { messageId: "wrongIndent", line: 6 },
+              { messageId: "wrongIndent", line: 9 },
+            ],
+          }
+        : [],
+    ),
+  ),
 });

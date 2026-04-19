@@ -3,9 +3,9 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
-const getScope = require('./eslint').getScope;
+const getScope = require("./eslint").getScope;
 
 /**
  * Search a particular variable in a list
@@ -45,7 +45,10 @@ function getVariableFromContext(context, node, name) {
       variable = getVariable(scope.childScopes[0].variables, name);
 
       if (!variable && scope.childScopes[0].childScopes.length) {
-        variable = getVariable(scope.childScopes[0].childScopes[0].variables, name);
+        variable = getVariable(
+          scope.childScopes[0].childScopes[0].variables,
+          name,
+        );
       }
     }
 
@@ -71,11 +74,11 @@ function findVariableByName(context, node, name) {
     return null;
   }
 
-  if (variable.defs[0].node.type === 'TypeAlias') {
+  if (variable.defs[0].node.type === "TypeAlias") {
     return variable.defs[0].node.right;
   }
 
-  if (variable.defs[0].type === 'ImportBinding') {
+  if (variable.defs[0].type === "ImportBinding") {
     return variable.defs[0].node;
   }
 

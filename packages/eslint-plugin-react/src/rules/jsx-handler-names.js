@@ -3,20 +3,22 @@
  * @author Jake Marsh
  */
 
-'use strict';
+"use strict";
 
-const minimatch = require('minimatch');
-const docsUrl = require('../util/docsUrl');
-const getText = require('../util/eslint').getText;
-const report = require('../util/report');
+const minimatch = require("minimatch");
+const docsUrl = require("../util/docsUrl");
+const getText = require("../util/eslint").getText;
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  badHandlerName: 'Handler function for {{propKey}} prop key must be a camelCase name beginning with \'{{handlerPrefix}}\' only',
-  badPropKey: 'Prop key for {{propValue}} must begin with \'{{handlerPropPrefix}}\'',
+  badHandlerName:
+    "Handler function for {{propKey}} prop key must be a camelCase name beginning with '{{handlerPrefix}}' only",
+  badPropKey:
+    "Prop key for {{propValue}} must begin with '{{handlerPropPrefix}}'",
 };
 
 function isPrefixDisabled(prefix) {
@@ -24,17 +26,17 @@ function isPrefixDisabled(prefix) {
 }
 
 function isInlineHandler(node) {
-  return node.value.expression.type === 'ArrowFunctionExpression';
+  return node.value.expression.type === "ArrowFunctionExpression";
 }
 
 function getComponentName(node) {
-  if (node.type === 'JSXIdentifier') {
+  if (node.type === "JSXIdentifier") {
     return node.name;
   }
-  if (node.type === 'JSXMemberExpression') {
+  if (node.type === "JSXMemberExpression") {
     return `${getComponentName(node.object)}.${node.property.name}`;
   }
-  if (node.type === 'JSXNamespacedName') {
+  if (node.type === "JSXNamespacedName") {
     return `${node.namespace.name}:${node.name.name}`;
   }
 }
@@ -43,104 +45,116 @@ function getComponentName(node) {
 module.exports = {
   meta: {
     docs: {
-      description: 'Enforce event handler naming conventions in JSX',
-      category: 'Stylistic Issues',
+      description: "Enforce event handler naming conventions in JSX",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('jsx-handler-names'),
+      url: docsUrl("jsx-handler-names"),
     },
 
     messages,
 
-    schema: [{
-      anyOf: [
-        {
-          type: 'object',
-          properties: {
-            eventHandlerPrefix: { type: 'string' },
-            eventHandlerPropPrefix: { type: 'string' },
-            checkLocalVariables: { type: 'boolean' },
-            checkInlineFunction: { type: 'boolean' },
-            ignoreComponentNames: {
-              type: 'array',
-              uniqueItems: true,
-              items: { type: 'string' },
+    schema: [
+      {
+        anyOf: [
+          {
+            type: "object",
+            properties: {
+              eventHandlerPrefix: { type: "string" },
+              eventHandlerPropPrefix: { type: "string" },
+              checkLocalVariables: { type: "boolean" },
+              checkInlineFunction: { type: "boolean" },
+              ignoreComponentNames: {
+                type: "array",
+                uniqueItems: true,
+                items: { type: "string" },
+              },
+            },
+            additionalProperties: false,
+          },
+          {
+            type: "object",
+            properties: {
+              eventHandlerPrefix: { type: "string" },
+              eventHandlerPropPrefix: {
+                type: "boolean",
+                enum: [false],
+              },
+              checkLocalVariables: { type: "boolean" },
+              checkInlineFunction: { type: "boolean" },
+              ignoreComponentNames: {
+                type: "array",
+                uniqueItems: true,
+                items: { type: "string" },
+              },
+            },
+            additionalProperties: false,
+          },
+          {
+            type: "object",
+            properties: {
+              eventHandlerPrefix: {
+                type: "boolean",
+                enum: [false],
+              },
+              eventHandlerPropPrefix: { type: "string" },
+              checkLocalVariables: { type: "boolean" },
+              checkInlineFunction: { type: "boolean" },
+              ignoreComponentNames: {
+                type: "array",
+                uniqueItems: true,
+                items: { type: "string" },
+              },
+            },
+            additionalProperties: false,
+          },
+          {
+            type: "object",
+            properties: {
+              checkLocalVariables: { type: "boolean" },
+            },
+            additionalProperties: false,
+          },
+          {
+            type: "object",
+            properties: {
+              checkInlineFunction: { type: "boolean" },
+            },
+            additionalProperties: false,
+          },
+          {
+            type: "object",
+            properties: {
+              ignoreComponentNames: {
+                type: "array",
+                uniqueItems: true,
+                items: { type: "string" },
+              },
             },
           },
-          additionalProperties: false,
-        }, {
-          type: 'object',
-          properties: {
-            eventHandlerPrefix: { type: 'string' },
-            eventHandlerPropPrefix: {
-              type: 'boolean',
-              enum: [false],
-            },
-            checkLocalVariables: { type: 'boolean' },
-            checkInlineFunction: { type: 'boolean' },
-            ignoreComponentNames: {
-              type: 'array',
-              uniqueItems: true,
-              items: { type: 'string' },
-            },
-          },
-          additionalProperties: false,
-        }, {
-          type: 'object',
-          properties: {
-            eventHandlerPrefix: {
-              type: 'boolean',
-              enum: [false],
-            },
-            eventHandlerPropPrefix: { type: 'string' },
-            checkLocalVariables: { type: 'boolean' },
-            checkInlineFunction: { type: 'boolean' },
-            ignoreComponentNames: {
-              type: 'array',
-              uniqueItems: true,
-              items: { type: 'string' },
-            },
-          },
-          additionalProperties: false,
-        }, {
-          type: 'object',
-          properties: {
-            checkLocalVariables: { type: 'boolean' },
-          },
-          additionalProperties: false,
-        }, {
-          type: 'object',
-          properties: {
-            checkInlineFunction: { type: 'boolean' },
-          },
-          additionalProperties: false,
-        },
-        {
-          type: 'object',
-          properties: {
-            ignoreComponentNames: {
-              type: 'array',
-              uniqueItems: true,
-              items: { type: 'string' },
-            },
-          },
-        },
-      ],
-    }],
+        ],
+      },
+    ],
   },
 
   create(context) {
     const configuration = context.options[0] || {};
 
-    const eventHandlerPrefix = isPrefixDisabled(configuration.eventHandlerPrefix)
+    const eventHandlerPrefix = isPrefixDisabled(
+      configuration.eventHandlerPrefix,
+    )
       ? null
-      : configuration.eventHandlerPrefix || 'handle';
-    const eventHandlerPropPrefix = isPrefixDisabled(configuration.eventHandlerPropPrefix)
+      : configuration.eventHandlerPrefix || "handle";
+    const eventHandlerPropPrefix = isPrefixDisabled(
+      configuration.eventHandlerPropPrefix,
+    )
       ? null
-      : configuration.eventHandlerPropPrefix || 'on';
+      : configuration.eventHandlerPropPrefix || "on";
 
     const EVENT_HANDLER_REGEX = !eventHandlerPrefix
       ? null
-      : new RegExp(`^((props\\.${eventHandlerPropPrefix || ''})|((.*\\.)?${eventHandlerPrefix}))[0-9]*[A-Z].*$`);
+      : new RegExp(
+          `^((props\\.${eventHandlerPropPrefix || ""})|((.*\\.)?${eventHandlerPrefix}))[0-9]*[A-Z].*$`,
+        );
     const PROP_EVENT_HANDLER_REGEX = !eventHandlerPropPrefix
       ? null
       : new RegExp(`^(${eventHandlerPropPrefix}[A-Z].*|ref)$`);
@@ -155,47 +169,52 @@ module.exports = {
       JSXAttribute(node) {
         const componentName = getComponentName(node.parent.name);
 
-        const isComponentNameIgnored = ignoreComponentNames.some((ignoredComponentNamePattern) => minimatch(
-          componentName,
-          ignoredComponentNamePattern
-        ));
+        const isComponentNameIgnored = ignoreComponentNames.some(
+          (ignoredComponentNamePattern) =>
+            minimatch(componentName, ignoredComponentNamePattern),
+        );
 
         if (
-          !node.value
-          || !node.value.expression
-          || (!checkInlineFunction && isInlineHandler(node))
-          || (
-            !checkLocal
-            && (isInlineHandler(node)
-              ? !node.value.expression.body.callee || !node.value.expression.body.callee.object
-              : !node.value.expression.object
-            )
-          )
-          || isComponentNameIgnored
+          !node.value ||
+          !node.value.expression ||
+          (!checkInlineFunction && isInlineHandler(node)) ||
+          (!checkLocal &&
+            (isInlineHandler(node)
+              ? !node.value.expression.body.callee ||
+                !node.value.expression.body.callee.object
+              : !node.value.expression.object)) ||
+          isComponentNameIgnored
         ) {
           return;
         }
 
-        const propKey = typeof node.name === 'object' ? node.name.name : node.name;
+        const propKey =
+          typeof node.name === "object" ? node.name.name : node.name;
         const expression = node.value.expression;
         const propValue = getText(
           context,
-          checkInlineFunction && isInlineHandler(node) ? expression.body.callee : expression
-        ).replace(/\s*/g, '').replace(/^this\.|.*::/, '');
+          checkInlineFunction && isInlineHandler(node)
+            ? expression.body.callee
+            : expression,
+        )
+          .replace(/\s*/g, "")
+          .replace(/^this\.|.*::/, "");
 
-        if (propKey === 'ref') {
+        if (propKey === "ref") {
           return;
         }
 
-        const propIsEventHandler = PROP_EVENT_HANDLER_REGEX && PROP_EVENT_HANDLER_REGEX.test(propKey);
-        const propFnIsNamedCorrectly = EVENT_HANDLER_REGEX && EVENT_HANDLER_REGEX.test(propValue);
+        const propIsEventHandler =
+          PROP_EVENT_HANDLER_REGEX && PROP_EVENT_HANDLER_REGEX.test(propKey);
+        const propFnIsNamedCorrectly =
+          EVENT_HANDLER_REGEX && EVENT_HANDLER_REGEX.test(propValue);
 
         if (
-          propIsEventHandler
-          && propFnIsNamedCorrectly !== null
-          && !propFnIsNamedCorrectly
+          propIsEventHandler &&
+          propFnIsNamedCorrectly !== null &&
+          !propFnIsNamedCorrectly
         ) {
-          report(context, messages.badHandlerName, 'badHandlerName', {
+          report(context, messages.badHandlerName, "badHandlerName", {
             node,
             data: {
               propKey,
@@ -203,11 +222,11 @@ module.exports = {
             },
           });
         } else if (
-          propFnIsNamedCorrectly
-          && propIsEventHandler !== null
-          && !propIsEventHandler
+          propFnIsNamedCorrectly &&
+          propIsEventHandler !== null &&
+          !propIsEventHandler
         ) {
-          report(context, messages.badPropKey, 'badPropKey', {
+          report(context, messages.badPropKey, "badPropKey", {
             node,
             data: {
               propValue,

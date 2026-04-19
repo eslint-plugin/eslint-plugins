@@ -3,20 +3,20 @@
  * @author David Petersen
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/style-prop-object');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/style-prop-object");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('style-prop-object', rule, {
+ruleTester.run("style-prop-object", rule, {
   valid: parsers.all([
     {
       code: '<div style={{ color: "red" }} />',
@@ -95,10 +95,10 @@ ruleTester.run('style-prop-object', rule, {
         const styles = Object.assign({ color: 'red' }, mystyles);
         React.createElement("div", { style: styles });
       `,
-      parserOptions: Object.assign({ sourceType: 'module' }, parserOptions),
+      parserOptions: Object.assign({ sourceType: "module" }, parserOptions),
     },
     {
-      code: '<div style></div>',
+      code: "<div style></div>",
     },
     {
       code: `
@@ -126,7 +126,7 @@ ruleTester.run('style-prop-object', rule, {
       `,
     },
     {
-      code: '<div style={undefined}></div>',
+      code: "<div style={undefined}></div>",
     },
     {
       code: `
@@ -157,7 +157,7 @@ ruleTester.run('style-prop-object', rule, {
       `,
     },
     {
-      code: '<div style={null}></div>',
+      code: "<div style={null}></div>",
     },
     {
       code: `
@@ -190,44 +190,44 @@ ruleTester.run('style-prop-object', rule, {
     },
     {
       code: '<MyComponent style="myStyle" />',
-      options: [{ allow: ['MyComponent'] }],
+      options: [{ allow: ["MyComponent"] }],
     },
     {
       code: 'React.createElement(MyComponent, { style: "mySpecialStyle" })',
-      options: [{ allow: ['MyComponent'] }],
+      options: [{ allow: ["MyComponent"] }],
     },
   ]),
   invalid: parsers.all([
     {
-      code: '<div style="color: \'red\'" />',
+      code: "<div style=\"color: 'red'\" />",
       errors: [
         {
-          messageId: 'stylePropNotObject',
+          messageId: "stylePropNotObject",
           line: 1,
           column: 6,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
       ],
     },
     {
-      code: '<Hello style="color: \'red\'" />',
+      code: "<Hello style=\"color: 'red'\" />",
       errors: [
         {
-          messageId: 'stylePropNotObject',
+          messageId: "stylePropNotObject",
           line: 1,
           column: 8,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
       ],
     },
     {
-      code: '<div style={true} />',
+      code: "<div style={true} />",
       errors: [
         {
-          messageId: 'stylePropNotObject',
+          messageId: "stylePropNotObject",
           line: 1,
           column: 6,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
       ],
     },
@@ -240,10 +240,10 @@ ruleTester.run('style-prop-object', rule, {
       `,
       errors: [
         {
-          messageId: 'stylePropNotObject',
+          messageId: "stylePropNotObject",
           line: 4,
           column: 30,
-          type: 'Identifier',
+          type: "Identifier",
         },
       ],
     },
@@ -256,10 +256,10 @@ ruleTester.run('style-prop-object', rule, {
       `,
       errors: [
         {
-          messageId: 'stylePropNotObject',
+          messageId: "stylePropNotObject",
           line: 4,
           column: 32,
-          type: 'Identifier',
+          type: "Identifier",
         },
       ],
     },
@@ -272,34 +272,34 @@ ruleTester.run('style-prop-object', rule, {
       `,
       errors: [
         {
-          messageId: 'stylePropNotObject',
+          messageId: "stylePropNotObject",
           line: 4,
           column: 30,
-          type: 'Identifier',
+          type: "Identifier",
         },
       ],
     },
     {
       code: '<MyComponent style="myStyle" />',
-      options: [{ allow: ['MyOtherComponent'] }],
+      options: [{ allow: ["MyOtherComponent"] }],
       errors: [
         {
-          messageId: 'stylePropNotObject',
+          messageId: "stylePropNotObject",
           line: 1,
           column: 14,
-          type: 'JSXAttribute',
+          type: "JSXAttribute",
         },
       ],
     },
     {
       code: 'React.createElement(MyComponent, { style: "mySpecialStyle" })',
-      options: [{ allow: ['MyOtherComponent'] }],
+      options: [{ allow: ["MyOtherComponent"] }],
       errors: [
         {
-          messageId: 'stylePropNotObject',
+          messageId: "stylePropNotObject",
           line: 1,
           column: 43,
-          type: 'Literal',
+          type: "Literal",
         },
       ],
     },

@@ -3,11 +3,11 @@
  * @author Glen Mailer
  */
 
-'use strict';
+"use strict";
 
-const pragmaUtil = require('../util/pragma');
-const docsUrl = require('../util/docsUrl');
-const markVariableAsUsed = require('../util/eslint').markVariableAsUsed;
+const pragmaUtil = require("../util/pragma");
+const docsUrl = require("../util/docsUrl");
+const markVariableAsUsed = require("../util/eslint").markVariableAsUsed;
 
 // ------------------------------------------------------------------------------
 // Rule Definition
@@ -18,10 +18,10 @@ module.exports = {
   // eslint-disable-next-line eslint-plugin/prefer-message-ids -- https://github.com/not-an-aardvark/eslint-plugin-eslint-plugin/issues/292
   meta: {
     docs: {
-      description: 'Disallow React to be incorrectly marked as unused',
-      category: 'Best Practices',
+      description: "Disallow React to be incorrectly marked as unused",
+      category: "Best Practices",
       recommended: true,
-      url: docsUrl('jsx-uses-react'),
+      url: docsUrl("jsx-uses-react"),
     },
     schema: [],
   },

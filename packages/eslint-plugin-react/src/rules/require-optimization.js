@@ -3,42 +3,46 @@
  * @author Evgueni Naverniouk
  */
 
-'use strict';
+"use strict";
 
-const Components = require('../util/Components');
-const componentUtil = require('../util/componentUtil');
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
-const getScope = require('../util/eslint').getScope;
+const Components = require("../util/Components");
+const componentUtil = require("../util/componentUtil");
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
+const getScope = require("../util/eslint").getScope;
 
 const messages = {
-  noShouldComponentUpdate: 'Component is not optimized. Please add a shouldComponentUpdate method.',
+  noShouldComponentUpdate:
+    "Component is not optimized. Please add a shouldComponentUpdate method.",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Enforce React components to have a shouldComponentUpdate method',
-      category: 'Best Practices',
+      description:
+        "Enforce React components to have a shouldComponentUpdate method",
+      category: "Best Practices",
       recommended: false,
-      url: docsUrl('require-optimization'),
+      url: docsUrl("require-optimization"),
     },
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        allowDecorators: {
-          type: 'array',
-          items: {
-            type: 'string',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          allowDecorators: {
+            type: "array",
+            items: {
+              type: "string",
+            },
           },
         },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create: Components.detect((context, components) => {
@@ -54,15 +58,16 @@ module.exports = {
       if (node.decorators && node.decorators.length) {
         for (let i = 0, l = node.decorators.length; i < l; i++) {
           if (
-            node.decorators[i].expression
-            && node.decorators[i].expression.callee
-            && node.decorators[i].expression.callee.object
-            && node.decorators[i].expression.callee.object.name === 'reactMixin'
-            && node.decorators[i].expression.callee.property
-            && node.decorators[i].expression.callee.property.name === 'decorate'
-            && node.decorators[i].expression.arguments
-            && node.decorators[i].expression.arguments.length
-            && node.decorators[i].expression.arguments[0].name === 'PureRenderMixin'
+            node.decorators[i].expression &&
+            node.decorators[i].expression.callee &&
+            node.decorators[i].expression.callee.object &&
+            node.decorators[i].expression.callee.object.name === "reactMixin" &&
+            node.decorators[i].expression.callee.property &&
+            node.decorators[i].expression.callee.property.name === "decorate" &&
+            node.decorators[i].expression.arguments &&
+            node.decorators[i].expression.arguments.length &&
+            node.decorators[i].expression.arguments[0].name ===
+              "PureRenderMixin"
           ) {
             return true;
           }
@@ -84,10 +89,7 @@ module.exports = {
         for (let i = 0; i < allowLength; i++) {
           for (let j = 0, l = node.decorators.length; j < l; j++) {
             const expression = node.decorators[j].expression;
-            if (
-              expression
-              && expression.name === allowDecorators[i]
-            ) {
+            if (expression && expression.name === allowDecorators[i]) {
               return true;
             }
           }
@@ -103,7 +105,7 @@ module.exports = {
      * @returns {boolean} True if we are declaring a shouldComponentUpdate method, false if not.
      */
     function isSCUDeclared(node) {
-      return !!node && node.name === 'shouldComponentUpdate';
+      return !!node && node.name === "shouldComponentUpdate";
     }
 
     /**
@@ -115,18 +117,17 @@ module.exports = {
       let hasPR = false;
       if (node.value && node.value.elements) {
         for (let i = 0, l = node.value.elements.length; i < l; i++) {
-          if (node.value.elements[i] && node.value.elements[i].name === 'PureRenderMixin') {
+          if (
+            node.value.elements[i] &&
+            node.value.elements[i].name === "PureRenderMixin"
+          ) {
             hasPR = true;
             break;
           }
         }
       }
 
-      return (
-        !!node
-        && node.key.name === 'mixins'
-        && hasPR
-      );
+      return !!node && node.key.name === "mixins" && hasPR;
     }
 
     /**
@@ -144,9 +145,14 @@ module.exports = {
      * @param {Object} component The component to process
      */
     function reportMissingOptimization(component) {
-      report(context, messages.noShouldComponentUpdate, 'noShouldComponentUpdate', {
-        node: component.node,
-      });
+      report(
+        context,
+        messages.noShouldComponentUpdate,
+        "noShouldComponentUpdate",
+        {
+          node: component.node,
+        },
+      );
     }
 
     /**
@@ -159,7 +165,7 @@ module.exports = {
       let scope = getScope(context, node);
       while (scope) {
         blockNode = scope.block;
-        if (blockNode && blockNode.type === 'ClassDeclaration') {
+        if (blockNode && blockNode.type === "ClassDeclaration") {
           return true;
         }
         scope = scope.upper;
@@ -179,11 +185,13 @@ module.exports = {
       },
 
       ClassDeclaration(node) {
-        if (!(
-          hasPureRenderDecorator(node)
-          || hasCustomDecorator(node)
-          || componentUtil.isPureComponent(node, context)
-        )) {
+        if (
+          !(
+            hasPureRenderDecorator(node) ||
+            hasCustomDecorator(node) ||
+            componentUtil.isPureComponent(node, context)
+          )
+        ) {
           return;
         }
         markSCUAsDeclared(node);
@@ -216,16 +224,17 @@ module.exports = {
 
       ObjectExpression(node) {
         // Search for the shouldComponentUpdate declaration
-        const found = node.properties.some((property) => (
-          property.key
-          && (isSCUDeclared(property.key) || isPureRenderDeclared(property))
-        ));
+        const found = node.properties.some(
+          (property) =>
+            property.key &&
+            (isSCUDeclared(property.key) || isPureRenderDeclared(property)),
+        );
         if (found) {
           markSCUAsDeclared(node);
         }
       },
 
-      'Program:exit'() {
+      "Program:exit"() {
         // Report missing shouldComponentUpdate for all components
         Object.values(components.list())
           .filter((component) => !component.hasSCU)

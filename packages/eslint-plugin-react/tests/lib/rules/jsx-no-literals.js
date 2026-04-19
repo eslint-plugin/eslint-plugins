@@ -4,20 +4,20 @@
  * @author David Buchan-Swanson
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-no-literals');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-no-literals");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -28,7 +28,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('jsx-no-literals', rule, {
+ruleTester.run("jsx-no-literals", rule, {
   valid: parsers.all([
     {
       code: `
@@ -45,7 +45,7 @@ ruleTester.run('jsx-no-literals', rule, {
       options: [
         {
           noStrings: true,
-          allowedStrings: ['button', 'submit'],
+          allowedStrings: ["button", "submit"],
         },
       ],
     },
@@ -74,7 +74,7 @@ ruleTester.run('jsx-no-literals', rule, {
           }
         }
       `,
-      features: ['fragment'],
+      features: ["fragment"],
     },
     {
       code: `
@@ -161,23 +161,23 @@ ruleTester.run('jsx-no-literals', rule, {
       options: [{ noStrings: true, ignoreProps: true }],
     },
     {
-      code: '<Foo bar={true} />',
+      code: "<Foo bar={true} />",
       options: [{ noStrings: true }],
     },
     {
-      code: '<Foo bar={false} />',
+      code: "<Foo bar={false} />",
       options: [{ noStrings: true }],
     },
     {
-      code: '<Foo bar={100} />',
+      code: "<Foo bar={100} />",
       options: [{ noStrings: true }],
     },
     {
-      code: '<Foo bar={null} />',
+      code: "<Foo bar={null} />",
       options: [{ noStrings: true }],
     },
     {
-      code: '<Foo bar={{}} />',
+      code: "<Foo bar={{}} />",
       options: [{ noStrings: true }],
     },
     {
@@ -210,7 +210,7 @@ ruleTester.run('jsx-no-literals', rule, {
           }
         }
       `,
-      options: [{ allowedStrings: ['asdf'] }],
+      options: [{ allowedStrings: ["asdf"] }],
     },
     {
       code: `
@@ -220,7 +220,7 @@ ruleTester.run('jsx-no-literals', rule, {
           }
         }
       `,
-      options: [{ noStrings: false, allowedStrings: ['asdf'] }],
+      options: [{ noStrings: false, allowedStrings: ["asdf"] }],
     },
     {
       code: `
@@ -230,7 +230,7 @@ ruleTester.run('jsx-no-literals', rule, {
           }
         }
       `,
-      options: [{ noStrings: true, allowedStrings: ['&nbsp;'] }],
+      options: [{ noStrings: true, allowedStrings: ["&nbsp;"] }],
     },
     {
       code: `
@@ -244,7 +244,7 @@ ruleTester.run('jsx-no-literals', rule, {
           }
         }
       `,
-      options: [{ noStrings: true, allowedStrings: ['&nbsp;'] }],
+      options: [{ noStrings: true, allowedStrings: ["&nbsp;"] }],
     },
     {
       code: `
@@ -254,7 +254,7 @@ ruleTester.run('jsx-no-literals', rule, {
           }
         }
       `,
-      options: [{ noStrings: true, allowedStrings: ['foo: ', '*'] }],
+      options: [{ noStrings: true, allowedStrings: ["foo: ", "*"] }],
     },
     {
       code: `
@@ -264,7 +264,7 @@ ruleTester.run('jsx-no-literals', rule, {
           }
         }
       `,
-      options: [{ noStrings: true, allowedStrings: ['   foo   '] }],
+      options: [{ noStrings: true, allowedStrings: ["   foo   "] }],
     },
     {
       code: `
@@ -288,36 +288,40 @@ ruleTester.run('jsx-no-literals', rule, {
       code: `
         <div>&mdash;</div>
       `,
-      options: [{ noStrings: true, allowedStrings: ['&mdash;', '—'] }],
+      options: [{ noStrings: true, allowedStrings: ["&mdash;", "—"] }],
     },
     {
       code: `
         <div>—</div>
       `,
-      options: [{ noStrings: true, allowedStrings: ['&mdash;', '—'] }],
+      options: [{ noStrings: true, allowedStrings: ["&mdash;", "—"] }],
     },
     {
       code: `
         <img src="image.jpg" alt="text" />
       `,
-      options: [{ restrictedAttributes: ['className', 'id'] }],
+      options: [{ restrictedAttributes: ["className", "id"] }],
     },
     {
       code: `
         <div className="allowed" />
       `,
-      options: [{ restrictedAttributes: ['className'], allowedStrings: ['allowed'] }],
+      options: [
+        { restrictedAttributes: ["className"], allowedStrings: ["allowed"] },
+      ],
     },
     {
       code: `
         <div className="test" title="hello" />
       `,
-      options: [{
-        noStrings: true,
-        ignoreProps: true,
-        restrictedAttributes: ['className'],
-        allowedStrings: ['test'],
-      }],
+      options: [
+        {
+          noStrings: true,
+          ignoreProps: true,
+          restrictedAttributes: ["className"],
+          allowedStrings: ["test"],
+        },
+      ],
     },
     {
       code: `
@@ -341,7 +345,13 @@ ruleTester.run('jsx-no-literals', rule, {
       code: `
         <T>foo <div>{'bar'}</div></T>
       `,
-      options: [{ elementOverrides: { T: { allowElement: true, applyToNestedElements: false } } }],
+      options: [
+        {
+          elementOverrides: {
+            T: { allowElement: true, applyToNestedElements: false },
+          },
+        },
+      ],
     },
     {
       code: `
@@ -362,7 +372,13 @@ ruleTester.run('jsx-no-literals', rule, {
       code: `
         <T>{2}<div>{'foo'}</div></T>
       `,
-      options: [{ elementOverrides: { T: { noStrings: true, applyToNestedElements: false } } }],
+      options: [
+        {
+          elementOverrides: {
+            T: { noStrings: true, applyToNestedElements: false },
+          },
+        },
+      ],
     },
     {
       code: `
@@ -371,19 +387,25 @@ ruleTester.run('jsx-no-literals', rule, {
           <T>foo</T>
         </div>
       `,
-      options: [{ elementOverrides: { T: { allowedStrings: ['foo'] } } }],
+      options: [{ elementOverrides: { T: { allowedStrings: ["foo"] } } }],
     },
     {
       code: `
         <T>foo<div>foo</div></T>
       `,
-      options: [{ elementOverrides: { T: { allowedStrings: ['foo'] } } }],
+      options: [{ elementOverrides: { T: { allowedStrings: ["foo"] } } }],
     },
     {
       code: `
         <T>foo<div>{'foo'}</div></T>
       `,
-      options: [{ elementOverrides: { T: { allowedStrings: ['foo'], applyToNestedElements: false } } }],
+      options: [
+        {
+          elementOverrides: {
+            T: { allowedStrings: ["foo"], applyToNestedElements: false },
+          },
+        },
+      ],
     },
     {
       code: `
@@ -392,19 +414,40 @@ ruleTester.run('jsx-no-literals', rule, {
           <T foo="bar" />
         </div>
       `,
-      options: [{ noStrings: true, elementOverrides: { T: { noStrings: true, ignoreProps: true } } }],
+      options: [
+        {
+          noStrings: true,
+          elementOverrides: { T: { noStrings: true, ignoreProps: true } },
+        },
+      ],
     },
     {
       code: `
         <T foo="bar"><div foo="bar" /></T>
       `,
-      options: [{ noStrings: true, elementOverrides: { T: { noStrings: true, ignoreProps: true } } }],
+      options: [
+        {
+          noStrings: true,
+          elementOverrides: { T: { noStrings: true, ignoreProps: true } },
+        },
+      ],
     },
     {
       code: `
         <T foo="bar"><div foo={2} /></T>
       `,
-      options: [{ noStrings: true, elementOverrides: { T: { noStrings: true, ignoreProps: true, applyToNestedElements: false } } }],
+      options: [
+        {
+          noStrings: true,
+          elementOverrides: {
+            T: {
+              noStrings: true,
+              ignoreProps: true,
+              applyToNestedElements: false,
+            },
+          },
+        },
+      ],
     },
     {
       code: `
@@ -425,13 +468,26 @@ ruleTester.run('jsx-no-literals', rule, {
       code: `
         <T foo={2}><div foo="foo" /></T>
       `,
-      options: [{ elementOverrides: { T: { noAttributeStrings: true, applyToNestedElements: false } } }],
+      options: [
+        {
+          elementOverrides: {
+            T: { noAttributeStrings: true, applyToNestedElements: false },
+          },
+        },
+      ],
     },
     {
       code: `
         <T>foo<U>foo</U></T>
       `,
-      options: [{ elementOverrides: { T: { allowedStrings: ['foo'] }, U: { allowedStrings: ['foo'] } } }],
+      options: [
+        {
+          elementOverrides: {
+            T: { allowedStrings: ["foo"] },
+            U: { allowedStrings: ["foo"] },
+          },
+        },
+      ],
     },
     {
       code: `
@@ -478,14 +534,14 @@ ruleTester.run('jsx-no-literals', rule, {
       code: `
         <T.U>foo</T.U>
       `,
-      options: [{ elementOverrides: { 'T.U': { allowElement: true } } }],
+      options: [{ elementOverrides: { "T.U": { allowElement: true } } }],
     },
     {
       code: `
         import { T as U } from 'foo';
         <U.U>foo</U.U>
       `,
-      options: [{ elementOverrides: { 'T.U': { allowElement: true } } }],
+      options: [{ elementOverrides: { "T.U": { allowElement: true } } }],
     },
     {
       code: `
@@ -497,7 +553,9 @@ ruleTester.run('jsx-no-literals', rule, {
       code: `
         <React.Fragment>foo</React.Fragment>
       `,
-      options: [{ elementOverrides: { 'React.Fragment': { allowElement: true } } }],
+      options: [
+        { elementOverrides: { "React.Fragment": { allowElement: true } } },
+      ],
     },
     {
       code: `
@@ -513,12 +571,14 @@ ruleTester.run('jsx-no-literals', rule, {
           <Image src="photo.jpg" />
         </div>
       `,
-      options: [{
-        elementOverrides: {
-          Input: { restrictedAttributes: ['placeholder'] },
-          Button: { restrictedAttributes: ['type'] },
+      options: [
+        {
+          elementOverrides: {
+            Input: { restrictedAttributes: ["placeholder"] },
+            Button: { restrictedAttributes: ["type"] },
+          },
         },
-      }],
+      ],
     },
     {
       code: `
@@ -526,23 +586,27 @@ ruleTester.run('jsx-no-literals', rule, {
           <Button className="btn" />
         </div>
       `,
-      options: [{
-        restrictedAttributes: ['className'],
-        elementOverrides: {
-          Button: { restrictedAttributes: ['disabled'] },
+      options: [
+        {
+          restrictedAttributes: ["className"],
+          elementOverrides: {
+            Button: { restrictedAttributes: ["disabled"] },
+          },
         },
-      }],
+      ],
     },
     {
       code: `
         <Button className="btn" />
       `,
-      options: [{
-        noAttributeStrings: true,
-        elementOverrides: {
-          Button: { restrictedAttributes: ['type'] },
+      options: [
+        {
+          noAttributeStrings: true,
+          elementOverrides: {
+            Button: { restrictedAttributes: ["type"] },
+          },
         },
-      }],
+      ],
     },
   ]),
 
@@ -557,8 +621,8 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       errors: [
         {
-          messageId: 'literalNotInJSXExpression',
-          data: { text: 'test' },
+          messageId: "literalNotInJSXExpression",
+          data: { text: "test" },
         },
       ],
     },
@@ -570,11 +634,11 @@ ruleTester.run('jsx-no-literals', rule, {
           }
         }
       `,
-      features: ['fragment'],
+      features: ["fragment"],
       errors: [
         {
-          messageId: 'literalNotInJSXExpression',
-          data: { text: 'test' },
+          messageId: "literalNotInJSXExpression",
+          data: { text: "test" },
         },
       ],
     },
@@ -589,8 +653,8 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       errors: [
         {
-          messageId: 'literalNotInJSXExpression',
-          data: { text: 'test' },
+          messageId: "literalNotInJSXExpression",
+          data: { text: "test" },
         },
       ],
     },
@@ -605,8 +669,8 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       errors: [
         {
-          messageId: 'literalNotInJSXExpression',
-          data: { text: 'test' },
+          messageId: "literalNotInJSXExpression",
+          data: { text: "test" },
         },
       ],
     },
@@ -621,8 +685,8 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       errors: [
         {
-          messageId: 'literalNotInJSXExpression',
-          data: { text: 'hello' },
+          messageId: "literalNotInJSXExpression",
+          data: { text: "hello" },
         },
       ],
     },
@@ -640,8 +704,8 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       errors: [
         {
-          messageId: 'literalNotInJSXExpression',
-          data: { text: 'asdjfl' },
+          messageId: "literalNotInJSXExpression",
+          data: { text: "asdjfl" },
         },
       ],
     },
@@ -661,7 +725,7 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       errors: [
         {
-          messageId: 'literalNotInJSXExpression',
+          messageId: "literalNotInJSXExpression",
           data: {
             text: `asdjfl
                 test
@@ -686,8 +750,8 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       errors: [
         {
-          messageId: 'literalNotInJSXExpression',
-          data: { text: 'test' },
+          messageId: "literalNotInJSXExpression",
+          data: { text: "test" },
         },
       ],
     },
@@ -700,12 +764,12 @@ ruleTester.run('jsx-no-literals', rule, {
       options: [{ noStrings: true, ignoreProps: false }],
       errors: [
         {
-          messageId: 'invalidPropValue',
+          messageId: "invalidPropValue",
           data: { text: 'bar="test"' },
         },
         {
-          messageId: 'noStringsInJSX',
-          data: { text: '\'Test\'' },
+          messageId: "noStringsInJSX",
+          data: { text: "'Test'" },
         },
       ],
     },
@@ -718,12 +782,12 @@ ruleTester.run('jsx-no-literals', rule, {
       options: [{ noStrings: true, ignoreProps: false }],
       errors: [
         {
-          messageId: 'invalidPropValue',
+          messageId: "invalidPropValue",
           data: { text: 'bar="test"' },
         },
         {
-          messageId: 'noStringsInJSX',
-          data: { text: '\'Test\'' },
+          messageId: "noStringsInJSX",
+          data: { text: "'Test'" },
         },
       ],
     },
@@ -736,12 +800,12 @@ ruleTester.run('jsx-no-literals', rule, {
       options: [{ noStrings: true, ignoreProps: false }],
       errors: [
         {
-          messageId: 'invalidPropValue',
+          messageId: "invalidPropValue",
           data: { text: 'bar="test"' },
         },
         {
-          messageId: 'noStringsInJSX',
-          data: { text: 'Test' },
+          messageId: "noStringsInJSX",
+          data: { text: "Test" },
         },
       ],
     },
@@ -754,82 +818,82 @@ ruleTester.run('jsx-no-literals', rule, {
       options: [{ noStrings: true }],
       errors: [
         {
-          messageId: 'noStringsInJSX',
-          data: { text: '`Test`' },
+          messageId: "noStringsInJSX",
+          data: { text: "`Test`" },
         },
       ],
     },
     {
-      code: '<Foo bar={`Test`} />',
+      code: "<Foo bar={`Test`} />",
       options: [{ noStrings: true, ignoreProps: false }],
       errors: [
         {
-          messageId: 'noStringsInJSX',
-          data: { text: '`Test`' },
+          messageId: "noStringsInJSX",
+          data: { text: "`Test`" },
         },
       ],
     },
     /* eslint-disable no-template-curly-in-string */
     {
-      code: '<Foo bar={`${baz}`} />',
+      code: "<Foo bar={`${baz}`} />",
       options: [{ noStrings: true, ignoreProps: false }],
       errors: [
         {
-          messageId: 'noStringsInJSX',
-          data: { text: '`${baz}`' },
+          messageId: "noStringsInJSX",
+          data: { text: "`${baz}`" },
         },
       ],
     },
     {
-      code: '<Foo bar={`Test ${baz}`} />',
+      code: "<Foo bar={`Test ${baz}`} />",
       options: [{ noStrings: true, ignoreProps: false }],
       errors: [
         {
-          messageId: 'noStringsInJSX',
-          data: { text: '`Test ${baz}`' },
+          messageId: "noStringsInJSX",
+          data: { text: "`Test ${baz}`" },
         },
       ],
     },
     /* eslint-enable no-template-curly-in-string */
     {
-      code: '<Foo bar={`foo` + \'bar\'} />',
+      code: "<Foo bar={`foo` + 'bar'} />",
       options: [{ noStrings: true, ignoreProps: false }],
       errors: [
         {
-          messageId: 'noStringsInJSX',
-          data: { text: '`foo`' },
+          messageId: "noStringsInJSX",
+          data: { text: "`foo`" },
         },
         {
-          messageId: 'noStringsInJSX',
-          data: { text: '\'bar\'' },
+          messageId: "noStringsInJSX",
+          data: { text: "'bar'" },
         },
       ],
     },
     {
-      code: '<Foo bar={`foo` + `bar`} />',
+      code: "<Foo bar={`foo` + `bar`} />",
       options: [{ noStrings: true, ignoreProps: false }],
       errors: [
         {
-          messageId: 'noStringsInJSX',
-          data: { text: '`foo`' },
+          messageId: "noStringsInJSX",
+          data: { text: "`foo`" },
         },
         {
-          messageId: 'noStringsInJSX',
-          data: { text: '`bar`' },
+          messageId: "noStringsInJSX",
+          data: { text: "`bar`" },
         },
       ],
     },
     {
-      code: '<Foo bar={\'foo\' + `bar`} />',
+      code: "<Foo bar={'foo' + `bar`} />",
       options: [{ noStrings: true, ignoreProps: false }],
       errors: [
         {
-          messageId: 'noStringsInJSX',
-          data: { text: '\'foo\'' },
+          messageId: "noStringsInJSX",
+          data: { text: "'foo'" },
         },
         {
-          messageId: 'noStringsInJSX',
-          data: { text: '`bar`' },
+          messageId: "noStringsInJSX",
+          data: { text: "`bar`" },
         },
       ],
     },
@@ -841,25 +905,27 @@ ruleTester.run('jsx-no-literals', rule, {
           }
         }
       `,
-      options: [{ noStrings: true, allowedStrings: ['asd'], ignoreProps: false }],
+      options: [
+        { noStrings: true, allowedStrings: ["asd"], ignoreProps: false },
+      ],
       errors: [
         {
-          messageId: 'noStringsInJSX',
-          data: { text: '\'foo\'' },
+          messageId: "noStringsInJSX",
+          data: { text: "'foo'" },
         },
         {
-          messageId: 'noStringsInJSX',
-          data: { text: 'asdf' },
+          messageId: "noStringsInJSX",
+          data: { text: "asdf" },
         },
       ],
     },
     {
-      code: '<Foo bar={\'bar\'} />',
+      code: "<Foo bar={'bar'} />",
       options: [{ noStrings: true, ignoreProps: false }],
       errors: [
         {
-          messageId: 'noStringsInJSX',
-          data: { text: '\'bar\'' },
+          messageId: "noStringsInJSX",
+          data: { text: "'bar'" },
         },
       ],
     },
@@ -870,18 +936,18 @@ ruleTester.run('jsx-no-literals', rule, {
       options: [{ noAttributeStrings: true }],
       errors: [
         {
-          messageId: 'noStringsInAttributes',
-          data: { text: '\'blank image\'' },
+          messageId: "noStringsInAttributes",
+          data: { text: "'blank image'" },
         },
       ],
     },
     {
-      code: 'export const WithChildren = ({}) => <div>baz bob</div>;',
+      code: "export const WithChildren = ({}) => <div>baz bob</div>;",
       options: [{ noAttributeStrings: true }],
       errors: [
         {
-          messageId: 'literalNotInJSXExpression',
-          data: { text: 'baz bob' },
+          messageId: "literalNotInJSXExpression",
+          data: { text: "baz bob" },
         },
       ],
     },
@@ -890,7 +956,7 @@ ruleTester.run('jsx-no-literals', rule, {
       options: [{ noAttributeStrings: true }],
       errors: [
         {
-          messageId: 'noStringsInAttributes',
+          messageId: "noStringsInAttributes",
           data: { text: '"foo bar"' },
         },
       ],
@@ -904,12 +970,12 @@ ruleTester.run('jsx-no-literals', rule, {
       options: [{ noAttributeStrings: true }],
       errors: [
         {
-          messageId: 'noStringsInAttributes',
+          messageId: "noStringsInAttributes",
           data: { text: '"foo bar"' },
         },
         {
-          messageId: 'literalNotInJSXExpression',
-          data: { text: 'baz bob' },
+          messageId: "literalNotInJSXExpression",
+          data: { text: "baz bob" },
         },
       ],
     },
@@ -917,62 +983,97 @@ ruleTester.run('jsx-no-literals', rule, {
       code: `
         <div className="test" />
       `,
-      options: [{ restrictedAttributes: ['className'] }],
-      errors: [{
-        messageId: 'restrictedAttributeString',
-        data: { text: '"test"', attribute: 'className' },
-      }],
+      options: [{ restrictedAttributes: ["className"] }],
+      errors: [
+        {
+          messageId: "restrictedAttributeString",
+          data: { text: '"test"', attribute: "className" },
+        },
+      ],
     },
     {
       code: `
         <div className="test" id="foo" title="bar" />
       `,
-      options: [{ restrictedAttributes: ['className', 'id'] }],
+      options: [{ restrictedAttributes: ["className", "id"] }],
       errors: [
-        { messageId: 'restrictedAttributeString', data: { text: '"test"', attribute: 'className' } },
-        { messageId: 'restrictedAttributeString', data: { text: '"foo"', attribute: 'id' } },
+        {
+          messageId: "restrictedAttributeString",
+          data: { text: '"test"', attribute: "className" },
+        },
+        {
+          messageId: "restrictedAttributeString",
+          data: { text: '"foo"', attribute: "id" },
+        },
       ],
     },
     {
       code: `
         <div src="image.jpg" />
       `,
-      options: [{
-        noAttributeStrings: true,
-        restrictedAttributes: ['className'],
-      }],
-      errors: [{ messageId: 'noStringsInAttributes', data: { text: '"image.jpg"' } }],
+      options: [
+        {
+          noAttributeStrings: true,
+          restrictedAttributes: ["className"],
+        },
+      ],
+      errors: [
+        { messageId: "noStringsInAttributes", data: { text: '"image.jpg"' } },
+      ],
     },
     {
       code: `
         <div title="text">test</div>
       `,
-      options: [{
-        restrictedAttributes: ['title'],
-        noStrings: true,
-      }],
+      options: [
+        {
+          restrictedAttributes: ["title"],
+          noStrings: true,
+        },
+      ],
       errors: [
-        { messageId: 'restrictedAttributeString', data: { text: '"text"', attribute: 'title' } },
-        { messageId: 'noStringsInJSX', data: { text: 'test' } },
+        {
+          messageId: "restrictedAttributeString",
+          data: { text: '"text"', attribute: "title" },
+        },
+        { messageId: "noStringsInJSX", data: { text: "test" } },
       ],
     },
     {
       code: `
         <div className="test" title="hello" />
       `,
-      options: [{ noStrings: true, ignoreProps: false, restrictedAttributes: ['className'] }],
+      options: [
+        {
+          noStrings: true,
+          ignoreProps: false,
+          restrictedAttributes: ["className"],
+        },
+      ],
       errors: [
-        { messageId: 'restrictedAttributeString', data: { text: '"test"', attribute: 'className' } },
-        { messageId: 'invalidPropValue', data: { text: 'title="hello"' } },
+        {
+          messageId: "restrictedAttributeString",
+          data: { text: '"test"', attribute: "className" },
+        },
+        { messageId: "invalidPropValue", data: { text: 'title="hello"' } },
       ],
     },
     {
       code: `
         <div className="test" title="hello" />
       `,
-      options: [{ noStrings: true, ignoreProps: true, restrictedAttributes: ['className'] }],
+      options: [
+        {
+          noStrings: true,
+          ignoreProps: true,
+          restrictedAttributes: ["className"],
+        },
+      ],
       errors: [
-        { messageId: 'restrictedAttributeString', data: { text: '"test"', attribute: 'className' } },
+        {
+          messageId: "restrictedAttributeString",
+          data: { text: '"test"', attribute: "className" },
+        },
       ],
     },
     {
@@ -984,8 +1085,11 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       options: [{ elementOverrides: { T: {} } }],
       errors: [
-        { messageId: 'literalNotInJSXExpression', data: { text: 'foo' } },
-        { messageId: 'literalNotInJSXExpressionInElement', data: { text: 'bar', element: 'T' } },
+        { messageId: "literalNotInJSXExpression", data: { text: "foo" } },
+        {
+          messageId: "literalNotInJSXExpressionInElement",
+          data: { text: "bar", element: "T" },
+        },
       ],
     },
     {
@@ -997,15 +1101,23 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       options: [{ elementOverrides: { T: { allowElement: true } } }],
       errors: [
-        { messageId: 'literalNotInJSXExpression', data: { text: 'foo' } },
+        { messageId: "literalNotInJSXExpression", data: { text: "foo" } },
       ],
     },
     {
       code: `
         <T>foo <div>bar</div></T>
       `,
-      options: [{ elementOverrides: { T: { allowElement: true, applyToNestedElements: false } } }],
-      errors: [{ messageId: 'literalNotInJSXExpression', data: { text: 'bar' } }],
+      options: [
+        {
+          elementOverrides: {
+            T: { allowElement: true, applyToNestedElements: false },
+          },
+        },
+      ],
+      errors: [
+        { messageId: "literalNotInJSXExpression", data: { text: "bar" } },
+      ],
     },
     {
       code: `
@@ -1016,8 +1128,11 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       options: [{ elementOverrides: { T: { noStrings: true } } }],
       errors: [
-        { messageId: 'literalNotInJSXExpression', data: { text: 'foo' } },
-        { messageId: 'noStringsInJSXInElement', data: { text: '\'bar\'', element: 'T' } },
+        { messageId: "literalNotInJSXExpression", data: { text: "foo" } },
+        {
+          messageId: "noStringsInJSXInElement",
+          data: { text: "'bar'", element: "T" },
+        },
       ],
     },
     {
@@ -1029,9 +1144,15 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       options: [{ elementOverrides: { T: { noStrings: true } } }],
       errors: [
-        { messageId: 'literalNotInJSXExpression', data: { text: 'foo' } },
-        { messageId: 'noStringsInJSXInElement', data: { text: '\'bar\'', element: 'T' } },
-        { messageId: 'noStringsInJSXInElement', data: { text: '\'baz\'', element: 'T' } },
+        { messageId: "literalNotInJSXExpression", data: { text: "foo" } },
+        {
+          messageId: "noStringsInJSXInElement",
+          data: { text: "'bar'", element: "T" },
+        },
+        {
+          messageId: "noStringsInJSXInElement",
+          data: { text: "'baz'", element: "T" },
+        },
       ],
     },
     {
@@ -1041,10 +1162,19 @@ ruleTester.run('jsx-no-literals', rule, {
           <T>{'bar'}<div>{'baz'}</div></T>
         </div>
       `,
-      options: [{ elementOverrides: { T: { noStrings: true, applyToNestedElements: false } } }],
+      options: [
+        {
+          elementOverrides: {
+            T: { noStrings: true, applyToNestedElements: false },
+          },
+        },
+      ],
       errors: [
-        { messageId: 'literalNotInJSXExpression', data: { text: 'foo' } },
-        { messageId: 'noStringsInJSXInElement', data: { text: '\'bar\'', element: 'T' } },
+        { messageId: "literalNotInJSXExpression", data: { text: "foo" } },
+        {
+          messageId: "noStringsInJSXInElement",
+          data: { text: "'bar'", element: "T" },
+        },
       ],
     },
     {
@@ -1054,10 +1184,13 @@ ruleTester.run('jsx-no-literals', rule, {
           <T>{'foo'}</T>
         </div>
       `,
-      options: [{ noStrings: true, elementOverrides: { T: { noStrings: true, allowedStrings: ['foo'] } } }],
-      errors: [
-        { messageId: 'noStringsInJSX', data: { text: '\'foo\'' } },
+      options: [
+        {
+          noStrings: true,
+          elementOverrides: { T: { noStrings: true, allowedStrings: ["foo"] } },
+        },
       ],
+      errors: [{ messageId: "noStringsInJSX", data: { text: "'foo'" } }],
     },
     {
       code: `
@@ -1066,10 +1199,13 @@ ruleTester.run('jsx-no-literals', rule, {
           <T>{'foo'}<div>{'foo'}</div></T>
         </div>
       `,
-      options: [{ noStrings: true, elementOverrides: { T: { noStrings: true, allowedStrings: ['foo'] } } }],
-      errors: [
-        { messageId: 'noStringsInJSX', data: { text: '\'foo\'' } },
+      options: [
+        {
+          noStrings: true,
+          elementOverrides: { T: { noStrings: true, allowedStrings: ["foo"] } },
+        },
       ],
+      errors: [{ messageId: "noStringsInJSX", data: { text: "'foo'" } }],
     },
     {
       code: `
@@ -1078,10 +1214,21 @@ ruleTester.run('jsx-no-literals', rule, {
           <T>{'foo'}<div>{'foo'}</div></T>
         </div>
       `,
-      options: [{ noStrings: true, elementOverrides: { T: { noStrings: true, allowedStrings: ['foo'], applyToNestedElements: false } } }],
+      options: [
+        {
+          noStrings: true,
+          elementOverrides: {
+            T: {
+              noStrings: true,
+              allowedStrings: ["foo"],
+              applyToNestedElements: false,
+            },
+          },
+        },
+      ],
       errors: [
-        { messageId: 'noStringsInJSX', data: { text: '\'foo\'' } },
-        { messageId: 'noStringsInJSX', data: { text: '\'foo\'' } },
+        { messageId: "noStringsInJSX", data: { text: "'foo'" } },
+        { messageId: "noStringsInJSX", data: { text: "'foo'" } },
       ],
     },
     {
@@ -1091,10 +1238,13 @@ ruleTester.run('jsx-no-literals', rule, {
           <T foo2="bar" />
         </div>
       `,
-      options: [{ noStrings: true, elementOverrides: { T: { noStrings: true, ignoreProps: true } } }],
-      errors: [
-        { messageId: 'invalidPropValue', data: { text: 'foo1="bar"' } },
+      options: [
+        {
+          noStrings: true,
+          elementOverrides: { T: { noStrings: true, ignoreProps: true } },
+        },
       ],
+      errors: [{ messageId: "invalidPropValue", data: { text: 'foo1="bar"' } }],
     },
     {
       code: `
@@ -1103,10 +1253,13 @@ ruleTester.run('jsx-no-literals', rule, {
           <T foo2="bar"><div foo3="bar" /></T>
         </div>
       `,
-      options: [{ noStrings: true, elementOverrides: { T: { noStrings: true, ignoreProps: true } } }],
-      errors: [
-        { messageId: 'invalidPropValue', data: { text: 'foo1="bar"' } },
+      options: [
+        {
+          noStrings: true,
+          elementOverrides: { T: { noStrings: true, ignoreProps: true } },
+        },
       ],
+      errors: [{ messageId: "invalidPropValue", data: { text: 'foo1="bar"' } }],
     },
     {
       code: `
@@ -1115,10 +1268,21 @@ ruleTester.run('jsx-no-literals', rule, {
           <T foo2="bar"><div foo3="bar" /></T>
         </div>
       `,
-      options: [{ noStrings: true, elementOverrides: { T: { noStrings: true, ignoreProps: true, applyToNestedElements: false } } }],
+      options: [
+        {
+          noStrings: true,
+          elementOverrides: {
+            T: {
+              noStrings: true,
+              ignoreProps: true,
+              applyToNestedElements: false,
+            },
+          },
+        },
+      ],
       errors: [
-        { messageId: 'invalidPropValue', data: { text: 'foo1="bar"' } },
-        { messageId: 'invalidPropValue', data: { text: 'foo3="bar"' } },
+        { messageId: "invalidPropValue", data: { text: 'foo1="bar"' } },
+        { messageId: "invalidPropValue", data: { text: 'foo3="bar"' } },
       ],
     },
     {
@@ -1130,7 +1294,10 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       options: [{ elementOverrides: { T: { noAttributeStrings: true } } }],
       errors: [
-        { messageId: 'noStringsInAttributesInElement', data: { text: '"bar2"', element: 'T' } },
+        {
+          messageId: "noStringsInAttributesInElement",
+          data: { text: '"bar2"', element: "T" },
+        },
       ],
     },
     {
@@ -1142,8 +1309,14 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       options: [{ elementOverrides: { T: { noAttributeStrings: true } } }],
       errors: [
-        { messageId: 'noStringsInAttributesInElement', data: { text: '"bar2"', element: 'T' } },
-        { messageId: 'noStringsInAttributesInElement', data: { text: '"bar3"', element: 'T' } },
+        {
+          messageId: "noStringsInAttributesInElement",
+          data: { text: '"bar2"', element: "T" },
+        },
+        {
+          messageId: "noStringsInAttributesInElement",
+          data: { text: '"bar3"', element: "T" },
+        },
       ],
     },
     {
@@ -1153,9 +1326,18 @@ ruleTester.run('jsx-no-literals', rule, {
           <T foo2="bar2"><div foo3="bar3" /></T>
         </div>
       `,
-      options: [{ elementOverrides: { T: { noAttributeStrings: true, applyToNestedElements: false } } }],
+      options: [
+        {
+          elementOverrides: {
+            T: { noAttributeStrings: true, applyToNestedElements: false },
+          },
+        },
+      ],
       errors: [
-        { messageId: 'noStringsInAttributesInElement', data: { text: '"bar2"', element: 'T' } },
+        {
+          messageId: "noStringsInAttributesInElement",
+          data: { text: '"bar2"', element: "T" },
+        },
       ],
     },
     {
@@ -1166,9 +1348,7 @@ ruleTester.run('jsx-no-literals', rule, {
         </div>
       `,
       options: [{ noStrings: true, elementOverrides: { T: {} } }],
-      errors: [
-        { messageId: 'noStringsInJSX', data: { text: '\'foo\'' } },
-      ],
+      errors: [{ messageId: "noStringsInJSX", data: { text: "'foo'" } }],
     },
     {
       code: `
@@ -1177,9 +1357,12 @@ ruleTester.run('jsx-no-literals', rule, {
           <T>foo</T>
         </div>
       `,
-      options: [{ allowedStrings: ['foo'], elementOverrides: { T: {} } }],
+      options: [{ allowedStrings: ["foo"], elementOverrides: { T: {} } }],
       errors: [
-        { messageId: 'literalNotInJSXExpressionInElement', data: { text: 'foo', element: 'T' } },
+        {
+          messageId: "literalNotInJSXExpressionInElement",
+          data: { text: "foo", element: "T" },
+        },
       ],
     },
     {
@@ -1191,10 +1374,21 @@ ruleTester.run('jsx-no-literals', rule, {
           <T>baz</T>
         </div>
       `,
-      options: [{ allowedStrings: ['foo'], elementOverrides: { T: { allowedStrings: ['bar'] } } }],
+      options: [
+        {
+          allowedStrings: ["foo"],
+          elementOverrides: { T: { allowedStrings: ["bar"] } },
+        },
+      ],
       errors: [
-        { messageId: 'literalNotInJSXExpressionInElement', data: { text: 'foo', element: 'T' } },
-        { messageId: 'literalNotInJSXExpressionInElement', data: { text: 'baz', element: 'T' } },
+        {
+          messageId: "literalNotInJSXExpressionInElement",
+          data: { text: "foo", element: "T" },
+        },
+        {
+          messageId: "literalNotInJSXExpressionInElement",
+          data: { text: "baz", element: "T" },
+        },
       ],
     },
     {
@@ -1204,9 +1398,18 @@ ruleTester.run('jsx-no-literals', rule, {
           <T foo2="bar2" />
         </div>
       `,
-      options: [{ noStrings: true, ignoreProps: true, elementOverrides: { T: { noStrings: true } } }],
+      options: [
+        {
+          noStrings: true,
+          ignoreProps: true,
+          elementOverrides: { T: { noStrings: true } },
+        },
+      ],
       errors: [
-        { messageId: 'invalidPropValueInElement', data: { text: 'foo2="bar2"', element: 'T' } },
+        {
+          messageId: "invalidPropValueInElement",
+          data: { text: 'foo2="bar2"', element: "T" },
+        },
       ],
     },
     {
@@ -1218,7 +1421,7 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       options: [{ noAttributeStrings: true, elementOverrides: { T: {} } }],
       errors: [
-        { messageId: 'noStringsInAttributes', data: { text: '"bar1"' } },
+        { messageId: "noStringsInAttributes", data: { text: '"bar1"' } },
       ],
     },
     {
@@ -1230,8 +1433,14 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       options: [{ elementOverrides: { T: {}, U: {} } }],
       errors: [
-        { messageId: 'literalNotInJSXExpressionInElement', data: { text: 'foo', element: 'T' } },
-        { messageId: 'literalNotInJSXExpressionInElement', data: { text: 'bar', element: 'U' } },
+        {
+          messageId: "literalNotInJSXExpressionInElement",
+          data: { text: "foo", element: "T" },
+        },
+        {
+          messageId: "literalNotInJSXExpressionInElement",
+          data: { text: "bar", element: "U" },
+        },
       ],
     },
     {
@@ -1243,7 +1452,10 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       options: [{ elementOverrides: { T: {}, U: { allowElement: true } } }],
       errors: [
-        { messageId: 'literalNotInJSXExpressionInElement', data: { text: 'foo', element: 'T' } },
+        {
+          messageId: "literalNotInJSXExpressionInElement",
+          data: { text: "foo", element: "T" },
+        },
       ],
     },
     {
@@ -1252,7 +1464,10 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       options: [{ elementOverrides: { T: {}, U: { allowElement: true } } }],
       errors: [
-        { messageId: 'literalNotInJSXExpressionInElement', data: { text: 'foo', element: 'T' } },
+        {
+          messageId: "literalNotInJSXExpressionInElement",
+          data: { text: "foo", element: "T" },
+        },
       ],
     },
     {
@@ -1261,25 +1476,38 @@ ruleTester.run('jsx-no-literals', rule, {
       `,
       options: [{ elementOverrides: { T: { noStrings: true }, U: {} } }],
       errors: [
-        { messageId: 'noStringsInJSXInElement', data: { text: '\'foo\'', element: 'T' } },
+        {
+          messageId: "noStringsInJSXInElement",
+          data: { text: "'foo'", element: "T" },
+        },
       ],
     },
     {
       code: `
         <T>foo<U>foo</U></T>
       `,
-      options: [{ elementOverrides: { T: { allowedStrings: ['foo'] }, U: {} } }],
+      options: [
+        { elementOverrides: { T: { allowedStrings: ["foo"] }, U: {} } },
+      ],
       errors: [
-        { messageId: 'literalNotInJSXExpressionInElement', data: { text: 'foo', element: 'U' } },
+        {
+          messageId: "literalNotInJSXExpressionInElement",
+          data: { text: "foo", element: "U" },
+        },
       ],
     },
     {
       code: `
         <T>foo<U>foo</U></T>
       `,
-      options: [{ elementOverrides: { T: {}, U: { allowedStrings: ['foo'] } } }],
+      options: [
+        { elementOverrides: { T: {}, U: { allowedStrings: ["foo"] } } },
+      ],
       errors: [
-        { messageId: 'literalNotInJSXExpressionInElement', data: { text: 'foo', element: 'T' } },
+        {
+          messageId: "literalNotInJSXExpressionInElement",
+          data: { text: "foo", element: "T" },
+        },
       ],
     },
     {
@@ -1289,15 +1517,21 @@ ruleTester.run('jsx-no-literals', rule, {
           <React.Fragment>foo</React.Fragment>
         </div>
       `,
-      options: [{ elementOverrides: { 'React.Fragment': { allowElement: true } } }],
-      errors: [{ messageId: 'literalNotInJSXExpression', data: { text: 'foo' } }],
+      options: [
+        { elementOverrides: { "React.Fragment": { allowElement: true } } },
+      ],
+      errors: [
+        { messageId: "literalNotInJSXExpression", data: { text: "foo" } },
+      ],
     },
     {
       code: `
         <div>foo</div>
       `,
       options: [{ elementOverrides: { div: { allowElement: true } } }],
-      errors: [{ messageId: 'literalNotInJSXExpression', data: { text: 'foo' } }],
+      errors: [
+        { messageId: "literalNotInJSXExpression", data: { text: "foo" } },
+      ],
     },
     {
       code: `
@@ -1306,13 +1540,18 @@ ruleTester.run('jsx-no-literals', rule, {
           <Button type="submit" />
         </div>
       `,
-      options: [{
-        elementOverrides: {
-          Button: { restrictedAttributes: ['type'] },
+      options: [
+        {
+          elementOverrides: {
+            Button: { restrictedAttributes: ["type"] },
+          },
         },
-      }],
+      ],
       errors: [
-        { messageId: 'restrictedAttributeStringInElement', data: { text: '"submit"', attribute: 'type', element: 'Button' } },
+        {
+          messageId: "restrictedAttributeStringInElement",
+          data: { text: '"submit"', attribute: "type", element: "Button" },
+        },
       ],
     },
     {
@@ -1322,15 +1561,27 @@ ruleTester.run('jsx-no-literals', rule, {
           <Button type="submit" disabled="true" />
         </div>
       `,
-      options: [{
-        elementOverrides: {
-          Input: { restrictedAttributes: ['placeholder'] },
-          Button: { restrictedAttributes: ['disabled'] },
+      options: [
+        {
+          elementOverrides: {
+            Input: { restrictedAttributes: ["placeholder"] },
+            Button: { restrictedAttributes: ["disabled"] },
+          },
         },
-      }],
+      ],
       errors: [
-        { messageId: 'restrictedAttributeStringInElement', data: { text: '"Enter text"', attribute: 'placeholder', element: 'Input' } },
-        { messageId: 'restrictedAttributeStringInElement', data: { text: '"true"', attribute: 'disabled', element: 'Button' } },
+        {
+          messageId: "restrictedAttributeStringInElement",
+          data: {
+            text: '"Enter text"',
+            attribute: "placeholder",
+            element: "Input",
+          },
+        },
+        {
+          messageId: "restrictedAttributeStringInElement",
+          data: { text: '"true"', attribute: "disabled", element: "Button" },
+        },
       ],
     },
     {
@@ -1340,15 +1591,23 @@ ruleTester.run('jsx-no-literals', rule, {
           <Button className="btn" id="submit-btn" />
         </div>
       `,
-      options: [{
-        restrictedAttributes: ['className'],
-        elementOverrides: {
-          Button: { restrictedAttributes: ['id'] },
+      options: [
+        {
+          restrictedAttributes: ["className"],
+          elementOverrides: {
+            Button: { restrictedAttributes: ["id"] },
+          },
         },
-      }],
+      ],
       errors: [
-        { messageId: 'restrictedAttributeString', data: { text: '"wrapper"', attribute: 'className' } },
-        { messageId: 'restrictedAttributeStringInElement', data: { text: '"submit-btn"', attribute: 'id', element: 'Button' } },
+        {
+          messageId: "restrictedAttributeString",
+          data: { text: '"wrapper"', attribute: "className" },
+        },
+        {
+          messageId: "restrictedAttributeStringInElement",
+          data: { text: '"submit-btn"', attribute: "id", element: "Button" },
+        },
       ],
     },
     {
@@ -1358,15 +1617,20 @@ ruleTester.run('jsx-no-literals', rule, {
           <T foo2="bar2" />
         </div>
       `,
-      options: [{
-        noAttributeStrings: true,
-        elementOverrides: {
-          T: { restrictedAttributes: ['foo2'] },
+      options: [
+        {
+          noAttributeStrings: true,
+          elementOverrides: {
+            T: { restrictedAttributes: ["foo2"] },
+          },
         },
-      }],
+      ],
       errors: [
-        { messageId: 'noStringsInAttributes', data: { text: '"bar1"' } },
-        { messageId: 'restrictedAttributeStringInElement', data: { text: '"bar2"', attribute: 'foo2', element: 'T' } },
+        { messageId: "noStringsInAttributes", data: { text: '"bar1"' } },
+        {
+          messageId: "restrictedAttributeStringInElement",
+          data: { text: '"bar2"', attribute: "foo2", element: "T" },
+        },
       ],
     },
   ]),

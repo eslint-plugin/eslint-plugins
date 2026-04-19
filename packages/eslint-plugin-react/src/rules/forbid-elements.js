@@ -3,57 +3,59 @@
  * @author Kenneth Chung
  */
 
-'use strict';
+"use strict";
 
-const docsUrl = require('../util/docsUrl');
-const getText = require('../util/eslint').getText;
-const isCreateElement = require('../util/isCreateElement');
-const report = require('../util/report');
+const docsUrl = require("../util/docsUrl");
+const getText = require("../util/eslint").getText;
+const isCreateElement = require("../util/isCreateElement");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  forbiddenElement: '<{{element}}> is forbidden',
-  forbiddenElement_message: '<{{element}}> is forbidden, {{message}}',
+  forbiddenElement: "<{{element}}> is forbidden",
+  forbiddenElement_message: "<{{element}}> is forbidden, {{message}}",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow certain elements',
-      category: 'Best Practices',
+      description: "Disallow certain elements",
+      category: "Best Practices",
       recommended: false,
-      url: docsUrl('forbid-elements'),
+      url: docsUrl("forbid-elements"),
     },
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        forbid: {
-          type: 'array',
-          items: {
-            anyOf: [
-              { type: 'string' },
-              {
-                type: 'object',
-                properties: {
-                  element: { type: 'string' },
-                  message: { type: 'string' },
+    schema: [
+      {
+        type: "object",
+        properties: {
+          forbid: {
+            type: "array",
+            items: {
+              anyOf: [
+                { type: "string" },
+                {
+                  type: "object",
+                  properties: {
+                    element: { type: "string" },
+                    message: { type: "string" },
+                  },
+                  required: ["element"],
+                  additionalProperties: false,
                 },
-                required: ['element'],
-                additionalProperties: false,
-              },
-            ],
+              ],
+            },
           },
         },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create(context) {
@@ -64,7 +66,7 @@ module.exports = {
     const indexedForbidConfigs = {};
 
     forbidConfiguration.forEach((item) => {
-      if (typeof item === 'string') {
+      if (typeof item === "string") {
         indexedForbidConfigs[item] = { element: item };
       } else {
         indexedForbidConfigs[item.element] = item;
@@ -77,15 +79,17 @@ module.exports = {
 
         report(
           context,
-          message ? messages.forbiddenElement_message : messages.forbiddenElement,
-          message ? 'forbiddenElement_message' : 'forbiddenElement',
+          message
+            ? messages.forbiddenElement_message
+            : messages.forbiddenElement,
+          message ? "forbiddenElement_message" : "forbiddenElement",
           {
             node,
             data: {
               element,
               message,
             },
-          }
+          },
         );
       }
     }
@@ -105,11 +109,14 @@ module.exports = {
           return;
         }
 
-        if (argument.type === 'Identifier' && /^[A-Z_]/.test(argument.name)) {
+        if (argument.type === "Identifier" && /^[A-Z_]/.test(argument.name)) {
           reportIfForbidden(argument.name, argument);
-        } else if (argument.type === 'Literal' && /^[a-z][^.]*$/.test(String(argument.value))) {
+        } else if (
+          argument.type === "Literal" &&
+          /^[a-z][^.]*$/.test(String(argument.value))
+        ) {
           reportIfForbidden(argument.value, argument);
-        } else if (argument.type === 'MemberExpression') {
+        } else if (argument.type === "MemberExpression") {
           reportIfForbidden(getText(context, argument), argument);
         }
       },

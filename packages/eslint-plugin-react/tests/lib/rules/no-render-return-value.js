@@ -3,20 +3,20 @@
  * @author Mark Dalgleish
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/no-render-return-value');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/no-render-return-value");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,10 +27,10 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('no-render-return-value', rule, {
+ruleTester.run("no-render-return-value", rule, {
   valid: parsers.all([
     {
-      code: 'ReactDOM.render(<div />, document.body);',
+      code: "ReactDOM.render(<div />, document.body);",
     },
     {
       code: `
@@ -39,36 +39,36 @@ ruleTester.run('no-render-return-value', rule, {
       `,
     },
     {
-      code: 'ReactDOM.render(<div ref={ref => this.node = ref}/>, document.body);',
-      settings: { react: { version: '0.14.0' } },
+      code: "ReactDOM.render(<div ref={ref => this.node = ref}/>, document.body);",
+      settings: { react: { version: "0.14.0" } },
     },
     {
-      code: 'React.render(<div ref={ref => this.node = ref}/>, document.body);',
-      settings: { react: { version: '0.14.0' } },
+      code: "React.render(<div ref={ref => this.node = ref}/>, document.body);",
+      settings: { react: { version: "0.14.0" } },
     },
     {
-      code: 'React.render(<div ref={ref => this.node = ref}/>, document.body);',
-      settings: { react: { version: '0.13.0' } },
+      code: "React.render(<div ref={ref => this.node = ref}/>, document.body);",
+      settings: { react: { version: "0.13.0" } },
     },
     {
-      code: 'var foo = React.render(<div />, root);',
-      settings: { react: { version: '0.0.1' } },
+      code: "var foo = React.render(<div />, root);",
+      settings: { react: { version: "0.0.1" } },
     },
     {
-      code: 'var foo = render(<div />, root)',
+      code: "var foo = render(<div />, root)",
     },
     {
-      code: 'var foo = ReactDom.renderder(<div />, root)',
+      code: "var foo = ReactDom.renderder(<div />, root)",
     },
   ]),
 
   invalid: parsers.all([
     {
-      code: 'var Hello = ReactDOM.render(<div />, document.body);',
+      code: "var Hello = ReactDOM.render(<div />, document.body);",
       errors: [
         {
-          messageId: 'noReturnValue',
-          data: { node: 'ReactDOM' },
+          messageId: "noReturnValue",
+          data: { node: "ReactDOM" },
         },
       ],
     },
@@ -80,8 +80,8 @@ ruleTester.run('no-render-return-value', rule, {
       `,
       errors: [
         {
-          messageId: 'noReturnValue',
-          data: { node: 'ReactDOM' },
+          messageId: "noReturnValue",
+          data: { node: "ReactDOM" },
         },
       ],
     },
@@ -93,65 +93,65 @@ ruleTester.run('no-render-return-value', rule, {
       `,
       errors: [
         {
-          messageId: 'noReturnValue',
-          data: { node: 'ReactDOM' },
+          messageId: "noReturnValue",
+          data: { node: "ReactDOM" },
         },
       ],
     },
     {
-      code: 'var render = (a, b) => ReactDOM.render(a, b)',
+      code: "var render = (a, b) => ReactDOM.render(a, b)",
       errors: [
         {
-          messageId: 'noReturnValue',
-          data: { node: 'ReactDOM' },
+          messageId: "noReturnValue",
+          data: { node: "ReactDOM" },
         },
       ],
     },
     {
-      code: 'this.o = ReactDOM.render(<div />, document.body);',
+      code: "this.o = ReactDOM.render(<div />, document.body);",
       errors: [
         {
-          messageId: 'noReturnValue',
-          data: { node: 'ReactDOM' },
+          messageId: "noReturnValue",
+          data: { node: "ReactDOM" },
         },
       ],
     },
     {
-      code: 'var v; v = ReactDOM.render(<div />, document.body);',
+      code: "var v; v = ReactDOM.render(<div />, document.body);",
       errors: [
         {
-          messageId: 'noReturnValue',
-          data: { node: 'ReactDOM' },
+          messageId: "noReturnValue",
+          data: { node: "ReactDOM" },
         },
       ],
     },
     {
-      code: 'var inst = React.render(<div />, document.body);',
-      settings: { react: { version: '0.14.0' } },
+      code: "var inst = React.render(<div />, document.body);",
+      settings: { react: { version: "0.14.0" } },
       errors: [
         {
-          messageId: 'noReturnValue',
-          data: { node: 'React' },
+          messageId: "noReturnValue",
+          data: { node: "React" },
         },
       ],
     },
     {
-      code: 'var inst = ReactDOM.render(<div />, document.body);',
-      settings: { react: { version: '0.14.0' } },
+      code: "var inst = ReactDOM.render(<div />, document.body);",
+      settings: { react: { version: "0.14.0" } },
       errors: [
         {
-          messageId: 'noReturnValue',
-          data: { node: 'ReactDOM' },
+          messageId: "noReturnValue",
+          data: { node: "ReactDOM" },
         },
       ],
     },
     {
-      code: 'var inst = React.render(<div />, document.body);',
-      settings: { react: { version: '0.13.0' } },
+      code: "var inst = React.render(<div />, document.body);",
+      settings: { react: { version: "0.13.0" } },
       errors: [
         {
-          messageId: 'noReturnValue',
-          data: { node: 'React' },
+          messageId: "noReturnValue",
+          data: { node: "React" },
         },
       ],
     },

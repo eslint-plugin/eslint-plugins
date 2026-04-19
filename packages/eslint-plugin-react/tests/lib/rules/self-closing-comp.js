@@ -3,20 +3,20 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/self-closing-comp');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/self-closing-comp");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('self-closing-comp', rule, {
+ruleTester.run("self-closing-comp", rule, {
   valid: parsers.all([
     {
       code: 'var HelloJohn = <Hello name="John" />;',
@@ -68,10 +68,10 @@ ruleTester.run('self-closing-comp', rule, {
       code: 'var HelloJohn = <Hello.Compound name="John">        </Hello.Compound>;',
     },
     {
-      code: 'var HelloJohn = <div>&nbsp;</div>;',
+      code: "var HelloJohn = <div>&nbsp;</div>;",
     },
     {
-      code: 'var HelloJohn = <div>{\' \'}</div>;',
+      code: "var HelloJohn = <div>{' '}</div>;",
     },
     {
       code: 'var HelloJohn = <Hello name="John">&nbsp;</Hello>;',
@@ -112,19 +112,19 @@ ruleTester.run('self-closing-comp', rule, {
       options: [],
     },
     {
-      code: 'var HelloJohn = <div> </div>;',
+      code: "var HelloJohn = <div> </div>;",
       options: [],
     },
     {
-      code: 'var HelloJohn = <div>        </div>;',
+      code: "var HelloJohn = <div>        </div>;",
       options: [],
     },
     {
-      code: 'var HelloJohn = <div>&nbsp;</div>;',
+      code: "var HelloJohn = <div>&nbsp;</div>;",
       options: [],
     },
     {
-      code: 'var HelloJohn = <div>{\' \'}</div>;',
+      code: "var HelloJohn = <div>{' '}</div>;",
       options: [],
     },
     {
@@ -181,69 +181,69 @@ ruleTester.run('self-closing-comp', rule, {
     {
       code: 'var contentContainer = <div className="content"></div>;',
       output: 'var contentContainer = <div className="content" />;',
-      errors: [{ messageId: 'notSelfClosing' }],
+      errors: [{ messageId: "notSelfClosing" }],
     },
     {
       code: 'var contentContainer = <div className="content"></div>;',
       output: 'var contentContainer = <div className="content" />;',
       options: [],
-      errors: [{ messageId: 'notSelfClosing' }],
+      errors: [{ messageId: "notSelfClosing" }],
     },
     {
       code: 'var HelloJohn = <Hello name="John"></Hello>;',
       output: 'var HelloJohn = <Hello name="John" />;',
-      errors: [{ messageId: 'notSelfClosing' }],
+      errors: [{ messageId: "notSelfClosing" }],
     },
     {
       code: 'var CompoundHelloJohn = <Hello.Compound name="John"></Hello.Compound>;',
       output: 'var CompoundHelloJohn = <Hello.Compound name="John" />;',
-      errors: [{ messageId: 'notSelfClosing' }],
+      errors: [{ messageId: "notSelfClosing" }],
     },
     {
       code: 'var HelloJohn = <Hello name="John">\n</Hello>;',
       output: 'var HelloJohn = <Hello name="John" />;',
-      errors: [{ messageId: 'notSelfClosing' }],
+      errors: [{ messageId: "notSelfClosing" }],
     },
     {
       code: 'var HelloJohn = <Hello.Compound name="John">\n</Hello.Compound>;',
       output: 'var HelloJohn = <Hello.Compound name="John" />;',
-      errors: [{ messageId: 'notSelfClosing' }],
+      errors: [{ messageId: "notSelfClosing" }],
     },
     {
       code: 'var HelloJohn = <Hello name="John"></Hello>;',
       output: 'var HelloJohn = <Hello name="John" />;',
       options: [],
-      errors: [{ messageId: 'notSelfClosing' }],
+      errors: [{ messageId: "notSelfClosing" }],
     },
     {
       code: 'var HelloJohn = <Hello.Compound name="John"></Hello.Compound>;',
       output: 'var HelloJohn = <Hello.Compound name="John" />;',
       options: [],
-      errors: [{ messageId: 'notSelfClosing' }],
+      errors: [{ messageId: "notSelfClosing" }],
     },
     {
       code: 'var HelloJohn = <Hello name="John">\n</Hello>;',
       output: 'var HelloJohn = <Hello name="John" />;',
       options: [],
-      errors: [{ messageId: 'notSelfClosing' }],
+      errors: [{ messageId: "notSelfClosing" }],
     },
     {
       code: 'var HelloJohn = <Hello.Compound name="John">\n</Hello.Compound>;',
       output: 'var HelloJohn = <Hello.Compound name="John" />;',
       options: [],
-      errors: [{ messageId: 'notSelfClosing' }],
+      errors: [{ messageId: "notSelfClosing" }],
     },
     {
       code: 'var contentContainer = <div className="content"></div>;',
       output: 'var contentContainer = <div className="content" />;',
       options: [{ html: true }],
-      errors: [{ messageId: 'notSelfClosing' }],
+      errors: [{ messageId: "notSelfClosing" }],
     },
     {
       code: 'var contentContainer = <div className="content">\n</div>;',
       output: 'var contentContainer = <div className="content" />;',
       options: [{ html: true }],
-      errors: [{ messageId: 'notSelfClosing' }],
+      errors: [{ messageId: "notSelfClosing" }],
     },
   ]),
 });

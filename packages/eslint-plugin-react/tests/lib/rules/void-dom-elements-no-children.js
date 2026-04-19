@@ -3,20 +3,20 @@
  * @author Joe Lencioni
  */
 
-'use strict';
+"use strict";
 
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/void-dom-elements-no-children');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/void-dom-elements-no-children");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,10 +27,10 @@ const parserOptions = {
 // -----------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('void-dom-elements-no-children', rule, {
+ruleTester.run("void-dom-elements-no-children", rule, {
   valid: parsers.all([
     {
-      code: '<div>Foo</div>;',
+      code: "<div>Foo</div>;",
     },
     {
       code: '<div children="Foo" />;',
@@ -54,10 +54,10 @@ ruleTester.run('void-dom-elements-no-children', rule, {
       code: 'React.createElement("img");',
     },
     {
-      code: 'React.createElement();',
+      code: "React.createElement();",
     },
     {
-      code: 'document.createElement();',
+      code: "document.createElement();",
     },
     {
       code: `
@@ -93,11 +93,11 @@ ruleTester.run('void-dom-elements-no-children', rule, {
   ]),
   invalid: parsers.all([
     {
-      code: '<br>Foo</br>;',
+      code: "<br>Foo</br>;",
       errors: [
         {
-          messageId: 'noChildrenInVoidEl',
-          data: { element: 'br' },
+          messageId: "noChildrenInVoidEl",
+          data: { element: "br" },
         },
       ],
     },
@@ -105,8 +105,8 @@ ruleTester.run('void-dom-elements-no-children', rule, {
       code: '<br children="Foo" />;',
       errors: [
         {
-          messageId: 'noChildrenInVoidEl',
-          data: { element: 'br' },
+          messageId: "noChildrenInVoidEl",
+          data: { element: "br" },
         },
       ],
     },
@@ -114,8 +114,8 @@ ruleTester.run('void-dom-elements-no-children', rule, {
       code: '<img {...props} children="Foo" />;',
       errors: [
         {
-          messageId: 'noChildrenInVoidEl',
-          data: { element: 'img' },
+          messageId: "noChildrenInVoidEl",
+          data: { element: "img" },
         },
       ],
     },
@@ -123,8 +123,8 @@ ruleTester.run('void-dom-elements-no-children', rule, {
       code: '<br dangerouslySetInnerHTML={{ __html: "Foo" }} />;',
       errors: [
         {
-          messageId: 'noChildrenInVoidEl',
-          data: { element: 'br' },
+          messageId: "noChildrenInVoidEl",
+          data: { element: "br" },
         },
       ],
     },
@@ -132,8 +132,8 @@ ruleTester.run('void-dom-elements-no-children', rule, {
       code: 'React.createElement("br", {}, "Foo");',
       errors: [
         {
-          messageId: 'noChildrenInVoidEl',
-          data: { element: 'br' },
+          messageId: "noChildrenInVoidEl",
+          data: { element: "br" },
         },
       ],
     },
@@ -141,8 +141,8 @@ ruleTester.run('void-dom-elements-no-children', rule, {
       code: 'React.createElement("br", { children: "Foo" });',
       errors: [
         {
-          messageId: 'noChildrenInVoidEl',
-          data: { element: 'br' },
+          messageId: "noChildrenInVoidEl",
+          data: { element: "br" },
         },
       ],
     },
@@ -150,8 +150,8 @@ ruleTester.run('void-dom-elements-no-children', rule, {
       code: 'React.createElement("br", { dangerouslySetInnerHTML: { __html: "Foo" } });',
       errors: [
         {
-          messageId: 'noChildrenInVoidEl',
-          data: { element: 'br' },
+          messageId: "noChildrenInVoidEl",
+          data: { element: "br" },
         },
       ],
     },
@@ -162,8 +162,8 @@ ruleTester.run('void-dom-elements-no-children', rule, {
       `,
       errors: [
         {
-          messageId: 'noChildrenInVoidEl',
-          data: { element: 'img' },
+          messageId: "noChildrenInVoidEl",
+          data: { element: "img" },
         },
       ],
     },
@@ -174,8 +174,8 @@ ruleTester.run('void-dom-elements-no-children', rule, {
       `,
       errors: [
         {
-          messageId: 'noChildrenInVoidEl',
-          data: { element: 'img' },
+          messageId: "noChildrenInVoidEl",
+          data: { element: "img" },
         },
       ],
     },
@@ -186,8 +186,8 @@ ruleTester.run('void-dom-elements-no-children', rule, {
       `,
       errors: [
         {
-          messageId: 'noChildrenInVoidEl',
-          data: { element: 'img' },
+          messageId: "noChildrenInVoidEl",
+          data: { element: "img" },
         },
       ],
     },

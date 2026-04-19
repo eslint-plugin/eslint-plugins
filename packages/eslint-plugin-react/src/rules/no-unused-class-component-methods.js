@@ -3,54 +3,51 @@
  * @author Paweł Nowak, Berton Zhu
  */
 
-'use strict';
+"use strict";
 
-const docsUrl = require('../util/docsUrl');
-const componentUtil = require('../util/componentUtil');
-const report = require('../util/report');
+const docsUrl = require("../util/docsUrl");
+const componentUtil = require("../util/componentUtil");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const LIFECYCLE_METHODS = new Set([
-  'constructor',
-  'componentDidCatch',
-  'componentDidMount',
-  'componentDidUpdate',
-  'componentWillMount',
-  'componentWillReceiveProps',
-  'componentWillUnmount',
-  'componentWillUpdate',
-  'getChildContext',
-  'getSnapshotBeforeUpdate',
-  'render',
-  'shouldComponentUpdate',
-  'UNSAFE_componentWillMount',
-  'UNSAFE_componentWillReceiveProps',
-  'UNSAFE_componentWillUpdate',
+  "constructor",
+  "componentDidCatch",
+  "componentDidMount",
+  "componentDidUpdate",
+  "componentWillMount",
+  "componentWillReceiveProps",
+  "componentWillUnmount",
+  "componentWillUpdate",
+  "getChildContext",
+  "getSnapshotBeforeUpdate",
+  "render",
+  "shouldComponentUpdate",
+  "UNSAFE_componentWillMount",
+  "UNSAFE_componentWillReceiveProps",
+  "UNSAFE_componentWillUpdate",
 ]);
 
-const ES6_LIFECYCLE = new Set([
-  'state',
-]);
+const ES6_LIFECYCLE = new Set(["state"]);
 
-const ES5_LIFECYCLE = new Set([
-  'getInitialState',
-  'getDefaultProps',
-  'mixins',
-]);
+const ES5_LIFECYCLE = new Set(["getInitialState", "getDefaultProps", "mixins"]);
 
 function isKeyLiteralLike(node, property) {
-  return property.type === 'Literal'
-     || (property.type === 'TemplateLiteral' && property.expressions.length === 0)
-     || (node.computed === false && property.type === 'Identifier');
+  return (
+    property.type === "Literal" ||
+    (property.type === "TemplateLiteral" &&
+      property.expressions.length === 0) ||
+    (node.computed === false && property.type === "Identifier")
+  );
 }
 
 // Descend through all wrapping TypeCastExpressions and return the expression
 // that was cast.
 function uncast(node) {
-  while (node.type === 'TypeCastExpression') {
+  while (node.type === "TypeCastExpression") {
     node = node.expression;
   }
   return node;
@@ -63,20 +60,20 @@ function getName(node) {
   node = uncast(node);
   const type = node.type;
 
-  if (type === 'Identifier') {
+  if (type === "Identifier") {
     return node.name;
   }
-  if (type === 'Literal') {
+  if (type === "Literal") {
     return String(node.value);
   }
-  if (type === 'TemplateLiteral' && node.expressions.length === 0) {
+  if (type === "TemplateLiteral" && node.expressions.length === 0) {
     return node.quasis[0].value.raw;
   }
   return null;
 }
 
 function isThisExpression(node) {
-  return uncast(node).type === 'ThisExpression';
+  return uncast(node).type === "ThisExpression";
 }
 
 function getInitialClassInfo(node, isClass) {
@@ -95,23 +92,24 @@ function getInitialClassInfo(node, isClass) {
 
 const messages = {
   unused: 'Unused method or property "{{name}}"',
-  unusedWithClass: 'Unused method or property "{{name}}" of class "{{className}}"',
+  unusedWithClass:
+    'Unused method or property "{{name}}" of class "{{className}}"',
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow declaring unused methods of component class',
-      category: 'Best Practices',
+      description: "Disallow declaring unused methods of component class",
+      category: "Best Practices",
       recommended: false,
-      url: docsUrl('no-unused-class-component-methods'),
+      url: docsUrl("no-unused-class-component-methods"),
     },
     messages,
     schema: [],
   },
 
-  create: ((context) => {
+  create: (context) => {
     let classInfo = null;
 
     // Takes an ObjectExpression node and adds all named Property nodes to the
@@ -131,28 +129,27 @@ module.exports = {
 
     function reportUnusedProperties() {
       // Report all unused properties.
-      for (const node of classInfo.properties) { // eslint-disable-line no-restricted-syntax
+      for (const node of classInfo.properties) {
+        // eslint-disable-line no-restricted-syntax
         const name = getName(node);
         if (
-          !classInfo.usedProperties.has(name)
-           && !LIFECYCLE_METHODS.has(name)
-           && (classInfo.isClass ? !ES6_LIFECYCLE.has(name) : !ES5_LIFECYCLE.has(name))
+          !classInfo.usedProperties.has(name) &&
+          !LIFECYCLE_METHODS.has(name) &&
+          (classInfo.isClass
+            ? !ES6_LIFECYCLE.has(name)
+            : !ES5_LIFECYCLE.has(name))
         ) {
-          const className = (classInfo.classNode.id && classInfo.classNode.id.name) || '';
+          const className =
+            (classInfo.classNode.id && classInfo.classNode.id.name) || "";
 
-          const messageID = className ? 'unusedWithClass' : 'unused';
-          report(
-            context,
-            messages[messageID],
-            messageID,
-            {
-              node,
-              data: {
-                name,
-                className,
-              },
-            }
-          );
+          const messageID = className ? "unusedWithClass" : "unused";
+          report(context, messages[messageID], messageID, {
+            node,
+            data: {
+              name,
+              className,
+            },
+          });
         }
       }
     }
@@ -178,7 +175,7 @@ module.exports = {
         }
       },
 
-      'ClassDeclaration:exit'() {
+      "ClassDeclaration:exit"() {
         if (!classInfo) {
           return;
         }
@@ -186,7 +183,7 @@ module.exports = {
         classInfo = null;
       },
 
-      'ObjectExpression:exit'(node) {
+      "ObjectExpression:exit"(node) {
         if (!classInfo || classInfo.classNode !== node) {
           return;
         }
@@ -204,7 +201,7 @@ module.exports = {
         }
       },
 
-      'ClassProperty, MethodDefinition, PropertyDefinition'(node) {
+      "ClassProperty, MethodDefinition, PropertyDefinition"(node) {
         if (!classInfo) {
           return;
         }
@@ -219,17 +216,23 @@ module.exports = {
         }
       },
 
-      'ClassProperty:exit': exitMethod,
-      'MethodDefinition:exit': exitMethod,
-      'PropertyDefinition:exit': exitMethod,
+      "ClassProperty:exit": exitMethod,
+      "MethodDefinition:exit": exitMethod,
+      "PropertyDefinition:exit": exitMethod,
 
       MemberExpression(node) {
         if (!classInfo || classInfo.inStatic) {
           return;
         }
 
-        if (isThisExpression(node.object) && isKeyLiteralLike(node, node.property)) {
-          if (node.parent.type === 'AssignmentExpression' && node.parent.left === node) {
+        if (
+          isThisExpression(node.object) &&
+          isKeyLiteralLike(node, node.property)
+        ) {
+          if (
+            node.parent.type === "AssignmentExpression" &&
+            node.parent.left === node
+          ) {
             // detect `this.property = xxx`
             addProperty(node.property);
           } else {
@@ -245,14 +248,21 @@ module.exports = {
         }
 
         // detect `{ foo, bar: baz } = this`
-        if (node.init && isThisExpression(node.init) && node.id.type === 'ObjectPattern') {
+        if (
+          node.init &&
+          isThisExpression(node.init) &&
+          node.id.type === "ObjectPattern"
+        ) {
           node.id.properties
-            .filter((prop) => prop.type === 'Property' && isKeyLiteralLike(prop, prop.key))
+            .filter(
+              (prop) =>
+                prop.type === "Property" && isKeyLiteralLike(prop, prop.key),
+            )
             .forEach((prop) => {
-              addUsedProperty('key' in prop ? prop.key : undefined);
+              addUsedProperty("key" in prop ? prop.key : undefined);
             });
         }
       },
     };
-  }),
+  },
 };

@@ -3,28 +3,28 @@
  * @author Mark Dalgleish
  */
 
-'use strict';
+"use strict";
 
-const Components = require('../util/Components');
-const docsUrl = require('../util/docsUrl');
-const report = require('../util/report');
+const Components = require("../util/Components");
+const docsUrl = require("../util/docsUrl");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  noSetState: 'Do not use setState',
+  noSetState: "Do not use setState",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow usage of setState',
-      category: 'Stylistic Issues',
+      description: "Disallow usage of setState",
+      category: "Stylistic Issues",
       recommended: false,
-      url: docsUrl('no-set-state'),
+      url: docsUrl("no-set-state"),
     },
 
     messages,
@@ -49,7 +49,7 @@ module.exports = {
     function reportSetStateUsages(component) {
       for (let i = 0, j = component.setStateUsages.length; i < j; i++) {
         const setStateUsage = component.setStateUsages[i];
-        report(context, messages.noSetState, 'noSetState', {
+        report(context, messages.noSetState, "noSetState", {
           node: setStateUsage,
         });
       }
@@ -59,9 +59,9 @@ module.exports = {
       CallExpression(node) {
         const callee = node.callee;
         if (
-          callee.type !== 'MemberExpression'
-          || callee.object.type !== 'ThisExpression'
-          || callee.property.name !== 'setState'
+          callee.type !== "MemberExpression" ||
+          callee.object.type !== "ThisExpression" ||
+          callee.property.name !== "setState"
         ) {
           return;
         }
@@ -74,7 +74,7 @@ module.exports = {
         });
       },
 
-      'Program:exit'() {
+      "Program:exit"() {
         Object.values(components.list())
           .filter((component) => !isValid(component))
           .forEach((component) => {

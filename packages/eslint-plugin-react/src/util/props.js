@@ -2,9 +2,9 @@
  * @fileoverview Utility functions for props
  */
 
-'use strict';
+"use strict";
 
-const astUtil = require('./ast');
+const astUtil = require("./ast");
 
 /**
  * Checks if the Identifier node passed in looks like a propTypes declaration.
@@ -12,13 +12,16 @@ const astUtil = require('./ast');
  * @returns {boolean} `true` if the node is a propTypes declaration, `false` if not
  */
 function isPropTypesDeclaration(node) {
-  if (node && (node.type === 'ClassProperty' || node.type === 'PropertyDefinition')) {
+  if (
+    node &&
+    (node.type === "ClassProperty" || node.type === "PropertyDefinition")
+  ) {
     // Flow support
-    if (node.typeAnnotation && node.key.name === 'props') {
+    if (node.typeAnnotation && node.key.name === "props") {
       return true;
     }
   }
-  return astUtil.getPropertyName(node) === 'propTypes';
+  return astUtil.getPropertyName(node) === "propTypes";
 }
 
 /**
@@ -27,13 +30,16 @@ function isPropTypesDeclaration(node) {
  * @returns {boolean} `true` if the node is a contextTypes declaration, `false` if not
  */
 function isContextTypesDeclaration(node) {
-  if (node && (node.type === 'ClassProperty' || node.type === 'PropertyDefinition')) {
+  if (
+    node &&
+    (node.type === "ClassProperty" || node.type === "PropertyDefinition")
+  ) {
     // Flow support
-    if (node.typeAnnotation && node.key.name === 'context') {
+    if (node.typeAnnotation && node.key.name === "context") {
       return true;
     }
   }
-  return astUtil.getPropertyName(node) === 'contextTypes';
+  return astUtil.getPropertyName(node) === "contextTypes";
 }
 
 /**
@@ -42,7 +48,7 @@ function isContextTypesDeclaration(node) {
  * @returns {boolean} `true` if the node is a contextType declaration, `false` if not
  */
 function isContextTypeDeclaration(node) {
-  return astUtil.getPropertyName(node) === 'contextType';
+  return astUtil.getPropertyName(node) === "contextType";
 }
 
 /**
@@ -51,7 +57,7 @@ function isContextTypeDeclaration(node) {
  * @returns {boolean} `true` if the node is a childContextTypes declaration, `false` if not
  */
 function isChildContextTypesDeclaration(node) {
-  return astUtil.getPropertyName(node) === 'childContextTypes';
+  return astUtil.getPropertyName(node) === "childContextTypes";
 }
 
 /**
@@ -61,7 +67,7 @@ function isChildContextTypesDeclaration(node) {
  */
 function isDefaultPropsDeclaration(node) {
   const propName = astUtil.getPropertyName(node);
-  return (propName === 'defaultProps' || propName === 'getDefaultProps');
+  return propName === "defaultProps" || propName === "getDefaultProps";
 }
 
 /**
@@ -71,13 +77,13 @@ function isDefaultPropsDeclaration(node) {
  */
 function isDisplayNameDeclaration(node) {
   switch (node.type) {
-    case 'ClassProperty':
-    case 'PropertyDefinition':
-      return node.key && node.key.name === 'displayName';
-    case 'Identifier':
-      return node.name === 'displayName';
-    case 'Literal':
-      return node.value === 'displayName';
+    case "ClassProperty":
+    case "PropertyDefinition":
+      return node.key && node.key.name === "displayName";
+    case "Identifier":
+      return node.name === "displayName";
+    case "Literal":
+      return node.value === "displayName";
     default:
       return false;
   }
@@ -89,8 +95,10 @@ function isDisplayNameDeclaration(node) {
  * @returns {boolean} `true` if this PropType is required, `false` if not.
  */
 function isRequiredPropType(propTypeExpression) {
-  return propTypeExpression.type === 'MemberExpression'
-    && propTypeExpression.property.name === 'isRequired';
+  return (
+    propTypeExpression.type === "MemberExpression" &&
+    propTypeExpression.property.name === "isRequired"
+  );
 }
 
 /**
@@ -99,7 +107,7 @@ function isRequiredPropType(propTypeExpression) {
  * @returns {ASTNode} The type arguments or type parameters of the node.
  */
 function getTypeArguments(node) {
-  if ('typeArguments' in node) {
+  if ("typeArguments" in node) {
     return node.typeArguments;
   }
   return node.typeParameters;
@@ -111,7 +119,7 @@ function getTypeArguments(node) {
  * @returns {ASTNode} The super type arguments or parameters of the node.
  */
 function getSuperTypeArguments(node) {
-  if ('superTypeArguments' in node) {
+  if ("superTypeArguments" in node) {
     return node.superTypeArguments;
   }
   return node.superTypeParameters;

@@ -3,20 +3,20 @@
  * @author Ben Mosher
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-key');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-key");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -24,8 +24,8 @@ const parserOptions = {
 
 const settings = {
   react: {
-    pragma: 'Act',
-    fragment: 'Frag',
+    pragma: "Act",
+    fragment: "Frag",
   },
 };
 
@@ -34,7 +34,7 @@ const settings = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('jsx-key', rule, {
+ruleTester.run("jsx-key", rule, {
   valid: parsers.all([
     {
       code: `
@@ -42,34 +42,36 @@ ruleTester.run('jsx-key', rule, {
          return item === 'bar' ? <div key={item}>{item}</div> : <span key={item}>{item}</span>;
         })`,
     },
-    { code: 'fn()' },
-    { code: '[1, 2, 3].map(function () {})' },
-    { code: '<App />;' },
-    { code: '[<App key={0} />, <App key={1} />];' },
-    { code: '[1, 2, 3].map(function(x) { return <App key={x} /> });' },
-    { code: '[1, 2, 3].map(x => <App key={x} />);' },
-    { code: '[1, 2 ,3].map(x => x && <App x={x} key={x} />);' },
-    { code: '[1, 2 ,3].map(x => x ? <App x={x} key="1" /> : <OtherApp x={x} key="2" />);' },
-    { code: '[1, 2, 3].map(x => { return <App key={x} /> });' },
-    { code: 'Array.from([1, 2, 3], function(x) { return <App key={x} /> });' },
-    { code: 'Array.from([1, 2, 3], (x => <App key={x} />));' },
-    { code: 'Array.from([1, 2, 3], (x => {return <App key={x} />}));' },
-    { code: 'Array.from([1, 2, 3], someFn);' },
-    { code: 'Array.from([1, 2, 3]);' },
-    { code: '[1, 2, 3].foo(x => <App />);' },
-    { code: 'var App = () => <div />;' },
-    { code: '[1, 2, 3].map(function(x) { return; });' },
-    { code: 'foo(() => <div />);' },
+    { code: "fn()" },
+    { code: "[1, 2, 3].map(function () {})" },
+    { code: "<App />;" },
+    { code: "[<App key={0} />, <App key={1} />];" },
+    { code: "[1, 2, 3].map(function(x) { return <App key={x} /> });" },
+    { code: "[1, 2, 3].map(x => <App key={x} />);" },
+    { code: "[1, 2 ,3].map(x => x && <App x={x} key={x} />);" },
     {
-      code: 'foo(() => <></>);',
-      features: ['fragment'],
+      code: '[1, 2 ,3].map(x => x ? <App x={x} key="1" /> : <OtherApp x={x} key="2" />);',
+    },
+    { code: "[1, 2, 3].map(x => { return <App key={x} /> });" },
+    { code: "Array.from([1, 2, 3], function(x) { return <App key={x} /> });" },
+    { code: "Array.from([1, 2, 3], (x => <App key={x} />));" },
+    { code: "Array.from([1, 2, 3], (x => {return <App key={x} />}));" },
+    { code: "Array.from([1, 2, 3], someFn);" },
+    { code: "Array.from([1, 2, 3]);" },
+    { code: "[1, 2, 3].foo(x => <App />);" },
+    { code: "var App = () => <div />;" },
+    { code: "[1, 2, 3].map(function(x) { return; });" },
+    { code: "foo(() => <div />);" },
+    {
+      code: "foo(() => <></>);",
+      features: ["fragment"],
     },
     {
-      code: '<></>;',
-      features: ['fragment'],
+      code: "<></>;",
+      features: ["fragment"],
     },
     {
-      code: '<App {...{}} />;',
+      code: "<App {...{}} />;",
     },
     {
       code: '<App key="keyBeforeSpread" {...{}} />;',
@@ -126,7 +128,7 @@ ruleTester.run('jsx-key', rule, {
 
         export default ResourceVideo;
       `,
-      features: ['types'],
+      features: ["types"],
     },
     {
       code: `
@@ -159,7 +161,7 @@ ruleTester.run('jsx-key', rule, {
           );
         }
       `,
-      features: ['optional chaining'],
+      features: ["optional chaining"],
     },
     {
       code: `
@@ -169,7 +171,7 @@ ruleTester.run('jsx-key', rule, {
 
         const directiveRanges = comments?.map(tryParseTSDirective)
       `,
-      features: ['optional chaining', 'nullish coalescing'],
+      features: ["optional chaining", "nullish coalescing"],
     },
     {
       code: `
@@ -182,9 +184,9 @@ ruleTester.run('jsx-key', rule, {
 
         export const clusterFrameMap = observable.map<string, ClusterFrameInfo>();
       `,
-      features: ['types', 'no-babel-old'],
+      features: ["types", "no-babel-old"],
     },
-    { code: 'React.Children.toArray([1, 2 ,3].map(x => <App />));' },
+    { code: "React.Children.toArray([1, 2 ,3].map(x => <App />));" },
     {
       code: `
         import { Children } from "react";
@@ -211,9 +213,9 @@ ruleTester.run('jsx-key', rule, {
       `,
       settings,
     },
-    { code: '[1, 2, 3].map(x => { return x && <App key={x} />; });' },
-    { code: '[1, 2, 3].map(x => { return x && y && <App key={x} />; });' },
-    { code: '[1, 2, 3].map(x => { return x && foo(); });' },
+    { code: "[1, 2, 3].map(x => { return x && <App key={x} />; });" },
+    { code: "[1, 2, 3].map(x => { return x && y && <App key={x} />; });" },
+    { code: "[1, 2, 3].map(x => { return x && foo(); });" },
   ]),
   invalid: parsers.all([
     {
@@ -222,8 +224,8 @@ ruleTester.run('jsx-key', rule, {
           return item === 'bar' ? <div>{item}</div> : <span>{item}</span>;
         })`,
       errors: [
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
+        { messageId: "missingIterKey" },
+        { messageId: "missingIterKey" },
       ],
     },
     {
@@ -232,8 +234,8 @@ ruleTester.run('jsx-key', rule, {
           return item === 'bar' ? <div>{item}</div> : <span>{item}</span>;
         })`,
       errors: [
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
+        { messageId: "missingIterKey" },
+        { messageId: "missingIterKey" },
       ],
     },
     {
@@ -242,8 +244,8 @@ ruleTester.run('jsx-key', rule, {
           return item === 'bar' ? <div>{item}</div> : <span>{item}</span>;
         })`,
       errors: [
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
+        { messageId: "missingIterKey" },
+        { messageId: "missingIterKey" },
       ],
     },
     {
@@ -263,94 +265,94 @@ ruleTester.run('jsx-key', rule, {
         }
       `,
       errors: [
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
+        { messageId: "missingIterKey" },
+        { messageId: "missingIterKey" },
       ],
     },
     {
-      code: '[<App />];',
-      errors: [{ messageId: 'missingArrayKey' }],
+      code: "[<App />];",
+      errors: [{ messageId: "missingArrayKey" }],
     },
     {
-      code: '[<App {...key} />];',
-      errors: [{ messageId: 'missingArrayKey' }],
+      code: "[<App {...key} />];",
+      errors: [{ messageId: "missingArrayKey" }],
     },
     {
-      code: '[<App key={0}/>, <App />];',
-      errors: [{ messageId: 'missingArrayKey' }],
+      code: "[<App key={0}/>, <App />];",
+      errors: [{ messageId: "missingArrayKey" }],
     },
     {
-      code: '[1, 2 ,3].map(function(x) { return <App /> });',
-      errors: [{ messageId: 'missingIterKey' }],
+      code: "[1, 2 ,3].map(function(x) { return <App /> });",
+      errors: [{ messageId: "missingIterKey" }],
     },
     {
-      code: '[1, 2 ,3].map(x => <App />);',
-      errors: [{ messageId: 'missingIterKey' }],
+      code: "[1, 2 ,3].map(x => <App />);",
+      errors: [{ messageId: "missingIterKey" }],
     },
     {
-      code: '[1, 2 ,3].map(x => x && <App x={x} />);',
-      errors: [{ messageId: 'missingIterKey' }],
+      code: "[1, 2 ,3].map(x => x && <App x={x} />);",
+      errors: [{ messageId: "missingIterKey" }],
     },
     {
       code: '[1, 2 ,3].map(x => x ? <App x={x} key="1" /> : <OtherApp x={x} />);',
-      errors: [{ messageId: 'missingIterKey' }],
+      errors: [{ messageId: "missingIterKey" }],
     },
     {
       code: '[1, 2 ,3].map(x => x ? <App x={x} /> : <OtherApp x={x} key="2" />);',
-      errors: [{ messageId: 'missingIterKey' }],
+      errors: [{ messageId: "missingIterKey" }],
     },
     {
-      code: '[1, 2 ,3].map(x => { return <App /> });',
-      errors: [{ messageId: 'missingIterKey' }],
+      code: "[1, 2 ,3].map(x => { return <App /> });",
+      errors: [{ messageId: "missingIterKey" }],
     },
     {
-      code: 'Array.from([1, 2 ,3], function(x) { return <App /> });',
-      errors: [{ messageId: 'missingIterKey' }],
+      code: "Array.from([1, 2 ,3], function(x) { return <App /> });",
+      errors: [{ messageId: "missingIterKey" }],
     },
     {
-      code: 'Array.from([1, 2 ,3], (x => { return <App /> }));',
-      errors: [{ messageId: 'missingIterKey' }],
+      code: "Array.from([1, 2 ,3], (x => { return <App /> }));",
+      errors: [{ messageId: "missingIterKey" }],
     },
     {
-      code: 'Array.from([1, 2 ,3], (x => <App />));',
-      errors: [{ messageId: 'missingIterKey' }],
+      code: "Array.from([1, 2 ,3], (x => <App />));",
+      errors: [{ messageId: "missingIterKey" }],
     },
     {
-      code: '[1, 2, 3]?.map(x => <BabelEslintApp />)',
-      features: ['no-default'],
-      errors: [{ messageId: 'missingIterKey' }],
+      code: "[1, 2, 3]?.map(x => <BabelEslintApp />)",
+      features: ["no-default"],
+      errors: [{ messageId: "missingIterKey" }],
     },
     {
-      code: '[1, 2, 3]?.map(x => <TypescriptEslintApp />)',
-      features: ['ts'],
-      errors: [{ messageId: 'missingIterKey' }],
+      code: "[1, 2, 3]?.map(x => <TypescriptEslintApp />)",
+      features: ["ts"],
+      errors: [{ messageId: "missingIterKey" }],
     },
     {
-      code: '[1, 2, 3].map(x => <>{x}</>);',
-      features: ['fragment'],
+      code: "[1, 2, 3].map(x => <>{x}</>);",
+      features: ["fragment"],
       options: [{ checkFragmentShorthand: true }],
       settings,
       errors: [
         {
-          messageId: 'missingIterKeyUsePrag',
+          messageId: "missingIterKeyUsePrag",
           data: {
-            reactPrag: 'Act',
-            fragPrag: 'Frag',
+            reactPrag: "Act",
+            fragPrag: "Frag",
           },
         },
       ],
     },
     {
-      code: '[<></>];',
-      features: ['fragment'],
+      code: "[<></>];",
+      features: ["fragment"],
       options: [{ checkFragmentShorthand: true }],
       settings,
       errors: [
         {
-          messageId: 'missingArrayKeyUsePrag',
+          messageId: "missingArrayKeyUsePrag",
           data: {
-            reactPrag: 'Act',
-            fragPrag: 'Frag',
+            reactPrag: "Act",
+            fragPrag: "Frag",
           },
         },
       ],
@@ -359,13 +361,13 @@ ruleTester.run('jsx-key', rule, {
       code: '[<App {...obj} key="keyAfterSpread" />];',
       options: [{ checkKeyMustBeforeSpread: true }],
       settings,
-      errors: [{ messageId: 'keyBeforeSpread' }],
+      errors: [{ messageId: "keyBeforeSpread" }],
     },
     {
       code: '[<div {...obj} key="keyAfterSpread" />];',
       options: [{ checkKeyMustBeforeSpread: true }],
       settings,
-      errors: [{ messageId: 'keyBeforeSpread' }],
+      errors: [{ messageId: "keyBeforeSpread" }],
     },
     {
       code: `
@@ -376,8 +378,8 @@ ruleTester.run('jsx-key', rule, {
       `,
       options: [{ warnOnDuplicates: true }],
       errors: [
-        { messageId: 'nonUniqueKeys', line: 3 },
-        { messageId: 'nonUniqueKeys', line: 4 },
+        { messageId: "nonUniqueKeys", line: 3 },
+        { messageId: "nonUniqueKeys", line: 4 },
       ],
     },
     {
@@ -391,8 +393,8 @@ ruleTester.run('jsx-key', rule, {
       `,
       options: [{ warnOnDuplicates: true }],
       errors: [
-        { messageId: 'nonUniqueKeys', line: 4 },
-        { messageId: 'nonUniqueKeys', line: 5 },
+        { messageId: "nonUniqueKeys", line: 4 },
+        { messageId: "nonUniqueKeys", line: 5 },
       ],
     },
     {
@@ -414,8 +416,8 @@ ruleTester.run('jsx-key', rule, {
         };
       `,
       errors: [
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
+        { messageId: "missingIterKey" },
+        { messageId: "missingIterKey" },
       ],
     },
     {
@@ -441,10 +443,10 @@ ruleTester.run('jsx-key', rule, {
         };
       `,
       errors: [
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
+        { messageId: "missingIterKey" },
+        { messageId: "missingIterKey" },
+        { messageId: "missingIterKey" },
+        { messageId: "missingIterKey" },
       ],
     },
     {
@@ -464,9 +466,9 @@ ruleTester.run('jsx-key', rule, {
         };
       `,
       errors: [
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
+        { messageId: "missingIterKey" },
+        { messageId: "missingIterKey" },
+        { messageId: "missingIterKey" },
       ],
     },
     {
@@ -482,15 +484,15 @@ ruleTester.run('jsx-key', rule, {
         };
       `,
       options: [{ checkKeyMustBeforeSpread: true }],
-      errors: [{ messageId: 'keyBeforeSpread' }],
+      errors: [{ messageId: "keyBeforeSpread" }],
     },
     {
-      code: '[1, 2, 3].map(x => { return x && <App />; });',
-      errors: [{ messageId: 'missingIterKey' }],
+      code: "[1, 2, 3].map(x => { return x && <App />; });",
+      errors: [{ messageId: "missingIterKey" }],
     },
     {
-      code: '[1, 2, 3].map(x => { return x || y || <App />; });',
-      errors: [{ messageId: 'missingIterKey' }],
+      code: "[1, 2, 3].map(x => { return x || y || <App />; });",
+      errors: [{ messageId: "missingIterKey" }],
     },
   ]),
 });

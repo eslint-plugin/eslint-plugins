@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * Find the token before the closing bracket.

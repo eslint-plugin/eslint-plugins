@@ -3,56 +3,61 @@
  * @author Yannick Croissant
  */
 
-'use strict';
+"use strict";
 
-const Components = require('../util/Components');
-const isCreateContext = require('../util/isCreateContext');
-const astUtil = require('../util/ast');
-const componentUtil = require('../util/componentUtil');
-const docsUrl = require('../util/docsUrl');
-const testReactVersion = require('../util/version').testReactVersion;
-const propsUtil = require('../util/props');
-const report = require('../util/report');
+const Components = require("../util/Components");
+const isCreateContext = require("../util/isCreateContext");
+const astUtil = require("../util/ast");
+const componentUtil = require("../util/componentUtil");
+const docsUrl = require("../util/docsUrl");
+const testReactVersion = require("../util/version").testReactVersion;
+const propsUtil = require("../util/props");
+const report = require("../util/report");
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
 
 const messages = {
-  noDisplayName: 'Component definition is missing display name',
-  noContextDisplayName: 'Context definition is missing display name',
+  noDisplayName: "Component definition is missing display name",
+  noContextDisplayName: "Context definition is missing display name",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow missing displayName in a React component definition',
-      category: 'Best Practices',
+      description:
+        "Disallow missing displayName in a React component definition",
+      category: "Best Practices",
       recommended: true,
-      url: docsUrl('display-name'),
+      url: docsUrl("display-name"),
     },
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        ignoreTranspilerName: {
-          type: 'boolean',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          ignoreTranspilerName: {
+            type: "boolean",
+          },
+          checkContextObjects: {
+            type: "boolean",
+          },
         },
-        checkContextObjects: {
-          type: 'boolean',
-        },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create: Components.detect((context, components, utils) => {
     const config = context.options[0] || {};
     const ignoreTranspilerName = config.ignoreTranspilerName || false;
-    const checkContextObjects = (config.checkContextObjects || false) && testReactVersion(context, '>= 16.3.0');
+    const checkContextObjects =
+      (config.checkContextObjects || false) &&
+      testReactVersion(context, ">= 16.3.0");
 
     const contextObjects = new Map();
 
@@ -72,10 +77,12 @@ module.exports = {
      * @returns {boolean} True if React.forwardRef is nested inside React.memo, false if not.
      */
     function isNestedMemo(node) {
-      return astUtil.isCallExpression(node)
-        && node.arguments
-        && astUtil.isCallExpression(node.arguments[0])
-        && utils.isPragmaComponentWrapper(node);
+      return (
+        astUtil.isCallExpression(node) &&
+        node.arguments &&
+        astUtil.isCallExpression(node.arguments[0]) &&
+        utils.isPragmaComponentWrapper(node)
+      );
     }
 
     /**
@@ -84,13 +91,13 @@ module.exports = {
      */
     function reportMissingDisplayName(component) {
       if (
-        testReactVersion(context, '^0.14.10 || ^15.7.0 || >= 16.12.0')
-        && isNestedMemo(component.node)
+        testReactVersion(context, "^0.14.10 || ^15.7.0 || >= 16.12.0") &&
+        isNestedMemo(component.node)
       ) {
         return;
       }
 
-      report(context, messages.noDisplayName, 'noDisplayName', {
+      report(context, messages.noDisplayName, "noDisplayName", {
         node: component.node,
       });
     }
@@ -100,7 +107,7 @@ module.exports = {
      * @param {Object} contextObj The context object to process
      */
     function reportMissingContextDisplayName(contextObj) {
-      report(context, messages.noContextDisplayName, 'noContextDisplayName', {
+      report(context, messages.noContextDisplayName, "noContextDisplayName", {
         node: contextObj.node,
       });
     }
@@ -111,46 +118,45 @@ module.exports = {
      * @returns {boolean} True if component has a name, false if not.
      */
     function hasTranspilerName(node) {
-      const namedObjectAssignment = (
-        node.type === 'ObjectExpression'
-        && node.parent
-        && node.parent.parent
-        && node.parent.parent.type === 'AssignmentExpression'
-        && (
-          !node.parent.parent.left.object
-          || node.parent.parent.left.object.name !== 'module'
-          || node.parent.parent.left.property.name !== 'exports'
-        )
-      );
-      const namedObjectDeclaration = (
-        node.type === 'ObjectExpression'
-        && node.parent
-        && node.parent.parent
-        && node.parent.parent.type === 'VariableDeclarator'
-      );
-      const namedClass = (
-        (node.type === 'ClassDeclaration' || node.type === 'ClassExpression')
-        && node.id
-        && !!node.id.name
-      );
+      const namedObjectAssignment =
+        node.type === "ObjectExpression" &&
+        node.parent &&
+        node.parent.parent &&
+        node.parent.parent.type === "AssignmentExpression" &&
+        (!node.parent.parent.left.object ||
+          node.parent.parent.left.object.name !== "module" ||
+          node.parent.parent.left.property.name !== "exports");
+      const namedObjectDeclaration =
+        node.type === "ObjectExpression" &&
+        node.parent &&
+        node.parent.parent &&
+        node.parent.parent.type === "VariableDeclarator";
+      const namedClass =
+        (node.type === "ClassDeclaration" || node.type === "ClassExpression") &&
+        node.id &&
+        !!node.id.name;
 
-      const namedFunctionDeclaration = (
-        (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression')
-        && node.id
-        && !!node.id.name
-      );
+      const namedFunctionDeclaration =
+        (node.type === "FunctionDeclaration" ||
+          node.type === "FunctionExpression") &&
+        node.id &&
+        !!node.id.name;
 
-      const namedFunctionExpression = (
-        astUtil.isFunctionLikeExpression(node)
-        && node.parent
-        && (node.parent.type === 'VariableDeclarator' || node.parent.type === 'Property' || node.parent.method === true)
-        && (!node.parent.parent || !componentUtil.isES5Component(node.parent.parent, context))
-      );
+      const namedFunctionExpression =
+        astUtil.isFunctionLikeExpression(node) &&
+        node.parent &&
+        (node.parent.type === "VariableDeclarator" ||
+          node.parent.type === "Property" ||
+          node.parent.method === true) &&
+        (!node.parent.parent ||
+          !componentUtil.isES5Component(node.parent.parent, context));
 
       if (
-        namedObjectAssignment || namedObjectDeclaration
-        || namedClass
-        || namedFunctionDeclaration || namedFunctionExpression
+        namedObjectAssignment ||
+        namedObjectDeclaration ||
+        namedClass ||
+        namedFunctionDeclaration ||
+        namedFunctionExpression
       ) {
         return true;
       }
@@ -160,26 +166,27 @@ module.exports = {
     function hasVariableDeclaration(node, name) {
       if (!node) return false;
 
-      if (node.type === 'VariableDeclaration') {
+      if (node.type === "VariableDeclaration") {
         return node.declarations.some((decl) => {
           if (!decl.id) return false;
 
           // const name = ...
-          if (decl.id.type === 'Identifier' && decl.id.name === name) {
+          if (decl.id.type === "Identifier" && decl.id.name === name) {
             return true;
           }
 
           // const [name] = ...
-          if (decl.id.type === 'ArrayPattern') {
+          if (decl.id.type === "ArrayPattern") {
             return decl.id.elements.some(
-              (el) => el && el.type === 'Identifier' && el.name === name
+              (el) => el && el.type === "Identifier" && el.name === name,
             );
           }
 
           // const { name } = ...
-          if (decl.id.type === 'ObjectPattern') {
+          if (decl.id.type === "ObjectPattern") {
             return decl.id.properties.some(
-              (prop) => prop.type === 'Property' && prop.key && prop.key.name === name
+              (prop) =>
+                prop.type === "Property" && prop.key && prop.key.name === name,
             );
           }
 
@@ -187,7 +194,7 @@ module.exports = {
         });
       }
 
-      if (node.type === 'BlockStatement' && node.body) {
+      if (node.type === "BlockStatement" && node.body) {
         return node.body.some((stmt) => hasVariableDeclaration(stmt, name));
       }
 
@@ -201,39 +208,46 @@ module.exports = {
         currentNode = currentNode.parent;
 
         if (
-          currentNode.type === 'FunctionDeclaration'
-          || currentNode.type === 'FunctionExpression'
-          || currentNode.type === 'ArrowFunctionExpression'
+          currentNode.type === "FunctionDeclaration" ||
+          currentNode.type === "FunctionExpression" ||
+          currentNode.type === "ArrowFunctionExpression"
         ) {
-          if (currentNode.body && hasVariableDeclaration(currentNode.body, identifierName)) {
+          if (
+            currentNode.body &&
+            hasVariableDeclaration(currentNode.body, identifierName)
+          ) {
             return true;
           }
         }
 
-        if (currentNode.type === 'BlockStatement') {
+        if (currentNode.type === "BlockStatement") {
           if (hasVariableDeclaration(currentNode, identifierName)) {
             return true;
           }
         }
 
         if (
-          (currentNode.type === 'FunctionDeclaration'
-           || currentNode.type === 'FunctionExpression'
-           || currentNode.type === 'ArrowFunctionExpression')
-          && currentNode.params
+          (currentNode.type === "FunctionDeclaration" ||
+            currentNode.type === "FunctionExpression" ||
+            currentNode.type === "ArrowFunctionExpression") &&
+          currentNode.params
         ) {
           const isParamShadowed = currentNode.params.some((param) => {
-            if (param.type === 'Identifier' && param.name === identifierName) {
+            if (param.type === "Identifier" && param.name === identifierName) {
               return true;
             }
-            if (param.type === 'ObjectPattern') {
+            if (param.type === "ObjectPattern") {
               return param.properties.some(
-                (prop) => prop.type === 'Property' && prop.key && prop.key.name === identifierName
+                (prop) =>
+                  prop.type === "Property" &&
+                  prop.key &&
+                  prop.key.name === identifierName,
               );
             }
-            if (param.type === 'ArrayPattern') {
+            if (param.type === "ArrayPattern") {
               return param.elements.some(
-                (el) => el && el.type === 'Identifier' && el.name === identifierName
+                (el) =>
+                  el && el.type === "Identifier" && el.name === identifierName,
               );
             }
             return false;
@@ -253,20 +267,20 @@ module.exports = {
      * @returns {boolean} True if the wrapper identifier (e.g. 'React', 'memo', 'forwardRef') is shadowed, false otherwise.
      */
     function isShadowedComponent(node) {
-      if (!node || node.type !== 'CallExpression') {
+      if (!node || node.type !== "CallExpression") {
         return false;
       }
 
       if (
-        node.callee.type === 'MemberExpression'
-        && node.callee.object.name === 'React'
+        node.callee.type === "MemberExpression" &&
+        node.callee.object.name === "React"
       ) {
-        return isIdentifierShadowed(node, 'React');
+        return isIdentifierShadowed(node, "React");
       }
 
-      if (node.callee.type === 'Identifier') {
+      if (node.callee.type === "Identifier") {
         const name = node.callee.name;
-        if (name === 'memo' || name === 'forwardRef') {
+        if (name === "memo" || name === "forwardRef") {
           return isIdentifierShadowed(node, name);
         }
       }
@@ -281,7 +295,10 @@ module.exports = {
     return {
       ExpressionStatement(node) {
         if (checkContextObjects && isCreateContext(node)) {
-          contextObjects.set(node.expression.left.name, { node, hasDisplayName: false });
+          contextObjects.set(node.expression.left.name, {
+            node,
+            hasDisplayName: false,
+          });
         }
       },
       VariableDeclarator(node) {
@@ -289,7 +306,7 @@ module.exports = {
           contextObjects.set(node.id.name, { node, hasDisplayName: false });
         }
       },
-      'ClassProperty, PropertyDefinition'(node) {
+      "ClassProperty, PropertyDefinition"(node) {
         if (!propsUtil.isDisplayNameDeclaration(node)) {
           return;
         }
@@ -301,10 +318,10 @@ module.exports = {
           return;
         }
         if (
-          checkContextObjects
-          && node.object
-          && node.object.name
-          && contextObjects.has(node.object.name)
+          checkContextObjects &&
+          node.object &&
+          node.object.name &&
+          contextObjects.has(node.object.name)
         ) {
           contextObjects.get(node.object.name).hasDisplayName = true;
         }
@@ -315,7 +332,7 @@ module.exports = {
         markDisplayNameAsDeclared(astUtil.unwrapTSAsExpression(component.node));
       },
 
-      'FunctionExpression, FunctionDeclaration, ArrowFunctionExpression'(node) {
+      "FunctionExpression, FunctionDeclaration, ArrowFunctionExpression"(node) {
         if (ignoreTranspilerName || !hasTranspilerName(node)) {
           return;
         }
@@ -331,7 +348,7 @@ module.exports = {
         markDisplayNameAsDeclared(node);
       },
 
-      'ClassExpression, ClassDeclaration'(node) {
+      "ClassExpression, ClassDeclaration"(node) {
         if (ignoreTranspilerName || !hasTranspilerName(node)) {
           return;
         }
@@ -345,7 +362,10 @@ module.exports = {
         if (ignoreTranspilerName || !hasTranspilerName(node)) {
           // Search for the displayName declaration
           node.properties.forEach((property) => {
-            if (!property.key || !propsUtil.isDisplayNameDeclaration(property.key)) {
+            if (
+              !property.key ||
+              !propsUtil.isDisplayNameDeclaration(property.key)
+            ) {
               return;
             }
             markDisplayNameAsDeclared(node);
@@ -360,15 +380,19 @@ module.exports = {
           return;
         }
 
-        if (node.arguments.length > 0 && astUtil.isFunctionLikeExpression(node.arguments[0])) {
+        if (
+          node.arguments.length > 0 &&
+          astUtil.isFunctionLikeExpression(node.arguments[0])
+        ) {
           // Skip over React.forwardRef declarations that are embedded within
           // a React.memo i.e. React.memo(React.forwardRef(/* ... */))
           // This means that we raise a single error for the call to React.memo
           // instead of one for React.memo and one for React.forwardRef
-          const isWrappedInAnotherPragma = utils.getPragmaComponentWrapper(node);
+          const isWrappedInAnotherPragma =
+            utils.getPragmaComponentWrapper(node);
           if (
-            !isWrappedInAnotherPragma
-            && (ignoreTranspilerName || !hasTranspilerName(node.arguments[0]))
+            !isWrappedInAnotherPragma &&
+            (ignoreTranspilerName || !hasTranspilerName(node.arguments[0]))
           ) {
             return;
           }
@@ -379,17 +403,25 @@ module.exports = {
         }
       },
 
-      'Program:exit'() {
+      "Program:exit"() {
         const list = components.list();
         // Report missing display name for all components
         Object.values(list)
-          .filter((component) => !isShadowedComponent(component.node) && !component.hasDisplayName)
-          .forEach((component) => { reportMissingDisplayName(component); });
+          .filter(
+            (component) =>
+              !isShadowedComponent(component.node) && !component.hasDisplayName,
+          )
+          .forEach((component) => {
+            reportMissingDisplayName(component);
+          });
         if (checkContextObjects) {
           // Report missing display name for all context objects
-            contextObjects.values().filter((v) => !v.hasDisplayName).forEach(
-            (contextObj) => reportMissingContextDisplayName(contextObj)
-          );
+          contextObjects
+            .values()
+            .filter((v) => !v.hasDisplayName)
+            .forEach((contextObj) =>
+              reportMissingContextDisplayName(contextObj),
+            );
         }
       },
     };

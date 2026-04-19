@@ -3,20 +3,20 @@
  * @author Jake Marsh
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/jsx-handler-names');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/jsx-handler-names");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,17 +27,17 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('jsx-handler-names', rule, {
+ruleTester.run("jsx-handler-names", rule, {
   valid: parsers.all([
     {
-      code: '<TestComponent onChange={this.handleChange} />',
+      code: "<TestComponent onChange={this.handleChange} />",
     },
     {
       // TODO: make this an invalid test
-      code: '<TestComponent onChange={this.handle123Change} />',
+      code: "<TestComponent onChange={this.handle123Change} />",
     },
     {
-      code: '<TestComponent onChange={this.props.onChange} />',
+      code: "<TestComponent onChange={this.props.onChange} />",
     },
     {
       code: `
@@ -59,19 +59,19 @@ ruleTester.run('jsx-handler-names', rule, {
       `,
     },
     {
-      code: '<TestComponent onChange={handleChange} />',
+      code: "<TestComponent onChange={handleChange} />",
       options: [{ checkLocalVariables: true }],
     },
     {
-      code: '<TestComponent onChange={takeCareOfChange} />',
+      code: "<TestComponent onChange={takeCareOfChange} />",
       options: [{ checkLocalVariables: false }],
     },
     {
-      code: '<TestComponent onChange={event => window.alert(event.target.value)} />',
+      code: "<TestComponent onChange={event => window.alert(event.target.value)} />",
       options: [{ checkInlineFunction: false }],
     },
     {
-      code: '<TestComponent onChange={() => handleChange()} />',
+      code: "<TestComponent onChange={() => handleChange()} />",
       options: [
         {
           checkInlineFunction: true,
@@ -80,110 +80,115 @@ ruleTester.run('jsx-handler-names', rule, {
       ],
     },
     {
-      code: '<TestComponent onChange={() => this.handleChange()} />',
+      code: "<TestComponent onChange={() => this.handleChange()} />",
       options: [{ checkInlineFunction: true }],
     },
     {
-      code: '<TestComponent onChange={() => 42} />',
+      code: "<TestComponent onChange={() => 42} />",
     },
     {
-      code: '<TestComponent onChange={this.props.onFoo} />',
+      code: "<TestComponent onChange={this.props.onFoo} />",
     },
     {
-      code: '<TestComponent isSelected={this.props.isSelected} />',
+      code: "<TestComponent isSelected={this.props.isSelected} />",
     },
     {
-      code: '<TestComponent shouldDisplay={this.state.shouldDisplay} />',
+      code: "<TestComponent shouldDisplay={this.state.shouldDisplay} />",
     },
     {
-      code: '<TestComponent shouldDisplay={arr[0].prop} />',
+      code: "<TestComponent shouldDisplay={arr[0].prop} />",
     },
     {
-      code: '<TestComponent onChange={props.onChange} />',
+      code: "<TestComponent onChange={props.onChange} />",
     },
     {
-      code: '<TestComponent ref={this.handleRef} />',
+      code: "<TestComponent ref={this.handleRef} />",
     },
     {
-      code: '<TestComponent ref={this.somethingRef} />',
+      code: "<TestComponent ref={this.somethingRef} />",
     },
     {
-      code: '<TestComponent test={this.props.content} />',
+      code: "<TestComponent test={this.props.content} />",
       options: [
         {
-          eventHandlerPrefix: 'on',
-          eventHandlerPropPrefix: 'on',
+          eventHandlerPrefix: "on",
+          eventHandlerPropPrefix: "on",
         },
       ],
     },
     {
-      code: '<TestComponent onChange={props::handleChange} />',
-      features: ['bind operator'],
+      code: "<TestComponent onChange={props::handleChange} />",
+      features: ["bind operator"],
     },
     {
-      code: '<TestComponent onChange={::props.onChange} />',
-      features: ['bind operator'],
+      code: "<TestComponent onChange={::props.onChange} />",
+      features: ["bind operator"],
     },
     {
-      code: '<TestComponent onChange={props.foo::handleChange} />',
-      features: ['bind operator'],
+      code: "<TestComponent onChange={props.foo::handleChange} />",
+      features: ["bind operator"],
     },
     {
-      code: '<TestComponent onChange={() => props::handleChange()} />',
-      features: ['bind operator'],
+      code: "<TestComponent onChange={() => props::handleChange()} />",
+      features: ["bind operator"],
       options: [{ checkInlineFunction: true }],
     },
     {
-      code: '<TestComponent onChange={() => ::props.onChange()} />',
-      features: ['bind operator'],
+      code: "<TestComponent onChange={() => ::props.onChange()} />",
+      features: ["bind operator"],
       options: [{ checkInlineFunction: true }],
     },
     {
-      code: '<TestComponent onChange={() => props.foo::handleChange()} />',
-      features: ['bind operator'],
+      code: "<TestComponent onChange={() => props.foo::handleChange()} />",
+      features: ["bind operator"],
       options: [{ checkInlineFunction: true }],
     },
     {
-      code: '<TestComponent only={this.only} />',
+      code: "<TestComponent only={this.only} />",
     },
     {
-      code: '<TestComponent onChange={this.someChange} />',
-      options: [
-        {
-          eventHandlerPrefix: false,
-          eventHandlerPropPrefix: 'on',
-        },
-      ],
-    },
-    {
-      code: '<TestComponent somePrefixChange={this.someChange} />',
+      code: "<TestComponent onChange={this.someChange} />",
       options: [
         {
           eventHandlerPrefix: false,
-          eventHandlerPropPrefix: 'somePrefix',
+          eventHandlerPropPrefix: "on",
         },
       ],
     },
     {
-      code: '<TestComponent someProp={this.handleChange} />',
+      code: "<TestComponent somePrefixChange={this.someChange} />",
+      options: [
+        {
+          eventHandlerPrefix: false,
+          eventHandlerPropPrefix: "somePrefix",
+        },
+      ],
+    },
+    {
+      code: "<TestComponent someProp={this.handleChange} />",
       options: [{ eventHandlerPropPrefix: false }],
     },
     {
-      code: '<TestComponent someProp={this.somePrefixChange} />',
+      code: "<TestComponent someProp={this.somePrefixChange} />",
       options: [
         {
-          eventHandlerPrefix: 'somePrefix',
+          eventHandlerPrefix: "somePrefix",
           eventHandlerPropPrefix: false,
         },
       ],
     },
     {
-      code: '<TestComponent someProp={props.onChange} />',
+      code: "<TestComponent someProp={props.onChange} />",
       options: [{ eventHandlerPropPrefix: false }],
     },
     {
-      code: '<ComponentFromOtherLibraryBar customPropNameBar={handleSomething} />;',
-      options: [{ checkLocalVariables: true, ignoreComponentNames: ['ComponentFromOtherLibraryBar'] }],
+      code: "<ComponentFromOtherLibraryBar customPropNameBar={handleSomething} />;",
+      options: [
+        {
+          checkLocalVariables: true,
+          ignoreComponentNames: ["ComponentFromOtherLibraryBar"],
+        },
+      ],
     },
     {
       code: `
@@ -197,11 +202,18 @@ ruleTester.run('jsx-handler-names', rule, {
           )
         }
       `,
-      options: [{ checkLocalVariables: true, ignoreComponentNames: ['MyLib*'] }],
+      options: [
+        { checkLocalVariables: true, ignoreComponentNames: ["MyLib*"] },
+      ],
     },
     {
-      code: '<A.TestComponent customPropNameBar={handleSomething} />',
-      options: [{ checkLocalVariables: true, ignoreComponentNames: ['A.TestComponent'] }],
+      code: "<A.TestComponent customPropNameBar={handleSomething} />",
+      options: [
+        {
+          checkLocalVariables: true,
+          ignoreComponentNames: ["A.TestComponent"],
+        },
+      ],
     },
     {
       code: `
@@ -215,125 +227,125 @@ ruleTester.run('jsx-handler-names', rule, {
           )
         }
       `,
-      options: [{ checkLocalVariables: true, ignoreComponentNames: ['A.MyLib*'] }],
+      options: [
+        { checkLocalVariables: true, ignoreComponentNames: ["A.MyLib*"] },
+      ],
     },
   ]),
 
   invalid: parsers.all([
     {
-      code: '<TestComponent onChange={this.doSomethingOnChange} />',
+      code: "<TestComponent onChange={this.doSomethingOnChange} />",
       errors: [
         {
-          messageId: 'badHandlerName',
-          data: { propKey: 'onChange', handlerPrefix: 'handle' },
+          messageId: "badHandlerName",
+          data: { propKey: "onChange", handlerPrefix: "handle" },
         },
       ],
     },
     {
-      code: '<TestComponent onChange={this.handlerChange} />',
+      code: "<TestComponent onChange={this.handlerChange} />",
       errors: [
         {
-          messageId: 'badHandlerName',
-          data: { propKey: 'onChange', handlerPrefix: 'handle' },
+          messageId: "badHandlerName",
+          data: { propKey: "onChange", handlerPrefix: "handle" },
         },
       ],
     },
     {
-      code: '<TestComponent onChange={this.handle} />',
+      code: "<TestComponent onChange={this.handle} />",
       errors: [
         {
-          messageId: 'badHandlerName',
-          data: { propKey: 'onChange', handlerPrefix: 'handle' },
+          messageId: "badHandlerName",
+          data: { propKey: "onChange", handlerPrefix: "handle" },
         },
       ],
     },
     {
-      code: '<TestComponent onChange={this.handle2} />',
+      code: "<TestComponent onChange={this.handle2} />",
       errors: [
         {
-          messageId: 'badHandlerName',
-          data: { propKey: 'onChange', handlerPrefix: 'handle' },
+          messageId: "badHandlerName",
+          data: { propKey: "onChange", handlerPrefix: "handle" },
         },
       ],
     },
     {
-      code: '<TestComponent onChange={this.handl3Change} />',
+      code: "<TestComponent onChange={this.handl3Change} />",
       errors: [
         {
-          messageId: 'badHandlerName',
-          data: { propKey: 'onChange', handlerPrefix: 'handle' },
+          messageId: "badHandlerName",
+          data: { propKey: "onChange", handlerPrefix: "handle" },
         },
       ],
     },
     {
-      code: '<TestComponent onChange={this.handle4change} />',
+      code: "<TestComponent onChange={this.handle4change} />",
       errors: [
         {
-          messageId: 'badHandlerName',
-          data: { propKey: 'onChange', handlerPrefix: 'handle' },
+          messageId: "badHandlerName",
+          data: { propKey: "onChange", handlerPrefix: "handle" },
         },
       ],
     },
     {
-      code: '<TestComponent onChange={takeCareOfChange} />',
+      code: "<TestComponent onChange={takeCareOfChange} />",
       errors: [
         {
-          messageId: 'badHandlerName',
-          data: { propKey: 'onChange', handlerPrefix: 'handle' },
+          messageId: "badHandlerName",
+          data: { propKey: "onChange", handlerPrefix: "handle" },
         },
       ],
       options: [{ checkLocalVariables: true }],
     },
     {
-      code: '<TestComponent onChange={() => this.takeCareOfChange()} />',
+      code: "<TestComponent onChange={() => this.takeCareOfChange()} />",
       errors: [
         {
-          messageId: 'badHandlerName',
-          data: { propKey: 'onChange', handlerPrefix: 'handle' },
+          messageId: "badHandlerName",
+          data: { propKey: "onChange", handlerPrefix: "handle" },
         },
       ],
       options: [{ checkInlineFunction: true }],
     },
     {
-      code: '<TestComponent only={this.handleChange} />',
-      errors: [
-        { message: 'Prop key for handleChange must begin with \'on\'' },
-      ],
+      code: "<TestComponent only={this.handleChange} />",
+      errors: [{ message: "Prop key for handleChange must begin with 'on'" }],
     },
     {
-      code: '<TestComponent2 only={this.handleChange} />',
+      code: "<TestComponent2 only={this.handleChange} />",
       errors: [
         {
-          messageId: 'badPropKey',
-          data: { propValue: 'handleChange', handlerPropPrefix: 'on' },
+          messageId: "badPropKey",
+          data: { propValue: "handleChange", handlerPropPrefix: "on" },
         },
       ],
     },
     {
-      code: '<TestComponent handleChange={this.handleChange} />',
+      code: "<TestComponent handleChange={this.handleChange} />",
       errors: [
         {
-          messageId: 'badPropKey',
-          data: { propValue: 'handleChange', handlerPropPrefix: 'on' },
+          messageId: "badPropKey",
+          data: { propValue: "handleChange", handlerPropPrefix: "on" },
         },
       ],
     },
     {
-      code: '<TestComponent whenChange={handleChange} />',
+      code: "<TestComponent whenChange={handleChange} />",
       errors: [
         {
-          messageId: 'badPropKey',
-          data: { propValue: 'handleChange', handlerPropPrefix: 'on' },
+          messageId: "badPropKey",
+          data: { propValue: "handleChange", handlerPropPrefix: "on" },
         },
       ],
       options: [{ checkLocalVariables: true }],
     },
     {
-      code: '<TestComponent whenChange={() => handleChange()} />',
+      code: "<TestComponent whenChange={() => handleChange()} />",
       errors: [
         {
-          messageId: 'badPropKey',
-          data: { propValue: 'handleChange', handlerPropPrefix: 'on' },
+          messageId: "badPropKey",
+          data: { propValue: "handleChange", handlerPropPrefix: "on" },
         },
       ],
       options: [
@@ -344,64 +356,64 @@ ruleTester.run('jsx-handler-names', rule, {
       ],
     },
     {
-      code: '<TestComponent onChange={handleChange} />',
+      code: "<TestComponent onChange={handleChange} />",
       errors: [
         {
-          messageId: 'badPropKey',
-          data: { propValue: 'handleChange', handlerPropPrefix: 'when' },
+          messageId: "badPropKey",
+          data: { propValue: "handleChange", handlerPropPrefix: "when" },
         },
       ],
       options: [
         {
           checkLocalVariables: true,
-          eventHandlerPrefix: 'handle',
-          eventHandlerPropPrefix: 'when',
+          eventHandlerPrefix: "handle",
+          eventHandlerPropPrefix: "when",
         },
       ],
     },
     {
-      code: '<TestComponent onChange={() => handleChange()} />',
+      code: "<TestComponent onChange={() => handleChange()} />",
       errors: [
         {
-          messageId: 'badPropKey',
-          data: { propValue: 'handleChange', handlerPropPrefix: 'when' },
+          messageId: "badPropKey",
+          data: { propValue: "handleChange", handlerPropPrefix: "when" },
         },
       ],
       options: [
         {
           checkInlineFunction: true,
           checkLocalVariables: true,
-          eventHandlerPrefix: 'handle',
-          eventHandlerPropPrefix: 'when',
+          eventHandlerPrefix: "handle",
+          eventHandlerPropPrefix: "when",
         },
       ],
     },
     {
-      code: '<TestComponent onChange={this.onChange} />',
+      code: "<TestComponent onChange={this.onChange} />",
       errors: [
         {
-          messageId: 'badHandlerName',
-          data: { propKey: 'onChange', handlerPrefix: 'handle' },
+          messageId: "badHandlerName",
+          data: { propKey: "onChange", handlerPrefix: "handle" },
         },
       ],
     },
     {
-      code: '<TestComponent onChange={props::onChange} />',
-      features: ['bind operator'],
+      code: "<TestComponent onChange={props::onChange} />",
+      features: ["bind operator"],
       errors: [
         {
-          messageId: 'badHandlerName',
-          data: { propKey: 'onChange', handlerPrefix: 'handle' },
+          messageId: "badHandlerName",
+          data: { propKey: "onChange", handlerPrefix: "handle" },
         },
       ],
     },
     {
-      code: '<TestComponent onChange={props.foo::onChange} />',
-      features: ['bind operator'],
+      code: "<TestComponent onChange={props.foo::onChange} />",
+      features: ["bind operator"],
       errors: [
         {
-          messageId: 'badHandlerName',
-          data: { propKey: 'onChange', handlerPrefix: 'handle' },
+          messageId: "badHandlerName",
+          data: { propKey: "onChange", handlerPrefix: "handle" },
         },
       ],
     },
@@ -417,29 +429,36 @@ ruleTester.run('jsx-handler-names', rule, {
           )
         }
       `,
-      options: [{ checkLocalVariables: true, ignoreComponentNames: ['MyLibrary*'] }],
+      options: [
+        { checkLocalVariables: true, ignoreComponentNames: ["MyLibrary*"] },
+      ],
       errors: [
         {
-          messageId: 'badPropKey',
-          data: { propValue: 'handleInput', handlerPropPrefix: 'on' },
+          messageId: "badPropKey",
+          data: { propValue: "handleInput", handlerPropPrefix: "on" },
         },
         {
-          messageId: 'badPropKey',
-          data: { propValue: 'handleCheckbox', handlerPropPrefix: 'on' },
+          messageId: "badPropKey",
+          data: { propValue: "handleCheckbox", handlerPropPrefix: "on" },
         },
         {
-          messageId: 'badPropKey',
-          data: { propValue: 'handleButton', handlerPropPrefix: 'on' },
+          messageId: "badPropKey",
+          data: { propValue: "handleButton", handlerPropPrefix: "on" },
         },
       ],
     },
     {
-      code: '<A.TestComponent onChange={onChange} />',
-      options: [{ checkLocalVariables: true, ignoreComponentNames: ['B.TestComponent', 'TestComponent', 'Test*'] }],
+      code: "<A.TestComponent onChange={onChange} />",
+      options: [
+        {
+          checkLocalVariables: true,
+          ignoreComponentNames: ["B.TestComponent", "TestComponent", "Test*"],
+        },
+      ],
       errors: [
         {
-          messageId: 'badHandlerName',
-          data: { propKey: 'onChange', handlerPrefix: 'handle' },
+          messageId: "badHandlerName",
+          data: { propKey: "onChange", handlerPrefix: "handle" },
         },
       ],
     },

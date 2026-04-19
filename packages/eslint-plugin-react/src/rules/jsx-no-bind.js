@@ -5,64 +5,66 @@
  * @author Jacky Ho
  */
 
-'use strict';
+"use strict";
 
-const { propName } = require('@eslintplugin/jsx-ast-utils');
-const docsUrl = require('../util/docsUrl');
-const astUtil = require('../util/ast');
-const jsxUtil = require('../util/jsx');
-const report = require('../util/report');
-const getAncestors = require('../util/eslint').getAncestors;
+const { propName } = require("@eslintplugin/jsx-ast-utils");
+const docsUrl = require("../util/docsUrl");
+const astUtil = require("../util/ast");
+const jsxUtil = require("../util/jsx");
+const report = require("../util/report");
+const getAncestors = require("../util/eslint").getAncestors;
 
 // -----------------------------------------------------------------------------
 // Rule Definition
 // -----------------------------------------------------------------------------
 
 const messages = {
-  bindCall: 'JSX props should not use .bind()',
-  arrowFunc: 'JSX props should not use arrow functions',
-  bindExpression: 'JSX props should not use ::',
-  func: 'JSX props should not use functions',
+  bindCall: "JSX props should not use .bind()",
+  arrowFunc: "JSX props should not use arrow functions",
+  bindExpression: "JSX props should not use ::",
+  func: "JSX props should not use functions",
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow `.bind()` or arrow functions in JSX props',
-      category: 'Best Practices',
+      description: "Disallow `.bind()` or arrow functions in JSX props",
+      category: "Best Practices",
       recommended: false,
-      url: docsUrl('jsx-no-bind'),
+      url: docsUrl("jsx-no-bind"),
     },
 
     messages,
 
-    schema: [{
-      type: 'object',
-      properties: {
-        allowArrowFunctions: {
-          default: false,
-          type: 'boolean',
+    schema: [
+      {
+        type: "object",
+        properties: {
+          allowArrowFunctions: {
+            default: false,
+            type: "boolean",
+          },
+          allowBind: {
+            default: false,
+            type: "boolean",
+          },
+          allowFunctions: {
+            default: false,
+            type: "boolean",
+          },
+          ignoreRefs: {
+            default: false,
+            type: "boolean",
+          },
+          ignoreDOMComponents: {
+            default: false,
+            type: "boolean",
+          },
         },
-        allowBind: {
-          default: false,
-          type: 'boolean',
-        },
-        allowFunctions: {
-          default: false,
-          type: 'boolean',
-        },
-        ignoreRefs: {
-          default: false,
-          type: 'boolean',
-        },
-        ignoreDOMComponents: {
-          default: false,
-          type: 'boolean',
-        },
+        additionalProperties: false,
       },
-      additionalProperties: false,
-    }],
+    ],
   },
 
   create(context) {
@@ -86,30 +88,36 @@ module.exports = {
 
     function getNodeViolationType(node) {
       if (
-        !configuration.allowBind
-        && astUtil.isCallExpression(node)
-        && node.callee.type === 'MemberExpression'
-        && node.callee.property.type === 'Identifier'
-        && node.callee.property.name === 'bind'
+        !configuration.allowBind &&
+        astUtil.isCallExpression(node) &&
+        node.callee.type === "MemberExpression" &&
+        node.callee.property.type === "Identifier" &&
+        node.callee.property.name === "bind"
       ) {
-        return 'bindCall';
+        return "bindCall";
       }
-      if (node.type === 'ConditionalExpression') {
-        return getNodeViolationType(node.test)
-               || getNodeViolationType(node.consequent)
-               || getNodeViolationType(node.alternate);
-      }
-      if (!configuration.allowArrowFunctions && node.type === 'ArrowFunctionExpression') {
-        return 'arrowFunc';
+      if (node.type === "ConditionalExpression") {
+        return (
+          getNodeViolationType(node.test) ||
+          getNodeViolationType(node.consequent) ||
+          getNodeViolationType(node.alternate)
+        );
       }
       if (
-        !configuration.allowFunctions
-        && (node.type === 'FunctionExpression' || node.type === 'FunctionDeclaration')
+        !configuration.allowArrowFunctions &&
+        node.type === "ArrowFunctionExpression"
       ) {
-        return 'func';
+        return "arrowFunc";
       }
-      if (!configuration.allowBind && node.type === 'BindExpression') {
-        return 'bindExpression';
+      if (
+        !configuration.allowFunctions &&
+        (node.type === "FunctionExpression" ||
+          node.type === "FunctionDeclaration")
+      ) {
+        return "func";
+      }
+      if (!configuration.allowBind && node.type === "BindExpression") {
+        return "bindExpression";
       }
 
       return null;
@@ -125,9 +133,9 @@ module.exports = {
     }
 
     function getBlockStatementAncestors(node) {
-      return getAncestors(context, node).filter(
-        (ancestor) => ancestor.type === 'BlockStatement'
-      ).reverse();
+      return getAncestors(context, node)
+        .filter((ancestor) => ancestor.type === "BlockStatement")
+        .reverse();
     }
 
     function reportVariableViolation(node, name, blockStart) {
@@ -147,8 +155,8 @@ module.exports = {
     }
 
     function findVariableViolation(node, name) {
-      getBlockStatementAncestors(node).find(
-        (block) => reportVariableViolation(node, name, block.range[0])
+      getBlockStatementAncestors(node).find((block) =>
+        reportVariableViolation(node, name, block.range[0]),
       );
     }
 
@@ -162,7 +170,11 @@ module.exports = {
         const variableViolationType = getNodeViolationType(node);
 
         if (blockAncestors.length > 0 && variableViolationType) {
-          addVariableNameToSet(variableViolationType, node.id.name, blockAncestors[0].range[0]);
+          addVariableNameToSet(
+            variableViolationType,
+            node.id.name,
+            blockAncestors[0].range[0],
+          );
         }
       },
 
@@ -174,17 +186,21 @@ module.exports = {
         const variableViolationType = getNodeViolationType(node.init);
 
         if (
-          blockAncestors.length > 0
-          && variableViolationType
-          && 'kind' in node.parent
-          && node.parent.kind === 'const' // only support const right now
+          blockAncestors.length > 0 &&
+          variableViolationType &&
+          "kind" in node.parent &&
+          node.parent.kind === "const" // only support const right now
         ) {
-          addVariableNameToSet(variableViolationType, 'name' in node.id ? node.id.name : undefined, blockAncestors[0].range[0]);
+          addVariableNameToSet(
+            variableViolationType,
+            "name" in node.id ? node.id.name : undefined,
+            blockAncestors[0].range[0],
+          );
         }
       },
 
       JSXAttribute(node) {
-        const isRef = configuration.ignoreRefs && propName(node) === 'ref';
+        const isRef = configuration.ignoreRefs && propName(node) === "ref";
         if (isRef || !node.value || !node.value.expression) {
           return;
         }
@@ -196,7 +212,7 @@ module.exports = {
         const valueNodeType = valueNode.type;
         const nodeViolationType = getNodeViolationType(valueNode);
 
-        if (valueNodeType === 'Identifier') {
+        if (valueNodeType === "Identifier") {
           findVariableViolation(node, valueNode.name);
         } else if (nodeViolationType) {
           report(context, messages[nodeViolationType], nodeViolationType, {

@@ -3,20 +3,20 @@
  * @author Mark Dalgleish
  */
 
-'use strict';
+"use strict";
 
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
 
-const RuleTester = require('../../helpers/ruleTester');
-const rule = require('../../../lib/rules/no-set-state');
+const RuleTester = require("../../helpers/ruleTester");
+const rule = require("../../../lib/rules/no-set-state");
 
-const parsers = require('../../helpers/parsers');
+const parsers = require("../../helpers/parsers");
 
 const parserOptions = {
   ecmaVersion: 2018,
-  sourceType: 'module',
+  sourceType: "module",
   ecmaFeatures: {
     jsx: true,
   },
@@ -27,7 +27,7 @@ const parserOptions = {
 // ------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({ parserOptions });
-ruleTester.run('no-set-state', rule, {
+ruleTester.run("no-set-state", rule, {
   valid: parsers.all([
     {
       code: `
@@ -74,7 +74,7 @@ ruleTester.run('no-set-state', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'noSetState' }],
+      errors: [{ messageId: "noSetState" }],
     },
     {
       code: `
@@ -89,7 +89,7 @@ ruleTester.run('no-set-state', rule, {
           }
         });
       `,
-      errors: [{ messageId: 'noSetState' }],
+      errors: [{ messageId: "noSetState" }],
     },
     {
       code: `
@@ -104,7 +104,7 @@ ruleTester.run('no-set-state', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'noSetState' }],
+      errors: [{ messageId: "noSetState" }],
     },
     {
       code: `
@@ -119,8 +119,8 @@ ruleTester.run('no-set-state', rule, {
           }
         };
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove `no-ts-old` and fix
-      errors: [{ messageId: 'noSetState' }],
+      features: ["class fields", "no-ts-old"], // TODO: FIXME: remove `no-ts-old` and fix
+      errors: [{ messageId: "noSetState" }],
     },
     {
       code: `
@@ -130,7 +130,7 @@ ruleTester.run('no-set-state', rule, {
           }
         };
       `,
-      errors: [{ messageId: 'noSetState' }],
+      errors: [{ messageId: "noSetState" }],
     },
   ]),
 });
