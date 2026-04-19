@@ -3,7 +3,7 @@ import estree from "estree";
 
 declare global {
   interface ASTNode extends estree.BaseNode {
-    [_: string]: any; // TODO: fixme
+    [_: string]: unknown; // TODO: fixme
   }
   type Scope = eslint.Scope.Scope;
   type Token = eslint.AST.Token;

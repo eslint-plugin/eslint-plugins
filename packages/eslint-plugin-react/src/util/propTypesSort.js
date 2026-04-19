@@ -163,7 +163,7 @@ function fixPropTypesSort(
       try {
         commentBefore = sourceCode.getCommentsBefore(node);
         commentAfter = sourceCode.getCommentsAfter(node);
-      } catch (e) {
+      } catch {
         /**/
       }
 

@@ -1,7 +1,6 @@
 "use strict";
 
 const react = require("../../../../src/index");
-const reactRecommended = require("../../../../configs/recommended");
 
 module.exports = [
   {

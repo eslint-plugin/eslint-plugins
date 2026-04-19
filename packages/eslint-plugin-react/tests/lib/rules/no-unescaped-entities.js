@@ -25,7 +25,7 @@ try {
     ).version,
     "< 5.2",
   );
-} catch (e) {
+} catch {
   /**/
 }
 

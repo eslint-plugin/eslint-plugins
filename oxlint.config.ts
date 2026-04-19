@@ -1,3 +1,5 @@
-import { config } from "@gameroman/config/oxlint";
+import { defineConfig } from "@gameroman/config/oxlint";
 
-export default config;
+export default defineConfig({
+  ignorePatterns: ["**/fixtures/**/test.js"],
+});

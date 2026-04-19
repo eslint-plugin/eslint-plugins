@@ -198,7 +198,7 @@ function getGroupsOfSortableAttributes(attributes, context) {
     let comment = [];
     try {
       comment = sourceCode.getCommentsAfter(attribute);
-    } catch (e) {
+    } catch {
       /**/
     }
     const lastAttr = attributes[i - 1];
