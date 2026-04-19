@@ -1,3 +1,5 @@
-import { config } from "@gameroman/config/oxfmt";
+import { defineConfig } from "@gameroman/config/oxfmt";
 
-export default config;
+export default defineConfig({
+  ignorePatterns: ["**/fixtures/**/*.jsx"],
+});
