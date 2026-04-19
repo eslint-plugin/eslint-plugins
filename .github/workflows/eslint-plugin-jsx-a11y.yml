@@ -17,10 +17,6 @@ jobs:
     name: Build and Test (${{ matrix.os }}) (ESLint v${{ matrix.eslint-version }})
     runs-on: ${{ matrix.os }}
 
-    defaults:
-      run:
-        working-directory: packages/eslint-plugin-jsx-a11y
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -37,13 +33,12 @@ jobs:
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
-        working-directory: .
 
       - name: Install ESLint v${{ matrix.eslint-version }}
-        run: bun add eslint@${{ matrix.eslint-version }} --no-save
+        run: cd packages/eslint-plugin-jsx-a11y && bun add eslint@${{ matrix.eslint-version }} --no-save
 
       - name: Build (${{ matrix.os }})
-        run: bun run build
+        run: bun run --cwd packages/eslint-plugin-jsx-a11y build
 
       - name: Run tests (${{ matrix.os }})
-        run: bun run test
+        run: bun run --cwd packages/eslint-plugin-jsx-a11y test
