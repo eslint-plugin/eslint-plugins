@@ -1,13 +1,13 @@
-import { getProp, getLiteralPropValue } from 'jsx-ast-utils';
+import { getProp, getLiteralPropValue } from "@eslintplugin/jsx-ast-utils";
 
 /**
  * Returns the implicit role for an img tag.
  */
 export default function getImplicitRoleForImg(attributes) {
-  const alt = getProp(attributes, 'alt');
+  const alt = getProp(attributes, "alt");
 
-  if (alt && getLiteralPropValue(alt) === '') {
-    return '';
+  if (alt && getLiteralPropValue(alt) === "") {
+    return "";
   }
 
   /**
@@ -17,8 +17,10 @@ export default function getImplicitRoleForImg(attributes) {
    * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#identifying_svg_as_an_image
    * @see https://bugs.webkit.org/show_bug.cgi?id=216364
    */
-  const src = getProp(attributes, 'src');
-  if (src && getLiteralPropValue(src)?.includes('.svg')) { return ''; }
+  const src = getProp(attributes, "src");
+  if (src && getLiteralPropValue(src)?.includes(".svg")) {
+    return "";
+  }
 
-  return 'img';
+  return "img";
 }

@@ -1,24 +1,31 @@
-import type { JSXOpeningElement } from 'ast-types-flow';
-import hasOwn from 'hasown';
-import includes from 'array-includes';
-import { elementType, getProp, getLiteralPropValue } from 'jsx-ast-utils';
+import {
+  elementType,
+  getProp,
+  getLiteralPropValue,
+} from "@eslintplugin/jsx-ast-utils";
+import type { JSXOpeningElement } from "ast-types-flow";
+import hasOwn from "hasown";
 
-import type { ESLintContext } from '../../flow/eslint';
+import type { ESLintContext } from "../../flow/eslint";
 
-const getElementType = (context: ESLintContext): ((node: JSXOpeningElement) => string) => {
+const getElementType = (
+  context: ESLintContext,
+): ((node: JSXOpeningElement) => string) => {
   const { settings } = context;
-  const polymorphicPropName = settings['jsx-a11y']?.polymorphicPropName;
-  const polymorphicAllowList = settings['jsx-a11y']?.polymorphicAllowList;
+  const polymorphicPropName = settings["jsx-a11y"]?.polymorphicPropName;
+  const polymorphicAllowList = settings["jsx-a11y"]?.polymorphicAllowList;
 
-  const componentMap = settings['jsx-a11y']?.components;
+  const componentMap = settings["jsx-a11y"]?.components;
 
   return (node: JSXOpeningElement): string => {
-    const polymorphicProp = polymorphicPropName ? getLiteralPropValue(getProp(node.attributes, polymorphicPropName)) : undefined;
+    const polymorphicProp = polymorphicPropName
+      ? getLiteralPropValue(getProp(node.attributes, polymorphicPropName))
+      : undefined;
 
     let rawType = elementType(node);
     if (
-      polymorphicProp
-      && (!polymorphicAllowList || includes(polymorphicAllowList, rawType))
+      polymorphicProp &&
+      (!polymorphicAllowList || polymorphicAllowList.includes(rawType))
     ) {
       rawType = polymorphicProp;
     }

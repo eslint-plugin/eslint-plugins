@@ -7,12 +7,12 @@
 // Requirements
 // -----------------------------------------------------------------------------
 
-import RuleTester from '../../__util__/RuleTester';
-import { configs } from '../../../src/index';
-import parserOptionsMapper from '../../__util__/parserOptionsMapper';
-import parsers from '../../__util__/helpers/parsers';
-import ruleOptionsMapperFactory from '../../__util__/ruleOptionsMapperFactory';
-import rule from '../../../src/rules/control-has-associated-label';
+import { configs } from "../../../src/index";
+import rule from "../../../src/rules/control-has-associated-label";
+import parsers from "../../__util__/helpers/parsers";
+import parserOptionsMapper from "../../__util__/parserOptionsMapper";
+import ruleOptionsMapperFactory from "../../__util__/ruleOptionsMapperFactory";
+import RuleTester from "../../__util__/RuleTester";
 
 // -----------------------------------------------------------------------------
 // Tests
@@ -20,36 +20,60 @@ import rule from '../../../src/rules/control-has-associated-label';
 
 const ruleTester = new RuleTester();
 
-const ruleName = 'jsx-a11y/control-has-associated-label';
+const ruleName = "jsx-a11y/control-has-associated-label";
 
 const expectedError = {
-  message: 'A control must be associated with a text label.',
-  type: 'JSXOpeningElement',
+  message: "A control must be associated with a text label.",
+  type: "JSXOpeningElement",
 };
 
 const alwaysValid = [
   // Custom Control Components
-  { code: '<CustomControl><span><span>Save</span></span></CustomControl>', options: [{ depth: 3, controlComponents: ['CustomControl'] }] },
-  { code: '<CustomControl><span><span label="Save"></span></span></CustomControl>', options: [{ depth: 3, controlComponents: ['CustomControl'], labelAttributes: ['label'] }] },
-  { code: '<CustomControl>Save</CustomControl>', settings: { 'jsx-a11y': { components: { CustomControl: 'button' } } } },
+  {
+    code: "<CustomControl><span><span>Save</span></span></CustomControl>",
+    options: [{ depth: 3, controlComponents: ["CustomControl"] }],
+  },
+  {
+    code: '<CustomControl><span><span label="Save"></span></span></CustomControl>',
+    options: [
+      {
+        depth: 3,
+        controlComponents: ["CustomControl"],
+        labelAttributes: ["label"],
+      },
+    ],
+  },
+  {
+    code: "<CustomControl>Save</CustomControl>",
+    settings: { "jsx-a11y": { components: { CustomControl: "button" } } },
+  },
   // Interactive Elements
-  { code: '<button>Save</button>' },
-  { code: '<button><span>Save</span></button>' },
-  { code: '<button><span><span>Save</span></span></button>', options: [{ depth: 3 }] },
-  { code: '<button><span><span><span><span><span><span><span><span>Save</span></span></span></span></span></span></span></span></button>', options: [{ depth: 9 }] },
+  { code: "<button>Save</button>" },
+  { code: "<button><span>Save</span></button>" },
+  {
+    code: "<button><span><span>Save</span></span></button>",
+    options: [{ depth: 3 }],
+  },
+  {
+    code: "<button><span><span><span><span><span><span><span><span>Save</span></span></span></span></span></span></span></span></button>",
+    options: [{ depth: 9 }],
+  },
   { code: '<button><img alt="Save" /></button>' },
   { code: '<button aria-label="Save" />' },
   { code: '<button><span aria-label="Save" /></button>' },
   { code: '<button aria-labelledby="js_1" />' },
   { code: '<button><span aria-labelledby="js_1" /></button>' },
-  { code: '<button>{sureWhyNot}</button>' },
-  { code: '<button><span><span label="Save"></span></span></button>', options: [{ depth: 3, labelAttributes: ['label'] }] },
+  { code: "<button>{sureWhyNot}</button>" },
+  {
+    code: '<button><span><span label="Save"></span></span></button>',
+    options: [{ depth: 3, labelAttributes: ["label"] }],
+  },
   { code: '<a href="#">Save</a>' },
   { code: '<area href="#">Save</area>' },
-  { code: '<link>Save</link>' },
-  { code: '<menuitem>Save</menuitem>' },
-  { code: '<option>Save</option>' },
-  { code: '<th>Save</th>' },
+  { code: "<link>Save</link>" },
+  { code: "<menuitem>Save</menuitem>" },
+  { code: "<option>Save</option>" },
+  { code: "<th>Save</th>" },
   // Interactive Roles
   { code: '<div role="button">Save</div>' },
   { code: '<div role="checkbox">Save</div>' },
@@ -112,55 +136,55 @@ const alwaysValid = [
   { code: '<div role="textbox" aria-labelledby="js_1" />' },
   { code: '<div role="treeitem" aria-labelledby="js_1" />' },
   // Non-interactive Elements
-  { code: '<abbr />' },
-  { code: '<article />' },
-  { code: '<blockquote />' },
-  { code: '<br />' },
-  { code: '<caption />' },
-  { code: '<dd />' },
-  { code: '<details />' },
-  { code: '<dfn />' },
-  { code: '<dialog />' },
-  { code: '<dir />' },
-  { code: '<dl />' },
-  { code: '<dt />' },
-  { code: '<fieldset />' },
-  { code: '<figcaption />' },
-  { code: '<figure />' },
-  { code: '<footer />' },
-  { code: '<form />' },
-  { code: '<frame />' },
-  { code: '<h1 />' },
-  { code: '<h2 />' },
-  { code: '<h3 />' },
-  { code: '<h4 />' },
-  { code: '<h5 />' },
-  { code: '<h6 />' },
-  { code: '<hr />' },
-  { code: '<iframe />' },
-  { code: '<img />' },
-  { code: '<label />' },
-  { code: '<legend />' },
-  { code: '<li />' },
-  { code: '<link />' },
-  { code: '<main />' },
-  { code: '<mark />' },
-  { code: '<marquee />' },
-  { code: '<menu />' },
-  { code: '<meter />' },
-  { code: '<nav />' },
-  { code: '<ol />' },
-  { code: '<p />' },
-  { code: '<pre />' },
-  { code: '<progress />' },
-  { code: '<ruby />' },
-  { code: '<section />' },
-  { code: '<table />' },
-  { code: '<tbody />' },
-  { code: '<tfoot />' },
-  { code: '<thead />' },
-  { code: '<time />' },
-  { code: '<ul />' },
+  { code: "<abbr />" },
+  { code: "<article />" },
+  { code: "<blockquote />" },
+  { code: "<br />" },
+  { code: "<caption />" },
+  { code: "<dd />" },
+  { code: "<details />" },
+  { code: "<dfn />" },
+  { code: "<dialog />" },
+  { code: "<dir />" },
+  { code: "<dl />" },
+  { code: "<dt />" },
+  { code: "<fieldset />" },
+  { code: "<figcaption />" },
+  { code: "<figure />" },
+  { code: "<footer />" },
+  { code: "<form />" },
+  { code: "<frame />" },
+  { code: "<h1 />" },
+  { code: "<h2 />" },
+  { code: "<h3 />" },
+  { code: "<h4 />" },
+  { code: "<h5 />" },
+  { code: "<h6 />" },
+  { code: "<hr />" },
+  { code: "<iframe />" },
+  { code: "<img />" },
+  { code: "<label />" },
+  { code: "<legend />" },
+  { code: "<li />" },
+  { code: "<link />" },
+  { code: "<main />" },
+  { code: "<mark />" },
+  { code: "<marquee />" },
+  { code: "<menu />" },
+  { code: "<meter />" },
+  { code: "<nav />" },
+  { code: "<ol />" },
+  { code: "<p />" },
+  { code: "<pre />" },
+  { code: "<progress />" },
+  { code: "<ruby />" },
+  { code: "<section />" },
+  { code: "<table />" },
+  { code: "<tbody />" },
+  { code: "<tfoot />" },
+  { code: "<thead />" },
+  { code: "<time />" },
+  { code: "<ul />" },
   // Non-interactive Roles
   { code: '<div role="alert" />' },
   { code: '<div role="alertdialog" />' },
@@ -202,7 +226,7 @@ const alwaysValid = [
   { code: '<div role="tooltip" />' },
   // Via config
   // Inputs. Ignore them because they might get a label from a wrapping label element.
-  { code: '<input />' },
+  { code: "<input />" },
   { code: '<input type="button" />' },
   { code: '<input type="checkbox" />' },
   { code: '<input type="color" />' },
@@ -225,18 +249,20 @@ const alwaysValid = [
   { code: '<input type="tel" />' },
   { code: '<input type="text" />' },
   { code: '<label>Foo <input type="text" /></label>' },
-  { code: '<input name={field.name} id="foo" type="text" value={field.value} disabled={isDisabled} onChange={changeText(field.onChange, field.name)} onBlur={field.onBlur} />' },
+  {
+    code: '<input name={field.name} id="foo" type="text" value={field.value} disabled={isDisabled} onChange={changeText(field.onChange, field.name)} onBlur={field.onBlur} />',
+  },
   { code: '<input type="time" />' },
   { code: '<input type="url" />' },
   { code: '<input type="week" />' },
   // Marginal interactive elements. It is difficult to insist that these
   // elements contain a text label.
-  { code: '<audio />' },
-  { code: '<canvas />' },
-  { code: '<embed />' },
-  { code: '<textarea />' },
-  { code: '<tr />' },
-  { code: '<video />' },
+  { code: "<audio />" },
+  { code: "<canvas />" },
+  { code: "<embed />" },
+  { code: "<textarea />" },
+  { code: "<tr />" },
+  { code: "<video />" },
   // Interactive roles to ignore
   { code: '<div role="grid" />' },
   { code: '<div role="listbox" />' },
@@ -250,19 +276,34 @@ const alwaysValid = [
   { code: '<div role="treegrid" />' },
 ];
 const neverValid = [
-  { code: '<button />', errors: [expectedError] },
-  { code: '<button><span /></button>', errors: [expectedError] },
-  { code: '<button><img /></button>', errors: [expectedError] },
-  { code: '<button><span title="This is not a real label" /></button>', errors: [expectedError] },
-  { code: '<button><span><span><span>Save</span></span></span></button>', options: [{ depth: 3 }], errors: [expectedError] },
-  { code: '<CustomControl><span><span></span></span></CustomControl>', options: [{ depth: 3, controlComponents: ['CustomControl'] }], errors: [expectedError] },
-  { code: '<CustomControl></CustomControl>', errors: [expectedError], settings: { 'jsx-a11y': { components: { CustomControl: 'button' } } } },
+  { code: "<button />", errors: [expectedError] },
+  { code: "<button><span /></button>", errors: [expectedError] },
+  { code: "<button><img /></button>", errors: [expectedError] },
+  {
+    code: '<button><span title="This is not a real label" /></button>',
+    errors: [expectedError],
+  },
+  {
+    code: "<button><span><span><span>Save</span></span></span></button>",
+    options: [{ depth: 3 }],
+    errors: [expectedError],
+  },
+  {
+    code: "<CustomControl><span><span></span></span></CustomControl>",
+    options: [{ depth: 3, controlComponents: ["CustomControl"] }],
+    errors: [expectedError],
+  },
+  {
+    code: "<CustomControl></CustomControl>",
+    errors: [expectedError],
+    settings: { "jsx-a11y": { components: { CustomControl: "button" } } },
+  },
   { code: '<a href="#" />', errors: [expectedError] },
   { code: '<area href="#" />', errors: [expectedError] },
-  { code: '<menuitem />', errors: [expectedError] },
-  { code: '<option />', errors: [expectedError] },
-  { code: '<th />', errors: [expectedError] },
-  { code: '<td />', errors: [expectedError] },
+  { code: "<menuitem />", errors: [expectedError] },
+  { code: "<option />", errors: [expectedError] },
+  { code: "<th />", errors: [expectedError] },
+  { code: "<td />", errors: [expectedError] },
   // Interactive Roles
   { code: '<div role="button" />', errors: [expectedError] },
   { code: '<div role="checkbox" />', errors: [expectedError] },
@@ -286,42 +327,40 @@ const neverValid = [
   { code: '<div role="textbox" />', errors: [expectedError] },
 ];
 
-const recommendedOptions = (configs.recommended.rules[ruleName][1] || {});
+const recommendedOptions = configs.recommended.rules[ruleName][1] || {};
 ruleTester.run(`${ruleName}:recommended`, rule, {
-  valid: parsers.all([].concat(
-    ...alwaysValid,
-  ))
+  valid: parsers
+    .all([].concat(...alwaysValid))
     .map(ruleOptionsMapperFactory(recommendedOptions))
     .map(parserOptionsMapper),
-  invalid: parsers.all([].concat(
-    ...neverValid,
-  ))
+  invalid: parsers
+    .all([].concat(...neverValid))
     .map(ruleOptionsMapperFactory(recommendedOptions))
     .map(parserOptionsMapper),
 });
 
-const strictOptions = (configs.strict.rules[ruleName][1] || {});
+const strictOptions = configs.strict.rules[ruleName][1] || {};
 ruleTester.run(`${ruleName}:strict`, rule, {
-  valid: parsers.all([].concat(
-    ...alwaysValid,
-  ))
+  valid: parsers
+    .all([].concat(...alwaysValid))
     .map(ruleOptionsMapperFactory(strictOptions))
     .map(parserOptionsMapper),
-  invalid: parsers.all([].concat(
-    ...neverValid,
-  ))
+  invalid: parsers
+    .all([].concat(...neverValid))
     .map(ruleOptionsMapperFactory(strictOptions))
     .map(parserOptionsMapper),
 });
 
 ruleTester.run(`${ruleName}:no-config`, rule, {
-  valid: parsers.all([].concat(
-    { code: '<input type="hidden" />' },
-    { code: '<input type="text" aria-hidden="true" />' },
-  ))
+  valid: parsers
+    .all(
+      [].concat(
+        { code: '<input type="hidden" />' },
+        { code: '<input type="text" aria-hidden="true" />' },
+      ),
+    )
     .map(parserOptionsMapper),
-  invalid: parsers.all([].concat(
-    { code: '<input type="text" />', errors: [expectedError] },
-  ))
+  invalid: parsers
+    .all([].concat({ code: '<input type="text" />', errors: [expectedError] }))
     .map(parserOptionsMapper),
 });

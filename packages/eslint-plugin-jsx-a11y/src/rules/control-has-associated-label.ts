@@ -7,21 +7,25 @@
 // Rule Definition
 // ----------------------------------------------------------------------------
 
-import { getProp, getLiteralPropValue } from 'jsx-ast-utils';
-import type { JSXElement } from 'ast-types-flow';
-import includes from 'array-includes';
-import { generateObjSchema, arraySchema } from '../util/schemas';
-import type { ESLintConfig, ESLintContext, ESLintVisitorSelectorConfig } from '../../flow/eslint';
-import getElementType from '../util/getElementType';
-import isDOMElement from '../util/isDOMElement';
-import isHiddenFromScreenReader from '../util/isHiddenFromScreenReader';
-import isInteractiveElement from '../util/isInteractiveElement';
-import isInteractiveRole from '../util/isInteractiveRole';
-import mayHaveAccessibleLabel from '../util/mayHaveAccessibleLabel';
+import { getProp, getLiteralPropValue } from "@eslintplugin/jsx-ast-utils";
+import type { JSXElement } from "ast-types-flow";
 
-const errorMessage = 'A control must be associated with a text label.';
+import type {
+  ESLintConfig,
+  ESLintContext,
+  ESLintVisitorSelectorConfig,
+} from "../../flow/eslint";
+import getElementType from "../util/getElementType";
+import isDOMElement from "../util/isDOMElement";
+import isHiddenFromScreenReader from "../util/isHiddenFromScreenReader";
+import isInteractiveElement from "../util/isInteractiveElement";
+import isInteractiveRole from "../util/isInteractiveRole";
+import mayHaveAccessibleLabel from "../util/mayHaveAccessibleLabel";
+import { generateObjSchema, arraySchema } from "../util/schemas";
 
-const ignoreList = ['link'];
+const errorMessage = "A control must be associated with a text label.";
+
+const ignoreList = ["link"];
 
 const schema = generateObjSchema({
   labelAttributes: arraySchema,
@@ -29,17 +33,18 @@ const schema = generateObjSchema({
   ignoreElements: arraySchema,
   ignoreRoles: arraySchema,
   depth: {
-    description: 'JSX tree depth limit to check for accessible label',
-    type: 'integer',
+    description: "JSX tree depth limit to check for accessible label",
+    type: "integer",
     minimum: 0,
   },
 });
 
-export default ({
+export default {
   meta: {
     docs: {
-      description: 'Enforce that a control (an interactive element) has a text label.',
-      url: 'https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/main/docs/rules/control-has-associated-label.md',
+      description:
+        "Enforce that a control (an interactive element) has a text label.",
+      url: "https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/main/docs/rules/control-has-associated-label.md",
     },
     schema: [schema],
   },
@@ -58,7 +63,9 @@ export default ({
 
     const rule = (node: JSXElement): void => {
       const tag = elementType(node.openingElement);
-      const role = getLiteralPropValue(getProp(node.openingElement.attributes, 'role'));
+      const role = getLiteralPropValue(
+        getProp(node.openingElement.attributes, "role"),
+      );
       // Ignore interactive elements that might get their label from a source
       // that cannot be discerned from static analysis, like
       // <label><input />Save</label>
@@ -66,7 +73,7 @@ export default ({
         return;
       }
       // Ignore roles that are "interactive" but should not require a label.
-      if (includes(ignoreRoles, role)) {
+      if (ignoreRoles.includes(role)) {
         return;
       }
       const props = node.openingElement.attributes;
@@ -82,13 +89,9 @@ export default ({
 
       let hasAccessibleLabel = true;
       if (
-        nodeIsInteractiveElement
-        || (
-          nodeIsDOMElement
-          && nodeIsInteractiveRole
-        )
-        || nodeIsControlComponent
-
+        nodeIsInteractiveElement ||
+        (nodeIsDOMElement && nodeIsInteractiveRole) ||
+        nodeIsControlComponent
       ) {
         // Prevent crazy recursion.
         const recursionDepth = Math.min(
@@ -117,4 +120,4 @@ export default ({
       JSXElement: rule,
     };
   },
-}) satisfies ESLintConfig;
+} satisfies ESLintConfig;

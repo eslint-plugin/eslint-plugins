@@ -5,20 +5,17 @@
  * but this module cannot determine it positively.
  */
 
-import type { JSXOpeningElement, Node } from 'ast-types-flow';
-import { elementType as rawElementType } from 'jsx-ast-utils';
-import minimatch from 'minimatch';
+import { elementType as rawElementType } from "@eslintplugin/jsx-ast-utils";
+import type { JSXOpeningElement, Node } from "ast-types-flow";
+import minimatch from "minimatch";
 
 export default function mayContainChildComponent(
   root: Node,
   componentName: string,
   maxDepth: number = 1,
-  elementType: ((node: JSXOpeningElement) => string) = rawElementType,
+  elementType: (node: JSXOpeningElement) => string = rawElementType,
 ): boolean {
-  function traverseChildren(
-    node: Node,
-    depth: number,
-  ): boolean {
+  function traverseChildren(node: Node, depth: number): boolean {
     // Bail when maxDepth is exceeded.
     if (depth > maxDepth) {
       return false;
@@ -30,14 +27,14 @@ export default function mayContainChildComponent(
         const childNode = node.children[i];
         // Assume an expression container renders a label. It is the best we can
         // do in this case.
-        if (childNode.type === 'JSXExpressionContainer') {
+        if (childNode.type === "JSXExpressionContainer") {
           return true;
         }
         // Check for components with the provided name.
         if (
-          childNode.type === 'JSXElement'
-          && childNode.openingElement
-          && minimatch(elementType(childNode.openingElement), componentName)
+          childNode.type === "JSXElement" &&
+          childNode.openingElement &&
+          minimatch(elementType(childNode.openingElement), componentName)
         ) {
           return true;
         }

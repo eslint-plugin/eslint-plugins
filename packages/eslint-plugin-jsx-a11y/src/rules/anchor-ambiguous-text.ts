@@ -7,28 +7,29 @@
 // Rule Definition
 // ----------------------------------------------------------------------------
 
-import type { ESLintConfig, ESLintContext } from '../../flow/eslint';
-import { arraySchema, generateObjSchema } from '../util/schemas';
-import getAccessibleChildText from '../util/getAccessibleChildText';
-import getElementType from '../util/getElementType';
+import type { ESLintConfig, ESLintContext } from "../../flow/eslint";
+import getAccessibleChildText from "../util/getAccessibleChildText";
+import getElementType from "../util/getElementType";
+import { arraySchema, generateObjSchema } from "../util/schemas";
 
 const DEFAULT_AMBIGUOUS_WORDS = [
-  'click here',
-  'here',
-  'link',
-  'a link',
-  'learn more',
+  "click here",
+  "here",
+  "link",
+  "a link",
+  "learn more",
 ];
 
 const schema = generateObjSchema({
   words: arraySchema,
 });
 
-export default ({
+export default {
   meta: {
     docs: {
-      url: 'https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/anchor-ambiguous-text.md',
-      description: 'Enforce `<a>` text to not exactly match "click here", "here", "link", or "a link".',
+      url: "https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/anchor-ambiguous-text.md",
+      description:
+        'Enforce `<a>` text to not exactly match "click here", "here", "link", or "a link".',
     },
     schema: [schema],
   },
@@ -36,7 +37,7 @@ export default ({
   create: (context: ESLintContext) => {
     const elementType = getElementType(context);
 
-    const typesToValidate = ['a'];
+    const typesToValidate = ["a"];
 
     const options = context.options[0] || {};
     const { words = DEFAULT_AMBIGUOUS_WORDS } = options;
@@ -53,13 +54,15 @@ export default ({
 
         const nodeText = getAccessibleChildText(node.parent, elementType);
 
-        if (!ambiguousWords.has(nodeText)) { // check the value
+        if (!ambiguousWords.has(nodeText)) {
+          // check the value
           return;
         }
 
         context.report({
           node,
-          message: 'Ambiguous text within anchor. Screen reader users rely on link text for context; the words "{{wordsList}}" are ambiguous and do not provide enough context.',
+          message:
+            'Ambiguous text within anchor. Screen reader users rely on link text for context; the words "{{wordsList}}" are ambiguous and do not provide enough context.',
           data: {
             wordsList: words.join('", "'),
           },
@@ -67,4 +70,4 @@ export default ({
       },
     };
   },
-}) satisfies ESLintConfig;
+} satisfies ESLintConfig;

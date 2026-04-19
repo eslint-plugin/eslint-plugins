@@ -1,17 +1,21 @@
-import test from 'tape';
+import test from "tape";
 
-import { generateObjSchema, arraySchema, enumArraySchema } from '../../../src/util/schemas';
+import {
+  generateObjSchema,
+  arraySchema,
+  enumArraySchema,
+} from "../../../src/util/schemas";
 
-test('schemas', (t) => {
-  t.test('should generate an object schema with correct properties', (st) => {
+test("schemas", (t) => {
+  t.test("should generate an object schema with correct properties", (st) => {
     const schema = generateObjSchema({
-      foo: 'bar',
+      foo: "bar",
       baz: arraySchema,
     });
     const properties = schema.properties || {};
 
-    st.deepEqual(properties.foo, properties.foo, 'bar');
-    st.deepEqual(properties.baz.type, 'array');
+    st.deepEqual(properties.foo, properties.foo, "bar");
+    st.deepEqual(properties.baz.type, "array");
 
     st.end();
   });
@@ -22,13 +26,13 @@ test('schemas', (t) => {
       additionalItems: false,
       items: {
         enum: [],
-        type: 'string',
+        type: "string",
       },
       minItems: 0,
-      type: 'array',
+      type: "array",
       uniqueItems: true,
     },
-    'enumArraySchema works with no arguments',
+    "enumArraySchema works with no arguments",
   );
 
   t.end();

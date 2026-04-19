@@ -7,10 +7,10 @@
 // Requirements
 // -----------------------------------------------------------------------------
 
-import RuleTester from '../../__util__/RuleTester';
-import parserOptionsMapper from '../../__util__/parserOptionsMapper';
-import parsers from '../../__util__/helpers/parsers';
-import rule from '../../../src/rules/anchor-has-content';
+import rule from "../../../src/rules/anchor-has-content";
+import parsers from "../../__util__/helpers/parsers";
+import parserOptionsMapper from "../../__util__/parserOptionsMapper";
+import RuleTester from "../../__util__/RuleTester";
 
 // -----------------------------------------------------------------------------
 // Tests
@@ -19,36 +19,45 @@ import rule from '../../../src/rules/anchor-has-content';
 const ruleTester = new RuleTester();
 
 const expectedError = {
-  message: 'Anchors must have content and the content must be accessible by a screen reader.',
-  type: 'JSXOpeningElement',
+  message:
+    "Anchors must have content and the content must be accessible by a screen reader.",
+  type: "JSXOpeningElement",
 };
 
-ruleTester.run('anchor-has-content', rule, {
-  valid: parsers.all([].concat(
-    { code: '<div />;' },
-    { code: '<a>Foo</a>' },
-    { code: '<a><Bar /></a>' },
-    { code: '<a>{foo}</a>' },
-    { code: '<a>{foo.bar}</a>' },
-    { code: '<a dangerouslySetInnerHTML={{ __html: "foo" }} />' },
-    { code: '<a children={children} />' },
-    { code: '<Link />' },
-    {
-      code: '<Link>foo</Link>',
-      settings: { 'jsx-a11y': { components: { Link: 'a' } } },
-    },
-    { code: '<a title={title} />' },
-    { code: '<a aria-label={ariaLabel} />' },
-    { code: '<a title={title} aria-label={ariaLabel} />' },
-  )).map(parserOptionsMapper),
-  invalid: parsers.all([].concat(
-    { code: '<a />', errors: [expectedError] },
-    { code: '<a><Bar aria-hidden /></a>', errors: [expectedError] },
-    { code: '<a>{undefined}</a>', errors: [expectedError] },
-    {
-      code: '<Link />',
-      errors: [expectedError],
-      settings: { 'jsx-a11y': { components: { Link: 'a' } } },
-    },
-  )).map(parserOptionsMapper),
+ruleTester.run("anchor-has-content", rule, {
+  valid: parsers
+    .all(
+      [].concat(
+        { code: "<div />;" },
+        { code: "<a>Foo</a>" },
+        { code: "<a><Bar /></a>" },
+        { code: "<a>{foo}</a>" },
+        { code: "<a>{foo.bar}</a>" },
+        { code: '<a dangerouslySetInnerHTML={{ __html: "foo" }} />' },
+        { code: "<a children={children} />" },
+        { code: "<Link />" },
+        {
+          code: "<Link>foo</Link>",
+          settings: { "jsx-a11y": { components: { Link: "a" } } },
+        },
+        { code: "<a title={title} />" },
+        { code: "<a aria-label={ariaLabel} />" },
+        { code: "<a title={title} aria-label={ariaLabel} />" },
+      ),
+    )
+    .map(parserOptionsMapper),
+  invalid: parsers
+    .all(
+      [].concat(
+        { code: "<a />", errors: [expectedError] },
+        { code: "<a><Bar aria-hidden /></a>", errors: [expectedError] },
+        { code: "<a>{undefined}</a>", errors: [expectedError] },
+        {
+          code: "<Link />",
+          errors: [expectedError],
+          settings: { "jsx-a11y": { components: { Link: "a" } } },
+        },
+      ),
+    )
+    .map(parserOptionsMapper),
 });

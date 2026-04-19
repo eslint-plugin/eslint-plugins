@@ -1,4 +1,4 @@
-import { getProp, getLiteralPropValue } from 'jsx-ast-utils';
+import { getProp, getLiteralPropValue } from "@eslintplugin/jsx-ast-utils";
 
 /**
  * Returns the implicit role for a select tag depending on attributes.
@@ -6,13 +6,13 @@ import { getProp, getLiteralPropValue } from 'jsx-ast-utils';
  * @see https://www.w3.org/TR/html-aria/#el-select
  */
 export default function getImplicitRoleForSelect(attributes) {
-  const multiple = getProp(attributes, 'multiple');
+  const multiple = getProp(attributes, "multiple");
   if (multiple && getLiteralPropValue(multiple)) {
-    return 'listbox';
+    return "listbox";
   }
 
-  const size = getProp(attributes, 'size');
+  const size = getProp(attributes, "size");
   const sizeValue = size && getLiteralPropValue(size);
 
-  return sizeValue > 1 ? 'listbox' : 'combobox';
+  return sizeValue > 1 ? "listbox" : "combobox";
 }

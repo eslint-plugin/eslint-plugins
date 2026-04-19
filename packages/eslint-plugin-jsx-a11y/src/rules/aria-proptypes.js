@@ -7,27 +7,32 @@
 // Rule Definition
 // ----------------------------------------------------------------------------
 
-import { aria } from 'aria-query';
-import { getLiteralPropValue, getPropValue, propName } from 'jsx-ast-utils';
-import { generateObjSchema } from '../util/schemas';
+import {
+  getLiteralPropValue,
+  getPropValue,
+  propName,
+} from "@eslintplugin/jsx-ast-utils";
+import { aria } from "aria-query";
+
+import { generateObjSchema } from "../util/schemas";
 
 const errorMessage = (name, type, permittedValues) => {
   switch (type) {
-    case 'tristate':
+    case "tristate":
       return `The value for ${name} must be a boolean or the string "mixed".`;
-    case 'token':
+    case "token":
       return `The value for ${name} must be a single token from the following: ${permittedValues}.`;
-    case 'tokenlist':
+    case "tokenlist":
       return `The value for ${name} must be a list of one or more \
 tokens from the following: ${permittedValues}.`;
-    case 'idlist':
+    case "idlist":
       return `The value for ${name} must be a list of strings that represent DOM element IDs (idlist)`;
-    case 'id':
+    case "id":
       return `The value for ${name} must be a string that represents a DOM element ID`;
-    case 'boolean':
-    case 'string':
-    case 'integer':
-    case 'number':
+    case "boolean":
+    case "string":
+    case "integer":
+    case "number":
     default:
       return `The value for ${name} must be a ${type}.`;
   }
@@ -35,26 +40,36 @@ tokens from the following: ${permittedValues}.`;
 
 const validityCheck = (value, expectedType, permittedValues) => {
   switch (expectedType) {
-    case 'boolean':
-      return typeof value === 'boolean';
-    case 'string':
-    case 'id':
-      return typeof value === 'string';
-    case 'tristate':
-      return typeof value === 'boolean' || value === 'mixed';
-    case 'integer':
-    case 'number':
+    case "boolean":
+      return typeof value === "boolean";
+    case "string":
+    case "id":
+      return typeof value === "string";
+    case "tristate":
+      return typeof value === "boolean" || value === "mixed";
+    case "integer":
+    case "number":
       // Booleans resolve to 0/1 values so hard check that it's not first.
       // eslint-disable-next-line no-restricted-globals
-      return typeof value !== 'boolean' && isNaN(Number(value)) === false;
-    case 'token':
-      return permittedValues.indexOf(typeof value === 'string' ? value.toLowerCase() : value) > -1;
-    case 'idlist':
-      return typeof value === 'string'
-        && value.split(' ').every((token) => validityCheck(token, 'id', []));
-    case 'tokenlist':
-      return typeof value === 'string'
-        && value.split(' ').every((token) => permittedValues.indexOf(token.toLowerCase()) > -1);
+      return typeof value !== "boolean" && isNaN(Number(value)) === false;
+    case "token":
+      return (
+        permittedValues.indexOf(
+          typeof value === "string" ? value.toLowerCase() : value,
+        ) > -1
+      );
+    case "idlist":
+      return (
+        typeof value === "string" &&
+        value.split(" ").every((token) => validityCheck(token, "id", []))
+      );
+    case "tokenlist":
+      return (
+        typeof value === "string" &&
+        value
+          .split(" ")
+          .every((token) => permittedValues.indexOf(token.toLowerCase()) > -1)
+      );
     default:
       return false;
   }
@@ -66,8 +81,8 @@ export default {
   validityCheck,
   meta: {
     docs: {
-      url: 'https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/aria-proptypes.md',
-      description: 'Enforce ARIA state and property values are valid.',
+      url: "https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/aria-proptypes.md",
+      description: "Enforce ARIA state and property values are valid.",
     },
     schema: [schema],
   },
@@ -78,7 +93,10 @@ export default {
       const normalizedName = name.toLowerCase();
 
       // Not a valid aria-* state or property.
-      if (normalizedName.indexOf('aria-') !== 0 || aria.get(normalizedName) === undefined) {
+      if (
+        normalizedName.indexOf("aria-") !== 0 ||
+        aria.get(normalizedName) === undefined
+      ) {
         return;
       }
 
@@ -98,7 +116,9 @@ export default {
       const allowUndefined = attributes.allowUndefined || false;
       const permittedValues = attributes.values || [];
 
-      const isValid = validityCheck(value, permittedType, permittedValues) || (allowUndefined && value === undefined);
+      const isValid =
+        validityCheck(value, permittedType, permittedValues) ||
+        (allowUndefined && value === undefined);
 
       if (isValid) {
         return;

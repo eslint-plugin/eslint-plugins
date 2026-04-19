@@ -7,24 +7,29 @@
 // Rule Definition
 // ----------------------------------------------------------------------------
 
-import { hasProp, getProp, getPropValue } from 'jsx-ast-utils';
-import { generateObjSchema, arraySchema, enumArraySchema } from '../util/schemas';
-import getElementType from '../util/getElementType';
-import hasAccessibleChild from '../util/hasAccessibleChild';
+import { hasProp, getProp, getPropValue } from "@eslintplugin/jsx-ast-utils";
 
-const enumValues = ['nesting', 'id'];
+import getElementType from "../util/getElementType";
+import hasAccessibleChild from "../util/hasAccessibleChild";
+import {
+  generateObjSchema,
+  arraySchema,
+  enumArraySchema,
+} from "../util/schemas";
+
+const enumValues = ["nesting", "id"];
 const schema = {
-  type: 'object',
+  type: "object",
   properties: {
     components: arraySchema,
     required: {
       oneOf: [
-        { type: 'string', enum: enumValues },
-        generateObjSchema({ some: enumArraySchema(enumValues) }, ['some']),
-        generateObjSchema({ every: enumArraySchema(enumValues) }, ['every']),
+        { type: "string", enum: enumValues },
+        generateObjSchema({ some: enumArraySchema(enumValues) }, ["some"]),
+        generateObjSchema({ every: enumArraySchema(enumValues) }, ["every"]),
       ],
     },
-    allowChildren: { type: 'boolean' },
+    allowChildren: { type: "boolean" },
   },
 };
 // Breadth-first search, assuming that HTML for forms is shallow.
@@ -35,7 +40,13 @@ function validateNesting(node) {
   while (queue.length) {
     child = queue.shift();
     opener = child.openingElement;
-    if (child.type === 'JSXElement' && opener && (opener.name.name === 'input' || opener.name.name === 'textarea' || opener.name.name === 'select')) {
+    if (
+      child.type === "JSXElement" &&
+      opener &&
+      (opener.name.name === "input" ||
+        opener.name.name === "textarea" ||
+        opener.name.name === "select")
+    ) {
       return true;
     }
     if (child.children) {
@@ -47,7 +58,9 @@ function validateNesting(node) {
 
 function validateID({ attributes }, context) {
   const { settings } = context;
-  const htmlForAttributes = settings['jsx-a11y']?.attributes?.for ?? ['htmlFor'];
+  const htmlForAttributes = settings["jsx-a11y"]?.attributes?.for ?? [
+    "htmlFor",
+  ];
 
   for (let i = 0; i < htmlForAttributes.length; i += 1) {
     const attribute = htmlForAttributes[i];
@@ -66,24 +79,34 @@ function validate(node, required, allowChildren, elementType, context) {
   if (allowChildren === true) {
     return hasAccessibleChild(node.parent, elementType);
   }
-  if (required === 'nesting') {
+  if (required === "nesting") {
     return validateNesting(node);
   }
   return validateID(node, context);
 }
 
-function getValidityStatus(node, required, allowChildren, elementType, context) {
+function getValidityStatus(
+  node,
+  required,
+  allowChildren,
+  elementType,
+  context,
+) {
   if (Array.isArray(required.some)) {
-    const isValid = required.some.some((rule) => validate(node, rule, allowChildren, elementType, context));
+    const isValid = required.some.some((rule) =>
+      validate(node, rule, allowChildren, elementType, context),
+    );
     const message = !isValid
-      ? `Form label must have ANY of the following types of associated control: ${required.some.join(', ')}`
+      ? `Form label must have ANY of the following types of associated control: ${required.some.join(", ")}`
       : null;
     return { isValid, message };
   }
   if (Array.isArray(required.every)) {
-    const isValid = required.every.every((rule) => validate(node, rule, allowChildren, elementType, context));
+    const isValid = required.every.every((rule) =>
+      validate(node, rule, allowChildren, elementType, context),
+    );
     const message = !isValid
-      ? `Form label must have ALL of the following types of associated control: ${required.every.join(', ')}`
+      ? `Form label must have ALL of the following types of associated control: ${required.every.join(", ")}`
       : null;
     return { isValid, message };
   }
@@ -98,10 +121,10 @@ function getValidityStatus(node, required, allowChildren, elementType, context) 
 export default {
   meta: {
     deprecated: true,
-    replacedBy: ['label-has-associated-control'],
+    replacedBy: ["label-has-associated-control"],
     docs: {
-      description: 'Enforce that `<label>` elements have the `htmlFor` prop.',
-      url: 'https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/label-has-for.md',
+      description: "Enforce that `<label>` elements have the `htmlFor` prop.",
+      url: "https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/label-has-for.md",
     },
     schema: [schema],
   },
@@ -112,7 +135,7 @@ export default {
       JSXOpeningElement(node) {
         const options = context.options[0] || {};
         const componentOptions = options.components || [];
-        const typesToValidate = ['label'].concat(componentOptions);
+        const typesToValidate = ["label"].concat(componentOptions);
         const nodeType = elementType(node);
 
         // Only check 'label' elements and custom types.
@@ -120,10 +143,16 @@ export default {
           return;
         }
 
-        const required = options.required || { every: ['nesting', 'id'] };
+        const required = options.required || { every: ["nesting", "id"] };
         const allowChildren = options.allowChildren || false;
 
-        const { isValid, message } = getValidityStatus(node, required, allowChildren, elementType, context);
+        const { isValid, message } = getValidityStatus(
+          node,
+          required,
+          allowChildren,
+          elementType,
+          context,
+        );
         if (!isValid) {
           context.report({
             node,

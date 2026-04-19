@@ -1,6 +1,7 @@
-import { roles as rolesMap } from 'aria-query';
-import type { Node } from 'ast-types-flow';
-import implicitRoles from './implicitRoles';
+import { roles as rolesMap } from "aria-query";
+import type { Node } from "ast-types-flow";
+
+import implicitRoles from "./implicitRoles";
 
 /**
  * Returns an element's implicit role given its attributes and type.

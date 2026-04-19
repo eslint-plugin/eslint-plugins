@@ -1,12 +1,12 @@
-import test from 'tape';
-import { dom } from 'aria-query';
-import { elementType } from 'jsx-ast-utils';
+import { dom } from "aria-query";
+import { elementType } from "jsx-ast-utils";
+import test from "tape";
 
-import isDOMElement from '../../../src/util/isDOMElement';
-import JSXElementMock from '../../../__mocks__/JSXElementMock';
+import JSXElementMock from "../../../__mocks__/JSXElementMock";
+import isDOMElement from "../../../src/util/isDOMElement";
 
-test('isDOMElement', (t) => {
-  t.test('DOM elements', (st) => {
+test("isDOMElement", (t) => {
+  t.test("DOM elements", (st) => {
     dom.forEach((_, el) => {
       const element = JSXElementMock(el);
 
@@ -21,9 +21,9 @@ test('isDOMElement', (t) => {
   });
 
   t.equal(
-    isDOMElement(JSXElementMock('CustomElement')),
+    isDOMElement(JSXElementMock("CustomElement")),
     false,
-    'does not identify a custom element',
+    "does not identify a custom element",
   );
 
   t.end();

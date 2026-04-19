@@ -7,10 +7,10 @@
 // Requirements
 // -----------------------------------------------------------------------------
 
-import RuleTester from '../../__util__/RuleTester';
-import parserOptionsMapper from '../../__util__/parserOptionsMapper';
-import parsers from '../../__util__/helpers/parsers';
-import rule from '../../../src/rules/scope';
+import rule from "../../../src/rules/scope";
+import parsers from "../../__util__/helpers/parsers";
+import parserOptionsMapper from "../../__util__/parserOptionsMapper";
+import RuleTester from "../../__util__/RuleTester";
 
 // -----------------------------------------------------------------------------
 // Tests
@@ -19,32 +19,44 @@ import rule from '../../../src/rules/scope';
 const ruleTester = new RuleTester();
 
 const expectedError = {
-  message: 'The scope prop can only be used on <th> elements.',
-  type: 'JSXAttribute',
+  message: "The scope prop can only be used on <th> elements.",
+  type: "JSXAttribute",
 };
 
 const componentsSettings = {
-  'jsx-a11y': {
+  "jsx-a11y": {
     components: {
-      Foo: 'div',
-      TableHeader: 'th',
+      Foo: "div",
+      TableHeader: "th",
     },
   },
 };
 
-ruleTester.run('scope', rule, {
-  valid: parsers.all([].concat(
-    { code: '<div />;' },
-    { code: '<div foo />;' },
-    { code: '<th scope />' },
-    { code: '<th scope="row" />' },
-    { code: '<th scope={foo} />' },
-    { code: '<th scope={"col"} {...props} />' },
-    { code: '<Foo scope="bar" {...props} />' },
-    { code: '<TableHeader scope="row" />', settings: componentsSettings },
-  )).map(parserOptionsMapper),
-  invalid: parsers.all([].concat(
-    { code: '<div scope />', errors: [expectedError] },
-    { code: '<Foo scope="bar" />', settings: componentsSettings, errors: [expectedError] },
-  )).map(parserOptionsMapper),
+ruleTester.run("scope", rule, {
+  valid: parsers
+    .all(
+      [].concat(
+        { code: "<div />;" },
+        { code: "<div foo />;" },
+        { code: "<th scope />" },
+        { code: '<th scope="row" />' },
+        { code: "<th scope={foo} />" },
+        { code: '<th scope={"col"} {...props} />' },
+        { code: '<Foo scope="bar" {...props} />' },
+        { code: '<TableHeader scope="row" />', settings: componentsSettings },
+      ),
+    )
+    .map(parserOptionsMapper),
+  invalid: parsers
+    .all(
+      [].concat(
+        { code: "<div scope />", errors: [expectedError] },
+        {
+          code: '<Foo scope="bar" />',
+          settings: componentsSettings,
+          errors: [expectedError],
+        },
+      ),
+    )
+    .map(parserOptionsMapper),
 });

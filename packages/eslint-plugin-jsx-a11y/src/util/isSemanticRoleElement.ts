@@ -1,12 +1,16 @@
-import type { JSXAttribute } from 'ast-types-flow';
-import { AXObjectRoles, elementAXObjects } from 'axobject-query';
-import { getLiteralPropValue, getProp, propName } from 'jsx-ast-utils';
+import {
+  getLiteralPropValue,
+  getProp,
+  propName,
+} from "@eslintplugin/jsx-ast-utils";
+import type { JSXAttribute } from "ast-types-flow";
+import { AXObjectRoles, elementAXObjects } from "axobject-query";
 
 const isSemanticRoleElement = (
   elementType: string,
   attributes: Array<JSXAttribute>,
 ): boolean => {
-  const roleAttr = getProp(attributes, 'role');
+  const roleAttr = getProp(attributes, "role");
   let res = false;
   const roleAttrValue = getLiteralPropValue(roleAttr);
   elementAXObjects.forEach((axObjects, concept) => {
@@ -14,24 +18,22 @@ const isSemanticRoleElement = (
       return;
     }
     if (
-      concept.name === elementType
-      && (concept.attributes || []).every(
-        (cAttr) => attributes.some(
-          (attr) => {
-            if (!attr.type || attr.type !== 'JSXAttribute') {
-              return false;
-            }
-            const namesMatch = cAttr.name === propName(attr);
-            let valuesMatch;
-            if (cAttr.value !== undefined) {
-              valuesMatch = cAttr.value === getLiteralPropValue(attr);
-            }
-            if (!namesMatch) {
-              return false;
-            }
-            return namesMatch && (valuesMatch !== undefined) ? valuesMatch : true;
-          },
-        ),
+      concept.name === elementType &&
+      (concept.attributes || []).every((cAttr) =>
+        attributes.some((attr) => {
+          if (!attr.type || attr.type !== "JSXAttribute") {
+            return false;
+          }
+          const namesMatch = cAttr.name === propName(attr);
+          let valuesMatch;
+          if (cAttr.value !== undefined) {
+            valuesMatch = cAttr.value === getLiteralPropValue(attr);
+          }
+          if (!namesMatch) {
+            return false;
+          }
+          return namesMatch && valuesMatch !== undefined ? valuesMatch : true;
+        }),
       )
     ) {
       axObjects.forEach((name) => {

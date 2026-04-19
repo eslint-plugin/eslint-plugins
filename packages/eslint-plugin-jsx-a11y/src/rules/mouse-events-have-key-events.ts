@@ -8,32 +8,34 @@
 // Rule Definition
 // ----------------------------------------------------------------------------
 
-import { dom } from 'aria-query';
-import { getProp, getPropValue } from 'jsx-ast-utils';
-import { arraySchema, generateObjSchema } from '../util/schemas';
-import type { ESLintConfig, ESLintContext } from '../../flow/eslint';
+import { getProp, getPropValue } from "@eslintplugin/jsx-ast-utils";
+import { dom } from "aria-query";
+
+import type { ESLintConfig, ESLintContext } from "../../flow/eslint";
+import { arraySchema, generateObjSchema } from "../util/schemas";
 
 const schema = generateObjSchema({
   hoverInHandlers: {
     ...arraySchema,
-    description: 'An array of events that need to be accompanied by `onFocus`',
+    description: "An array of events that need to be accompanied by `onFocus`",
   },
   hoverOutHandlers: {
     ...arraySchema,
-    description: 'An array of events that need to be accompanied by `onBlur`',
+    description: "An array of events that need to be accompanied by `onBlur`",
   },
 });
 
 // Use `onMouseOver` and `onMouseOut` by default if no config is
 // passed in for backwards compatibility
-const DEFAULT_HOVER_IN_HANDLERS = ['onMouseOver'];
-const DEFAULT_HOVER_OUT_HANDLERS = ['onMouseOut'];
+const DEFAULT_HOVER_IN_HANDLERS = ["onMouseOver"];
+const DEFAULT_HOVER_OUT_HANDLERS = ["onMouseOut"];
 
-export default ({
+export default {
   meta: {
     docs: {
-      url: 'https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/mouse-events-have-key-events.md',
-      description: 'Enforce that `onMouseOver`/`onMouseOut` are accompanied by `onFocus`/`onBlur` for keyboard-only users.',
+      url: "https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/mouse-events-have-key-events.md",
+      description:
+        "Enforce that `onMouseOver`/`onMouseOut` are accompanied by `onFocus`/`onBlur` for keyboard-only users.",
     },
     schema: [schema],
   },
@@ -48,8 +50,10 @@ export default ({
 
       const { options } = context;
 
-      const hoverInHandlers: string[] = options[0]?.hoverInHandlers ?? DEFAULT_HOVER_IN_HANDLERS;
-      const hoverOutHandlers: string[] = options[0]?.hoverOutHandlers ?? DEFAULT_HOVER_OUT_HANDLERS;
+      const hoverInHandlers: string[] =
+        options[0]?.hoverInHandlers ?? DEFAULT_HOVER_IN_HANDLERS;
+      const hoverOutHandlers: string[] =
+        options[0]?.hoverOutHandlers ?? DEFAULT_HOVER_OUT_HANDLERS;
 
       const { attributes } = node;
 
@@ -61,10 +65,14 @@ export default ({
       });
 
       if (firstHoverInHandlerWithValue != null) {
-        const hasOnFocus = getProp(attributes, 'onFocus');
+        const hasOnFocus = getProp(attributes, "onFocus");
         const onFocusValue = getPropValue(hasOnFocus);
 
-        if (hasOnFocus === false || onFocusValue === null || onFocusValue === undefined) {
+        if (
+          hasOnFocus === false ||
+          onFocusValue === null ||
+          onFocusValue === undefined
+        ) {
           context.report({
             node: getProp(attributes, firstHoverInHandlerWithValue),
             message: `${firstHoverInHandlerWithValue} must be accompanied by onFocus for accessibility.`,
@@ -80,10 +88,14 @@ export default ({
       });
 
       if (firstHoverOutHandlerWithValue != null) {
-        const hasOnBlur = getProp(attributes, 'onBlur');
+        const hasOnBlur = getProp(attributes, "onBlur");
         const onBlurValue = getPropValue(hasOnBlur);
 
-        if (hasOnBlur === false || onBlurValue === null || onBlurValue === undefined) {
+        if (
+          hasOnBlur === false ||
+          onBlurValue === null ||
+          onBlurValue === undefined
+        ) {
           context.report({
             node: getProp(attributes, firstHoverOutHandlerWithValue),
             message: `${firstHoverOutHandlerWithValue} must be accompanied by onBlur for accessibility.`,
@@ -92,4 +104,4 @@ export default ({
       }
     },
   }),
-}) satisfies ESLintConfig;
+} satisfies ESLintConfig;

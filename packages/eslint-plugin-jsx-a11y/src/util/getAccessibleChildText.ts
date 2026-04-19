@@ -1,8 +1,7 @@
-import type { JSXElement, JSXOpeningElement, Node } from 'ast-types-flow';
+import { getProp, getLiteralPropValue } from "@eslintplugin/jsx-ast-utils";
+import type { JSXElement, JSXOpeningElement, Node } from "ast-types-flow";
 
-import { getProp, getLiteralPropValue } from 'jsx-ast-utils';
-
-import isHiddenFromScreenReader from './isHiddenFromScreenReader';
+import isHiddenFromScreenReader from "./isHiddenFromScreenReader";
 
 /**
  * Returns a new "standardized" string: all whitespace is collapsed to one space,
@@ -13,8 +12,8 @@ import isHiddenFromScreenReader from './isHiddenFromScreenReader';
 function standardizeSpaceAndCase(input: string): string {
   return input
     .trim()
-    .replace(/[,.?¿!‽¡;:]/g, '') // strip punctuation
-    .replace(/\s\s+/g, ' ') // collapse spaces
+    .replace(/[,.?¿!‽¡;:]/g, "") // strip punctuation
+    .replace(/\s\s+/g, " ") // collapse spaces
     .toLowerCase();
 }
 
@@ -26,14 +25,22 @@ function standardizeSpaceAndCase(input: string): string {
  * @param {JSXElement} node - node to traverse
  * @returns child text as a string
  */
-export default function getAccessibleChildText(node: JSXElement, elementType: (JSXOpeningElement) => string): string {
-  const ariaLabel = getLiteralPropValue(getProp(node.openingElement.attributes, 'aria-label'));
+export default function getAccessibleChildText(
+  node: JSXElement,
+  elementType: (JSXOpeningElement) => string,
+): string {
+  const ariaLabel = getLiteralPropValue(
+    getProp(node.openingElement.attributes, "aria-label"),
+  );
   // early escape-hatch when aria-label is applied
   if (ariaLabel) return standardizeSpaceAndCase(ariaLabel);
 
   // early-return if alt prop exists and is an image
-  const altTag = getLiteralPropValue(getProp(node.openingElement.attributes, 'alt'));
-  if (elementType(node.openingElement) === 'img' && altTag) return standardizeSpaceAndCase(altTag);
+  const altTag = getLiteralPropValue(
+    getProp(node.openingElement.attributes, "alt"),
+  );
+  if (elementType(node.openingElement) === "img" && altTag)
+    return standardizeSpaceAndCase(altTag);
 
   // skip if aria-hidden is true
   if (
@@ -42,20 +49,21 @@ export default function getAccessibleChildText(node: JSXElement, elementType: (J
       node.openingElement.attributes,
     )
   ) {
-    return '';
+    return "";
   }
 
   const rawChildText = node.children
     .map((currentNode: Node): string => {
       // $FlowFixMe JSXText is missing in ast-types-flow
-      if (currentNode.type === 'Literal' || currentNode.type === 'JSXText') {
+      if (currentNode.type === "Literal" || currentNode.type === "JSXText") {
         return String(currentNode.value);
       }
-      if (currentNode.type === 'JSXElement') {
+      if (currentNode.type === "JSXElement") {
         return getAccessibleChildText(currentNode, elementType);
       }
-      return '';
-    }).join(' ');
+      return "";
+    })
+    .join(" ");
 
   return standardizeSpaceAndCase(rawChildText);
 }

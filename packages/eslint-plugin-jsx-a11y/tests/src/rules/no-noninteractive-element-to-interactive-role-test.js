@@ -9,12 +9,12 @@
 // Requirements
 // -----------------------------------------------------------------------------
 
-import RuleTester from '../../__util__/RuleTester';
-import { configs } from '../../../src/index';
-import parserOptionsMapper from '../../__util__/parserOptionsMapper';
-import parsers from '../../__util__/helpers/parsers';
-import rule from '../../../src/rules/no-noninteractive-element-to-interactive-role';
-import ruleOptionsMapperFactory from '../../__util__/ruleOptionsMapperFactory';
+import { configs } from "../../../src/index";
+import rule from "../../../src/rules/no-noninteractive-element-to-interactive-role";
+import parsers from "../../__util__/helpers/parsers";
+import parserOptionsMapper from "../../__util__/parserOptionsMapper";
+import ruleOptionsMapperFactory from "../../__util__/ruleOptionsMapperFactory";
+import RuleTester from "../../__util__/RuleTester";
 
 // -----------------------------------------------------------------------------
 // Tests
@@ -22,27 +22,28 @@ import ruleOptionsMapperFactory from '../../__util__/ruleOptionsMapperFactory';
 
 const ruleTester = new RuleTester();
 
-const errorMessage = 'Non-interactive elements should not be assigned interactive roles.';
+const errorMessage =
+  "Non-interactive elements should not be assigned interactive roles.";
 
 const expectedError = {
   message: errorMessage,
-  type: 'JSXAttribute',
+  type: "JSXAttribute",
 };
 
-const ruleName = 'jsx-a11y/no-noninteractive-element-to-interactive-role';
+const ruleName = "jsx-a11y/no-noninteractive-element-to-interactive-role";
 
 const componentsSettings = {
-  'jsx-a11y': {
+  "jsx-a11y": {
     components: {
-      Article: 'article',
-      Input: 'input',
+      Article: "article",
+      Input: "input",
     },
   },
 };
 
 const alwaysValid = [
-  { code: '<TestComponent onClick={doFoo} />' },
-  { code: '<Button onClick={doFoo} />' },
+  { code: "<TestComponent onClick={doFoo} />" },
+  { code: "<Button onClick={doFoo} />" },
   /* Interactive elements */
   { code: '<a tabIndex="0" role="button" />' },
   { code: '<a href="http://x.y.z" role="button" />' },
@@ -430,71 +431,82 @@ const neverValid = [
   { code: '<nav role="menuitem" />;', errors: [expectedError] },
   { code: '<ol role="menuitem" />;', errors: [expectedError] },
   { code: '<p role="button" />;', errors: [expectedError] },
-  { code: '<section role="button" aria-label="Aardvark" />;', errors: [expectedError] },
+  {
+    code: '<section role="button" aria-label="Aardvark" />;',
+    errors: [expectedError],
+  },
   { code: '<table role="menuitem" />;', errors: [expectedError] },
   { code: '<tbody role="menuitem" />;', errors: [expectedError] },
   { code: '<tfoot role="menuitem" />;', errors: [expectedError] },
   { code: '<thead role="menuitem" />;', errors: [expectedError] },
   /* Custom components */
-  { code: '<Article role="button" />', errors: [expectedError], settings: componentsSettings },
+  {
+    code: '<Article role="button" />',
+    errors: [expectedError],
+    settings: componentsSettings,
+  },
 ];
 
-const recommendedOptions = (configs.recommended.rules[ruleName][1] || {});
+const recommendedOptions = configs.recommended.rules[ruleName][1] || {};
 ruleTester.run(`${ruleName}:recommended`, rule, {
-  valid: parsers.all([].concat(
-    ...alwaysValid,
-    { code: '<ul role="menu" />;' },
-    { code: '<ul role="menubar" />;' },
-    { code: '<ul role="radiogroup" />;' },
-    { code: '<ul role="tablist" />;' },
-    { code: '<ul role="tree" />;' },
-    { code: '<ul role="treegrid" />;' },
-    { code: '<ol role="menu" />;' },
-    { code: '<ol role="menubar" />;' },
-    { code: '<ol role="radiogroup" />;' },
-    { code: '<ol role="tablist" />;' },
-    { code: '<ol role="tree" />;' },
-    { code: '<ol role="treegrid" />;' },
-    { code: '<li role="tab" />;' },
-    { code: '<li role="menuitem" />;' },
-    { code: '<li role="menuitemcheckbox" />;' },
-    { code: '<li role="menuitemradio" />;' },
-    { code: '<li role="row" />;' },
-    { code: '<li role="treeitem" />;' },
-    { code: '<Component role="treeitem" />;' },
-    { code: '<fieldset role="radiogroup" />;' },
-    { code: '<fieldset role="presentation" />;' },
-  ))
+  valid: parsers
+    .all(
+      [].concat(
+        ...alwaysValid,
+        { code: '<ul role="menu" />;' },
+        { code: '<ul role="menubar" />;' },
+        { code: '<ul role="radiogroup" />;' },
+        { code: '<ul role="tablist" />;' },
+        { code: '<ul role="tree" />;' },
+        { code: '<ul role="treegrid" />;' },
+        { code: '<ol role="menu" />;' },
+        { code: '<ol role="menubar" />;' },
+        { code: '<ol role="radiogroup" />;' },
+        { code: '<ol role="tablist" />;' },
+        { code: '<ol role="tree" />;' },
+        { code: '<ol role="treegrid" />;' },
+        { code: '<li role="tab" />;' },
+        { code: '<li role="menuitem" />;' },
+        { code: '<li role="menuitemcheckbox" />;' },
+        { code: '<li role="menuitemradio" />;' },
+        { code: '<li role="row" />;' },
+        { code: '<li role="treeitem" />;' },
+        { code: '<Component role="treeitem" />;' },
+        { code: '<fieldset role="radiogroup" />;' },
+        { code: '<fieldset role="presentation" />;' },
+      ),
+    )
     .map(ruleOptionsMapperFactory(recommendedOptions))
     .map(parserOptionsMapper),
-  invalid: parsers.all([].concat(
-    ...neverValid,
-  ))
+  invalid: parsers
+    .all([].concat(...neverValid))
     .map(ruleOptionsMapperFactory(recommendedOptions))
     .map(parserOptionsMapper),
 });
 
 ruleTester.run(`${ruleName}:strict`, rule, {
-  valid: parsers.all([].concat(
-    ...alwaysValid,
-  )).map(parserOptionsMapper),
-  invalid: parsers.all([].concat(
-    ...neverValid,
-    { code: '<ul role="menu" />;', errors: [expectedError] },
-    { code: '<ul role="menubar" />;', errors: [expectedError] },
-    { code: '<ul role="radiogroup" />;', errors: [expectedError] },
-    { code: '<ul role="tablist" />;', errors: [expectedError] },
-    { code: '<ul role="tree" />;', errors: [expectedError] },
-    { code: '<ul role="treegrid" />;', errors: [expectedError] },
-    { code: '<ol role="menu" />;', errors: [expectedError] },
-    { code: '<ol role="menubar" />;', errors: [expectedError] },
-    { code: '<ol role="radiogroup" />;', errors: [expectedError] },
-    { code: '<ol role="tablist" />;', errors: [expectedError] },
-    { code: '<ol role="tree" />;', errors: [expectedError] },
-    { code: '<ol role="treegrid" />;', errors: [expectedError] },
-    { code: '<li role="tab" />;', errors: [expectedError] },
-    { code: '<li role="menuitem" />;', errors: [expectedError] },
-    { code: '<li role="row" />;', errors: [expectedError] },
-    { code: '<li role="treeitem" />;', errors: [expectedError] },
-  )).map(parserOptionsMapper),
+  valid: parsers.all([].concat(...alwaysValid)).map(parserOptionsMapper),
+  invalid: parsers
+    .all(
+      [].concat(
+        ...neverValid,
+        { code: '<ul role="menu" />;', errors: [expectedError] },
+        { code: '<ul role="menubar" />;', errors: [expectedError] },
+        { code: '<ul role="radiogroup" />;', errors: [expectedError] },
+        { code: '<ul role="tablist" />;', errors: [expectedError] },
+        { code: '<ul role="tree" />;', errors: [expectedError] },
+        { code: '<ul role="treegrid" />;', errors: [expectedError] },
+        { code: '<ol role="menu" />;', errors: [expectedError] },
+        { code: '<ol role="menubar" />;', errors: [expectedError] },
+        { code: '<ol role="radiogroup" />;', errors: [expectedError] },
+        { code: '<ol role="tablist" />;', errors: [expectedError] },
+        { code: '<ol role="tree" />;', errors: [expectedError] },
+        { code: '<ol role="treegrid" />;', errors: [expectedError] },
+        { code: '<li role="tab" />;', errors: [expectedError] },
+        { code: '<li role="menuitem" />;', errors: [expectedError] },
+        { code: '<li role="row" />;', errors: [expectedError] },
+        { code: '<li role="treeitem" />;', errors: [expectedError] },
+      ),
+    )
+    .map(parserOptionsMapper),
 });

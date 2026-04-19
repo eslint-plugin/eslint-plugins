@@ -7,19 +7,20 @@
 // Rule Definition
 // ----------------------------------------------------------------------------
 
-import { getProp, getPropValue } from 'jsx-ast-utils';
-import getElementType from '../util/getElementType';
-import { generateObjSchema } from '../util/schemas';
+import { getProp, getPropValue } from "@eslintplugin/jsx-ast-utils";
 
-const errorMessage = '<iframe> elements must have a unique title property.';
+import getElementType from "../util/getElementType";
+import { generateObjSchema } from "../util/schemas";
+
+const errorMessage = "<iframe> elements must have a unique title property.";
 
 const schema = generateObjSchema();
 
 export default {
   meta: {
     docs: {
-      url: 'https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/iframe-has-title.md',
-      description: 'Enforce iframe elements have a title attribute.',
+      url: "https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/iframe-has-title.md",
+      description: "Enforce iframe elements have a title attribute.",
     },
     schema: [schema],
   },
@@ -30,13 +31,13 @@ export default {
       JSXOpeningElement: (node) => {
         const type = elementType(node);
 
-        if (type && type !== 'iframe') {
+        if (type && type !== "iframe") {
           return;
         }
 
-        const title = getPropValue(getProp(node.attributes, 'title'));
+        const title = getPropValue(getProp(node.attributes, "title"));
 
-        if (title && typeof title === 'string') {
+        if (title && typeof title === "string") {
           return;
         }
 

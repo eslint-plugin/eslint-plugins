@@ -1,12 +1,12 @@
-import { getProp } from 'jsx-ast-utils';
+import { getProp } from "@eslintplugin/jsx-ast-utils";
 
 /**
  * Returns the implicit role for a link tag.
  */
 export default function getImplicitRoleForLink(attributes) {
-  if (getProp(attributes, 'href')) {
-    return 'link';
+  if (getProp(attributes, "href")) {
+    return "link";
   }
 
-  return '';
+  return "";
 }

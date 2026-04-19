@@ -7,21 +7,22 @@
 // Rule Definition
 // ----------------------------------------------------------------------------
 
-import { hasAnyProp } from 'jsx-ast-utils';
+import { hasAnyProp } from "@eslintplugin/jsx-ast-utils";
 
-import getElementType from '../util/getElementType';
-import { arraySchema, generateObjSchema } from '../util/schemas';
-import hasAccessibleChild from '../util/hasAccessibleChild';
+import getElementType from "../util/getElementType";
+import hasAccessibleChild from "../util/hasAccessibleChild";
+import { arraySchema, generateObjSchema } from "../util/schemas";
 
-const errorMessage = 'Anchors must have content and the content must be accessible by a screen reader.';
+const errorMessage =
+  "Anchors must have content and the content must be accessible by a screen reader.";
 
 const schema = generateObjSchema({ components: arraySchema });
 
 export default {
   meta: {
     docs: {
-      url: 'https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/anchor-has-content.md',
-      description: 'Enforce all anchors to contain accessible content.',
+      url: "https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/anchor-has-content.md",
+      description: "Enforce all anchors to contain accessible content.",
     },
     schema: [schema],
   },
@@ -32,7 +33,7 @@ export default {
       JSXOpeningElement: (node) => {
         const options = context.options[0] || {};
         const componentOptions = options.components || [];
-        const typeCheck = ['a'].concat(componentOptions);
+        const typeCheck = ["a"].concat(componentOptions);
         const nodeType = elementType(node);
 
         // Only check anchor elements and custom types.
@@ -42,7 +43,7 @@ export default {
         if (hasAccessibleChild(node.parent, elementType)) {
           return;
         }
-        if (hasAnyProp(node.attributes, ['title', 'aria-label'])) {
+        if (hasAnyProp(node.attributes, ["title", "aria-label"])) {
           return;
         }
 

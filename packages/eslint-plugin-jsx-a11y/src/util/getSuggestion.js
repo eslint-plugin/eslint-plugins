@@ -1,5 +1,4 @@
-import editDistance from 'damerau-levenshtein';
-import fromEntries from 'object.fromentries';
+import editDistance from "damerau-levenshtein";
 
 // Minimum edit distance to be considered a good suggestion.
 const THRESHOLD = 2;
@@ -9,9 +8,12 @@ const THRESHOLD = 2;
  * to return.
  */
 export default function getSuggestion(word, dictionary = [], limit = 2) {
-  const distances = fromEntries(
+  const distances = Object.fromEntries(
     dictionary.map((dictionaryWord) => {
-      const distance = editDistance(word.toUpperCase(), dictionaryWord.toUpperCase());
+      const distance = editDistance(
+        word.toUpperCase(),
+        dictionaryWord.toUpperCase(),
+      );
       const { steps } = distance;
       return [dictionaryWord, steps];
     }),

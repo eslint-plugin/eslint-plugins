@@ -1,4 +1,8 @@
-import { getProp, getPropValue, getLiteralPropValue } from 'jsx-ast-utils';
+import {
+  getProp,
+  getPropValue,
+  getLiteralPropValue,
+} from "@eslintplugin/jsx-ast-utils";
 
 /**
  * Returns boolean indicating that the aria-hidden prop
@@ -8,15 +12,15 @@ import { getProp, getPropValue, getLiteralPropValue } from 'jsx-ast-utils';
  * <div aria-hidden /> is equivalent to the DOM as <div aria-hidden=true />.
  */
 const isHiddenFromScreenReader = (type, attributes) => {
-  if (type.toUpperCase() === 'INPUT') {
-    const hidden = getLiteralPropValue(getProp(attributes, 'type'));
+  if (type.toUpperCase() === "INPUT") {
+    const hidden = getLiteralPropValue(getProp(attributes, "type"));
 
-    if (hidden && hidden.toUpperCase() === 'HIDDEN') {
+    if (hidden && hidden.toUpperCase() === "HIDDEN") {
       return true;
     }
   }
 
-  const ariaHidden = getPropValue(getProp(attributes, 'aria-hidden'));
+  const ariaHidden = getPropValue(getProp(attributes, "aria-hidden"));
   return ariaHidden === true;
 };
 

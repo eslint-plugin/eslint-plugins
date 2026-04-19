@@ -1,20 +1,24 @@
-import { getProp, getLiteralPropValue, getPropValue } from 'jsx-ast-utils';
-import type { Node } from 'ast-types-flow';
+import {
+  getProp,
+  getLiteralPropValue,
+  getPropValue,
+} from "@eslintplugin/jsx-ast-utils";
+import type { Node } from "ast-types-flow";
 
 const isDisabledElement = (attributes: Array<Node>): boolean => {
-  const disabledAttr = getProp(attributes, 'disabled');
+  const disabledAttr = getProp(attributes, "disabled");
   const disabledAttrValue = getPropValue(disabledAttr);
   const isHTML5Disabled = disabledAttr && disabledAttrValue !== undefined;
   if (isHTML5Disabled) {
     return true;
   }
-  const ariaDisabledAttr = getProp(attributes, 'aria-disabled');
+  const ariaDisabledAttr = getProp(attributes, "aria-disabled");
   const ariaDisabledAttrValue = getLiteralPropValue(ariaDisabledAttr);
 
   if (
-    ariaDisabledAttr
-    && ariaDisabledAttrValue !== undefined
-    && ariaDisabledAttrValue === true
+    ariaDisabledAttr &&
+    ariaDisabledAttrValue !== undefined &&
+    ariaDisabledAttrValue === true
   ) {
     return true;
   }

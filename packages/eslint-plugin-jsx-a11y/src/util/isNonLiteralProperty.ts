@@ -1,5 +1,5 @@
-import type { Node } from 'ast-types-flow';
-import { getProp } from 'jsx-ast-utils';
+import { getProp } from "@eslintplugin/jsx-ast-utils";
+import type { Node } from "ast-types-flow";
 
 /**
  * Returns boolean indicating whether the given element has been specified with
@@ -19,12 +19,13 @@ const isNonLiteralProperty = (
   const propValue = prop.value;
   if (!propValue) return false;
 
-  if (propValue.type === 'Literal') return false;
+  if (propValue.type === "Literal") return false;
 
-  if (propValue.type === 'JSXExpressionContainer') {
+  if (propValue.type === "JSXExpressionContainer") {
     const { expression } = propValue;
-    if (expression.type === 'Identifier' && expression.name === 'undefined') return false;
-    if (expression.type === 'JSXText') return false;
+    if (expression.type === "Identifier" && expression.name === "undefined")
+      return false;
+    if (expression.type === "JSXText") return false;
   }
 
   return true;

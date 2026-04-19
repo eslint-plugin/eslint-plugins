@@ -3,26 +3,28 @@
  * @author Jesse Beach <@jessebeach>
  */
 
-import { dom } from 'aria-query';
-import { getProp } from 'jsx-ast-utils';
-import { generateObjSchema } from '../util/schemas';
-import getElementType from '../util/getElementType';
-import getTabIndex from '../util/getTabIndex';
-import isInteractiveElement from '../util/isInteractiveElement';
+import { getProp } from "@eslintplugin/jsx-ast-utils";
+import { dom } from "aria-query";
+
+import getElementType from "../util/getElementType";
+import getTabIndex from "../util/getTabIndex";
+import isInteractiveElement from "../util/isInteractiveElement";
+import { generateObjSchema } from "../util/schemas";
 
 // ----------------------------------------------------------------------------
 // Rule Definition
 // ----------------------------------------------------------------------------
 
-const errorMessage = 'An element that manages focus with `aria-activedescendant` must have a tabindex';
+const errorMessage =
+  "An element that manages focus with `aria-activedescendant` must have a tabindex";
 
 const schema = generateObjSchema();
 
 export default {
   meta: {
     docs: {
-      url: 'https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/aria-activedescendant-has-tabindex.md',
-      description: 'Enforce elements with aria-activedescendant are tabbable.',
+      url: "https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/aria-activedescendant-has-tabindex.md",
+      description: "Enforce elements with aria-activedescendant are tabbable.",
     },
     schema: [schema],
   },
@@ -33,7 +35,7 @@ export default {
       JSXOpeningElement: (node) => {
         const { attributes } = node;
 
-        if (getProp(attributes, 'aria-activedescendant') === undefined) {
+        if (getProp(attributes, "aria-activedescendant") === undefined) {
           return;
         }
 
@@ -43,15 +45,12 @@ export default {
         if (!dom.has(type)) {
           return;
         }
-        const tabIndex = getTabIndex(getProp(attributes, 'tabIndex'));
+        const tabIndex = getTabIndex(getProp(attributes, "tabIndex"));
 
         // If this is an interactive element and the tabindex attribute is not specified,
         // or the tabIndex property was not mutated, then the tabIndex
         // property will be undefined.
-        if (
-          isInteractiveElement(type, attributes)
-          && tabIndex === undefined
-        ) {
+        if (isInteractiveElement(type, attributes) && tabIndex === undefined) {
           return;
         }
 

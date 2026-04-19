@@ -1,5 +1,5 @@
-import { version as eslintVersion } from 'eslint/package.json';
-import semver from 'semver';
+import { version as eslintVersion } from "eslint/package.json";
+import semver from "semver";
 
 const usingLegacy = semver.major(eslintVersion) < 9;
 
@@ -16,7 +16,7 @@ const defaultLegacyParserOptions = {
 };
 
 const defaultLanguageOptions = {
-  ecmaVersion: 'latest',
+  ecmaVersion: "latest",
   parserOptions: {
     ...defaultParserOptions,
   },
@@ -31,23 +31,23 @@ export default function parserOptionsMapper({
 }) {
   return usingLegacy
     ? {
-      code,
-      errors,
-      options,
-      parserOptions: {
-        ...defaultLegacyParserOptions,
-        ...languageOptions,
-      },
-      settings,
-    }
+        code,
+        errors,
+        options,
+        parserOptions: {
+          ...defaultLegacyParserOptions,
+          ...languageOptions,
+        },
+        settings,
+      }
     : {
-      code,
-      errors,
-      options,
-      languageOptions: {
-        ...defaultLanguageOptions,
-        ...languageOptions,
-      },
-      settings,
-    };
+        code,
+        errors,
+        options,
+        languageOptions: {
+          ...defaultLanguageOptions,
+          ...languageOptions,
+        },
+        settings,
+      };
 }

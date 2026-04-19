@@ -11,20 +11,14 @@ import {
   getProp,
   getPropValue,
   getLiteralPropValue,
-} from 'jsx-ast-utils';
-import flatMap from 'array.prototype.flatmap';
+} from "@eslintplugin/jsx-ast-utils";
 
-import { generateObjSchema, arraySchema } from '../util/schemas';
-import getElementType from '../util/getElementType';
-import hasAccessibleChild from '../util/hasAccessibleChild';
-import isPresentationRole from '../util/isPresentationRole';
+import getElementType from "../util/getElementType";
+import hasAccessibleChild from "../util/hasAccessibleChild";
+import isPresentationRole from "../util/isPresentationRole";
+import { generateObjSchema, arraySchema } from "../util/schemas";
 
-const DEFAULT_ELEMENTS = [
-  'img',
-  'object',
-  'area',
-  'input[type="image"]',
-];
+const DEFAULT_ELEMENTS = ["img", "object", "area", 'input[type="image"]'];
 
 const schema = generateObjSchema({
   elements: arraySchema,
@@ -39,7 +33,7 @@ const ariaLabelHasValue = (prop) => {
   if (value === undefined) {
     return false;
   }
-  if (typeof value === 'string' && value.length === 0) {
+  if (typeof value === "string" && value.length === 0) {
     return false;
   }
   return true;
@@ -47,26 +41,28 @@ const ariaLabelHasValue = (prop) => {
 
 const ruleByElement = {
   img(context, node, nodeType) {
-    const altProp = getProp(node.attributes, 'alt');
+    const altProp = getProp(node.attributes, "alt");
 
     // Missing alt prop error.
     if (altProp === undefined) {
       if (isPresentationRole(nodeType, node.attributes)) {
         context.report({
           node,
-          message: 'Prefer alt="" over a presentational role. First rule of aria is to not use aria if it can be achieved via native HTML.',
+          message:
+            'Prefer alt="" over a presentational role. First rule of aria is to not use aria if it can be achieved via native HTML.',
         });
         return;
       }
       // Check for `aria-label` to provide text alternative
       // Don't create an error if the attribute is used correctly. But if it
       // isn't, suggest that the developer use `alt` instead.
-      const ariaLabelProp = getProp(node.attributes, 'aria-label');
+      const ariaLabelProp = getProp(node.attributes, "aria-label");
       if (ariaLabelProp !== undefined) {
         if (!ariaLabelHasValue(ariaLabelProp)) {
           context.report({
             node,
-            message: 'The aria-label attribute must have a value. The alt attribute is preferred over aria-label for images.',
+            message:
+              "The aria-label attribute must have a value. The alt attribute is preferred over aria-label for images.",
           });
         }
         return;
@@ -74,12 +70,13 @@ const ruleByElement = {
       // Check for `aria-labelledby` to provide text alternative
       // Don't create an error if the attribute is used correctly. But if it
       // isn't, suggest that the developer use `alt` instead.
-      const ariaLabelledbyProp = getProp(node.attributes, 'aria-labelledby');
+      const ariaLabelledbyProp = getProp(node.attributes, "aria-labelledby");
       if (ariaLabelledbyProp !== undefined) {
         if (!ariaLabelHasValue(ariaLabelledbyProp)) {
           context.report({
             node,
-            message: 'The aria-labelledby attribute must have a value. The alt attribute is preferred over aria-labelledby for images.',
+            message:
+              "The aria-labelledby attribute must have a value. The alt attribute is preferred over aria-labelledby for images.",
           });
         }
         return;
@@ -96,7 +93,7 @@ const ruleByElement = {
     const altValue = getPropValue(altProp);
     const isNullValued = altProp.value === null; // <img alt />
 
-    if ((altValue && !isNullValued) || altValue === '') {
+    if ((altValue && !isNullValued) || altValue === "") {
       return;
     }
 
@@ -108,36 +105,46 @@ const ruleByElement = {
   },
 
   object(context, node, unusedNodeType, elementType) {
-    const ariaLabelProp = getProp(node.attributes, 'aria-label');
-    const arialLabelledByProp = getProp(node.attributes, 'aria-labelledby');
-    const hasLabel = ariaLabelHasValue(ariaLabelProp) || ariaLabelHasValue(arialLabelledByProp);
-    const titleProp = getLiteralPropValue(getProp(node.attributes, 'title'));
+    const ariaLabelProp = getProp(node.attributes, "aria-label");
+    const arialLabelledByProp = getProp(node.attributes, "aria-labelledby");
+    const hasLabel =
+      ariaLabelHasValue(ariaLabelProp) ||
+      ariaLabelHasValue(arialLabelledByProp);
+    const titleProp = getLiteralPropValue(getProp(node.attributes, "title"));
     const hasTitleAttr = !!titleProp;
 
-    if (hasLabel || hasTitleAttr || hasAccessibleChild(node.parent, elementType)) {
+    if (
+      hasLabel ||
+      hasTitleAttr ||
+      hasAccessibleChild(node.parent, elementType)
+    ) {
       return;
     }
 
     context.report({
       node,
-      message: 'Embedded <object> elements must have alternative text by providing inner text, aria-label or aria-labelledby props.',
+      message:
+        "Embedded <object> elements must have alternative text by providing inner text, aria-label or aria-labelledby props.",
     });
   },
 
   area(context, node) {
-    const ariaLabelProp = getProp(node.attributes, 'aria-label');
-    const arialLabelledByProp = getProp(node.attributes, 'aria-labelledby');
-    const hasLabel = ariaLabelHasValue(ariaLabelProp) || ariaLabelHasValue(arialLabelledByProp);
+    const ariaLabelProp = getProp(node.attributes, "aria-label");
+    const arialLabelledByProp = getProp(node.attributes, "aria-labelledby");
+    const hasLabel =
+      ariaLabelHasValue(ariaLabelProp) ||
+      ariaLabelHasValue(arialLabelledByProp);
 
     if (hasLabel) {
       return;
     }
 
-    const altProp = getProp(node.attributes, 'alt');
+    const altProp = getProp(node.attributes, "alt");
     if (altProp === undefined) {
       context.report({
         node,
-        message: 'Each area of an image map must have a text alternative through the `alt`, `aria-label`, or `aria-labelledby` prop.',
+        message:
+          "Each area of an image map must have a text alternative through the `alt`, `aria-label`, or `aria-labelledby` prop.",
       });
       return;
     }
@@ -145,35 +152,41 @@ const ruleByElement = {
     const altValue = getPropValue(altProp);
     const isNullValued = altProp.value === null; // <area alt />
 
-    if ((altValue && !isNullValued) || altValue === '') {
+    if ((altValue && !isNullValued) || altValue === "") {
       return;
     }
 
     context.report({
       node,
-      message: 'Each area of an image map must have a text alternative through the `alt`, `aria-label`, or `aria-labelledby` prop.',
+      message:
+        "Each area of an image map must have a text alternative through the `alt`, `aria-label`, or `aria-labelledby` prop.",
     });
   },
 
   'input[type="image"]': function inputImage(context, node, nodeType) {
     // Only test input[type="image"]
-    if (nodeType === 'input') {
-      const typePropValue = getPropValue(getProp(node.attributes, 'type'));
-      if (typePropValue !== 'image') { return; }
+    if (nodeType === "input") {
+      const typePropValue = getPropValue(getProp(node.attributes, "type"));
+      if (typePropValue !== "image") {
+        return;
+      }
     }
-    const ariaLabelProp = getProp(node.attributes, 'aria-label');
-    const arialLabelledByProp = getProp(node.attributes, 'aria-labelledby');
-    const hasLabel = ariaLabelHasValue(ariaLabelProp) || ariaLabelHasValue(arialLabelledByProp);
+    const ariaLabelProp = getProp(node.attributes, "aria-label");
+    const arialLabelledByProp = getProp(node.attributes, "aria-labelledby");
+    const hasLabel =
+      ariaLabelHasValue(ariaLabelProp) ||
+      ariaLabelHasValue(arialLabelledByProp);
 
     if (hasLabel) {
       return;
     }
 
-    const altProp = getProp(node.attributes, 'alt');
+    const altProp = getProp(node.attributes, "alt");
     if (altProp === undefined) {
       context.report({
         node,
-        message: '<input> elements with type="image" must have a text alternative through the `alt`, `aria-label`, or `aria-labelledby` prop.',
+        message:
+          '<input> elements with type="image" must have a text alternative through the `alt`, `aria-label`, or `aria-labelledby` prop.',
       });
       return;
     }
@@ -181,13 +194,14 @@ const ruleByElement = {
     const altValue = getPropValue(altProp);
     const isNullValued = altProp.value === null; // <area alt />
 
-    if ((altValue && !isNullValued) || altValue === '') {
+    if ((altValue && !isNullValued) || altValue === "") {
       return;
     }
 
     context.report({
       node,
-      message: '<input> elements with type="image" must have a text alternative through the `alt`, `aria-label`, or `aria-labelledby` prop.',
+      message:
+        '<input> elements with type="image" must have a text alternative through the `alt`, `aria-label`, or `aria-labelledby` prop.',
     });
   },
 };
@@ -195,8 +209,9 @@ const ruleByElement = {
 export default {
   meta: {
     docs: {
-      url: 'https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/alt-text.md',
-      description: 'Enforce all elements that require alternative text have meaningful information to relay back to end user.',
+      url: "https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/alt-text.md",
+      description:
+        "Enforce all elements that require alternative text have meaningful information to relay back to end user.",
     },
     schema: [schema],
   },
@@ -206,25 +221,25 @@ export default {
     // Elements to validate for alt text.
     const elementOptions = options.elements || DEFAULT_ELEMENTS;
     // Get custom components for just the elements that will be tested.
-    const customComponents = flatMap(
-      elementOptions,
+    const customComponents = elementOptions.flatMap(
       (element) => options[element],
     );
     const typesToValidate = new Set(
-      [].concat(
-        customComponents,
-        elementOptions,
-      ).map((type) => (type === 'input[type="image"]' ? 'input' : type)),
+      []
+        .concat(customComponents, elementOptions)
+        .map((type) => (type === 'input[type="image"]' ? "input" : type)),
     );
     const elementType = getElementType(context);
 
     return {
       JSXOpeningElement(node) {
         const nodeType = elementType(node);
-        if (!typesToValidate.has(nodeType)) { return; }
+        if (!typesToValidate.has(nodeType)) {
+          return;
+        }
 
         let DOMElement = nodeType;
-        if (DOMElement === 'input') {
+        if (DOMElement === "input") {
           DOMElement = 'input[type="image"]';
         }
 

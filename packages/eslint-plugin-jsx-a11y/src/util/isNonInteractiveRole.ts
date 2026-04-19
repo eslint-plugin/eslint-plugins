@@ -1,16 +1,16 @@
-import {
-  dom,
-  roles as rolesMap,
-} from 'aria-query';
-import type { Node } from 'ast-types-flow';
-import { getProp, getLiteralPropValue } from 'jsx-ast-utils';
-import includes from 'array-includes';
-import flatMap from 'array.prototype.flatmap';
+import { getProp, getLiteralPropValue } from "@eslintplugin/jsx-ast-utils";
+import { dom, roles as rolesMap } from "aria-query";
+import type { Node } from "ast-types-flow";
 
-const nonInteractiveRoles = rolesMap.keys().filter((name) => (
-  !rolesMap.get(name).abstract
-  && !rolesMap.get(name).superClass.some((klasses) => includes(klasses, 'widget'))
-));
+const nonInteractiveRoles = rolesMap
+  .keys()
+  .filter(
+    (name) =>
+      !rolesMap.get(name).abstract &&
+      !rolesMap
+        .get(name)
+        .superClass.some((classes) => classes.includes("widget")),
+  );
 
 /**
  * Returns boolean indicating whether the given element has a role
@@ -40,17 +40,16 @@ const isNonInteractiveRole = (
     return false;
   }
 
-  const role = getLiteralPropValue(getProp(attributes, 'role'));
+  const role = getLiteralPropValue(getProp(attributes, "role"));
 
   let isNonInteractive = false;
-  const normalizedValues = String(role).toLowerCase().split(' ');
-  const validRoles = flatMap(
-    normalizedValues,
-    (name: string) => (rolesMap.has(name) ? [name] : []),
+  const normalizedValues = String(role).toLowerCase().split(" ");
+  const validRoles = normalizedValues.flatMap((name: string) =>
+    rolesMap.has(name) ? [name] : [],
   );
   if (validRoles.length > 0) {
     // The first role value is a series takes precedence.
-    isNonInteractive = includes(nonInteractiveRoles, validRoles[0]);
+    isNonInteractive = nonInteractiveRoles.includes(validRoles[0]);
   }
 
   return isNonInteractive;

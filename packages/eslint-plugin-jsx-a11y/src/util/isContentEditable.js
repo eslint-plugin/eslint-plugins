@@ -1,7 +1,7 @@
-import { getProp } from 'jsx-ast-utils';
+import { getProp } from "@eslintplugin/jsx-ast-utils";
 
 export default function isContentEditable(tagName, attributes) {
-  const prop = getProp(attributes, 'contentEditable');
+  const prop = getProp(attributes, "contentEditable");
 
   return prop?.value?.raw === '"true"';
 }

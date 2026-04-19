@@ -1,6 +1,7 @@
-import type { Node } from 'ast-types-flow';
-import getExplicitRole from './getExplicitRole';
-import getImplicitRole from './getImplicitRole';
+import type { Node } from "ast-types-flow";
+
+import getExplicitRole from "./getExplicitRole";
+import getImplicitRole from "./getImplicitRole";
 /**
  * Returns an element's computed role, which is
  *

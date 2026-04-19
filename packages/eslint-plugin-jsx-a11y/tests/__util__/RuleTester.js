@@ -1,29 +1,23 @@
-import test from 'tape';
-import mockProperty from 'mock-property';
-import { RuleTester } from 'eslint';
+import { RuleTester } from "eslint";
+import { describe, it } from "bun:test";
 
 const orig = RuleTester.prototype.run;
 RuleTester.prototype.run = function (name, rule, tests) {
-  test(`RuleTester: ${name}`, (t) => {
-    t.teardown(mockProperty(RuleTester.describe, 't', { value: t }));
+  describe(`RuleTester: ${name}`, () => {
     orig.call(this, name, rule, tests);
-
-    t.end();
   });
 };
 
 RuleTester.describe = function (text, method) {
-  RuleTester.it.title = text;
-  const self = this;
-  RuleTester.describe.t.test(text, (t) => {
-    t.teardown(mockProperty(RuleTester.it, 't', { value: t }));
-    method.call(self);
-    t.end();
+  describe(text, () => {
+    method.call(this);
   });
 };
 
 RuleTester.it = function (text, method) {
-  RuleTester.it.t.doesNotThrow(method, `${RuleTester.it.title}: ${text}`);
+  it(text, () => {
+    expect(method).not.toThrow();
+  });
 };
 
 export default RuleTester;

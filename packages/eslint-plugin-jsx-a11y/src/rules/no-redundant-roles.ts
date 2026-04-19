@@ -8,36 +8,42 @@
 // Rule Definition
 // ----------------------------------------------------------------------------
 
-import includes from 'array-includes';
-import hasOwn from 'hasown';
-import type { JSXOpeningElement } from 'ast-types-flow';
-import type { ESLintConfig, ESLintContext, ESLintVisitorSelectorConfig } from '../../flow/eslint';
-import getElementType from '../util/getElementType';
-import getExplicitRole from '../util/getExplicitRole';
-import getImplicitRole from '../util/getImplicitRole';
+import type { JSXOpeningElement } from "ast-types-flow";
+import hasOwn from "hasown";
 
-const errorMessage = (element, implicitRole) => (
-  `The element ${element} has an implicit role of ${implicitRole}. Defining this explicitly is redundant and should be avoided.`
-);
+import type {
+  ESLintConfig,
+  ESLintContext,
+  ESLintVisitorSelectorConfig,
+} from "../../flow/eslint";
+import getElementType from "../util/getElementType";
+import getExplicitRole from "../util/getExplicitRole";
+import getImplicitRole from "../util/getImplicitRole";
 
-const DEFAULT_ROLE_EXCEPTIONS = { nav: ['navigation'] };
+const errorMessage = (element: string, implicitRole: string) =>
+  `The element ${element} has an implicit role of ${implicitRole}. Defining this explicitly is redundant and should be avoided.`;
 
-export default ({
+const DEFAULT_ROLE_EXCEPTIONS = { nav: ["navigation"] };
+
+export default {
   meta: {
     docs: {
-      url: 'https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/no-redundant-roles.md',
-      description: 'Enforce explicit role property is not the same as implicit/default role property on element.',
+      url: "https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/no-redundant-roles.md",
+      description:
+        "Enforce explicit role property is not the same as implicit/default role property on element.",
     },
-    schema: [{
-      type: 'object',
-      additionalProperties: {
-        type: 'array',
-        items: {
-          type: 'string',
+    schema: [
+      {
+        type: "object",
+        additionalProperties: {
+          type: "array",
+          items: {
+            type: "string",
+          },
+          uniqueItems: true,
         },
-        uniqueItems: true,
       },
-    }],
+    ],
   },
 
   create: (context: ESLintContext): ESLintVisitorSelectorConfig => {
@@ -54,7 +60,7 @@ export default ({
         }
 
         if (implicitRole === explicitRole) {
-          const allowedRedundantRoles = (options[0] || {});
+          const allowedRedundantRoles = options[0] || {};
           let redundantRolesForElement;
 
           if (hasOwn(allowedRedundantRoles, type)) {
@@ -63,7 +69,7 @@ export default ({
             redundantRolesForElement = DEFAULT_ROLE_EXCEPTIONS[type] || [];
           }
 
-          if (includes(redundantRolesForElement, implicitRole)) {
+          if (redundantRolesForElement.includes(implicitRole)) {
             return;
           }
 
@@ -75,4 +81,4 @@ export default ({
       },
     };
   },
-}) satisfies ESLintConfig;
+} satisfies ESLintConfig;

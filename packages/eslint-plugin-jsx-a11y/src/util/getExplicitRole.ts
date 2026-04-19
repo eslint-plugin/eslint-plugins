@@ -1,9 +1,6 @@
-import { roles as rolesMap } from 'aria-query';
-import {
-  getProp,
-  getLiteralPropValue,
-} from 'jsx-ast-utils';
-import type { Node } from 'ast-types-flow';
+import { getProp, getLiteralPropValue } from "@eslintplugin/jsx-ast-utils";
+import { roles as rolesMap } from "aria-query";
+import type { Node } from "ast-types-flow";
 /**
  * Returns an element's computed role, which is
  *
@@ -15,11 +12,11 @@ export default function getExplicitRole(
   attributes: Array<Node>,
 ): string | null {
   const explicitRole = (function toLowerCase(role) {
-    if (typeof role === 'string') {
+    if (typeof role === "string") {
       return role.toLowerCase();
     }
     return null;
-  }(getLiteralPropValue(getProp(attributes, 'role'))));
+  })(getLiteralPropValue(getProp(attributes, "role")));
 
   if (rolesMap.has(explicitRole)) {
     return explicitRole;
