@@ -874,16 +874,16 @@ module.exports = function propTypesInstructions(context, components, utils) {
           }
           // Handle ReturnType<typeof mapStateToProps>
           if (astUtil.isTSTypeQuery(returnType)) {
-            const returnTypeFunction = flatMap(
-              this.sourceCode.ast.body.filter(
+            const returnTypeFunction = this.sourceCode.ast.body
+              .filter(
                 (item) =>
                   item.type === "VariableDeclaration" &&
                   item.declarations.find(
                     (dec) => dec.id.name === returnType.exprName.name,
                   ),
-              ),
-              (type) => type.declarations,
-            ).map((dec) => dec.init);
+              )
+              .flatMap((type) => type.declarations)
+              .map((dec) => dec.init);
 
             if (Array.isArray(returnTypeFunction)) {
               if (returnTypeFunction.length === 0) {
