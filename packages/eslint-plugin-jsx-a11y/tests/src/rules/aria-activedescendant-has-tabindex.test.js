@@ -25,7 +25,7 @@ const expectedError = {
 };
 
 if (eslintBefore10) {
-  error.type = "JSXOpeningElement";
+  expectedError.type = "JSXOpeningElement";
 }
 
 ruleTester.run("aria-activedescendant-has-tabindex", rule, {

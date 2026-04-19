@@ -32,6 +32,8 @@ const errorMessage = (role) => {
   if (eslintBefore10) {
     error.type = "JSXOpeningElement";
   }
+
+  return error;
 };
 
 const componentsSettings = {

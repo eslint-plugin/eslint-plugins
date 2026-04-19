@@ -24,7 +24,7 @@ const expectedError = {
 };
 
 if (eslintBefore10) {
-  error.type = "JSXOpeningElement";
+  expectedError.type = "JSXOpeningElement";
 }
 
 ruleTester.run("no-aria-hidden-on-focusable", rule, {

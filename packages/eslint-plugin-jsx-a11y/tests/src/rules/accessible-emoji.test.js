@@ -25,7 +25,7 @@ const expectedError = {
 };
 
 if (eslintBefore10) {
-  error.type = "JSXOpeningElement";
+  expectedError.type = "JSXOpeningElement";
 }
 
 ruleTester.run("accessible-emoji", rule, {
