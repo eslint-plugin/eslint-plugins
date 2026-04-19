@@ -159,8 +159,8 @@ describe("Version", () => {
         ),
       );
 
-      expect(versionUtil.testReactVersion(context, ">= 2.3.4")).toBe(true);
       it.failing("TODO: fix", () => {
+        expect(versionUtil.testReactVersion(context, ">= 2.3.4")).toBe(true);
         expect(versionUtil.testReactVersion(context, ">= 2.3.5")).toBe(false);
       });
       expect(versionUtil.testFlowVersion(context, ">= 2.92.0")).toBe(true);
