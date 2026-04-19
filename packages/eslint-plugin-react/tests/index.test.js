@@ -1,100 +1,106 @@
-/* eslint-env mocha */
+import { expect, describe, it } from "bun:test";
 
-'use strict';
+const fs = require("node:fs");
+const path = require("node:path");
 
-const assert = require('assert');
-const fs = require('fs');
-const path = require('path');
+const plugin = require("../src/index");
+const index = require("../src/rules");
 
-const plugin = require('../src/index');
-const index = require('../src/rules');
+const ruleFiles = fs
+  .readdirSync(path.resolve(__dirname, "../src/rules/"))
+  .filter((f) => f.endsWith(".js"))
+  .map((f) => path.basename(f, ".js"))
+  .filter((f) => f !== "index");
 
-const ruleFiles = fs.readdirSync(path.resolve(__dirname, '../src/rules/'))
-  .filter((f) => f.endsWith('.js'))
-  .map((f) => path.basename(f, '.js'))
-  .filter((f) => f !== 'index');
-
-describe('all rule files should be exported by the plugin', () => {
+describe("all rule files should be exported by the plugin", () => {
   ruleFiles.forEach((ruleName) => {
     it(`should export ${ruleName}`, () => {
-      assert.equal(
-        plugin.rules[ruleName],
-        require(path.join('../src/rules', ruleName)) // eslint-disable-line global-require, import/no-dynamic-require
+      expect(plugin.rules[ruleName]).toEqual(
+        require(path.join("../src/rules", ruleName)), // eslint-disable-line global-require, import/no-dynamic-require
       );
     });
 
     it(`should export ${ruleName} from src/rules/index`, () => {
-      assert.equal(
-        plugin.rules[ruleName],
-        index[ruleName]
-      );
+      expect(plugin.rules[ruleName]).toEqual(index[ruleName]);
     });
   });
 });
 
-describe('deprecated rules', () => {
-  it('marks all deprecated rules as deprecated', () => {
+describe("deprecated rules", () => {
+  describe("marks all deprecated rules as deprecated", () => {
     ruleFiles.forEach((ruleName) => {
       const inDeprecatedRules = !!plugin.deprecatedRules[ruleName];
       const isDeprecated = plugin.rules[ruleName].meta.deprecated;
       if (inDeprecatedRules) {
-        assert(isDeprecated, `${ruleName} metadata should mark it as deprecated`);
+        it(`${ruleName} metadata should mark it as deprecated`, () => {
+          expect(isDeprecated).toBeTrue();
+        });
       } else {
-        assert(!isDeprecated, `${ruleName} metadata should not mark it as deprecated`);
+        it(`${ruleName} metadata should not mark it as deprecated`, () => {
+          expect(isDeprecated).toBeUndefined();
+        });
       }
     });
   });
 });
 
-describe('configurations', () => {
-  it('should export a ‘recommended’ configuration', () => {
-    const configName = 'recommended';
-    assert(plugin.configs[configName]);
+describe("configurations", () => {
+  describe("should export a ‘recommended’ configuration", () => {
+    const configName = "recommended";
+    expect(plugin.configs[configName]).toBeDefined();
 
     Object.keys(plugin.configs[configName].rules).forEach((ruleName) => {
-      assert.ok(ruleName.startsWith('react/'));
-      const subRuleName = ruleName.slice('react/'.length);
-      assert(plugin.rules[subRuleName]);
+      expect(ruleName).toStartWith("react/");
+      const subRuleName = ruleName.slice("react/".length);
+      expect(plugin.rules[subRuleName]).toBeDefined();
     });
 
     ruleFiles.forEach((ruleName) => {
-      const inRecommendedConfig = !!plugin.configs[configName].rules[`react/${ruleName}`];
+      const inRecommendedConfig =
+        !!plugin.configs[configName].rules[`react/${ruleName}`];
       const isRecommended = plugin.rules[ruleName].meta.docs[configName];
       if (inRecommendedConfig) {
-        assert(isRecommended, `${ruleName} metadata should mark it as recommended`);
+        it(`${ruleName} metadata should mark it as recommended`, () => {
+          expect(isRecommended).toBeTrue();
+        });
       } else {
-        assert(!isRecommended, `${ruleName} metadata should not mark it as recommended`);
+        it(`${ruleName} metadata should not mark it as recommended`, () => {
+          expect(isRecommended).toBeOneOf([false, undefined]);
+        });
       }
     });
   });
 
-  it('should export an ‘all’ configuration', () => {
-    const configName = 'all';
-    assert(plugin.configs[configName]);
+  it("should export an ‘all’ configuration", () => {
+    const configName = "all";
+    expect(plugin.configs[configName]).toBeDefined();
 
     Object.keys(plugin.configs[configName].rules).forEach((ruleName) => {
-      assert.ok(ruleName.startsWith('react/'));
-      assert.equal(plugin.configs[configName].rules[ruleName], 2);
+      expect(ruleName).toStartWith("react/");
+      expect(plugin.configs[configName].rules[ruleName]).toBe(2);
     });
 
     ruleFiles.forEach((ruleName) => {
       const inDeprecatedRules = !!plugin.deprecatedRules[ruleName];
-      const inConfig = typeof plugin.configs[configName].rules[`react/${ruleName}`] !== 'undefined';
-      assert(inDeprecatedRules ^ inConfig); // eslint-disable-line no-bitwise
+      const inConfig =
+        typeof plugin.configs[configName].rules[`react/${ruleName}`] !==
+        "undefined";
+      expect(inDeprecatedRules ^ inConfig).toBe(1);
     });
   });
 
-  it('should export a ‘jsx-runtime’ configuration', () => {
-    const configName = 'jsx-runtime';
-    assert(plugin.configs[configName]);
+  it("should export a ‘jsx-runtime’ configuration", () => {
+    const configName = "jsx-runtime";
+    expect(plugin.configs[configName]).toBeDefined();
 
     Object.keys(plugin.configs[configName].rules).forEach((ruleName) => {
-      assert.ok(ruleName.startsWith('react/'));
-      assert.equal(plugin.configs[configName].rules[ruleName], 0);
+      expect(ruleName).toStartWith("react/");
+      expect(plugin.configs[configName].rules[ruleName]).toBe(0);
 
       const inDeprecatedRules = !!plugin.deprecatedRules[ruleName];
-      const inConfig = typeof plugin.configs[configName].rules[ruleName] !== 'undefined';
-      assert(inDeprecatedRules ^ inConfig); // eslint-disable-line no-bitwise
+      const inConfig =
+        typeof plugin.configs[configName].rules[ruleName] !== "undefined";
+      expect(inDeprecatedRules ^ inConfig).toBe(1);
     });
   });
 });
