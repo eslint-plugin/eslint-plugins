@@ -10,9 +10,11 @@ console.log(eslintPkg.version);
 const isFlat = semver.satisfies(eslintPkg.version, ">= 8.23.0");
 
 describe.if(isFlat)("eslint-plugin-react in flat config", async () => {
+  if (!isFlat) return;
+
   const ESLint =
     semver.major(eslintPkg.version) < 9
-      ? (await import("eslint/use-at-your-own-risk")).FlatESLint
+      ? require("eslint/use-at-your-own-risk").FlatESLint
       : require("eslint").ESLint;
 
   const fixturesdDir = path.resolve(__dirname, "fixtures", "flat-config");
