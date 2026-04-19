@@ -1,4 +1,4 @@
-import { describe, it, expect } from "bun:test";
+import { describe, expect } from "bun:test";
 
 const RuleTester = require("../helpers/ruleTester");
 const Components = require("../../src/util/Components");
@@ -21,7 +21,7 @@ describe("Components", () => {
       const instructions = orDone ? instructionsOrDone : instructionsOrDone;
 
       const rule = {
-        create: Components.detect((_context, components, util) => {
+        create: Components.detect((context, components, util) => {
           const instructionResults = [];
 
           const augmentedInstructions = Object.fromEntries(
@@ -72,7 +72,7 @@ describe("Components", () => {
       ruleTester.run(test.code, rule, tests);
     }
 
-    it("should detect Stateless Function Component", () => {
+    describe("should detect Stateless Function Component", () => {
       testComponentsDetect(
         {
           code: `import React from 'react'
@@ -89,7 +89,7 @@ describe("Components", () => {
       );
     });
 
-    it("should detect Class Components", () => {
+    describe("should detect Class Components", () => {
       testComponentsDetect(
         {
           code: `import React from 'react'
@@ -108,7 +108,7 @@ describe("Components", () => {
       );
     });
 
-    it("should detect React Imports", () => {
+    describe("should detect React Imports", () => {
       testComponentsDetect(
         {
           code: "import React, { useCallback, useState } from 'react'",
@@ -129,7 +129,7 @@ describe("Components", () => {
 
     describe("utils", () => {
       describe("isReactHookCall", () => {
-        it("should not identify hook-like call", () => {
+        describe("should not identify hook-like call", () => {
           testComponentsDetect(
             {
               code: `
@@ -151,7 +151,7 @@ describe("Components", () => {
           );
         });
 
-        it("should identify hook call", () => {
+        describe("should identify hook call", () => {
           testComponentsDetect(
             {
               code: `
@@ -173,7 +173,7 @@ describe("Components", () => {
           );
         });
 
-        it("should identify aliased hook call", () => {
+        describe("should identify aliased hook call", () => {
           testComponentsDetect(
             {
               code: `
@@ -195,7 +195,7 @@ describe("Components", () => {
           );
         });
 
-        it("should identify aliased present named hook call", () => {
+        describe("should identify aliased present named hook call", () => {
           testComponentsDetect(
             {
               code: `
@@ -217,7 +217,7 @@ describe("Components", () => {
           );
         });
 
-        it("should not identify shadowed hook call", () => {
+        describe("should not identify shadowed hook call", () => {
           testComponentsDetect(
             {
               code: `
@@ -242,7 +242,7 @@ describe("Components", () => {
           );
         });
 
-        it("should identify React hook call", () => {
+        describe("should identify React hook call", () => {
           testComponentsDetect(
             {
               code: `
@@ -264,7 +264,7 @@ describe("Components", () => {
           );
         });
 
-        it("should identify aliased React hook call", () => {
+        describe("should identify aliased React hook call", () => {
           testComponentsDetect(
             {
               code: `
@@ -286,7 +286,7 @@ describe("Components", () => {
           );
         });
 
-        it("should not identify shadowed React hook call", () => {
+        describe("should not identify shadowed React hook call", () => {
           testComponentsDetect(
             {
               code: `
@@ -311,7 +311,7 @@ describe("Components", () => {
           );
         });
 
-        it("should identify present named hook call", () => {
+        describe("should identify present named hook call", () => {
           testComponentsDetect(
             {
               code: `
@@ -333,7 +333,7 @@ describe("Components", () => {
           );
         });
 
-        it("should not identify missing named hook call", () => {
+        describe("should not identify missing named hook call", () => {
           testComponentsDetect(
             {
               code: `
@@ -358,7 +358,7 @@ describe("Components", () => {
     });
 
     describe("testComponentsDetect", () => {
-      it("should log Program:exit instruction", () => {
+      describe("should log Program:exit instruction", () => {
         testComponentsDetect(
           {
             code: "",
