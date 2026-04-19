@@ -215,9 +215,7 @@ module.exports = {
         const forwardComponent = list.find(
           (innerComponent) =>
             innerComponent.node.range[0] ===
-              component.node.arguments[0].range[0] &&
-            innerComponent.node.range[0] ===
-              component.node.arguments[0].range[0],
+            component.node.arguments[0].range[0],
         );
 
         const isValidated = mustBeValidated(forwardComponent);

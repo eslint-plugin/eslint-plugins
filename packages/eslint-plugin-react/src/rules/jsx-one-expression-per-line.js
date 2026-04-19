@@ -178,9 +178,9 @@ module.exports = {
           function spaceBetweenPrev() {
             return (
               ((prevChild.type === "Literal" || prevChild.type === "JSXText") &&
-                / $/.test(prevChild.raw)) ||
+                prevChild.raw.endsWith(" ")) ||
               ((child.type === "Literal" || child.type === "JSXText") &&
-                /^ /.test(child.raw)) ||
+                child.raw.startsWith(" ")) ||
               getSourceCode(context).isSpaceBetweenTokens(prevChild, child)
             );
           }
@@ -188,9 +188,9 @@ module.exports = {
           function spaceBetweenNext() {
             return (
               ((nextChild.type === "Literal" || nextChild.type === "JSXText") &&
-                /^ /.test(nextChild.raw)) ||
+                nextChild.raw.startsWith(" ")) ||
               ((child.type === "Literal" || child.type === "JSXText") &&
-                / $/.test(child.raw)) ||
+                child.raw.endsWith(" ")) ||
               getSourceCode(context).isSpaceBetweenTokens(child, nextChild)
             );
           }

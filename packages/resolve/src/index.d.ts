@@ -6,7 +6,11 @@
  * @param callback - Called with `(err, resolved, pkg)` when resolution completes.
  */
 declare function resolve(id: string, callback: resolve.Callback): void;
-declare function resolve(id: string, options: resolve.AsyncOptions, callback: resolve.Callback): void;
+declare function resolve(
+  id: string,
+  options: resolve.AsyncOptions,
+  callback: resolve.Callback,
+): void;
 
 declare namespace resolve {
   /** Asynchronously resolve a module path, like `require.resolve()`, on behalf of files. */
@@ -33,7 +37,11 @@ declare namespace resolve {
   }
 
   /** Callback for asynchronous resolution. */
-  type Callback = (err: Error | null, resolved?: string, pkg?: PackageJSON) => void;
+  type Callback = (
+    err: Error | null,
+    resolved?: string,
+    pkg?: PackageJSON,
+  ) => void;
 
   /** Options shared by both async and sync resolution. */
   interface BaseOptions {
@@ -48,7 +56,14 @@ declare namespace resolve {
     /** Whether to preserve symlinks instead of resolving them. Defaults to `false`. */
     preserveSymlinks?: boolean;
     /** Additional lookup paths. */
-    paths?: ReadonlyArray<string> | ((request: string, start: string, getNodeModulesDirs: () => string[], opts: BaseOptions) => string[]);
+    paths?:
+      | ReadonlyArray<string>
+      | ((
+          request: string,
+          start: string,
+          getNodeModulesDirs: () => string[],
+          opts: BaseOptions,
+        ) => string[]);
     /** The filename used for error messages and as a fallback for basedir. */
     filename?: string;
     /** The directory name(s) to use for node_modules lookups. Defaults to `['node_modules']`. */
@@ -61,7 +76,11 @@ declare namespace resolve {
      * @param dir - The directory containing the package.json.
      * @returns The (possibly modified) package.json object.
      */
-    packageFilter?: (pkg: PackageJSON, pkgFile: string, dir: string) => PackageJSON;
+    packageFilter?: (
+      pkg: PackageJSON,
+      pkgFile: string,
+      dir: string,
+    ) => PackageJSON;
     /**
      * Transform a resolved path before it is used.
      *
@@ -70,7 +89,11 @@ declare namespace resolve {
      * @param relativePath - The path relative to the package directory.
      * @returns An alternative path, or undefined/falsy to use the original.
      */
-    pathFilter?: (pkg: PackageJSON, path: string, relativePath: string) => string | undefined;
+    pathFilter?: (
+      pkg: PackageJSON,
+      path: string,
+      relativePath: string,
+    ) => string | undefined;
     /**
      * Override the default node_modules candidate iterator.
      *
@@ -80,7 +103,12 @@ declare namespace resolve {
      * @param opts - The resolve options.
      * @returns An array of candidate directories.
      */
-    packageIterator?: (request: string, start: string, thunk: () => string[], opts: BaseOptions) => string[];
+    packageIterator?: (
+      request: string,
+      start: string,
+      thunk: () => string[],
+      opts: BaseOptions,
+    ) => string[];
     /**
      * An exports category string, as defined by `node-exports-info`.
      * Mutually exclusive with `engines`.
@@ -104,21 +132,30 @@ declare namespace resolve {
      * @param file - The path to check.
      * @param cb - Called with `(err, isFile)`.
      */
-    isFile?: (file: string, cb: (err: Error | null, isFile?: boolean) => void) => void;
+    isFile?: (
+      file: string,
+      cb: (err: Error | null, isFile?: boolean) => void,
+    ) => void;
     /**
      * Check whether a path is a directory.
      *
      * @param dir - The path to check.
      * @param cb - Called with `(err, isDirectory)`.
      */
-    isDirectory?: (dir: string, cb: (err: Error | null, isDirectory?: boolean) => void) => void;
+    isDirectory?: (
+      dir: string,
+      cb: (err: Error | null, isDirectory?: boolean) => void,
+    ) => void;
     /**
      * Resolve a path's real location, following symlinks.
      *
      * @param file - The path to resolve.
      * @param cb - Called with `(err, realPath)`.
      */
-    realpath?: (file: string, cb: (err: Error | null, realPath?: string) => void) => void;
+    realpath?: (
+      file: string,
+      cb: (err: Error | null, realPath?: string) => void,
+    ) => void;
     /**
      * Read a file's contents.
      * Mutually exclusive with `readPackage`.
@@ -126,7 +163,10 @@ declare namespace resolve {
      * @param file - The path to read.
      * @param cb - Called with `(err, contents)`.
      */
-    readFile?: (file: string, cb: (err: Error | null, contents?: string | Buffer) => void) => void;
+    readFile?: (
+      file: string,
+      cb: (err: Error | null, contents?: string | Buffer) => void,
+    ) => void;
     /**
      * Read and parse a package.json file.
      * Mutually exclusive with `readFile`.
@@ -135,7 +175,14 @@ declare namespace resolve {
      * @param pkgFile - The path to the package.json.
      * @param cb - Called with `(err, pkg)`.
      */
-    readPackage?: (readFile: (file: string, cb: (err: Error | null, contents?: string | Buffer) => void) => void, pkgFile: string, cb: (err: Error | null, pkg?: PackageJSON) => void) => void;
+    readPackage?: (
+      readFile: (
+        file: string,
+        cb: (err: Error | null, contents?: string | Buffer) => void,
+      ) => void,
+      pkgFile: string,
+      cb: (err: Error | null, pkg?: PackageJSON) => void,
+    ) => void;
   }
 
   /** Options for synchronous resolution. */
@@ -177,7 +224,10 @@ declare namespace resolve {
      * @param pkgFile - The path to the package.json.
      * @returns The parsed package.json object.
      */
-    readPackageSync?: (readFileSync: (file: string) => string | Buffer, pkgFile: string) => PackageJSON;
+    readPackageSync?: (
+      readFileSync: (file: string) => string | Buffer,
+      pkgFile: string,
+    ) => PackageJSON;
   }
 }
 

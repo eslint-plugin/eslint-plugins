@@ -7,13 +7,13 @@
     "url": "git+https://github.com/eslint-plugin/eslint-plugins.git",
     "directory": "packages/resolve"
   },
-  "imports": {
-    "#node-exports-info/*": "./src/node-exports-info/*.js"
-  },
   "files": [
     "dist"
   ],
   "type": "module",
+  "imports": {
+    "#node-exports-info/*": "./src/node-exports-info/*.js"
+  },
   "exports": {
     ".": "./dist/index.mjs",
     "./package.json": "./package.json"

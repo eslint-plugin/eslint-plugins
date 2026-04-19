@@ -1,7 +1,7 @@
-import isCategory from '#node-exports-info/isCategory';
-import getCategoriesForRange from '#node-exports-info/getCategoriesForRange';
+import getCategoriesForRange from "#node-exports-info/getCategoriesForRange";
+import isCategory from "#node-exports-info/isCategory";
 
-import selectMostRestrictive from './select-most-restrictive';
+import selectMostRestrictive from "./select-most-restrictive";
 
 // Determine the active exports category from resolve options
 // Returns null if no exports resolution should be applied
@@ -9,41 +9,47 @@ import selectMostRestrictive from './select-most-restrictive';
 // Throws TypeError if invalid options are provided
 /** @type {(opts?: { exportsCategory?: import('#node-exports-info/getCategory').Category, engines?: boolean | string }) => null | import('#node-exports-info/getCategory').Category} */
 export default function getExportsCategory(opts) {
-    if (!opts) {
-        return null;
-    }
-
-    var hasCategory = typeof opts.exportsCategory !== 'undefined';
-    var engines = opts.engines;
-    var hasEngines = typeof engines !== 'undefined' && engines !== false;
-
-    if (hasCategory && hasEngines) {
-        throw new TypeError('`exportsCategory` and `engines` are mutually exclusive.');
-    }
-
-    if (hasCategory) {
-        if (!isCategory(opts.exportsCategory)) {
-            var catError = new TypeError('Invalid exports category: "' + opts.exportsCategory + '"');
-            catError.code = 'INVALID_EXPORTS_CATEGORY';
-            throw catError;
-        }
-        return opts.exportsCategory;
-    }
-
-    if (hasEngines) {
-        // engines: true means read from consumer's package.json
-        if (engines === true) {
-            return 'engines';
-        }
-
-        // engines must be a non-empty string (semver range)
-        if (typeof engines !== 'string' || engines === '') {
-            throw new TypeError('`engines` must be `true`, `false`, or a non-empty string semver range.');
-        }
-
-        var categories = getCategoriesForRange(engines);
-        return selectMostRestrictive(categories);
-    }
-
+  if (!opts) {
     return null;
-};
+  }
+
+  const hasCategory = typeof opts.exportsCategory !== "undefined";
+  const engines = opts.engines;
+  const hasEngines = typeof engines !== "undefined" && engines !== false;
+
+  if (hasCategory && hasEngines) {
+    throw new TypeError(
+      "`exportsCategory` and `engines` are mutually exclusive.",
+    );
+  }
+
+  if (hasCategory) {
+    if (!isCategory(opts.exportsCategory)) {
+      const catError = new TypeError(
+        'Invalid exports category: "' + opts.exportsCategory + '"',
+      );
+      catError.code = "INVALID_EXPORTS_CATEGORY";
+      throw catError;
+    }
+    return opts.exportsCategory;
+  }
+
+  if (hasEngines) {
+    // engines: true means read from consumer's package.json
+    if (engines === true) {
+      return "engines";
+    }
+
+    // engines must be a non-empty string (semver range)
+    if (typeof engines !== "string" || engines === "") {
+      throw new TypeError(
+        "`engines` must be `true`, `false`, or a non-empty string semver range.",
+      );
+    }
+
+    const categories = getCategoriesForRange(engines);
+    return selectMostRestrictive(categories);
+  }
+
+  return null;
+}

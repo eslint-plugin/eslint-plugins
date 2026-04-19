@@ -1,6 +1,6 @@
-import ranges from './ranges';
+import ranges from "./ranges";
 
 /** @type {import('./getRangePairs')} */
 export default function getRangePairs() {
-	return Object.entries(ranges);
-};
+  return Object.entries(ranges);
+}

@@ -1,4 +1,4 @@
-import type { Category } from './types';
+import type { Category } from "./types";
 
 declare function getCategory(nodeVersion?: string): Category;
 

@@ -1,4 +1,4 @@
-import async from './lib/async';
-import sync from './lib/sync';
+import async from "./lib/async";
+import sync from "./lib/sync";
 
 export { async, sync };

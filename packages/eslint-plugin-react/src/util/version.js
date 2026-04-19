@@ -8,7 +8,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
-import * as resolve from "@eslintplugin/resolve";
+const resolve = require("@eslintplugin/resolve");
 const semver = require("semver");
 const error = require("./error");
 const getFilename = require("./eslint").getFilename;

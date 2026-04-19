@@ -1,16 +1,16 @@
-import type { Category, Condition } from './types';
-import type getCategoryFlags from './getCategoryFlags';
+import type getCategoryFlags from "./getCategoryFlags";
+import type { Category, Condition } from "./types";
 
 declare namespace getCategoryInfo {
-	interface CategoryInfo {
-		conditions: Condition[] | null;
-		flags: getCategoryFlags.CategoryFlags;
-	}
+  interface CategoryInfo {
+    conditions: Condition[] | null;
+    flags: getCategoryFlags.CategoryFlags;
+  }
 }
 
 declare function getCategoryInfo(
-	category: Category,
-	moduleSystem?: 'import' | 'require'
+  category: Category,
+  moduleSystem?: "import" | "require",
 ): getCategoryInfo.CategoryInfo;
 
 export = getCategoryInfo;

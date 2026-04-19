@@ -1,4 +1,4 @@
-import type resolve = require('../index.js');
+import type resolve = require("../index.js");
 
 /**
  * Synchronously resolve a module path, like `require.resolve()`, on behalf of files.
