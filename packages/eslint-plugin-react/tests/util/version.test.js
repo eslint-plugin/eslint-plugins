@@ -40,7 +40,7 @@ describe("Version", () => {
       expect(versionUtil.testFlowVersion(context, ">= 0.92.0")).toBe(true);
     });
 
-    it("matches detected version in sibling project", () => {
+    describe("matches detected version in sibling project", () => {
       spyOn(context, "getFilename").mockReturnValue(
         path.resolve(base, "detect-version-sibling", "test.js"),
       );
