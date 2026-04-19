@@ -1,7 +1,5 @@
-"use strict";
+import { describe, it, expect, mock } from "bun:test";
 
-const assert = require("node:assert");
-const sinon = require("sinon");
 const espree = require("espree");
 
 const ast = require("../../src/util/ast");
@@ -15,7 +13,6 @@ const DEFAULT_CONFIG = {
 
 const parseCode = (code) => {
   const ASTnode = espree.parse(code, DEFAULT_CONFIG);
-  // Return only first statement
   return ASTnode.body[0];
 };
 
@@ -24,7 +21,7 @@ const mockContext = {};
 describe("ast", () => {
   describe("traverseReturnStatements", () => {
     it("Correctly traverses function declarations", () => {
-      const spy = sinon.spy();
+      const spy = mock(() => {});
       traverseReturns(
         parseCode(`
         function foo({prop}) {
@@ -35,11 +32,11 @@ describe("ast", () => {
         spy,
       );
 
-      assert(spy.calledOnce);
+      expect(spy).toHaveBeenCalledTimes(1);
     });
 
     it("Correctly traverses function expressions", () => {
-      const spy = sinon.spy();
+      const spy = mock(() => {});
       traverseReturns(
         parseCode(`
         const foo = function({prop}) {
@@ -50,11 +47,13 @@ describe("ast", () => {
         spy,
       );
 
-      assert(spy.calledOnce);
+      expect(spy).toHaveBeenCalledTimes(1);
     });
 
     it("Correctly traverses arrow functions", () => {
-      const spy = sinon.spy();
+      const spy = mock(() => {});
+
+      // Test block body
       traverseReturns(
         parseCode(`
         ({prop}) => {
@@ -64,11 +63,12 @@ describe("ast", () => {
         mockContext,
         spy,
       );
+      expect(spy).toHaveBeenCalledTimes(1);
 
-      assert(spy.calledOnce);
+      // Reset for second test
+      spy.mockClear();
 
-      spy.resetHistory();
-
+      // Test implicit return
       traverseReturns(
         parseCode(`
         ({prop}) => 'something'
@@ -76,12 +76,11 @@ describe("ast", () => {
         mockContext,
         spy,
       );
-
-      assert(spy.calledOnce);
+      expect(spy).toHaveBeenCalledTimes(1);
     });
 
     it("Correctly traverses inside control flow expressions", () => {
-      const spy = sinon.spy();
+      const spy = mock(() => {});
       traverseReturns(
         parseCode(`
         function foo({prop}) {
@@ -113,12 +112,11 @@ describe("ast", () => {
         spy,
       );
 
-      const enterCalls = spy.getCalls();
+      expect(spy).toHaveBeenCalledTimes(6);
 
-      assert.strictEqual(enterCalls.length, 6);
-
-      enterCalls.forEach((call, idx) => {
-        assert.strictEqual(call.args[0].value, idx);
+      // Verify each call's first argument value matches index
+      spy.mock.calls.forEach((call, idx) => {
+        expect(call[0].value).toBe(idx);
       });
     });
   });
@@ -131,7 +129,7 @@ describe("ast", () => {
           return asdf;
         }
       `);
-      assert.strictEqual(isFunctionLike(node1), true);
+      expect(isFunctionLike(node1)).toBe(true);
 
       const node2 = parseCode(`
         function foo({bar}) {
@@ -140,7 +138,7 @@ describe("ast", () => {
           return '5'
         }
       `);
-      assert.strictEqual(isFunctionLike(node2), true);
+      expect(isFunctionLike(node2)).toBe(true);
     });
 
     it("FunctionExpression should return true", () => {
@@ -149,14 +147,14 @@ describe("ast", () => {
           return () => 'zxcv';
         }
       `).declarations[0].init;
-      assert.strictEqual(isFunctionLike(node1), true);
+      expect(isFunctionLike(node1)).toBe(true);
 
       const node2 = parseCode(`
         const foo = function ({bar}) {
           return '5';
         }
       `).declarations[0].init;
-      assert.strictEqual(isFunctionLike(node2), true);
+      expect(isFunctionLike(node2)).toBe(true);
     });
 
     it("ArrowFunctionExpression should return true", () => {
@@ -165,17 +163,17 @@ describe("ast", () => {
           return () => 'zxcv';
         }
       `).expression;
-      assert.strictEqual(isFunctionLike(node1), true);
+      expect(isFunctionLike(node1)).toBe(true);
 
       const node2 = parseCode(`
         ({bar}) => '5';
       `).expression;
-      assert.strictEqual(isFunctionLike(node2), true);
+      expect(isFunctionLike(node2)).toBe(true);
 
       const node3 = parseCode(`
         bar => '5';
       `).expression;
-      assert.strictEqual(isFunctionLike(node3), true);
+      expect(isFunctionLike(node3)).toBe(true);
     });
 
     it("Non-functions should return false", () => {
@@ -186,12 +184,12 @@ describe("ast", () => {
           }
         }
       `);
-      assert.strictEqual(isFunctionLike(node1), false);
+      expect(isFunctionLike(node1)).toBe(false);
 
       const node2 = parseCode(`
         const a = 5;
       `);
-      assert.strictEqual(isFunctionLike(node2), false);
+      expect(isFunctionLike(node2)).toBe(false);
     });
   });
 });

@@ -1,16 +1,15 @@
-"use strict";
+import { describe, it, expect, beforeEach, afterEach, spyOn } from "bun:test";
 
 const path = require("node:path");
-const assert = require("node:assert");
-const sinon = require("sinon");
 const versionUtil = require("../../src/util/version");
 
 describe("Version", () => {
-  const base = path.resolve(__dirname, "..", "fixtures", "version");
+  const base = path.resolve(import.meta.dir, "..", "fixtures", "version");
   let expectedErrorArgs = [];
+  let consoleSpy;
 
   beforeEach(() => {
-    sinon.stub(console, "error");
+    consoleSpy = spyOn(console, "error").mockImplementation(() => {});
     expectedErrorArgs = [];
     versionUtil.resetWarningFlag();
     versionUtil.resetDetectedVersion();
@@ -18,9 +17,9 @@ describe("Version", () => {
   });
 
   afterEach(() => {
-    const actualArgs = console.error.args; // eslint-disable-line no-console
-    console.error.restore(); // eslint-disable-line no-console
-    assert.deepEqual(actualArgs, expectedErrorArgs);
+    const actualArgs = consoleSpy.mock.calls;
+    consoleSpy.mockRestore();
+    expect(actualArgs).toEqual(expectedErrorArgs);
   });
 
   describe("Detect version", () => {
@@ -29,59 +28,42 @@ describe("Version", () => {
       getFilename: () => path.resolve(base, "test.js"),
     };
 
-    afterEach(() => {
-      if (context.getFilename.restore) {
-        context.getFilename.restore();
-      }
-    });
-
     it("matches detected version", () => {
-      sinon
-        .stub(context, "getFilename")
-        .callsFake(() => path.resolve(base, "detect-version", "test.js"));
+      spyOn(context, "getFilename").mockReturnValue(
+        path.resolve(base, "detect-version", "test.js"),
+      );
 
-      assert.equal(versionUtil.testReactVersion(context, ">= 1.2.3"), true);
-      assert.equal(versionUtil.testReactVersion(context, ">= 1.2.4"), false);
-      assert.equal(versionUtil.testFlowVersion(context, ">= 0.92.0"), true);
+      expect(versionUtil.testReactVersion(context, ">= 1.2.3")).toBe(true);
+      expect(versionUtil.testReactVersion(context, ">= 1.2.4")).toBe(false);
+      expect(versionUtil.testFlowVersion(context, ">= 0.92.0")).toBe(true);
     });
 
     it("matches detected version in sibling project", () => {
-      sinon
-        .stub(context, "getFilename")
-        .callsFake(() =>
-          path.resolve(base, "detect-version-sibling", "test.js"),
-        );
+      spyOn(context, "getFilename").mockReturnValue(
+        path.resolve(base, "detect-version-sibling", "test.js"),
+      );
 
-      assert.equal(versionUtil.testReactVersion(context, ">= 2.3.4"), true);
-      assert.equal(versionUtil.testReactVersion(context, ">= 2.3.5"), false);
-      assert.equal(versionUtil.testFlowVersion(context, ">= 2.92.0"), true);
+      expect(versionUtil.testReactVersion(context, ">= 2.3.4")).toBe(true);
+      expect(versionUtil.testReactVersion(context, ">= 2.3.5")).toBe(false);
+      expect(versionUtil.testFlowVersion(context, ">= 2.92.0")).toBe(true);
     });
 
     it("matches detected version in child project", () => {
-      sinon
-        .stub(context, "getFilename")
-        .callsFake(() =>
-          path.resolve(
-            base,
-            "detect-version",
-            "detect-version-child",
-            "test.js",
-          ),
-        );
+      spyOn(context, "getFilename").mockReturnValue(
+        path.resolve(base, "detect-version", "detect-version-child", "test.js"),
+      );
 
-      assert.equal(versionUtil.testReactVersion(context, ">= 3.4.5"), true);
-      assert.equal(versionUtil.testReactVersion(context, ">= 3.4.6"), false);
-      assert.equal(versionUtil.testFlowVersion(context, ">= 3.92.0"), true);
+      expect(versionUtil.testReactVersion(context, ">= 3.4.5")).toBe(true);
+      expect(versionUtil.testReactVersion(context, ">= 3.4.6")).toBe(false);
+      expect(versionUtil.testFlowVersion(context, ">= 3.92.0")).toBe(true);
     });
 
     it("assumes latest version if react is not installed", () => {
-      sinon
-        .stub(context, "getFilename")
-        .callsFake(() =>
-          path.resolve(base, "detect-version-missing", "test.js"),
-        );
+      spyOn(context, "getFilename").mockReturnValue(
+        path.resolve(base, "detect-version-missing", "test.js"),
+      );
 
-      assert.equal(versionUtil.testReactVersion(context, "999.999.999"), true);
+      expect(versionUtil.testReactVersion(context, "999.999.999")).toBe(true);
 
       expectedErrorArgs = [
         [
@@ -92,13 +74,11 @@ describe("Version", () => {
 
     it("uses default version from settings if provided and react is not installed", () => {
       context.settings.react.defaultVersion = "16.14.0";
-      sinon
-        .stub(context, "getFilename")
-        .callsFake(() =>
-          path.resolve(base, "detect-version-missing", "test.js"),
-        );
+      spyOn(context, "getFilename").mockReturnValue(
+        path.resolve(base, "detect-version-missing", "test.js"),
+      );
 
-      assert.equal(versionUtil.testReactVersion(context, "16.14.0"), true);
+      expect(versionUtil.testReactVersion(context, "16.14.0")).toBe(true);
 
       expectedErrorArgs = [
         [
@@ -111,13 +91,11 @@ describe("Version", () => {
 
     it("fails nicely with an invalid default version of react", () => {
       context.settings.react.defaultVersion = "not semver";
-      sinon
-        .stub(context, "getFilename")
-        .callsFake(() =>
-          path.resolve(base, "detect-version-missing", "test.js"),
-        );
+      spyOn(context, "getFilename").mockReturnValue(
+        path.resolve(base, "detect-version-missing", "test.js"),
+      );
 
-      assert.equal(versionUtil.testReactVersion(context, "999.999.999"), true);
+      expect(versionUtil.testReactVersion(context, "999.999.999")).toBe(true);
 
       expectedErrorArgs = [
         [
@@ -132,14 +110,12 @@ describe("Version", () => {
     });
 
     it("warns only once for failure to detect react ", () => {
-      sinon
-        .stub(context, "getFilename")
-        .callsFake(() =>
-          path.resolve(base, "detect-version-missing", "test.js"),
-        );
+      spyOn(context, "getFilename").mockReturnValue(
+        path.resolve(base, "detect-version-missing", "test.js"),
+      );
 
-      assert.equal(versionUtil.testReactVersion(context, "999.999.999"), true);
-      assert.equal(versionUtil.testReactVersion(context, "999.999.999"), true);
+      expect(versionUtil.testReactVersion(context, "999.999.999")).toBe(true);
+      expect(versionUtil.testReactVersion(context, "999.999.999")).toBe(true);
 
       expectedErrorArgs = [
         [
@@ -149,7 +125,7 @@ describe("Version", () => {
     });
 
     it("assumes latest version if flow-bin is not installed", () => {
-      assert.equal(versionUtil.testFlowVersion(context, "999.999.999"), true);
+      expect(versionUtil.testFlowVersion(context, "999.999.999")).toBe(true);
 
       expectedErrorArgs = [
         [
@@ -159,31 +135,27 @@ describe("Version", () => {
     });
 
     it("works with virtual filename", () => {
-      sinon
-        .stub(context, "getFilename")
-        .callsFake(() =>
-          path.resolve(base, "detect-version-sibling", "test.js/0_fake.js"),
-        );
+      spyOn(context, "getFilename").mockReturnValue(
+        path.resolve(base, "detect-version-sibling", "test.js/0_fake.js"),
+      );
 
-      assert.equal(versionUtil.testReactVersion(context, ">= 2.3.4"), true);
-      assert.equal(versionUtil.testReactVersion(context, ">= 2.3.5"), false);
-      assert.equal(versionUtil.testFlowVersion(context, ">= 2.92.0"), true);
+      expect(versionUtil.testReactVersion(context, ">= 2.3.4")).toBe(true);
+      expect(versionUtil.testReactVersion(context, ">= 2.3.5")).toBe(false);
+      expect(versionUtil.testFlowVersion(context, ">= 2.92.0")).toBe(true);
     });
 
     it("works with recursive virtual filename", () => {
-      sinon
-        .stub(context, "getFilename")
-        .callsFake(() =>
-          path.resolve(
-            base,
-            "detect-version-sibling",
-            "test.js/0_fake.md/1_fake.js",
-          ),
-        );
+      spyOn(context, "getFilename").mockReturnValue(
+        path.resolve(
+          base,
+          "detect-version-sibling",
+          "test.js/0_fake.md/1_fake.js",
+        ),
+      );
 
-      assert.equal(versionUtil.testReactVersion(context, ">= 2.3.4"), true);
-      assert.equal(versionUtil.testReactVersion(context, ">= 2.3.5"), false);
-      assert.equal(versionUtil.testFlowVersion(context, ">= 2.92.0"), true);
+      expect(versionUtil.testReactVersion(context, ">= 2.3.4")).toBe(true);
+      expect(versionUtil.testReactVersion(context, ">= 2.3.5")).toBe(false);
+      expect(versionUtil.testFlowVersion(context, ">= 2.92.0")).toBe(true);
     });
   });
 
@@ -196,20 +168,19 @@ describe("Version", () => {
     };
 
     it("works with react", () => {
-      assert.equal(versionUtil.testReactVersion(context, ">= 0.14.0"), true);
-      assert.equal(versionUtil.testReactVersion(context, ">= 15.0.0"), true);
-      assert.equal(versionUtil.testReactVersion(context, ">= 16.0.0"), false);
+      expect(versionUtil.testReactVersion(context, ">= 0.14.0")).toBe(true);
+      expect(versionUtil.testReactVersion(context, ">= 15.0.0")).toBe(true);
+      expect(versionUtil.testReactVersion(context, ">= 16.0.0")).toBe(false);
     });
 
     it("works with flow", () => {
-      assert.equal(versionUtil.testFlowVersion(context, ">= 1.1.0"), true);
-      assert.equal(versionUtil.testFlowVersion(context, ">= 1.2.0"), true);
-      assert.equal(versionUtil.testFlowVersion(context, ">= 1.3.0"), false);
+      expect(versionUtil.testFlowVersion(context, ">= 1.1.0")).toBe(true);
+      expect(versionUtil.testFlowVersion(context, ">= 1.2.0")).toBe(true);
+      expect(versionUtil.testFlowVersion(context, ">= 1.3.0")).toBe(false);
     });
 
     it("fails nicely with an invalid react version", () => {
-      assert.equal(
-        versionUtil.testReactVersion(invalidContext, ">= 15.0"),
+      expect(versionUtil.testReactVersion(invalidContext, ">= 15.0")).toBe(
         true,
       );
       expectedErrorArgs = [
@@ -220,7 +191,7 @@ describe("Version", () => {
     });
 
     it("fails nicely with an invalid flow version", () => {
-      assert.equal(versionUtil.testFlowVersion(invalidContext, ">= 1.0"), true);
+      expect(versionUtil.testFlowVersion(invalidContext, ">= 1.0")).toBe(true);
       expectedErrorArgs = [
         [
           'Warning: Flow version specified in eslint-plugin-react-settings must be a valid semver version, or "detect"; got “not semver”',
@@ -235,21 +206,9 @@ describe("Version", () => {
     };
 
     it("works with react", () => {
-      assert.equal(
-        versionUtil.testReactVersion(context, ">= 0.14.0"),
-        true,
-        ">= 0.14.0",
-      );
-      assert.equal(
-        versionUtil.testReactVersion(context, ">= 15.0.0"),
-        true,
-        ">= 15.0.0",
-      );
-      assert.equal(
-        versionUtil.testReactVersion(context, ">= 16.0.0"),
-        false,
-        ">= 16.0.0",
-      );
+      expect(versionUtil.testReactVersion(context, ">= 0.14.0")).toBe(true);
+      expect(versionUtil.testReactVersion(context, ">= 15.0.0")).toBe(true);
+      expect(versionUtil.testReactVersion(context, ">= 16.0.0")).toBe(false);
 
       expectedErrorArgs = [
         [
@@ -265,9 +224,9 @@ describe("Version", () => {
     });
 
     it("works with flow", () => {
-      assert.equal(versionUtil.testFlowVersion(context, ">= 1.1.0"), true);
-      assert.equal(versionUtil.testFlowVersion(context, ">= 1.2.0"), true);
-      assert.equal(versionUtil.testFlowVersion(context, ">= 1.3.0"), false);
+      expect(versionUtil.testFlowVersion(context, ">= 1.1.0")).toBe(true);
+      expect(versionUtil.testFlowVersion(context, ">= 1.2.0")).toBe(true);
+      expect(versionUtil.testFlowVersion(context, ">= 1.3.0")).toBe(false);
 
       expectedErrorArgs = [
         [

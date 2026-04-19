@@ -1,6 +1,5 @@
-"use strict";
+import { describe, it, expect } from "bun:test";
 
-const assert = require("node:assert");
 const SourceCode = require("eslint").SourceCode;
 const espree = require("espree");
 
@@ -32,30 +31,29 @@ describe("pragma", () => {
   describe("getFromContext", () => {
     it("finds the pragma in a block comment", () => {
       const code = "/* @jsx jsx */";
-      assert.strictEqual(getFromContext(fakeContext(code)), "jsx");
+      expect(getFromContext(fakeContext(code))).toBe("jsx");
     });
 
     it("finds the pragma in a docstring comment", () => {
       const code = "/** @jsx jsx */";
-      assert.strictEqual(getFromContext(fakeContext(code)), "jsx");
+      expect(getFromContext(fakeContext(code))).toBe("jsx");
     });
 
     it("finds the pragma in a line comment", () => {
       const code = "// @jsx jsx";
-      assert.strictEqual(getFromContext(fakeContext(code)), "jsx");
+      expect(getFromContext(fakeContext(code))).toBe("jsx");
     });
 
     it("defaults to the value of settings.react.pragma", () => {
       const code = "";
-      assert.strictEqual(
-        getFromContext(fakeContext(code)),
+      expect(getFromContext(fakeContext(code))).toBe(
         DEFAULT_SETTINGS.react.pragma,
       );
     });
 
     it("returns React if the pragma is invalid", () => {
       const code = "/* @jsx invalid-jsx-pragma */";
-      assert.equal(getFromContext(fakeContext(code)), "React");
+      expect(getFromContext(fakeContext(code))).toBe("React");
     });
   });
 });
