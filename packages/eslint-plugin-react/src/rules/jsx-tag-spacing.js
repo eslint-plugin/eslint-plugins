@@ -31,6 +31,16 @@ const messages = {
   beforeCloseNeedNewline: "A newline is required before closing bracket",
 };
 
+/**
+ * Compatibility wrapper for isSpaceBetween (v9/v10) and isSpaceBetweenTokens (<v9).
+ */
+function isSpaceBetween(sourceCode, first, second) {
+  if (sourceCode.isSpaceBetween) {
+    return sourceCode.isSpaceBetween(first, second);
+  }
+  return sourceCode.isSpaceBetweenTokens(first, second);
+}
+
 // ------------------------------------------------------------------------------
 // Validators
 // ------------------------------------------------------------------------------
@@ -43,7 +53,7 @@ function validateClosingSlash(context, node, option) {
   if (node.selfClosing) {
     const lastTokens = sourceCode.getLastTokens(node, 2);
 
-    adjacent = !sourceCode.isSpaceBetweenTokens(lastTokens[0], lastTokens[1]);
+    adjacent = !isSpaceBetween(sourceCode, lastTokens[0], lastTokens[1]);
 
     if (option === "never") {
       if (!adjacent) {
@@ -86,7 +96,7 @@ function validateClosingSlash(context, node, option) {
   } else {
     const firstTokens = getFirstTokens(context, node, 2);
 
-    adjacent = !sourceCode.isSpaceBetweenTokens(firstTokens[0], firstTokens[1]);
+    adjacent = !isSpaceBetween(sourceCode, firstTokens[0], firstTokens[1]);
 
     if (option === "never") {
       if (!adjacent) {
@@ -149,7 +159,7 @@ function validateBeforeSelfClosing(context, node, option) {
     return;
   }
 
-  const adjacent = !sourceCode.isSpaceBetweenTokens(leftToken, closingSlash);
+  const adjacent = !isSpaceBetween(sourceCode, leftToken, closingSlash);
 
   if ((option === "always" || option === "proportional-always") && adjacent) {
     report(
@@ -189,7 +199,7 @@ function validateAfterOpening(context, node, option) {
     }
   }
 
-  const adjacent = !sourceCode.isSpaceBetweenTokens(openingToken, node.name);
+  const adjacent = !isSpaceBetween(sourceCode, openingToken, node.name);
 
   if (option === "never" || option === "allow-multiline") {
     if (!adjacent) {
@@ -253,7 +263,7 @@ function validateBeforeClosing(context, node, option) {
       return;
     }
 
-    const adjacent = !sourceCode.isSpaceBetweenTokens(leftToken, closingToken);
+    const adjacent = !isSpaceBetween(sourceCode, leftToken, closingToken);
 
     if (option === "never" && !adjacent) {
       report(context, messages.beforeCloseNoSpace, "beforeCloseNoSpace", {
