@@ -5,9 +5,9 @@ const eslintPkg = require("eslint/package.json");
 
 const path = require("node:path");
 
-describe.skipIf(
-  !semver.satisfies(require("eslint").ESLint.version, ">= 8.23.0"),
-)("eslint-plugin-react in flat config", () => {
+const supportsFlatConfigs = semver.satisfies(eslintPkg.version, ">= 8.23.0");
+
+describe.if(supportsFlatConfigs)("eslint-plugin-react in flat config", () => {
   const ESLint =
     semver.major(eslintPkg.version) < 9
       ? require("eslint/use-at-your-own-risk").FlatESLint
