@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import rule from "../../../src/rules/anchor-has-content";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
@@ -21,8 +22,11 @@ const ruleTester = new RuleTester();
 const expectedError = {
   message:
     "Anchors must have content and the content must be accessible by a screen reader.",
-  type: "JSXOpeningElement",
 };
+
+if (eslintBefore10) {
+  expectedError.type = "JSXOpeningElement";
+}
 
 ruleTester.run("anchor-has-content", rule, {
   valid: parsers

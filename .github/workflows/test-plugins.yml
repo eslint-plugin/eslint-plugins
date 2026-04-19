@@ -14,7 +14,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         eslint-version: [6, 7, 8, 9, 10]
 
-    name: eslint-plugin-jsx-a11y - ESLint v${{ matrix.eslint-version }} (${{ matrix.os }}) 
+    name: eslint-plugin-jsx-a11y - ESLint v${{ matrix.eslint-version }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
 
     steps:

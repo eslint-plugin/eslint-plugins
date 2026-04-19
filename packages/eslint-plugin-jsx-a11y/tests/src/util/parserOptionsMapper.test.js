@@ -1,4 +1,5 @@
 import { describe, expect, it } from "bun:test";
+
 import { version as eslintVersion } from "eslint/package.json";
 import semver from "semver";
 

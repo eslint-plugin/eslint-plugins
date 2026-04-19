@@ -21,11 +21,18 @@ import RuleTester from "../../__util__/RuleTester";
 
 const ruleTester = new RuleTester();
 
-const errorMessage = (invalidProp) => ({
-  message: `This element does not support ARIA roles, states and properties. \
+const errorMessage = (invalidProp) => {
+  const error = {
+    message: `This element does not support ARIA roles, states and properties. \
 Try removing the prop '${invalidProp}'.`,
-  type: "JSXOpeningElement",
-});
+  };
+
+  if (eslintBefore10) {
+    error.type = "JSXOpeningElement";
+  }
+
+  return error;
+};
 
 const domElements = dom.keys();
 // Generate valid test cases

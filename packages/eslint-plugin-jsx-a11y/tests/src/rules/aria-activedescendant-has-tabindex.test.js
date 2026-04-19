@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import rule from "../../../src/rules/aria-activedescendant-has-tabindex";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
@@ -21,8 +22,11 @@ const ruleTester = new RuleTester();
 const expectedError = {
   message:
     "An element that manages focus with `aria-activedescendant` must have a tabindex",
-  type: "JSXOpeningElement",
 };
+
+if (eslintBefore10) {
+  error.type = "JSXOpeningElement";
+}
 
 ruleTester.run("aria-activedescendant-has-tabindex", rule, {
   valid: parsers

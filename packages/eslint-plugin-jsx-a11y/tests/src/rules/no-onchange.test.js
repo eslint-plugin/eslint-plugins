@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import rule from "../../../src/rules/no-onchange";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
@@ -21,8 +22,11 @@ const ruleTester = new RuleTester();
 const expectedError = {
   message:
     "onBlur must be used instead of onchange, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users.",
-  type: "JSXOpeningElement",
 };
+
+if (eslintBefore10) {
+  expectedError.type = "JSXOpeningElement";
+}
 
 const componentsSettings = {
   "jsx-a11y": {

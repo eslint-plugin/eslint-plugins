@@ -11,6 +11,7 @@
 import { roles } from "aria-query";
 
 import rule from "../../../src/rules/role-has-required-aria-props";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
@@ -24,10 +25,13 @@ const ruleTester = new RuleTester();
 const errorMessage = (role) => {
   const requiredProps = Object.keys(roles.get(role).requiredProps);
 
-  return {
+  const error = {
     message: `Elements with the ARIA role "${role}" must have the following attributes defined: ${requiredProps}`,
-    type: "JSXAttribute",
   };
+
+  if (eslintBefore10) {
+    error.type = "JSXOpeningElement";
+  }
 };
 
 const componentsSettings = {

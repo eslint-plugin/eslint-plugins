@@ -1,5 +1,6 @@
-import { elementType } from "@eslintplugin/jsx-ast-utils";
 import { describe, expect, it } from "bun:test";
+
+import { elementType } from "@eslintplugin/jsx-ast-utils";
 
 import {
   genElementSymbol,

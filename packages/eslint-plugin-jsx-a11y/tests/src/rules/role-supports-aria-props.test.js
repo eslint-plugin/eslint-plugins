@@ -12,6 +12,7 @@ import { version as eslintVersion } from "eslint/package.json";
 import semver from "semver";
 
 import rule from "../../../src/rules/role-supports-aria-props";
+import { eslintBefore10 } from "../../__util__/eslint-version";
 import parsers from "../../__util__/helpers/parsers";
 import parserOptionsMapper from "../../__util__/parserOptionsMapper";
 import RuleTester from "../../__util__/RuleTester";
@@ -35,7 +36,7 @@ const errorMessage = (attr, role, tag, isImplicit) => {
     message: generateErrorMessage(attr, role, tag, isImplicit),
   };
 
-  if (semver.satisfies(eslintVersion, "< 10")) {
+  if (eslintBefore10) {
     error.type = "JSXOpeningElement";
   }
 
