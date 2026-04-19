@@ -38,7 +38,7 @@ jobs:
         run: cd packages/eslint-plugin-jsx-a11y && bun add eslint@${{ matrix.eslint-version }} --no-save
 
       - name: Build (${{ matrix.os }})
-        run: bun run --cwd packages/eslint-plugin-jsx-a11y build
+        run: bun run build
 
       - name: Run tests (${{ matrix.os }})
         run: bun run --cwd packages/eslint-plugin-jsx-a11y test
