@@ -1,6 +1,6 @@
 "use strict";
 
-const assert = require("assert");
+const assert = require("node:assert");
 const espree = require("espree");
 
 const jsxUtil = require("../../lib/util/jsx");

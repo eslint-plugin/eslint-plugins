@@ -5,7 +5,7 @@
 
 "use strict";
 
-const path = require("path");
+const path = require("node:path");
 const docsUrl = require("../util/docsUrl");
 const getFilename = require("../util/eslint").getFilename;
 const report = require("../util/report");

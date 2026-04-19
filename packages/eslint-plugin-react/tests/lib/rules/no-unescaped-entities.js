@@ -9,7 +9,7 @@
 // Requirements
 // ------------------------------------------------------------------------------
 
-const path = require("path");
+const path = require("node:path");
 
 const semver = require("semver");
 const resolve = require("resolve");

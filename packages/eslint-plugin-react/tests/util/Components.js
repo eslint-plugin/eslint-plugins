@@ -1,6 +1,6 @@
 "use strict";
 
-const assert = require("assert");
+const assert = require("node:assert");
 
 const RuleTester = require("../helpers/ruleTester");
 const Components = require("../../lib/util/Components");

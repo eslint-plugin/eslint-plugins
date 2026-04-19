@@ -1,6 +1,6 @@
 "use strict";
 
-const assert = require("assert");
+const assert = require("node:assert");
 const SourceCode = require("eslint").SourceCode;
 const espree = require("espree");
 
