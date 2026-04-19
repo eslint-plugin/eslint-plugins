@@ -1,20 +1,16 @@
-import test from "tape";
+import { describe, expect, it } from "bun:test";
 
 import JSXAttributeMock from "../../../../__mocks__/JSXAttributeMock";
 import getImplicitRoleForMenu from "../../../../src/util/implicitRoles/menu";
 
-test("isAbstractRole", (t) => {
-  t.equal(
-    getImplicitRoleForMenu([JSXAttributeMock("type", "toolbar")]),
-    "toolbar",
-    "works for toolbars",
-  );
+describe("isAbstractRole", () => {
+  it("works for toolbars", () => {
+    expect(getImplicitRoleForMenu([JSXAttributeMock("type", "toolbar")])).toBe(
+      "toolbar",
+    );
+  });
 
-  t.equal(
-    getImplicitRoleForMenu([JSXAttributeMock("type", "")]),
-    "",
-    "works for non-toolbars",
-  );
-
-  t.end();
+  it("works for non-toolbars", () => {
+    expect(getImplicitRoleForMenu([JSXAttributeMock("type", "")])).toBe("");
+  });
 });

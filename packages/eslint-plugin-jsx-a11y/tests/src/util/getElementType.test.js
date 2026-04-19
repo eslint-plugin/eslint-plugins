@@ -1,43 +1,39 @@
-import test from "tape";
+import { describe, expect, it } from "bun:test";
 
 import JSXAttributeMock from "../../../__mocks__/JSXAttributeMock";
 import JSXElementMock from "../../../__mocks__/JSXElementMock";
 import getElementType from "../../../src/util/getElementType";
 
-test("getElementType", (t) => {
-  t.test("no settings in context", (st) => {
+describe("getElementType", () => {
+  describe("no settings in context", () => {
     const elementType = getElementType({ settings: {} });
 
-    st.equal(
-      elementType(JSXElementMock("input").openingElement),
-      "input",
-      "returns the exact tag name for a DOM element",
-    );
+    it("returns the exact tag name for a DOM element", () => {
+      expect(elementType(JSXElementMock("input").openingElement)).toBe("input");
+    });
 
-    st.equal(
-      elementType(JSXElementMock("CustomInput").openingElement),
-      "CustomInput",
-      "returns the exact tag name for a custom element",
-    );
+    it("returns the exact tag name for a custom element", () => {
+      expect(elementType(JSXElementMock("CustomInput").openingElement)).toBe(
+        "CustomInput",
+      );
+    });
 
-    st.equal(
-      elementType(JSXElementMock("toString").openingElement),
-      "toString",
-      "returns the exact tag name for names that are in Object.prototype",
-    );
+    it("returns the exact tag name for names that are in Object.prototype", () => {
+      expect(elementType(JSXElementMock("toString").openingElement)).toBe(
+        "toString",
+      );
+    });
 
-    st.equal(
-      elementType(
-        JSXElementMock("span", [JSXAttributeMock("as", "h1")]).openingElement,
-      ),
-      "span",
-      "returns the default tag name provided",
-    );
-
-    st.end();
+    it("returns the default tag name provided", () => {
+      expect(
+        elementType(
+          JSXElementMock("span", [JSXAttributeMock("as", "h1")]).openingElement,
+        ),
+      ).toBe("span");
+    });
   });
 
-  t.test("components settings in context", (st) => {
+  describe("components settings in context", () => {
     const elementType = getElementType({
       settings: {
         "jsx-a11y": {
@@ -48,36 +44,32 @@ test("getElementType", (t) => {
       },
     });
 
-    st.equal(
-      elementType(JSXElementMock("input").openingElement),
-      "input",
-      "returns the exact tag name for a DOM element",
-    );
+    it("returns the exact tag name for a DOM element", () => {
+      expect(elementType(JSXElementMock("input").openingElement)).toBe("input");
+    });
 
-    st.equal(
-      elementType(JSXElementMock("CustomInput").openingElement),
-      "input",
-      "returns the mapped tag name for a custom element",
-    );
+    it("returns the mapped tag name for a custom element", () => {
+      expect(elementType(JSXElementMock("CustomInput").openingElement)).toBe(
+        "input",
+      );
+    });
 
-    st.equal(
-      elementType(JSXElementMock("CityInput").openingElement),
-      "CityInput",
-      "returns the exact tag name for a custom element not in the components map",
-    );
+    it("returns the exact tag name for a custom element not in the components map", () => {
+      expect(elementType(JSXElementMock("CityInput").openingElement)).toBe(
+        "CityInput",
+      );
+    });
 
-    st.equal(
-      elementType(
-        JSXElementMock("span", [JSXAttributeMock("as", "h1")]).openingElement,
-      ),
-      "span",
-      "return the default tag name since not polymorphicPropName was provided",
-    );
-
-    st.end();
+    it("return the default tag name since not polymorphicPropName was provided", () => {
+      expect(
+        elementType(
+          JSXElementMock("span", [JSXAttributeMock("as", "h1")]).openingElement,
+        ),
+      ).toBe("span");
+    });
   });
 
-  t.test("polymorphicPropName settings in context", (st) => {
+  describe("polymorphicPropName settings in context", () => {
     const elementType = getElementType({
       settings: {
         "jsx-a11y": {
@@ -89,90 +81,81 @@ test("getElementType", (t) => {
       },
     });
 
-    st.equal(
-      elementType(
-        JSXElementMock("span", [JSXAttributeMock("asChild", "h1")])
-          .openingElement,
-      ),
-      "h1",
-      'returns the tag name provided by the polymorphic prop, "asChild", defined in the settings',
-    );
+    it('returns the tag name provided by the polymorphic prop, "asChild", defined in the settings', () => {
+      expect(
+        elementType(
+          JSXElementMock("span", [JSXAttributeMock("asChild", "h1")])
+            .openingElement,
+        ),
+      ).toBe("h1");
+    });
 
-    st.equal(
-      elementType(
-        JSXElementMock("CustomButton", [JSXAttributeMock("asChild", "a")])
-          .openingElement,
-      ),
-      "a",
-      'returns the tag name provided by the polymorphic prop, "asChild", defined in the settings instead of the component mapping tag',
-    );
+    it('returns the tag name provided by the polymorphic prop, "asChild", defined in the settings instead of the component mapping tag', () => {
+      expect(
+        elementType(
+          JSXElementMock("CustomButton", [JSXAttributeMock("asChild", "a")])
+            .openingElement,
+        ),
+      ).toBe("a");
+    });
 
-    st.equal(
-      elementType(
-        JSXElementMock("CustomButton", [JSXAttributeMock("as", "a")])
-          .openingElement,
-      ),
-      "button",
-      'returns the tag name provided by the componnet mapping if the polymorphic prop, "asChild", defined in the settings is not set',
-    );
-
-    st.end();
+    it('returns the tag name provided by the component mapping if the polymorphic prop, "asChild", defined in the settings is not set', () => {
+      expect(
+        elementType(
+          JSXElementMock("CustomButton", [JSXAttributeMock("as", "a")])
+            .openingElement,
+        ),
+      ).toBe("button");
+    });
   });
 
-  t.test(
-    "polymorphicPropName settings and explicitly defined polymorphicAllowList in context",
-    (st) => {
-      const elementType = getElementType({
-        settings: {
-          "jsx-a11y": {
-            polymorphicPropName: "asChild",
-            polymorphicAllowList: ["Box", "Icon"],
-            components: {
-              Box: "div",
-              Icon: "svg",
-            },
+  describe("polymorphicPropName settings and explicitly defined polymorphicAllowList in context", () => {
+    const elementType = getElementType({
+      settings: {
+        "jsx-a11y": {
+          polymorphicPropName: "asChild",
+          polymorphicAllowList: ["Box", "Icon"],
+          components: {
+            Box: "div",
+            Icon: "svg",
           },
         },
-      });
+      },
+    });
 
-      st.equal(
+    it("does not use the polymorphic prop if polymorphicAllowList is defined, but element is not part of polymorphicAllowList", () => {
+      expect(
         elementType(
           JSXElementMock("Spinner", [JSXAttributeMock("asChild", "img")])
             .openingElement,
         ),
-        "Spinner",
-        "does not use the polymorphic prop if polymorphicAllowList is defined, but element is not part of polymorphicAllowList",
-      );
+      ).toBe("Spinner");
+    });
 
-      st.equal(
+    it("uses the polymorphic prop if it is in explicitly defined polymorphicAllowList", () => {
+      expect(
         elementType(
           JSXElementMock("Icon", [JSXAttributeMock("asChild", "img")])
             .openingElement,
         ),
-        "img",
-        "uses the polymorphic prop if it is in explicitly defined polymorphicAllowList",
-      );
+      ).toBe("img");
+    });
 
-      st.equal(
+    it('returns the tag name provided by the polymorphic prop, "asChild", defined in the settings instead of the component mapping tag', () => {
+      expect(
         elementType(
           JSXElementMock("Box", [JSXAttributeMock("asChild", "span")])
             .openingElement,
         ),
-        "span",
-        'returns the tag name provided by the polymorphic prop, "asChild", defined in the settings instead of the component mapping tag',
-      );
+      ).toBe("span");
+    });
 
-      st.equal(
+    it('returns the tag name provided by the component mapping if the polymorphic prop, "asChild", defined in the settings is not set', () => {
+      expect(
         elementType(
           JSXElementMock("Box", [JSXAttributeMock("as", "a")]).openingElement,
         ),
-        "div",
-        'returns the tag name provided by the component mapping if the polymorphic prop, "asChild", defined in the settings is not set',
-      );
-
-      st.end();
-    },
-  );
-
-  t.end();
+      ).toBe("div");
+    });
+  });
 });

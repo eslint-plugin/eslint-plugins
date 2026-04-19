@@ -33,12 +33,9 @@
     "safe-regex-test": "^1.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.27.4",
     "@babel/eslint-parser": "^7.27.5",
     "ast-types-flow": "^0.0.8",
     "eslint": "^6 || ^7 || ^8 || ^9 || ^10",
-    "minimist": "^1.2.8",
-    "mock-property": "^1.1.0",
     "semver": "^6.3.1",
     "to-ast": "^1.0.0",
     "tsdown": "catalog:"

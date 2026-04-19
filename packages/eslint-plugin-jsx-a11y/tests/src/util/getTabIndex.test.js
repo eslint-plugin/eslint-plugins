@@ -1,81 +1,59 @@
-import test from "tape";
+import { describe, expect, it } from "bun:test";
 
 import IdentifierMock from "../../../__mocks__/IdentifierMock";
 import JSXAttributeMock from "../../../__mocks__/JSXAttributeMock";
 import getTabIndex from "../../../src/util/getTabIndex";
 
-test("getTabIndex", (t) => {
-  t.equal(
-    getTabIndex(JSXAttributeMock("tabIndex", 0)),
-    0,
-    "tabIndex is defined as zero -> zero",
-  );
+describe("getTabIndex", () => {
+  it("returns zero when tabIndex is defined as zero", () => {
+    expect(getTabIndex(JSXAttributeMock("tabIndex", 0))).toBe(0);
+  });
 
-  t.equal(
-    getTabIndex(JSXAttributeMock("tabIndex", 1)),
-    1,
-    "tabIndex is defined as a positive integer -> returns it",
-  );
+  it("returns a positive integer when tabIndex is defined as such", () => {
+    expect(getTabIndex(JSXAttributeMock("tabIndex", 1))).toBe(1);
+  });
 
-  t.equal(
-    getTabIndex(JSXAttributeMock("tabIndex", -1)),
-    -1,
-    "tabIndex is defined as a negative integer -> returns it",
-  );
+  it("returns a negative integer when tabIndex is defined as such", () => {
+    expect(getTabIndex(JSXAttributeMock("tabIndex", -1))).toBe(-1);
+  });
 
-  t.equal(
-    getTabIndex(JSXAttributeMock("tabIndex", "")),
-    undefined,
-    "tabIndex is defined as an empty string -> undefined",
-  );
+  it("returns undefined when tabIndex is an empty string", () => {
+    expect(getTabIndex(JSXAttributeMock("tabIndex", ""))).toBe(undefined);
+  });
 
-  t.equal(
-    getTabIndex(JSXAttributeMock("tabIndex", 9.1)),
-    undefined,
-    "tabIndex is defined as a float -> undefined",
-  );
+  it("returns undefined when tabIndex is a float", () => {
+    expect(getTabIndex(JSXAttributeMock("tabIndex", 9.1))).toBe(undefined);
+  });
 
-  t.equal(
-    getTabIndex(JSXAttributeMock("tabIndex", "0")),
-    0,
-    "tabIndex is defined as a string which converts to a number -> returns the integer",
-  );
+  it("returns the integer when tabIndex is a string that converts to a number", () => {
+    expect(getTabIndex(JSXAttributeMock("tabIndex", "0"))).toBe(0);
+  });
 
-  t.equal(
-    getTabIndex(JSXAttributeMock("tabIndex", "0a")),
-    undefined,
-    "tabIndex is defined as a string which is NaN -> returns undefined",
-  );
+  it("returns undefined when tabIndex is a string that is NaN", () => {
+    expect(getTabIndex(JSXAttributeMock("tabIndex", "0a"))).toBe(undefined);
+  });
 
-  t.equal(
-    getTabIndex(JSXAttributeMock("tabIndex", true)),
-    undefined,
-    "tabIndex is defined as true -> returns undefined",
-  );
-  t.equal(
-    getTabIndex(JSXAttributeMock("tabIndex", false)),
-    undefined,
-    "tabIndex is defined as false -> returns undefined",
-  );
+  it("returns undefined when tabIndex is a boolean", () => {
+    expect(getTabIndex(JSXAttributeMock("tabIndex", true))).toBe(undefined);
+    expect(getTabIndex(JSXAttributeMock("tabIndex", false))).toBe(undefined);
+  });
 
-  t.equal(
-    typeof getTabIndex(JSXAttributeMock("tabIndex", () => 0)),
-    "function",
-    "tabIndex is defined as a function expression -> returns the correct type",
-  );
+  it("returns the function type when tabIndex is a function expression", () => {
+    expect(typeof getTabIndex(JSXAttributeMock("tabIndex", () => 0))).toBe(
+      "function",
+    );
+  });
 
-  const name = "identName";
-  t.equal(
-    getTabIndex(JSXAttributeMock("tabIndex", IdentifierMock(name), true)),
-    name,
-    "tabIndex is defined as a variable expression -> returns the Identifier name",
-  );
+  it("returns the Identifier name when tabIndex is a variable expression", () => {
+    const name = "identName";
+    expect(
+      getTabIndex(JSXAttributeMock("tabIndex", IdentifierMock(name), true)),
+    ).toBe(name);
+  });
 
-  t.equal(
-    getTabIndex(JSXAttributeMock("tabIndex", undefined)),
-    undefined,
-    "tabIndex is not defined -> returns undefined",
-  );
-
-  t.end();
+  it("returns undefined when tabIndex is not defined", () => {
+    expect(getTabIndex(JSXAttributeMock("tabIndex", undefined))).toBe(
+      undefined,
+    );
+  });
 });

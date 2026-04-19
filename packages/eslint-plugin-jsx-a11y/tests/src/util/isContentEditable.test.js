@@ -1,52 +1,48 @@
-import test from "tape";
+import { describe, expect, it } from "bun:test";
 
 import JSXAttributeMock from "../../../__mocks__/JSXAttributeMock";
 import isContentEditable from "../../../src/util/isContentEditable";
 
-test("isContentEditable - HTML5", (t) => {
-  t.equal(
-    isContentEditable("some tag", [
-      JSXAttributeMock("contentEditable", "true"),
-    ]),
-    true,
-    "identifies HTML5 contentEditable elements",
-  );
-
-  t.test("not content editable", (st) => {
-    st.equal(
+describe("isContentEditable - HTML5", () => {
+  it("identifies HTML5 contentEditable elements", () => {
+    expect(
       isContentEditable("some tag", [
-        JSXAttributeMock("contentEditable", null),
+        JSXAttributeMock("contentEditable", "true"),
       ]),
-      false,
-      "does not identify HTML5 content editable elements with null as the value",
-    );
-
-    st.equal(
-      isContentEditable("some tag", [
-        JSXAttributeMock("contentEditable", undefined),
-      ]),
-      false,
-      "does not identify HTML5 content editable elements with undefined as the value",
-    );
-
-    st.equal(
-      isContentEditable("some tag", [
-        JSXAttributeMock("contentEditable", true),
-      ]),
-      false,
-      "does not identify HTML5 content editable elements with true as the value",
-    );
-
-    st.equal(
-      isContentEditable("some tag", [
-        JSXAttributeMock("contentEditable", "false"),
-      ]),
-      false,
-      'does not identify HTML5 content editable elements with "false" as the value',
-    );
-
-    st.end();
+    ).toBe(true);
   });
 
-  t.end();
+  describe("not content editable", () => {
+    it("does not identify elements with null as the value", () => {
+      expect(
+        isContentEditable("some tag", [
+          JSXAttributeMock("contentEditable", null),
+        ]),
+      ).toBe(false);
+    });
+
+    it("does not identify elements with undefined as the value", () => {
+      expect(
+        isContentEditable("some tag", [
+          JSXAttributeMock("contentEditable", undefined),
+        ]),
+      ).toBe(false);
+    });
+
+    it("does not identify elements with boolean true as the value", () => {
+      expect(
+        isContentEditable("some tag", [
+          JSXAttributeMock("contentEditable", true),
+        ]),
+      ).toBe(false);
+    });
+
+    it('does not identify elements with "false" string as the value', () => {
+      expect(
+        isContentEditable("some tag", [
+          JSXAttributeMock("contentEditable", "false"),
+        ]),
+      ).toBe(false);
+    });
+  });
 });

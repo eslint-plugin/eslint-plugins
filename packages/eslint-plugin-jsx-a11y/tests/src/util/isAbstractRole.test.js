@@ -1,5 +1,5 @@
+import { describe, expect, it } from "bun:test";
 import { elementType } from "@eslintplugin/jsx-ast-utils";
-import test from "tape";
 
 import {
   genElementSymbol,
@@ -8,38 +8,32 @@ import {
 } from "../../../__mocks__/genInteractives";
 import isAbstractRole from "../../../src/util/isAbstractRole";
 
-test("isAbstractRole", (t) => {
-  t.equal(
-    isAbstractRole(undefined, []),
-    false,
-    "does NOT identify JSX Components (no tagName) as abstract role elements",
-  );
+describe("isAbstractRole", () => {
+  it("does NOT identify JSX Components (no tagName) as abstract role elements", () => {
+    expect(isAbstractRole(undefined, [])).toBe(false);
+  });
 
-  t.test("elements with an abstract role", (st) => {
+  describe("elements with an abstract role", () => {
     genAbstractRoleElements().forEach(({ openingElement }) => {
       const { attributes } = openingElement;
-      st.equal(
-        isAbstractRole(elementType(openingElement), attributes),
-        true,
-        `identifies \`${genElementSymbol(openingElement)}\` as an abstract role element`,
-      );
-    });
+      const tagName = elementType(openingElement);
+      const symbol = genElementSymbol(openingElement);
 
-    st.end();
+      it(`identifies \`${symbol}\` as an abstract role element`, () => {
+        expect(isAbstractRole(tagName, attributes)).toBe(true);
+      });
+    });
   });
 
-  t.test("elements with a non-abstract role", (st) => {
+  describe("elements with a non-abstract role", () => {
     genNonAbstractRoleElements().forEach(({ openingElement }) => {
       const { attributes } = openingElement;
-      st.equal(
-        isAbstractRole(elementType(openingElement), attributes),
-        false,
-        `does NOT identify \`${genElementSymbol(openingElement)}\` as an abstract role element`,
-      );
+      const tagName = elementType(openingElement);
+      const symbol = genElementSymbol(openingElement);
+
+      it(`does NOT identify \`${symbol}\` as an abstract role element`, () => {
+        expect(isAbstractRole(tagName, attributes)).toBe(false);
+      });
     });
-
-    st.end();
   });
-
-  t.end();
 });

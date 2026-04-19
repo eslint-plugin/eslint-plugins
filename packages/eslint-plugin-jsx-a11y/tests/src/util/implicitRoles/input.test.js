@@ -1,87 +1,69 @@
-import test from "tape";
+import { describe, expect, it } from "bun:test";
 
 import JSXAttributeMock from "../../../../__mocks__/JSXAttributeMock";
 import getImplicitRoleForInput from "../../../../src/util/implicitRoles/input";
 
-test("isAbstractRole", (t) => {
-  t.test("works for buttons", (st) => {
-    st.equal(
-      getImplicitRoleForInput([JSXAttributeMock("type", "button")]),
+describe("isAbstractRole", () => {
+  it("works for buttons", () => {
+    expect(getImplicitRoleForInput([JSXAttributeMock("type", "button")])).toBe(
       "button",
     );
-
-    st.equal(
-      getImplicitRoleForInput([JSXAttributeMock("type", "image")]),
+    expect(getImplicitRoleForInput([JSXAttributeMock("type", "image")])).toBe(
       "button",
     );
-
-    st.equal(
-      getImplicitRoleForInput([JSXAttributeMock("type", "reset")]),
+    expect(getImplicitRoleForInput([JSXAttributeMock("type", "reset")])).toBe(
       "button",
     );
-
-    st.equal(
-      getImplicitRoleForInput([JSXAttributeMock("type", "submit")]),
+    expect(getImplicitRoleForInput([JSXAttributeMock("type", "submit")])).toBe(
       "button",
     );
-
-    st.end();
   });
 
-  t.equal(
-    getImplicitRoleForInput([JSXAttributeMock("type", "checkbox")]),
-    "checkbox",
-    "works for checkboxes",
-  );
+  it("works for checkboxes", () => {
+    expect(
+      getImplicitRoleForInput([JSXAttributeMock("type", "checkbox")]),
+    ).toBe("checkbox");
+  });
 
-  t.equal(
-    getImplicitRoleForInput([JSXAttributeMock("type", "radio")]),
-    "radio",
-    "works for radios",
-  );
+  it("works for radios", () => {
+    expect(getImplicitRoleForInput([JSXAttributeMock("type", "radio")])).toBe(
+      "radio",
+    );
+  });
 
-  t.equal(
-    getImplicitRoleForInput([JSXAttributeMock("type", "range")]),
-    "slider",
-    "works for ranges",
-  );
+  it("works for ranges", () => {
+    expect(getImplicitRoleForInput([JSXAttributeMock("type", "range")])).toBe(
+      "slider",
+    );
+  });
 
-  t.test("works for textboxes", (st) => {
-    st.equal(
-      getImplicitRoleForInput([JSXAttributeMock("type", "email")]),
+  it("works for textboxes", () => {
+    expect(getImplicitRoleForInput([JSXAttributeMock("type", "email")])).toBe(
       "textbox",
     );
-    st.equal(
+    expect(
       getImplicitRoleForInput([JSXAttributeMock("type", "password")]),
+    ).toBe("textbox");
+    expect(getImplicitRoleForInput([JSXAttributeMock("type", "search")])).toBe(
       "textbox",
     );
-    st.equal(
-      getImplicitRoleForInput([JSXAttributeMock("type", "search")]),
+    expect(getImplicitRoleForInput([JSXAttributeMock("type", "tel")])).toBe(
       "textbox",
     );
-    st.equal(
-      getImplicitRoleForInput([JSXAttributeMock("type", "tel")]),
+    expect(getImplicitRoleForInput([JSXAttributeMock("type", "url")])).toBe(
       "textbox",
     );
-    st.equal(
-      getImplicitRoleForInput([JSXAttributeMock("type", "url")]),
-      "textbox",
-    );
-
-    st.end();
   });
 
-  t.equal(
-    getImplicitRoleForInput([JSXAttributeMock("type", "")]),
-    "textbox",
-    "works for the default case",
-  );
+  it("works for the default case", () => {
+    expect(getImplicitRoleForInput([JSXAttributeMock("type", "")])).toBe(
+      "textbox",
+    );
+  });
 
-  t.equal(
-    getImplicitRoleForInput([JSXAttributeMock("type", true)]),
-    "textbox",
-    "works for the true case",
-  );
-
-  t.end();
+  it("works for the true case", () => {
+    expect(getImplicitRoleForInput([JSXAttributeMock("type", true)])).toBe(
+      "textbox",
+    );
+  });
 });

@@ -1,5 +1,5 @@
+import { describe, expect, it } from "bun:test";
 import { elementType } from "@eslintplugin/jsx-ast-utils";
-import test from "tape";
 
 import {
   genElementSymbol,
@@ -11,87 +11,68 @@ import {
 } from "../../../__mocks__/genInteractives";
 import isNonInteractiveElement from "../../../src/util/isNonInteractiveElement";
 
-test("isNonInteractiveElement", (t) => {
-  t.equal(
-    isNonInteractiveElement(undefined, []),
-    false,
-    "identifies JSX Components (no tagName) as non-interactive elements",
-  );
+describe("isNonInteractiveElement", () => {
+  it("identifies JSX Components (no tagName) as non-interactive elements", () => {
+    expect(isNonInteractiveElement(undefined, [])).toBe(false);
+  });
 
-  t.test("non-interactive elements", (st) => {
+  describe("non-interactive elements", () => {
     genNonInteractiveElements().forEach(({ openingElement }) => {
-      st.equal(
-        isNonInteractiveElement(
-          elementType(openingElement),
-          openingElement.attributes,
-        ),
-        true,
-        `identifies \`${genElementSymbol(openingElement)}\` as a non-interactive element`,
-      );
-    });
+      const tag = elementType(openingElement);
+      const symbol = genElementSymbol(openingElement);
+      const { attributes } = openingElement;
 
-    st.end();
+      it(`identifies \`${symbol}\` as a non-interactive element`, () => {
+        expect(isNonInteractiveElement(tag, attributes)).toBe(true);
+      });
+    });
   });
 
-  t.test("non-interactive role elements", (st) => {
+  describe("non-interactive role elements", () => {
     genNonInteractiveRoleElements().forEach(({ openingElement }) => {
-      st.equal(
-        isNonInteractiveElement(
-          elementType(openingElement),
-          openingElement.attributes,
-        ),
-        false,
-        `identifies \`${genElementSymbol(openingElement)}\` as a non-interactive element`,
-      );
-    });
+      const tag = elementType(openingElement);
+      const symbol = genElementSymbol(openingElement);
+      const { attributes } = openingElement;
 
-    st.end();
+      it(`does NOT identify \`${symbol}\` as a non-interactive element`, () => {
+        expect(isNonInteractiveElement(tag, attributes)).toBe(false);
+      });
+    });
   });
 
-  t.test("interactive elements", (st) => {
+  describe("interactive elements", () => {
     genInteractiveElements().forEach(({ openingElement }) => {
-      st.equal(
-        isNonInteractiveElement(
-          elementType(openingElement),
-          openingElement.attributes,
-        ),
-        false,
-        `identifies \`${genElementSymbol(openingElement)}\` as a non-interactive element`,
-      );
-    });
+      const tag = elementType(openingElement);
+      const symbol = genElementSymbol(openingElement);
+      const { attributes } = openingElement;
 
-    st.end();
+      it(`does NOT identify \`${symbol}\` as a non-interactive element`, () => {
+        expect(isNonInteractiveElement(tag, attributes)).toBe(false);
+      });
+    });
   });
 
-  t.test("interactive role elements", (st) => {
+  describe("interactive role elements", () => {
     genInteractiveRoleElements().forEach(({ openingElement }) => {
-      st.equal(
-        isNonInteractiveElement(
-          elementType(openingElement),
-          openingElement.attributes,
-        ),
-        false,
-        `identifies \`${genElementSymbol(openingElement)}\` as a non-interactive element`,
-      );
-    });
+      const tag = elementType(openingElement);
+      const symbol = genElementSymbol(openingElement);
+      const { attributes } = openingElement;
 
-    st.end();
+      it(`does NOT identify \`${symbol}\` as a non-interactive element`, () => {
+        expect(isNonInteractiveElement(tag, attributes)).toBe(false);
+      });
+    });
   });
 
-  t.test("indeterminate elements", (st) => {
+  describe("indeterminate elements", () => {
     genIndeterminantInteractiveElements().forEach(({ openingElement }) => {
-      st.equal(
-        isNonInteractiveElement(
-          elementType(openingElement),
-          openingElement.attributes,
-        ),
-        false,
-        `identifies \`${genElementSymbol(openingElement)}\` as a non-interactive element`,
-      );
+      const tag = elementType(openingElement);
+      const symbol = genElementSymbol(openingElement);
+      const { attributes } = openingElement;
+
+      it(`does NOT identify \`${symbol}\` as a non-interactive element`, () => {
+        expect(isNonInteractiveElement(tag, attributes)).toBe(false);
+      });
     });
-
-    st.end();
   });
-
-  t.end();
 });

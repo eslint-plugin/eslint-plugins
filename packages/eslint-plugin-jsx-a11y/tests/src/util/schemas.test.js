@@ -18,8 +18,8 @@ describe("schemas", () => {
     expect(properties.baz.type).toBe("array");
   });
 
-  expect(enumArraySchema()).toEqual(
-    {
+  it("enumArraySchema works with no arguments", () => {
+    expect(enumArraySchema()).toEqual({
       additionalItems: false,
       items: {
         enum: [],
@@ -28,7 +28,6 @@ describe("schemas", () => {
       minItems: 0,
       type: "array",
       uniqueItems: true,
-    },
-    "enumArraySchema works with no arguments",
-  );
+    });
+  });
 });

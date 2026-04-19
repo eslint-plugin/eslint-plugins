@@ -1,5 +1,5 @@
+import { describe, expect, it } from "bun:test";
 import { elementType } from "@eslintplugin/jsx-ast-utils";
-import test from "tape";
 
 import {
   genElementSymbol,
@@ -13,93 +13,58 @@ function mergeTabIndex(index, attributes) {
   return [].concat(attributes, JSXAttributeMock("tabIndex", index));
 }
 
-test("isFocusable", (t) => {
-  t.test("interactive elements", (st) => {
+describe("isFocusable", () => {
+  describe("interactive elements", () => {
     genInteractiveElements().forEach(({ openingElement }) => {
-      st.equal(
-        isFocusable(elementType(openingElement), openingElement.attributes),
-        true,
-        `identifies \`${genElementSymbol(openingElement)}\` as a focusable element`,
-      );
+      const tag = elementType(openingElement);
+      const symbol = genElementSymbol(openingElement);
+      const { attributes } = openingElement;
 
-      st.equal(
-        isFocusable(
-          elementType(openingElement),
-          mergeTabIndex(-1, openingElement.attributes),
-        ),
-        false,
-        `does NOT identify \`${genElementSymbol(openingElement)}\` with tabIndex of -1 as a focusable element`,
-      );
+      it(`identifies \`${symbol}\` as a focusable element`, () => {
+        expect(isFocusable(tag, attributes)).toBe(true);
+      });
 
-      st.equal(
-        isFocusable(
-          elementType(openingElement),
-          mergeTabIndex(0, openingElement.attributes),
-        ),
-        true,
-        `identifies \`${genElementSymbol(openingElement)}\` with tabIndex of 0 as a focusable element`,
-      );
+      it(`does NOT identify \`${symbol}\` with tabIndex of -1 as a focusable element`, () => {
+        expect(isFocusable(tag, mergeTabIndex(-1, attributes))).toBe(false);
+      });
 
-      st.equal(
-        isFocusable(
-          elementType(openingElement),
-          mergeTabIndex(1, openingElement.attributes),
-        ),
-        true,
-        `identifies \`${genElementSymbol(openingElement)}\` with tabIndex of 1 as a focusable element`,
-      );
+      it(`identifies \`${symbol}\` with tabIndex of 0 as a focusable element`, () => {
+        expect(isFocusable(tag, mergeTabIndex(0, attributes))).toBe(true);
+      });
+
+      it(`identifies \`${symbol}\` with tabIndex of 1 as a focusable element`, () => {
+        expect(isFocusable(tag, mergeTabIndex(1, attributes))).toBe(true);
+      });
     });
-
-    st.end();
   });
 
-  t.test("non-interactive elements", (st) => {
+  describe("non-interactive elements", () => {
     genNonInteractiveElements().forEach(({ openingElement }) => {
-      st.equal(
-        isFocusable(elementType(openingElement), openingElement.attributes),
-        false,
-        `does NOT identify \`${genElementSymbol(openingElement)}\` as a focusable element`,
-      );
+      const tag = elementType(openingElement);
+      const symbol = genElementSymbol(openingElement);
+      const { attributes } = openingElement;
 
-      st.equal(
-        isFocusable(
-          elementType(openingElement),
-          mergeTabIndex(-1, openingElement.attributes),
-        ),
-        false,
-        `does NOT identify \`${genElementSymbol(openingElement)}\` with tabIndex of -1 as a focusable element`,
-      );
+      it(`does NOT identify \`${symbol}\` as a focusable element`, () => {
+        expect(isFocusable(tag, attributes)).toBe(false);
+      });
 
-      st.equal(
-        isFocusable(
-          elementType(openingElement),
-          mergeTabIndex(0, openingElement.attributes),
-        ),
-        true,
-        `identifies \`${genElementSymbol(openingElement)}\` with tabIndex of 0 as a focusable element`,
-      );
+      it(`does NOT identify \`${symbol}\` with tabIndex of -1 as a focusable element`, () => {
+        expect(isFocusable(tag, mergeTabIndex(-1, attributes))).toBe(false);
+      });
 
-      st.equal(
-        isFocusable(
-          elementType(openingElement),
-          mergeTabIndex(1, openingElement.attributes),
-        ),
-        true,
-        `identifies \`${genElementSymbol(openingElement)}\` with tabIndex of 1 as a focusable element`,
-      );
+      it(`identifies \`${symbol}\` with tabIndex of 0 as a focusable element`, () => {
+        expect(isFocusable(tag, mergeTabIndex(0, attributes))).toBe(true);
+      });
 
-      st.equal(
-        isFocusable(
-          elementType(openingElement),
-          mergeTabIndex("bogus", openingElement.attributes),
-        ),
-        false,
-        `does NOT identify \`${genElementSymbol(openingElement)}\` with tabIndex of 'bogus' as a focusable element`,
-      );
+      it(`identifies \`${symbol}\` with tabIndex of 1 as a focusable element`, () => {
+        expect(isFocusable(tag, mergeTabIndex(1, attributes))).toBe(true);
+      });
+
+      it(`does NOT identify \`${symbol}\` with tabIndex of 'bogus' as a focusable element`, () => {
+        expect(isFocusable(tag, mergeTabIndex("bogus", attributes))).toBe(
+          false,
+        );
+      });
     });
-
-    st.end();
   });
-
-  t.end();
 });

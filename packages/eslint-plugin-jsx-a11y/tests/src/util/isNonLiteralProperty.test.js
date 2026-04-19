@@ -1,4 +1,4 @@
-import test from "tape";
+import { describe, expect, it } from "bun:test";
 
 import IdentifierMock from "../../../__mocks__/IdentifierMock";
 import JSXAttributeMock from "../../../__mocks__/JSXAttributeMock";
@@ -8,60 +8,40 @@ import LiteralMock from "../../../__mocks__/LiteralMock";
 import isNonLiteralProperty from "../../../src/util/isNonLiteralProperty";
 
 const theProp = "theProp";
-
 const spread = JSXSpreadAttributeMock("theSpread");
 
-test("isNonLiteralProperty", (t) => {
-  t.equal(
-    isNonLiteralProperty([], theProp),
-    false,
-    "does not identify them as non-literal role elements",
-  );
+describe("isNonLiteralProperty", () => {
+  it("does not identify empty attributes as non-literal role elements", () => {
+    expect(isNonLiteralProperty([], theProp)).toBe(false);
+  });
 
-  t.equal(
-    isNonLiteralProperty(
-      [JSXAttributeMock(theProp, LiteralMock("theRole"))],
-      theProp,
-    ),
-    false,
-    "does not identify elements with a literal property as non-literal role elements without spread operator",
-  );
+  it("does not identify elements with a literal property as non-literal role elements without spread operator", () => {
+    const attributes = [JSXAttributeMock(theProp, LiteralMock("theRole"))];
+    expect(isNonLiteralProperty(attributes, theProp)).toBe(false);
+  });
 
-  t.equal(
-    isNonLiteralProperty(
-      [spread, JSXAttributeMock(theProp, LiteralMock("theRole"))],
-      theProp,
-    ),
-    false,
-    "does not identify elements with a literal property as non-literal role elements with spread operator",
-  );
+  it("does not identify elements with a literal property as non-literal role elements with spread operator", () => {
+    const attributes = [
+      spread,
+      JSXAttributeMock(theProp, LiteralMock("theRole")),
+    ];
+    expect(isNonLiteralProperty(attributes, theProp)).toBe(false);
+  });
 
-  t.equal(
-    isNonLiteralProperty(
-      [JSXAttributeMock(theProp, JSXTextMock("theRole"))],
-      theProp,
-    ),
-    false,
-    "identifies elements with a JSXText property as non-literal role elements",
-  );
+  it("identifies elements with a JSXText property as non-literal role elements", () => {
+    const attributes = [JSXAttributeMock(theProp, JSXTextMock("theRole"))];
+    expect(isNonLiteralProperty(attributes, theProp)).toBe(false);
+  });
 
-  t.equal(
-    isNonLiteralProperty(
-      [JSXAttributeMock(theProp, IdentifierMock("undefined"))],
-      theProp,
-    ),
-    false,
-    "does not identify elements with a property of undefined as non-literal role elements",
-  );
+  it("does not identify elements with a property of undefined as non-literal role elements", () => {
+    const attributes = [JSXAttributeMock(theProp, IdentifierMock("undefined"))];
+    expect(isNonLiteralProperty(attributes, theProp)).toBe(false);
+  });
 
-  t.equal(
-    isNonLiteralProperty(
-      [JSXAttributeMock(theProp, IdentifierMock("theIdentifier"))],
-      theProp,
-    ),
-    true,
-    "identifies elements with an expression property as non-literal role elements",
-  );
-
-  t.end();
+  it("identifies elements with an expression property as non-literal role elements", () => {
+    const attributes = [
+      JSXAttributeMock(theProp, IdentifierMock("theIdentifier")),
+    ];
+    expect(isNonLiteralProperty(attributes, theProp)).toBe(true);
+  });
 });

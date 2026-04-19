@@ -1,15 +1,13 @@
-import test from "tape";
+import { describe, expect, it } from "bun:test";
 
 import getImplicitRole from "../../../src/util/getImplicitRole";
 
-test("getImplicitRole", (t) => {
-  t.equal(
-    getImplicitRole("li", []),
-    "listitem",
-    "has implicit, returns implicit role",
-  );
+describe("getImplicitRole", () => {
+  it("returns the implicit role when it exists", () => {
+    expect(getImplicitRole("li", [])).toBe("listitem");
+  });
 
-  t.equal(getImplicitRole("div", []), null, "lacks implicit, returns null");
-
-  t.end();
+  it("returns null when the element lacks an implicit role", () => {
+    expect(getImplicitRole("div", [])).toBe(null);
+  });
 });

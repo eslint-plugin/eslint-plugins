@@ -1,5 +1,5 @@
 import { elementType } from "@eslintplugin/jsx-ast-utils";
-import test from "tape";
+import { describe, expect, it } from "bun:test";
 
 import {
   genElementSymbol,
@@ -12,93 +12,74 @@ import {
 import JSXElementMock from "../../../__mocks__/JSXElementMock";
 import isInteractiveElement from "../../../src/util/isInteractiveElement";
 
-test("isInteractiveElement", (t) => {
-  t.equal(
-    isInteractiveElement(undefined, []),
-    false,
-    "identifies them as interactive elements",
-  );
+describe("isInteractiveElement", () => {
+  it("returns false for undefined tag name", () => {
+    expect(isInteractiveElement(undefined, [])).toBe(false);
+  });
 
-  t.test("interactive elements", (st) => {
+  describe("interactive elements", () => {
     genInteractiveElements().forEach(({ openingElement }) => {
-      st.equal(
-        isInteractiveElement(
-          elementType(openingElement),
-          openingElement.attributes,
-        ),
-        true,
-        `identifies \`${genElementSymbol(openingElement)}\` as an interactive element`,
-      );
-    });
+      const tag = elementType(openingElement);
+      const symbol = genElementSymbol(openingElement);
+      const { attributes } = openingElement;
 
-    st.end();
+      it(`identifies \`${symbol}\` as an interactive element`, () => {
+        expect(isInteractiveElement(tag, attributes)).toBe(true);
+      });
+    });
   });
 
-  t.test("interactive role elements", (st) => {
+  describe("interactive role elements", () => {
     genInteractiveRoleElements().forEach(({ openingElement }) => {
-      st.equal(
-        isInteractiveElement(
-          elementType(openingElement),
-          openingElement.attributes,
-        ),
-        false,
-        `identifies \`${genElementSymbol(openingElement)}\` as an interactive element`,
-      );
-    });
+      const tag = elementType(openingElement);
+      const symbol = genElementSymbol(openingElement);
+      const { attributes } = openingElement;
 
-    st.end();
+      it(`does NOT identify \`${symbol}\` as an interactive element`, () => {
+        expect(isInteractiveElement(tag, attributes)).toBe(false);
+      });
+    });
   });
 
-  t.test("non-interactive elements", (st) => {
+  describe("non-interactive elements", () => {
     genNonInteractiveElements().forEach(({ openingElement }) => {
-      st.equal(
-        isInteractiveElement(
-          elementType(openingElement),
-          openingElement.attributes,
-        ),
-        false,
-        `identifies \`${genElementSymbol(openingElement)}\` as an interactive element`,
-      );
-    });
+      const tag = elementType(openingElement);
+      const symbol = genElementSymbol(openingElement);
+      const { attributes } = openingElement;
 
-    st.end();
+      it(`does NOT identify \`${symbol}\` as an interactive element`, () => {
+        expect(isInteractiveElement(tag, attributes)).toBe(false);
+      });
+    });
   });
 
-  t.test("non-interactive role elements", (st) => {
+  describe("non-interactive role elements", () => {
     genNonInteractiveRoleElements().forEach(({ openingElement }) => {
-      st.equal(
-        isInteractiveElement(
-          elementType(openingElement),
-          openingElement.attributes,
-        ),
-        false,
-        `identifies \`${genElementSymbol(openingElement)}\` as an interactive element`,
-      );
-    });
+      const tag = elementType(openingElement);
+      const symbol = genElementSymbol(openingElement);
+      const { attributes } = openingElement;
 
-    st.end();
+      it(`does NOT identify \`${symbol}\` as an interactive element`, () => {
+        expect(isInteractiveElement(tag, attributes)).toBe(false);
+      });
+    });
   });
 
-  t.test("indeterminate elements", (st) => {
+  describe("indeterminate elements", () => {
     genIndeterminantInteractiveElements().forEach(({ openingElement }) => {
-      st.equal(
-        isInteractiveElement(
-          elementType(openingElement),
-          openingElement.attributes,
-        ),
-        false,
-        `identifies \`${genElementSymbol(openingElement)}\` as an interactive element`,
-      );
-    });
+      const tag = elementType(openingElement);
+      const symbol = genElementSymbol(openingElement);
+      const { attributes } = openingElement;
 
-    st.end();
+      it(`does NOT identify \`${symbol}\` as an interactive element`, () => {
+        expect(isInteractiveElement(tag, attributes)).toBe(false);
+      });
+    });
   });
 
-  t.equal(
-    isInteractiveElement("CustomComponent", JSXElementMock()),
-    false,
-    "JSX elements are not interactive",
-  );
-
-  t.end();
+  it("identifies JSX elements as not interactive", () => {
+    expect(isInteractiveElement("CustomComponent", JSXElementMock())).toBe(
+      false,
+    );
+  });
 });

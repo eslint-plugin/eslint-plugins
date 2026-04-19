@@ -1,93 +1,76 @@
-import test from "tape";
+import { describe, expect, it } from "bun:test";
 
 import JSXAttributeMock from "../../../__mocks__/JSXAttributeMock";
 import JSXElementMock from "../../../__mocks__/JSXElementMock";
 import attributesComparator from "../../../src/util/attributesComparator";
 
-test("attributesComparator", (t) => {
-  t.equal(
-    attributesComparator(),
-    true,
-    "baseAttributes are undefined and attributes are undefined -> true",
-  );
+describe("attributesComparator", () => {
+  it("returns true when baseAttributes and attributes are undefined", () => {
+    expect(attributesComparator()).toBe(true);
+  });
 
-  t.equal(
-    attributesComparator([], []),
-    true,
-    "baseAttributes are empty and attributes are empty -> true",
-  );
+  it("returns true when baseAttributes and attributes are empty", () => {
+    expect(attributesComparator([], [])).toBe(true);
+  });
 
-  t.equal(
-    attributesComparator(
-      [],
-      [JSXAttributeMock("foo", 0), JSXAttributeMock("bar", "baz")],
-    ),
-    true,
-    "baseAttributes are empty and attributes have values -> true",
-  );
+  it("returns true when baseAttributes are empty and attributes have values", () => {
+    expect(
+      attributesComparator(
+        [],
+        [JSXAttributeMock("foo", 0), JSXAttributeMock("bar", "baz")],
+      ),
+    ).toBe(true);
+  });
 
   const baseAttributes = [
-    {
-      name: "biz",
-      value: 1,
-    },
-    {
-      name: "fizz",
-      value: "pop",
-    },
-    {
-      name: "fuzz",
-      value: "lolz",
-    },
+    { name: "biz", value: 1 },
+    { name: "fizz", value: "pop" },
+    { name: "fuzz", value: "lolz" },
   ];
 
-  t.equal(
-    attributesComparator(baseAttributes, []),
-    false,
-    "baseAttributes have values and attributes are empty -> false",
-  );
+  it("returns false when baseAttributes have values and attributes are empty", () => {
+    expect(attributesComparator(baseAttributes, [])).toBe(false);
+  });
 
-  t.equal(
-    attributesComparator(baseAttributes, [
-      JSXElementMock(),
-      JSXAttributeMock("biz", 2),
-      JSXAttributeMock("ziff", "opo"),
-      JSXAttributeMock("far", "lolz"),
-    ]),
-    false,
-    "baseAttributes have values and attributes have values, and the values are different -> false",
-  );
+  it("returns false when values are different", () => {
+    expect(
+      attributesComparator(baseAttributes, [
+        JSXElementMock(),
+        JSXAttributeMock("biz", 2),
+        JSXAttributeMock("ziff", "opo"),
+        JSXAttributeMock("far", "lolz"),
+      ]),
+    ).toBe(false);
+  });
 
-  t.equal(
-    attributesComparator(baseAttributes, [
-      JSXAttributeMock("biz", 1),
-      JSXAttributeMock("fizz", "pop"),
-      JSXAttributeMock("goo", "gazz"),
-    ]),
-    false,
-    "baseAttributes have values and attributes have values, and the values are a subset -> false",
-  );
+  it("returns false when attributes are only a subset of baseAttributes", () => {
+    expect(
+      attributesComparator(baseAttributes, [
+        JSXAttributeMock("biz", 1),
+        JSXAttributeMock("fizz", "pop"),
+        JSXAttributeMock("goo", "gazz"),
+      ]),
+    ).toBe(false);
+  });
 
-  t.equal(
-    attributesComparator(baseAttributes, [
-      JSXAttributeMock("biz", 1),
-      JSXAttributeMock("fizz", "pop"),
-      JSXAttributeMock("fuzz", "lolz"),
-    ]),
-    true,
-    "baseAttributes have values and attributes have values, and the values are the same -> true",
-  );
+  it("returns true when values match exactly", () => {
+    expect(
+      attributesComparator(baseAttributes, [
+        JSXAttributeMock("biz", 1),
+        JSXAttributeMock("fizz", "pop"),
+        JSXAttributeMock("fuzz", "lolz"),
+      ]),
+    ).toBe(true);
+  });
 
-  t.equal(
-    attributesComparator(baseAttributes, [
-      JSXAttributeMock("biz", 1),
-      JSXAttributeMock("fizz", "pop"),
-      JSXAttributeMock("fuzz", "lolz"),
-      JSXAttributeMock("dar", "tee"),
-    ]),
-    true,
-    "baseAttributes have values and attributes have values, and the values are a superset -> true",
-  );
-
-  t.end();
+  it("returns true when attributes are a superset of baseAttributes", () => {
+    expect(
+      attributesComparator(baseAttributes, [
+        JSXAttributeMock("biz", 1),
+        JSXAttributeMock("fizz", "pop"),
+        JSXAttributeMock("fuzz", "lolz"),
+        JSXAttributeMock("dar", "tee"),
+      ]),
+    ).toBe(true);
+  });
 });
