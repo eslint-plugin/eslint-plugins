@@ -35,7 +35,7 @@ const errorMessage = (attr, role, tag, isImplicit) => {
     message: generateErrorMessage(attr, role, tag, isImplicit),
   };
 
-  if (semver.lt(eslintVersion, "10")) {
+  if (semver.satisfies(eslintVersion, "< 10")) {
     error.type = "JSXOpeningElement";
   }
 
