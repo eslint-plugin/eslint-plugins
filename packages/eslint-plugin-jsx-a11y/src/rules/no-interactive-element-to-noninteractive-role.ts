@@ -74,7 +74,10 @@ export default {
         // Allow overrides from rule configuration for specific elements and
         // roles.
         const allowedRoles = options[0] || {};
-        if (allowedRoles.hasOwnProperty(type) && allowedRoles[type].includes(role)) {
+        if (
+          allowedRoles.hasOwnProperty(type) &&
+          allowedRoles[type].includes(role)
+        ) {
           return;
         }
         if (

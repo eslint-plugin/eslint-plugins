@@ -7,9 +7,9 @@ import { getLiteralPropValue, getProp } from "@eslintplugin/jsx-ast-utils";
 // ----------------------------------------------------------------------------
 // Rule Definition
 // ----------------------------------------------------------------------------
-import { runVirtualRule } from "axe-core";
 
 import getElementType from "../util/getElementType";
+import isValidAutocomplete from "../util/is-valid-autocomplete";
 import { generateObjSchema, arraySchema } from "../util/schemas";
 
 const schema = generateObjSchema({
@@ -42,23 +42,23 @@ export default {
           return;
         }
 
-        const type = getLiteralPropValue(getProp(node.attributes, "type"));
-        const { violations } = runVirtualRule("autocomplete-valid", {
-          nodeName: "input",
-          attributes: {
-            autocomplete,
-            // Which autocomplete is valid depends on the input type
-            type: type === null ? undefined : type,
-          },
-        });
-
-        if (violations.length === 0) {
+        if (autocomplete === "none") {
           return;
         }
+
+        const type = getLiteralPropValue(getProp(node.attributes, "type"));
+        const isValid = isValidAutocomplete(autocomplete, {
+          type: type === null ? undefined : type,
+        });
+
+        if (isValid) {
+          return;
+        }
+
         // Since we only test one rule, with one node, return the message from first (and only) instance of each
         context.report({
           node,
-          message: violations[0].nodes[0].all[0].message,
+          message: "the autocomplete attribute is incorrectly formatted",
         });
       },
     };
