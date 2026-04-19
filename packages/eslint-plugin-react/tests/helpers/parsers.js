@@ -32,7 +32,6 @@ function minEcmaVersion(features, parserOptions) {
 const parsers = {
   BABEL_ESLINT: require.resolve('babel-eslint'),
   '@BABEL_ESLINT': require.resolve('@babel/eslint-parser'),
-  TYPESCRIPT_ESLINT: require.resolve('typescript-eslint-parser'),
   '@TYPESCRIPT_ESLINT': require.resolve('@typescript-eslint/parser'),
   disableNewTS,
   skipDueToMultiErrorSorting: semver.satisfies(process.versions.node, '^8 || ^9'),
@@ -167,7 +166,7 @@ const parsers = {
           parser: parsers['@BABEL_ESLINT'],
           parserOptions: parsers.babelParserOptions(test, features),
         }), '@babel/eslint-parser'),
-        tsOld ? addComment(Object.assign({}, test, { parser: parsers.TYPESCRIPT_ESLINT }), 'typescript-eslint') : [],
+        tsOld ? addComment(Object.assign({}, test, { parser: parsers['@TYPESCRIPT_ESLINT'] }), '@typescript-eslint/parser') : [],
         tsNew ? addComment(Object.assign({}, test, { parser: parsers['@TYPESCRIPT_ESLINT'] }), '@typescript-eslint/parser') : []
       );
     });
