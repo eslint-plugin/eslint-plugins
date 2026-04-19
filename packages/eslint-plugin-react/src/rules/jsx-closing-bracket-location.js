@@ -243,8 +243,8 @@ module.exports = {
       const openingLine = sourceCode.lines[opening.line - 1];
       const closingLine = sourceCode.lines[closing.line - 1];
       const isTab = {
-        openTab: /^\t/.test(openingLine),
-        closeTab: /^\t/.test(closingLine),
+        openTab: openingLine.startsWith("\t"),
+        closeTab: closingLine.startsWith("\t"),
       };
       const openingStartOfLine = {
         column: /^\s*/.exec(openingLine)[0].length,

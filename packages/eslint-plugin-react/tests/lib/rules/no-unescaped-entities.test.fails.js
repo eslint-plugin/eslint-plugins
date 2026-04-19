@@ -12,7 +12,7 @@
 const path = require("node:path");
 
 const semver = require("semver");
-const resolve = require("resolve");
+const resolve = require("@eslintplugin/resolve");
 
 let allowsInvalidJSX = false;
 try {

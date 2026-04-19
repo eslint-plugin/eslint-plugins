@@ -14,8 +14,8 @@ const report = require("../util/report");
 // ------------------------------------------------------------------------------
 
 // https://github.com/facebook/react/blob/d0ebde77f6d1232cefc0da184d731943d78e86f2/packages/react-dom/src/shared/sanitizeURL.js#L30
-/* eslint-disable-next-line max-len, no-control-regex */
 const isJavaScriptProtocol =
+  // oxlint-disable-next-line no-control-regex
   /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i;
 
 function hasJavaScriptProtocol(attr) {
