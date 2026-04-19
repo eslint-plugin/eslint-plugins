@@ -8,7 +8,6 @@
 // ----------------------------------------------------------------------------
 
 import { getProp, getLiteralPropValue } from "@eslintplugin/jsx-ast-utils";
-import safeRegexTest from "safe-regex-test";
 
 import getElementType from "../util/getElementType";
 import isHiddenFromScreenReader from "../util/isHiddenFromScreenReader";
@@ -24,7 +23,7 @@ const schema = generateObjSchema({
   words: arraySchema,
 });
 
-const isASCII = safeRegexTest(/[\x20-\x7F]+/);
+const isASCII = (val: string) => /[\x20-\x7F]+/.test(val);
 
 function containsRedundantWord(value: string, redundantWords: string[]) {
   const lowercaseRedundantWords = redundantWords.map((redundantWord) =>

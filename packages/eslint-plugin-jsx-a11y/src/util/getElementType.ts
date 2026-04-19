@@ -4,7 +4,6 @@ import {
   getLiteralPropValue,
 } from "@eslintplugin/jsx-ast-utils";
 import type { JSXOpeningElement } from "ast-types-flow";
-import hasOwn from "hasown";
 
 import type { ESLintContext } from "../../flow/eslint";
 
@@ -34,7 +33,9 @@ const getElementType = (
       return rawType;
     }
 
-    return hasOwn(componentMap, rawType) ? componentMap[rawType] : rawType;
+    return componentMap.hasOwnProperty(rawType)
+      ? componentMap[rawType]
+      : rawType;
   };
 };
 

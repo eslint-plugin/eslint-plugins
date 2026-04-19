@@ -8,8 +8,7 @@
 // ----------------------------------------------------------------------------
 
 import { getProp, getLiteralPropValue } from "@eslintplugin/jsx-ast-utils";
-import emojiRegex from "emoji-regex";
-import safeRegexTest from "safe-regex-test";
+import emojiRegex from "emoji-regex-xs";
 
 import getElementType from "../util/getElementType";
 import isHiddenFromScreenReader from "../util/isHiddenFromScreenReader";
@@ -19,6 +18,7 @@ const errorMessage =
   'Emojis should be wrapped in <span>, have role="img", and have an accessible description with aria-label or aria-labelledby.';
 
 const schema = generateObjSchema();
+const emojiExpression = emojiRegex();
 
 export default {
   meta: {
@@ -34,7 +34,12 @@ export default {
   create: (context) => {
     const elementType = getElementType(context);
 
-    const testEmoji = safeRegexTest(emojiRegex());
+    const testEmoji = (value: unknown): boolean => {
+      if (typeof value !== "string") return false;
+      emojiExpression.lastIndex = 0;
+      return emojiExpression.test(value);
+    };
+
     return {
       JSXOpeningElement: (node) => {
         const literalChildValue = node.parent.children.find(

@@ -15,7 +15,6 @@ import {
 } from "@eslintplugin/jsx-ast-utils";
 import { dom } from "aria-query";
 import type { JSXIdentifier } from "ast-types-flow";
-import hasOwn from "hasown";
 
 import type {
   ESLintConfig,
@@ -75,7 +74,7 @@ export default {
         // Allow overrides from rule configuration for specific elements and
         // roles.
         const allowedRoles = options[0] || {};
-        if (hasOwn(allowedRoles, type) && allowedRoles[type].includes(role)) {
+        if (allowedRoles.hasOwnProperty(type) && allowedRoles[type].includes(role)) {
           return;
         }
         if (

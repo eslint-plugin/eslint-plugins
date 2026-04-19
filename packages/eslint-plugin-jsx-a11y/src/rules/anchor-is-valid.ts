@@ -10,7 +10,6 @@
 
 import { getProp, getPropValue } from "@eslintplugin/jsx-ast-utils";
 import type { JSXOpeningElement } from "ast-types-flow";
-import safeRegexTest from "safe-regex-test";
 
 import type {
   ESLintConfig,
@@ -52,7 +51,9 @@ export default {
 
   create: (context: ESLintContext): ESLintVisitorSelectorConfig => {
     const elementType = getElementType(context);
-    const testJShref = safeRegexTest(/^\W*?javascript:/);
+    const testJShref = (value: string) => {
+      return /^javascript:/i.test(value.replace(/^\W+/, ""));
+    };
 
     return {
       JSXOpeningElement: (node: JSXOpeningElement): void => {

@@ -15,7 +15,6 @@ import {
 } from "@eslintplugin/jsx-ast-utils";
 import { dom } from "aria-query";
 import type { JSXOpeningElement } from "ast-types-flow";
-import hasOwn from "hasown";
 
 import type {
   ESLintConfig,
@@ -66,7 +65,7 @@ export default {
         const config = options[0] || {};
         const interactiveProps = config.handlers || defaultInteractiveProps;
         // Allow overrides from rule configuration for specific elements and roles.
-        if (hasOwn(config, type)) {
+        if (config.hasOwnProperty(type)) {
           attributes = attributes.filter(
             (attr) =>
               attr.type !== "JSXSpreadAttribute" &&
