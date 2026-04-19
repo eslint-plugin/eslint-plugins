@@ -1,0 +1,44 @@
+name: Test plugins
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        eslint-version: [6, 7, 8, 9, 10]
+
+    name: eslint-plugin-jsx-a11y - ESLint v${{ matrix.eslint-version }} (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Node
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 24.x
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install ESLint v${{ matrix.eslint-version }}
+        run: cd packages/eslint-plugin-jsx-a11y && bun add eslint@${{ matrix.eslint-version }} --no-save
+
+      - name: Build (${{ matrix.os }})
+        run: bun run build
+
+      - name: Run tests (${{ matrix.os }})
+        run: bun run --cwd packages/eslint-plugin-jsx-a11y test

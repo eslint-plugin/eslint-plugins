@@ -1,0 +1,85 @@
+/**
+ * @fileoverview Enforce all aria-* properties are valid.
+ * @author Ethan Cohen
+ */
+
+// -----------------------------------------------------------------------------
+// Requirements
+// -----------------------------------------------------------------------------
+
+import { aria } from "aria-query";
+
+import rule from "../../../src/rules/aria-props";
+import getSuggestion from "../../../src/util/getSuggestion";
+import { eslintBefore10 } from "../../__util__/eslint-version";
+import parsers from "../../__util__/helpers/parsers";
+import parserOptionsMapper from "../../__util__/parserOptionsMapper";
+import RuleTester from "../../__util__/RuleTester";
+
+// -----------------------------------------------------------------------------
+// Tests
+// -----------------------------------------------------------------------------
+
+const ruleTester = new RuleTester();
+const ariaAttributes = aria.keys();
+
+const errorMessage = (name) => {
+  const suggestions = getSuggestion(name, ariaAttributes);
+  const message = `${name}: This attribute is an invalid ARIA attribute.`;
+
+  if (suggestions.length > 0) {
+    if (eslintBefore10) {
+      return {
+        type: "JSXAttribute",
+        message: `${message} Did you mean to use ${suggestions}?`,
+      };
+    } else {
+      return { message: `${message} Did you mean to use ${suggestions}?` };
+    }
+  }
+
+  if (eslintBefore10) {
+    return { type: "JSXAttribute", message };
+  } else {
+    return { message };
+  }
+};
+
+// Create basic test cases using all valid role types.
+const basicValidityTests = ariaAttributes.map((prop) => ({
+  code: `<div ${prop.toLowerCase()}="foobar" />`,
+}));
+
+ruleTester.run("aria-props", rule, {
+  valid: parsers
+    .all(
+      [].concat(
+        // Variables should pass, as we are only testing literals.
+        { code: "<div />" },
+        { code: "<div></div>" },
+        { code: '<div aria="wee"></div>' }, // Needs aria-*
+        { code: '<div abcARIAdef="true"></div>' },
+        { code: '<div fooaria-foobar="true"></div>' },
+        { code: '<div fooaria-hidden="true"></div>' },
+        { code: "<Bar baz />" },
+        { code: '<input type="text" aria-errormessage="foobar" />' },
+      ),
+    )
+    .concat(basicValidityTests)
+    .map(parserOptionsMapper),
+  invalid: parsers
+    .all(
+      [].concat(
+        { code: '<div aria-="foobar" />', errors: [errorMessage("aria-")] },
+        {
+          code: '<div aria-labeledby="foobar" />',
+          errors: [errorMessage("aria-labeledby")],
+        },
+        {
+          code: '<div aria-skldjfaria-klajsd="foobar" />',
+          errors: [errorMessage("aria-skldjfaria-klajsd")],
+        },
+      ),
+    )
+    .map(parserOptionsMapper),
+});

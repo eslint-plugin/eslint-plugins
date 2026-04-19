@@ -1,0 +1,66 @@
+/**
+ * @fileoverview Enforce scope prop is only used on <th> elements.
+ * @author Ethan Cohen
+ */
+
+// -----------------------------------------------------------------------------
+// Requirements
+// -----------------------------------------------------------------------------
+
+import rule from "../../../src/rules/scope";
+import { eslintBefore10 } from "../../__util__/eslint-version";
+import parsers from "../../__util__/helpers/parsers";
+import parserOptionsMapper from "../../__util__/parserOptionsMapper";
+import RuleTester from "../../__util__/RuleTester";
+
+// -----------------------------------------------------------------------------
+// Tests
+// -----------------------------------------------------------------------------
+
+const ruleTester = new RuleTester();
+
+const expectedError = {
+  message: "The scope prop can only be used on <th> elements.",
+};
+
+if (eslintBefore10) {
+  expectedError.type = "JSXAttribute";
+}
+
+const componentsSettings = {
+  "jsx-a11y": {
+    components: {
+      Foo: "div",
+      TableHeader: "th",
+    },
+  },
+};
+
+ruleTester.run("scope", rule, {
+  valid: parsers
+    .all(
+      [].concat(
+        { code: "<div />;" },
+        { code: "<div foo />;" },
+        { code: "<th scope />" },
+        { code: '<th scope="row" />' },
+        { code: "<th scope={foo} />" },
+        { code: '<th scope={"col"} {...props} />' },
+        { code: '<Foo scope="bar" {...props} />' },
+        { code: '<TableHeader scope="row" />', settings: componentsSettings },
+      ),
+    )
+    .map(parserOptionsMapper),
+  invalid: parsers
+    .all(
+      [].concat(
+        { code: "<div scope />", errors: [expectedError] },
+        {
+          code: '<Foo scope="bar" />',
+          settings: componentsSettings,
+          errors: [expectedError],
+        },
+      ),
+    )
+    .map(parserOptionsMapper),
+});
