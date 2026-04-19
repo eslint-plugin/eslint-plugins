@@ -15,7 +15,7 @@
     },
     "packages/eslint-plugin-jsx-a11y": {
       "name": "@eslintplugin/eslint-plugin-jsx-a11y",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "dependencies": {
         "@eslintplugin/jsx-ast-utils": "workspace:*",
         "aria-query": "^5.3.2",
@@ -36,6 +36,13 @@
       },
       "peerDependencies": {
         "eslint": "^6 || ^7 || ^8 || ^9 || ^ 10",
+      },
+    },
+    "packages/eslint-plugin-react": {
+      "name": "@eslintplugin/eslint-plugin-react",
+      "version": "0.0.0",
+      "devDependencies": {
+        "tsdown": "catalog:",
       },
     },
     "packages/jsx-ast-utils": {
@@ -121,6 +128,8 @@
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.4.1", "", { "dependencies": { "@eslint/core": "^0.17.0", "levn": "^0.4.1" } }, "sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA=="],
 
     "@eslintplugin/eslint-plugin-jsx-a11y": ["@eslintplugin/eslint-plugin-jsx-a11y@workspace:packages/eslint-plugin-jsx-a11y"],
+
+    "@eslintplugin/eslint-plugin-react": ["@eslintplugin/eslint-plugin-react@workspace:packages/eslint-plugin-react"],
 
     "@eslintplugin/jsx-ast-utils": ["@eslintplugin/jsx-ast-utils@workspace:packages/jsx-ast-utils"],
 
