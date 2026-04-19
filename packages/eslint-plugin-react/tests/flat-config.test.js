@@ -44,7 +44,7 @@ describe.if(isFlat)("eslint-plugin-react in flat config", async () => {
       return eslint.lintFiles(["test.jsx"]).then((results) => {
         const result = results[0];
 
-        expect(result.messages.length).toBe(3);
+        expect(result.messages).toBeArrayOfSize(3);
         expect(result.messages[0].severity).toBe(2);
         expect(result.messages[0].ruleId).toBe("react/react-in-jsx-scope");
         expect(result.messages[0].messageId).toBe("notInScope");
