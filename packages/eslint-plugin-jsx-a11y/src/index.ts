@@ -1,7 +1,6 @@
 import { name, version } from "../package.json";
 import flatConfigBase from "./configs/flat-config-base";
 import legacyConfigBase from "./configs/legacy-config-base";
-
 import accessibleEmojiRule from "./rules/accessible-emoji";
 import altTextRule from "./rules/alt-text";
 import anchorAmbiguousTextRule from "./rules/anchor-ambiguous-text";
@@ -70,9 +69,12 @@ const allRules = {
   "no-aria-hidden-on-focusable": noAriaHiddenOnFocusableRule,
   "no-autofocus": noAutofocusRule,
   "no-distracting-elements": noDistractingElementsRule,
-  "no-interactive-element-to-noninteractive-role": noInteractiveElementToNoninteractiveRoleRule,
-  "no-noninteractive-element-interactions": noNoninteractiveElementInteractionsRule,
-  "no-noninteractive-element-to-interactive-role": noNoninteractiveElementToInteractiveRoleRule,
+  "no-interactive-element-to-noninteractive-role":
+    noInteractiveElementToNoninteractiveRoleRule,
+  "no-noninteractive-element-interactions":
+    noNoninteractiveElementInteractionsRule,
+  "no-noninteractive-element-to-interactive-role":
+    noNoninteractiveElementToInteractiveRoleRule,
   "no-noninteractive-tabindex": noNoninteractiveTabindexRule,
   "no-onchange": noOnchangeRule,
   "no-redundant-roles": noRedundantRolesRule,
