@@ -4,15 +4,6 @@
 // Lower rank = more restrictive = fewer features supported
 const categoryRank = /** @type {const} */ {
   __proto__: null,
-  "pre-exports": /** @type {const} */ (0),
-  broken: /** @type {const} */ (1),
-  experimental: /** @type {const} */ (2),
-  conditions: /** @type {const} */ (3),
-  "broken-dir-slash-conditions": /** @type {const} */ (4),
-  patterns: /** @type {const} */ (5),
-  "pattern-trailers": /** @type {const} */ (6),
-  "pattern-trailers+json-imports": /** @type {const} */ (7),
-  "pattern-trailers-no-dir-slash": /** @type {const} */ (8),
   "pattern-trailers-no-dir-slash+json-imports": /** @type {const} */ (9),
   "require-esm": /** @type {const} */ (10),
   "strips-types": /** @type {const} */ (11),
