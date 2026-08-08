@@ -187,7 +187,7 @@ export default function resolve(x, options, callback) {
   const basedir = opts.basedir || path.dirname(caller());
   const parent = opts.filename || basedir;
 
-  opts.paths = opts.paths || defaultPaths();
+  opts.paths ||= defaultPaths();
 
   // Determine exports category
   let exportsCategory;
@@ -301,10 +301,9 @@ export default function resolve(x, options, callback) {
   function validateBasedir(basedir) {
     if (opts.basedir) {
       const dirError = new TypeError(
-        'Provided basedir "' +
-          basedir +
-          '" is not a directory' +
-          (opts.preserveSymlinks ? "" : ", or a symlink to a directory"),
+        `Provided basedir "${basedir}" is not a directory${
+          opts.preserveSymlinks ? "" : ", or a symlink to a directory"
+        }`,
       );
       dirError.code = "INVALID_BASEDIR";
       isDirectory(basedir, function (err, result) {
@@ -350,7 +349,7 @@ export default function resolve(x, options, callback) {
         if (selfRef === undefined) {
           // exports field exists but didn't resolve - error per Node semantics
           const moduleError = new Error(
-            "Cannot find module '" + x + "' from '" + parent + "'",
+            `Cannot find module '${x}' from '${parent}'`,
           );
           moduleError.code = "MODULE_NOT_FOUND";
           return cb(moduleError);
@@ -367,7 +366,7 @@ export default function resolve(x, options, callback) {
             });
           } else {
             const moduleError = new Error(
-              "Cannot find module '" + x + "' from '" + parent + "'",
+              `Cannot find module '${x}' from '${parent}'`,
             );
             moduleError.code = "MODULE_NOT_FOUND";
             cb(moduleError);
@@ -387,7 +386,7 @@ export default function resolve(x, options, callback) {
           });
         } else {
           const moduleError = new Error(
-            "Cannot find module '" + x + "' from '" + parent + "'",
+            `Cannot find module '${x}' from '${parent}'`,
           );
           moduleError.code = "MODULE_NOT_FOUND";
           cb(moduleError);
@@ -412,7 +411,7 @@ export default function resolve(x, options, callback) {
           });
         } else {
           const moduleError = new Error(
-            "Cannot find module '" + x + "' from '" + parent + "'",
+            `Cannot find module '${x}' from '${parent}'`,
           );
           moduleError.code = "MODULE_NOT_FOUND";
           cb(moduleError);
@@ -514,7 +513,7 @@ export default function resolve(x, options, callback) {
           if (pkg && pkg.main) {
             if (typeof pkg.main !== "string") {
               const mainError = new TypeError(
-                "package “" + pkg.name + "” `main` must be a string",
+                `package “${pkg.name}” \`main\` must be a string`,
               );
               mainError.code = "INVALID_PACKAGE_MAIN";
               return cb(mainError);
@@ -535,9 +534,10 @@ export default function resolve(x, options, callback) {
                   if (err) return cb(err);
                   if (m) return cb(null, m, pkg);
                   const incorrectMainError = new Error(
-                    "Cannot find module '" +
-                      path.resolve(x, pkg.main) +
-                      '\'. Please verify that the package.json has a valid "main" entry',
+                    `Cannot find module '${path.resolve(
+                      x,
+                      pkg.main,
+                    )}'. Please verify that the package.json has a valid "main" entry`,
                   );
                   incorrectMainError.code = "INCORRECT_PACKAGE_MAIN";
                   return cb(incorrectMainError);

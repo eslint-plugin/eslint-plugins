@@ -49,7 +49,7 @@ const defaultConfig = {
  * @returns {Array} Methods order
  */
 function getMethodsOrder(userConfig) {
-  userConfig = userConfig || {};
+  userConfig ||= {};
 
   const groups = Object.assign({}, defaultConfig.groups, userConfig.groups);
   const order = userConfig.order || defaultConfig.order;

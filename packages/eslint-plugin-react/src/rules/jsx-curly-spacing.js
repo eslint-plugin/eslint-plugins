@@ -140,7 +140,7 @@ module.exports = {
         spacing.objectLiterals || defaults.objectLiteralSpaces;
       if (lastPass) {
         // On the final pass assign the values that should be derived from others if they are still undefined
-        objectLiteralSpaces = objectLiteralSpaces || when;
+        objectLiteralSpaces ||= when;
       }
 
       return {

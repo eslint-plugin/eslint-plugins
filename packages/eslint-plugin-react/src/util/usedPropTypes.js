@@ -360,7 +360,7 @@ module.exports = function usedPropTypesInstructions(
    * @param {string[]} [parentNames]
    */
   function markPropTypesAsUsed(node, parentNames) {
-    parentNames = parentNames || [];
+    parentNames ||= [];
     let type;
     let name;
     let allNames;

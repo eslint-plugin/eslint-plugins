@@ -364,8 +364,7 @@ module.exports = function propTypesInstructions(context, components, utils) {
       propTypes.properties,
       (key, value, propNode) => {
         if (!value) {
-          ignorePropsValidation =
-            ignorePropsValidation ||
+          ignorePropsValidation ||=
             propNode.type !== "ObjectTypeSpreadProperty";
           return;
         }
@@ -388,8 +387,7 @@ module.exports = function propTypesInstructions(context, components, utils) {
               spreadAnnotation,
               declaredPropTypes,
             );
-          ignorePropsValidation =
-            ignorePropsValidation || spreadIgnoreValidation;
+          ignorePropsValidation ||= spreadIgnoreValidation;
         }
       },
     );

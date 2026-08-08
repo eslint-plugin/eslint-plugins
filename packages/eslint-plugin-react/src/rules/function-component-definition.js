@@ -282,8 +282,7 @@ module.exports = {
         validatePairs.push([node, "function-expression"]);
       },
       VariableDeclaration(node) {
-        hasES6OrJsx =
-          hasES6OrJsx || node.kind === "const" || node.kind === "let";
+        hasES6OrJsx ||= node.kind === "const" || node.kind === "let";
       },
       "Program:exit"() {
         if (hasES6OrJsx) fileVarType = "const";

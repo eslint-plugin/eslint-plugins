@@ -166,7 +166,7 @@ export default function resolveSync(x, options) {
   const basedir = opts.basedir || path.dirname(caller());
   const parent = opts.filename || basedir;
 
-  opts.paths = opts.paths || defaultPaths();
+  opts.paths ||= defaultPaths();
 
   // Determine exports category
   let exportsCategory = getExportsCategory(opts);
@@ -198,10 +198,9 @@ export default function resolveSync(x, options) {
 
   if (opts.basedir && !isDirectory(absoluteStart)) {
     const dirError = new TypeError(
-      'Provided basedir "' +
-        opts.basedir +
-        '" is not a directory' +
-        (opts.preserveSymlinks ? "" : ", or a symlink to a directory"),
+      `Provided basedir "${opts.basedir}" is not a directory${
+        opts.preserveSymlinks ? "" : ", or a symlink to a directory"
+      }`,
     );
     dirError.code = "INVALID_BASEDIR";
     throw dirError;
@@ -225,7 +224,7 @@ export default function resolveSync(x, options) {
     if (n) return maybeRealpathSync(realpathSync, n, opts);
   }
 
-  const err = new Error("Cannot find module '" + x + "' from '" + parent + "'");
+  const err = new Error(`Cannot find module '${x}' from '${parent}'`);
   err.code = "MODULE_NOT_FOUND";
   throw err;
 
@@ -353,7 +352,7 @@ export default function resolveSync(x, options) {
       if (pkg && pkg.main) {
         if (typeof pkg.main !== "string") {
           const mainError = new TypeError(
-            "package “" + pkg.name + "” `main` must be a string",
+            `package “${pkg.name}” \`main\` must be a string`,
           );
           mainError.code = "INVALID_PACKAGE_MAIN";
           throw mainError;
@@ -371,9 +370,10 @@ export default function resolveSync(x, options) {
           if (checkIndex) return checkIndex;
         } catch {}
         const incorrectMainError = new Error(
-          "Cannot find module '" +
-            path.resolve(x, pkg.main) +
-            '\'. Please verify that the package.json has a valid "main" entry',
+          `Cannot find module '${path.resolve(
+            x,
+            pkg.main,
+          )}'. Please verify that the package.json has a valid "main" entry`,
         );
         incorrectMainError.code = "INCORRECT_PACKAGE_MAIN";
         throw incorrectMainError;

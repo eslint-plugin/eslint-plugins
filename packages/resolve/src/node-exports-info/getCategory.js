@@ -13,5 +13,5 @@ export default function getCategory() {
     }
   }
 
-  throw new RangeError("no category found for version " + version);
+  throw new RangeError(`no category found for version ${version}`);
 }
