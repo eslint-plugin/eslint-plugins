@@ -15,7 +15,7 @@
     },
     "packages/eslint-plugin-jsx-a11y": {
       "name": "@eslintplugin/eslint-plugin-jsx-a11y",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "dependencies": {
         "@eslintplugin/jsx-ast-utils": "workspace:*",
         "aria-query": "^5.3.2",
@@ -29,18 +29,18 @@
         "@babel/eslint-parser": "^7.27.5",
         "ast-types-flow": "^0.0.8",
         "axe-core": "^4.10.3",
-        "eslint": "^6 || ^7 || ^8 || ^9 || ^10",
+        "eslint": "^7 || ^8 || ^9 || ^10",
         "semver": "^6.3.1",
         "to-ast": "^1.0.0",
         "tsdown": "catalog:",
       },
       "peerDependencies": {
-        "eslint": "^6 || ^7 || ^8 || ^9 || ^ 10",
+        "eslint": "^7 || ^8 || ^9 || ^10",
       },
     },
     "packages/eslint-plugin-react": {
       "name": "@eslintplugin/eslint-plugin-react",
-      "version": "0.0.0",
+      "version": "0.0.1",
       "dependencies": {
         "@eslintplugin/jsx-ast-utils": "workspace:*",
         "@eslintplugin/resolve": "workspace:*",
@@ -60,12 +60,12 @@
         "@types/estree": "0.0.52",
         "@typescript-eslint/parser": "^2.34.0 || ^3.10.1 || ^4 || ^5 || ^6.20 || ^7.14.1 || 8.4 - 8.17",
         "babel-eslint": "^8 || ^9 || ^10.1.0",
-        "eslint": "^6 || ^7 || ^8 || ^9",
+        "eslint": " ^7 || ^8 || ^9",
         "espree": "^3.5.4",
         "tsdown": "catalog:",
       },
       "peerDependencies": {
-        "eslint": "^6 || ^7 || ^8 || ^9 || ^10",
+        "eslint": "^7 || ^8 || ^9 || ^10",
       },
     },
     "packages/jsx-ast-utils": {
