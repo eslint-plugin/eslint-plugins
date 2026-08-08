@@ -1,13 +1,13 @@
 import { satisfies } from "semver";
 
 import ranges from "./ranges";
+import type { Category } from "./types";
 
-/** @type {import('./getCategory')} */
-export default function getCategory() {
-  const version = arguments.length > 0 ? arguments[0] : process.version;
+export default function getCategory(nodeVersion?: string): Category {
+  const version = nodeVersion ?? process.version;
   const rangeEntries = Object.entries(ranges);
   for (let i = 0; i < rangeEntries.length; i += 1) {
-    const entry = rangeEntries[i];
+    const entry = rangeEntries[i]!;
     if (satisfies(version, entry[0])) {
       return entry[1];
     }

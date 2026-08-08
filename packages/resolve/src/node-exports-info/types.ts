@@ -1,4 +1,4 @@
-import ranges from "./ranges";
+import type ranges from "./ranges";
 
 export type Category = (typeof ranges)[Exclude<
   keyof typeof ranges,
