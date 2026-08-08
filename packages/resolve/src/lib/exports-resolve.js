@@ -230,11 +230,7 @@ export default function resolveExports(
     if (resolved !== null && typeof resolved !== "undefined") {
       if (!validateTarget(resolved)) {
         const invalidError = new Error(
-          'Invalid "exports" target "' +
-            resolved +
-            '" for subpath "' +
-            subpath +
-            '"',
+          `Invalid "exports" target "${resolved}" for subpath "${subpath}"`,
         );
         invalidError.code = "ERR_INVALID_PACKAGE_CONFIG";
         throw invalidError;
@@ -243,7 +239,7 @@ export default function resolveExports(
     }
     // Target exists but resolved to null (explicitly not exported)
     const notExportedError = new Error(
-      'Package subpath "' + subpath + '" is not defined by "exports"',
+      `Package subpath "${subpath}" is not defined by "exports"`,
     );
     notExportedError.code = "ERR_PACKAGE_PATH_NOT_EXPORTED";
     throw notExportedError;
@@ -265,11 +261,9 @@ export default function resolveExports(
       if (patternResolved !== null && typeof patternResolved !== "undefined") {
         if (!validateTarget(patternResolved)) {
           const patternInvalidError = new Error(
-            'Invalid "exports" target "' +
-              patternResolved +
-              '" for subpath "' +
-              subpath +
-              '"',
+            `Invalid "exports" target "${patternResolved}" for subpath "${
+              subpath
+            }"`,
           );
           patternInvalidError.code = "ERR_INVALID_PACKAGE_CONFIG";
           throw patternInvalidError;
@@ -292,11 +286,9 @@ export default function resolveExports(
         const dirResolved = dirTarget + dirResult.remainder;
         if (!validateTarget(dirResolved)) {
           const dirInvalidError = new Error(
-            'Invalid "exports" target "' +
-              dirResolved +
-              '" for subpath "' +
-              subpath +
-              '"',
+            `Invalid "exports" target "${dirResolved}" for subpath "${
+              subpath
+            }"`,
           );
           dirInvalidError.code = "ERR_INVALID_PACKAGE_CONFIG";
           throw dirInvalidError;
@@ -307,7 +299,7 @@ export default function resolveExports(
   }
 
   const err = new Error(
-    'Package subpath "' + subpath + '" is not defined by "exports"',
+    `Package subpath "${subpath}" is not defined by "exports"`,
   );
   err.code = "ERR_PACKAGE_PATH_NOT_EXPORTED";
   throw err;

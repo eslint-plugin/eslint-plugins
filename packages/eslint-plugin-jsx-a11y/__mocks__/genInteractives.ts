@@ -176,9 +176,8 @@ export function genInteractiveElements(): Array<JSXElementMockType> {
 export function genInteractiveRoleElements(): Array<JSXElementMockType> {
   return interactiveRoles
     .concat("button article", "fakerole button article")
-    .map(
-      (value): JSXElementMockType =>
-        JSXElementMock("div", [JSXAttributeMock("role", value)]),
+    .map((value): JSXElementMockType =>
+      JSXElementMock("div", [JSXAttributeMock("role", value)]),
     );
 }
 

@@ -64,7 +64,7 @@ const moduleSyncCategories = {
 /** @type {import('./getConditionsForCategory')} */
 export default function getConditionsForCategory(category) {
   if (!isCategory(category)) {
-    throw new RangeError("invalid category " + category);
+    throw new RangeError(`invalid category ${category}`);
   }
 
   const moduleSystem = arguments.length > 1 ? arguments[1] : null;
@@ -74,8 +74,9 @@ export default function getConditionsForCategory(category) {
     moduleSystem !== "require"
   ) {
     throw new TypeError(
-      "invalid moduleSystem: must be `'require'` or `'import'` if provided, got" +
-        moduleSystem,
+      `invalid moduleSystem: must be \`'require'\` or \`'import'\` if provided, got${
+        moduleSystem
+      }`,
     );
   }
 

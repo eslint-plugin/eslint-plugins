@@ -41,7 +41,7 @@ const dirSlashCategories = {
 /** @type {import('./getCategoryFlags')} */
 export default function getCategoryFlags(category) {
   if (!isCategory(category)) {
-    throw new RangeError("invalid category " + category);
+    throw new RangeError(`invalid category ${category}`);
   }
 
   return {

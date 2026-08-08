@@ -20,7 +20,7 @@ export default function parsePackageSpecifier(x) {
     return {
       __proto__: null,
       name: x.slice(0, secondSlash),
-      subpath: "." + x.slice(secondSlash),
+      subpath: `.${x.slice(secondSlash)}`,
     };
   }
   const firstSlash = x.indexOf("/");
@@ -34,6 +34,6 @@ export default function parsePackageSpecifier(x) {
   return {
     __proto__: null,
     name: x.slice(0, firstSlash),
-    subpath: "." + x.slice(firstSlash),
+    subpath: `.${x.slice(firstSlash)}`,
   };
 }

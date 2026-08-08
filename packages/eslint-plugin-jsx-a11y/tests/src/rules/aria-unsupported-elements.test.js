@@ -50,7 +50,6 @@ const ariaValidityTests = domElements
     const aria = isReserved ? "" : "aria-hidden";
 
     return { code: `<${element} ${aria} />` };
-    return { code: `<${element} ${aria} />` };
   })
   .concat({ code: "<fake aria-hidden />" });
 

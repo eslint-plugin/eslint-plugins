@@ -26,7 +26,7 @@ export default function getExportsCategory(opts) {
   if (hasCategory) {
     if (!isCategory(opts.exportsCategory)) {
       const catError = new TypeError(
-        'Invalid exports category: "' + opts.exportsCategory + '"',
+        `Invalid exports category: "${opts.exportsCategory}"`,
       );
       catError.code = "INVALID_EXPORTS_CATEGORY";
       throw catError;
