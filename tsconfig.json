@@ -1,5 +1,5 @@
 {
-  "extends": "@gameroman/config/tsconfig/isolated",
+  "extends": "@gameroman/config/ts/isolated",
   "compilerOptions": {
     "types": ["bun"]
   },
