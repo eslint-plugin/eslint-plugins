@@ -23,7 +23,7 @@
   "dependencies": {
     "@eslintplugin/jsx-ast-utils": "workspace:*",
     "@eslintplugin/resolve": "workspace:*",
-    "doctrine": "^2.1.0",
+    "doctrine": "^3.0.0",
     "estraverse": "^5.3.0",
     "minimatch": "^3.1.2",
     "prop-types": "^15.8.1",
