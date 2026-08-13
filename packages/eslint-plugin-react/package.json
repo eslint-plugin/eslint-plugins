@@ -25,7 +25,7 @@
     "@eslintplugin/resolve": "workspace:*",
     "doctrine": "^3.0.0",
     "estraverse": "^5.3.0",
-    "minimatch": "^3.1.2",
+    "minimatch": "^10.0.0",
     "prop-types": "^15.8.1",
     "semver": "^6.3.1"
   },
