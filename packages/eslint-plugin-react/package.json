@@ -27,7 +27,7 @@
     "estraverse": "^5.3.0",
     "minimatch": "^3.1.2",
     "prop-types": "^15.8.1",
-    "semver": "^6.3.1"
+    "semver": "^7.0.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.28.6",

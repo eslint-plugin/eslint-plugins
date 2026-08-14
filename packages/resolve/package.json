@@ -23,7 +23,7 @@
     "prepublishOnly": "bun run build"
   },
   "dependencies": {
-    "semver": "^6.3.1"
+    "semver": "^7.0.0"
   },
   "devDependencies": {
     "tsdown": "0.22.14"
