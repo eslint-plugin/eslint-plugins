@@ -30,7 +30,7 @@
     "minimatch": "^3.1.2"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.27.5",
+    "@babel/eslint-parser": "^8.0.0",
     "ast-types-flow": "^0.0.8",
     "axe-core": "^4.10.3",
     "eslint": "^7 || ^8 || ^9 || ^10",
