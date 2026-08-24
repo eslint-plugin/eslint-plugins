@@ -75,7 +75,7 @@
         "@babel/parser": "^7.26.9",
         "@types/estree": "^1.0.8",
         "@types/estree-jsx": "^1.0.5",
-        "flow-parser": "^0.126.1",
+        "flow-parser": "^0.329.0",
         "tsdown": "0.22.14",
       },
       "peerDependencies": {
@@ -521,7 +521,9 @@
 
     "flatted": ["flatted@3.4.2", "", {}, "sha512-PjDse7RzhcPkIJwy5t7KPWQSZ9cAbzQXcafsetQoD7sOJRQlGikNbx7yZp2OotDnJyrDcbyRq3Ttb18iYOqkxA=="],
 
-    "flow-parser": ["flow-parser@0.126.1", "", {}, "sha512-HDQAPl2F8vuGgyVm/Zx4vmT9Ja/ACAVIWVA3FRIcNoklkWsWDv+2vv2oVLk/2n+jAzESmvA5nFc2ElayVFZN1A=="],
+    "flow-estree": ["flow-estree@0.329.0", "", {}, "sha512-Stv2+LumW7n6DUrV+KlqB4HikeyQtLFUpd9iVexISblopKiYFjNYMmTGUcN5at8NKEmkhjAV5UGps3Z8QqK1lw=="],
+
+    "flow-parser": ["flow-parser@0.329.0", "", { "dependencies": { "flow-estree": "0.329.0" } }, "sha512-skMH3HUOF3+JSlIKt4F/LITfzMGEPpJ0S+Gu7HcmxOjWeYEO5PUZJi5WpLw+L4MZaNcMEkzUtoN+M2fAbiutWA=="],
 
     "function-bind": ["function-bind@1.1.2", "", {}, "sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA=="],
 
