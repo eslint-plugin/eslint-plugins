@@ -41,7 +41,7 @@
     "babel-eslint": "^8 || ^9 || ^10.1.0",
     "eslint": " ^7 || ^8 || ^9",
     "espree": "^11.0.0",
-    "tsdown": "0.22.14"
+    "tsdown": "0.23.0"
   },
   "peerDependencies": {
     "eslint": "^7 || ^8 || ^9 || ^10"
