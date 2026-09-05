@@ -36,7 +36,7 @@
     "eslint": "^7 || ^8 || ^9 || ^10",
     "semver": "^6.3.1",
     "to-ast": "^1.0.0",
-    "tsdown": "0.22.14"
+    "tsdown": "0.23.0"
   },
   "peerDependencies": {
     "eslint": "^7 || ^8 || ^9 || ^10"
