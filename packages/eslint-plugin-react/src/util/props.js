@@ -16,7 +16,7 @@ function isPropTypesDeclaration(node) {
     node &&
     (node.type === "ClassProperty" || node.type === "PropertyDefinition") &&
     node.typeAnnotation &&
-    node.key.name === "context"
+    node.key.name === "props"
   ) {
     return true;
   }
