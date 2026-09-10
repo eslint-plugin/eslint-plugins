@@ -208,22 +208,20 @@ module.exports = {
         currentNode = currentNode.parent;
 
         if (
-          currentNode.type === "FunctionDeclaration" ||
-          currentNode.type === "FunctionExpression" ||
-          currentNode.type === "ArrowFunctionExpression"
+          (currentNode.type === "FunctionDeclaration" ||
+            currentNode.type === "FunctionExpression" ||
+            currentNode.type === "ArrowFunctionExpression") &&
+          currentNode.body &&
+          hasVariableDeclaration(currentNode.body, identifierName)
         ) {
-          if (
-            currentNode.body &&
-            hasVariableDeclaration(currentNode.body, identifierName)
-          ) {
-            return true;
-          }
+          return true;
         }
 
-        if (currentNode.type === "BlockStatement") {
-          if (hasVariableDeclaration(currentNode, identifierName)) {
-            return true;
-          }
+        if (
+          currentNode.type === "BlockStatement" &&
+          hasVariableDeclaration(currentNode, identifierName)
+        ) {
+          return true;
         }
 
         if (

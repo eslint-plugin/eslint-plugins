@@ -26,17 +26,15 @@ const messages = {
 function checkText(context, node) {
   // since babel-eslint has the wrong node.raw, we'll get the source text
   const rawValue = getText(context, node);
-  if (/^\s*\/(\/|\*)/m.test(rawValue)) {
-    // inside component, e.g. <div>literal</div>
-    if (
-      node.parent.type !== "JSXAttribute" &&
-      node.parent.type !== "JSXExpressionContainer" &&
-      node.parent.type.indexOf("JSX") !== -1
-    ) {
-      report(context, messages.putCommentInBraces, "putCommentInBraces", {
-        node,
-      });
-    }
+  if (
+    /^\s*\/(\/|\*)/m.test(rawValue) &&
+    node.parent.type !== "JSXAttribute" &&
+    node.parent.type !== "JSXExpressionContainer" &&
+    node.parent.type.indexOf("JSX") !== -1
+  ) {
+    report(context, messages.putCommentInBraces, "putCommentInBraces", {
+      node,
+    });
   }
 }
 

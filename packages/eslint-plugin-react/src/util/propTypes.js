@@ -862,107 +862,104 @@ module.exports = function propTypesInstructions(context, components, utils) {
     convertReturnTypeToPropTypes(node, rootNode) {
       // ReturnType<T> should always have one parameter
       const nodeTypeArguments = propsUtil.getTypeArguments(node);
-      if (nodeTypeArguments) {
-        if (nodeTypeArguments.params.length === 1) {
-          let returnType = nodeTypeArguments.params[0];
-          // This line is trying to handle typescript-eslint-parser
-          // typescript-eslint-parser TSTypeQuery is wrapped by TSTypeReference
-          if (astUtil.isTSTypeReference(returnType)) {
-            returnType = returnType.typeName;
-          }
-          // Handle ReturnType<typeof mapStateToProps>
-          if (astUtil.isTSTypeQuery(returnType)) {
-            const returnTypeFunction = this.sourceCode.ast.body
-              .filter(
-                (item) =>
-                  item.type === "VariableDeclaration" &&
-                  item.declarations.find(
-                    (dec) => dec.id.name === returnType.exprName.name,
-                  ),
-              )
-              .flatMap((type) => type.declarations)
-              .map((dec) => dec.init);
+      if (nodeTypeArguments && nodeTypeArguments.params.length === 1) {
+        let returnType = nodeTypeArguments.params[0];
+        // This line is trying to handle typescript-eslint-parser
+        // typescript-eslint-parser TSTypeQuery is wrapped by TSTypeReference
+        if (astUtil.isTSTypeReference(returnType)) {
+          returnType = returnType.typeName;
+        }
+        // Handle ReturnType<typeof mapStateToProps>
+        if (astUtil.isTSTypeQuery(returnType)) {
+          const returnTypeFunction = this.sourceCode.ast.body
+            .filter(
+              (item) =>
+                item.type === "VariableDeclaration" &&
+                item.declarations.find(
+                  (dec) => dec.id.name === returnType.exprName.name,
+                ),
+            )
+            .flatMap((type) => type.declarations)
+            .map((dec) => dec.init);
 
-            if (Array.isArray(returnTypeFunction)) {
-              if (returnTypeFunction.length === 0) {
-                // Cannot find identifier in current scope. It might be an exported type.
-                this.shouldIgnorePropTypes = true;
-                return;
-              }
-              returnTypeFunction.forEach((func) => {
-                if (isFunctionType(func)) {
-                  let res = func.body;
-                  if (res.type === "BlockStatement") {
-                    res = astUtil.findReturnStatement(func);
-                    if (res) {
-                      res = res.argument;
-                    }
+          if (Array.isArray(returnTypeFunction)) {
+            if (returnTypeFunction.length === 0) {
+              // Cannot find identifier in current scope. It might be an exported type.
+              this.shouldIgnorePropTypes = true;
+              return;
+            }
+            returnTypeFunction.forEach((func) => {
+              if (isFunctionType(func)) {
+                let res = func.body;
+                if (res.type === "BlockStatement") {
+                  res = astUtil.findReturnStatement(func);
+                  if (res) {
+                    res = res.argument;
                   }
-                  switch (res.type) {
-                    case "ObjectExpression":
-                      iterateProperties(
-                        context,
-                        res.properties,
-                        (key, value, propNode) => {
-                          if (
-                            propNode &&
-                            astUtil.isCallExpression(propNode.argument)
-                          ) {
-                            const propNodeTypeArguments =
-                              propsUtil.getTypeArguments(propNode.argument);
-                            if (propNodeTypeArguments) {
-                              this.visitTSNode(propNodeTypeArguments);
-                            } else {
-                              // Ignore this CallExpression return value since it doesn't have any typeParameters to let us know it's types.
-                              this.shouldIgnorePropTypes = true;
-                              return;
-                            }
-                          }
-                          if (!value) {
+                }
+                switch (res.type) {
+                  case "ObjectExpression":
+                    iterateProperties(
+                      context,
+                      res.properties,
+                      (key, value, propNode) => {
+                        if (
+                          propNode &&
+                          astUtil.isCallExpression(propNode.argument)
+                        ) {
+                          const propNodeTypeArguments =
+                            propsUtil.getTypeArguments(propNode.argument);
+                          if (propNodeTypeArguments) {
+                            this.visitTSNode(propNodeTypeArguments);
+                          } else {
+                            // Ignore this CallExpression return value since it doesn't have any typeParameters to let us know it's types.
                             this.shouldIgnorePropTypes = true;
                             return;
                           }
-                          const types = buildReactDeclarationTypes(
-                            value,
-                            key,
-                            rootNode,
-                          );
-                          types.fullName = key;
-                          types.name = key;
-                          types.node = propNode;
-                          types.isRequired =
-                            propsUtil.isRequiredPropType(value);
-                          this.declaredPropTypes[key] = types;
-                        },
-                      );
-                      break;
-                    case "CallExpression":
-                      if (propsUtil.getTypeArguments(res)) {
-                        this.visitTSNode(propsUtil.getTypeArguments(res));
-                      } else {
-                        // Ignore this CallExpression return value since it doesn't have any typeParameters to let us know it's types.
-                        this.shouldIgnorePropTypes = true;
-                      }
-                      break;
-                    default:
-                  }
+                        }
+                        if (!value) {
+                          this.shouldIgnorePropTypes = true;
+                          return;
+                        }
+                        const types = buildReactDeclarationTypes(
+                          value,
+                          key,
+                          rootNode,
+                        );
+                        types.fullName = key;
+                        types.name = key;
+                        types.node = propNode;
+                        types.isRequired = propsUtil.isRequiredPropType(value);
+                        this.declaredPropTypes[key] = types;
+                      },
+                    );
+                    break;
+                  case "CallExpression":
+                    if (propsUtil.getTypeArguments(res)) {
+                      this.visitTSNode(propsUtil.getTypeArguments(res));
+                    } else {
+                      // Ignore this CallExpression return value since it doesn't have any typeParameters to let us know it's types.
+                      this.shouldIgnorePropTypes = true;
+                    }
+                    break;
+                  default:
                 }
-              });
-              return;
-            }
+              }
+            });
+            return;
           }
-          // Handle ReturnType<()=>returnType>
-          if (astUtil.isTSFunctionType(returnType)) {
-            if (astUtil.isTSTypeAnnotation(returnType.returnType)) {
-              this.visitTSNode(returnType.returnType);
-              return;
-            }
-            // This line is trying to handle typescript-eslint-parser
-            // typescript-eslint-parser TSFunction name returnType as typeAnnotation
-            if (astUtil.isTSTypeAnnotation(returnType.typeAnnotation)) {
-              this.visitTSNode(returnType.typeAnnotation);
-              return;
-            }
+        }
+        // Handle ReturnType<()=>returnType>
+        if (astUtil.isTSFunctionType(returnType)) {
+          if (astUtil.isTSTypeAnnotation(returnType.returnType)) {
+            this.visitTSNode(returnType.returnType);
+            return;
+          }
+          // This line is trying to handle typescript-eslint-parser
+          // typescript-eslint-parser TSFunction name returnType as typeAnnotation
+          if (astUtil.isTSTypeAnnotation(returnType.typeAnnotation)) {
+            this.visitTSNode(returnType.typeAnnotation);
+            return;
           }
         }
       }

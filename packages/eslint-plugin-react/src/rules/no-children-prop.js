@@ -139,13 +139,12 @@ module.exports = {
         if (
           children &&
           children.length === 1 &&
-          children[0].type === "JSXExpressionContainer"
+          children[0].type === "JSXExpressionContainer" &&
+          isFunction(children[0].expression)
         ) {
-          if (isFunction(children[0].expression)) {
-            report(context, messages.nestFunction, "nestFunction", {
-              node,
-            });
-          }
+          report(context, messages.nestFunction, "nestFunction", {
+            node,
+          });
         }
       },
     };

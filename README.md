@@ -1,6 +1,6 @@
 # ESLint Plugins
 
-This repository contains several ESLint plugins.
+This repository contains several ESLint plugins
 
 ## Plugins
 
@@ -17,5 +17,5 @@ A fork of the [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react) plug
 The simplest way to migrate is to use [package aliases](https://docs.npmjs.com/cli/v11/using-npm/package-spec#aliases), for example:
 
 ```json
-"eslint-plugin-jsx-a11y": "npm:@eslintplugin/eslint-plugin-jsx-a11y@0.0.3"
+"eslint-plugin-jsx-a11y": "npm:@eslintplugin/eslint-plugin-jsx-a11y@0.1.0"
 ```

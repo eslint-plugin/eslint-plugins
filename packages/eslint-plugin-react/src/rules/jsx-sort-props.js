@@ -362,30 +362,28 @@ function generateFixerFunction(node, context, reservedList) {
  */
 // eslint-disable-next-line consistent-return
 function validateReservedFirstConfig(context, reservedFirst) {
-  if (reservedFirst) {
-    if (Array.isArray(reservedFirst)) {
-      // Only allow a subset of reserved words in customized lists
-      const nonReservedWords = reservedFirst.filter(
-        (word) => !isReservedPropName(word, RESERVED_PROPS_LIST),
-      );
+  if (reservedFirst && Array.isArray(reservedFirst)) {
+    // Only allow a subset of reserved words in customized lists
+    const nonReservedWords = reservedFirst.filter(
+      (word) => !isReservedPropName(word, RESERVED_PROPS_LIST),
+    );
 
-      if (reservedFirst.length === 0) {
-        return function Report(decl) {
-          report(context, messages.listIsEmpty, "listIsEmpty", {
-            node: decl,
-          });
-        };
-      }
-      if (nonReservedWords.length > 0) {
-        return function Report(decl) {
-          report(context, messages.noUnreservedProps, "noUnreservedProps", {
-            node: decl,
-            data: {
-              unreservedWords: nonReservedWords.toString(),
-            },
-          });
-        };
-      }
+    if (reservedFirst.length === 0) {
+      return function Report(decl) {
+        report(context, messages.listIsEmpty, "listIsEmpty", {
+          node: decl,
+        });
+      };
+    }
+    if (nonReservedWords.length > 0) {
+      return function Report(decl) {
+        report(context, messages.noUnreservedProps, "noUnreservedProps", {
+          node: decl,
+          data: {
+            unreservedWords: nonReservedWords.toString(),
+          },
+        });
+      };
     }
   }
 }

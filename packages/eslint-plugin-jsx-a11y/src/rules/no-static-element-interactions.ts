@@ -106,16 +106,12 @@ export default {
           if (
             roleProp &&
             roleProp.type === "JSXAttribute" &&
-            roleProp.value.type === "JSXExpressionContainer"
+            roleProp.value.type === "JSXExpressionContainer" &&
+            roleProp.value.expression.type === "ConditionalExpression" &&
+            roleProp.value.expression.consequent.type === "Literal" &&
+            roleProp.value.expression.alternate.type === "Literal"
           ) {
-            if (roleProp.value.expression.type === "ConditionalExpression") {
-              if (
-                roleProp.value.expression.consequent.type === "Literal" &&
-                roleProp.value.expression.alternate.type === "Literal"
-              ) {
-                return;
-              }
-            }
+            return;
           }
           return;
         }

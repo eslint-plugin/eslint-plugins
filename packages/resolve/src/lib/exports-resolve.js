@@ -118,23 +118,20 @@ function findPatternMatch(subpath, exportsMap, allowPatternTrailers) {
       const suffix = key.slice(starIndex + 1);
 
       // Pattern trailers: if suffix is non-empty after *, need allowPatternTrailers
-      if (suffix.length === 0 || allowPatternTrailers) {
-        if (
-          subpath.length >= prefix.length + suffix.length &&
-          subpath.slice(0, prefix.length) === prefix &&
-          (suffix.length === 0 ||
-            subpath.slice(subpath.length - suffix.length) === suffix)
-        ) {
-          // Longest prefix wins
-          if (prefix.length > bestPrefixLen) {
-            bestPrefixLen = prefix.length;
-            bestKey = key;
-            bestMatch = subpath.slice(
-              prefix.length,
-              subpath.length - suffix.length,
-            );
-          }
-        }
+      if (
+        (suffix.length === 0 || allowPatternTrailers) &&
+        subpath.length >= prefix.length + suffix.length &&
+        subpath.slice(0, prefix.length) === prefix &&
+        (suffix.length === 0 ||
+          subpath.slice(subpath.length - suffix.length) === suffix) &&
+        prefix.length > bestPrefixLen
+      ) {
+        bestPrefixLen = prefix.length;
+        bestKey = key;
+        bestMatch = subpath.slice(
+          prefix.length,
+          subpath.length - suffix.length,
+        );
       }
     }
   }
@@ -157,11 +154,13 @@ function findDirSlashMatch(subpath, exportsMap) {
 
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
-    if (key.charAt(key.length - 1) === "/") {
-      if (subpath.slice(0, key.length) === key && key.length > bestPrefixLen) {
-        bestPrefixLen = key.length;
-        bestKey = key;
-      }
+    if (
+      key.charAt(key.length - 1) === "/" &&
+      subpath.slice(0, key.length) === key &&
+      key.length > bestPrefixLen
+    ) {
+      bestPrefixLen = key.length;
+      bestKey = key;
     }
   }
 

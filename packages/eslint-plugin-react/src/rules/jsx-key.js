@@ -153,32 +153,33 @@ module.exports = {
      * @param {ASTNode} node
      */
     function checkFunctionsBlockStatement(node) {
-      if (astUtil.isFunctionLikeExpression(node)) {
-        if (node.body.type === "BlockStatement") {
-          getReturnStatements(node.body)
-            .filter(
-              (returnStatement) => returnStatement && returnStatement.argument,
-            )
-            .forEach((returnStatement) => {
-              const argument = returnStatement.argument;
+      if (
+        astUtil.isFunctionLikeExpression(node) ??
+        node.body.type === "BlockStatement"
+      ) {
+        getReturnStatements(node.body)
+          .filter(
+            (returnStatement) => returnStatement && returnStatement.argument,
+          )
+          .forEach((returnStatement) => {
+            const argument = returnStatement.argument;
 
-              if (argument.type === "ConditionalExpression") {
-                if (isJSX(argument.consequent)) {
-                  checkIteratorElement(argument.consequent);
-                }
-                if (isJSX(argument.alternate)) {
-                  checkIteratorElement(argument.alternate);
-                }
-              } else if (
-                argument.type === "LogicalExpression" &&
-                isJSX(argument.right)
-              ) {
-                checkIteratorElement(argument.right);
-              } else {
-                checkIteratorElement(argument);
+            if (argument.type === "ConditionalExpression") {
+              if (isJSX(argument.consequent)) {
+                checkIteratorElement(argument.consequent);
               }
-            });
-        }
+              if (isJSX(argument.alternate)) {
+                checkIteratorElement(argument.alternate);
+              }
+            } else if (
+              argument.type === "LogicalExpression" &&
+              isJSX(argument.right)
+            ) {
+              checkIteratorElement(argument.right);
+            } else {
+              checkIteratorElement(argument);
+            }
+          });
       }
     }
 

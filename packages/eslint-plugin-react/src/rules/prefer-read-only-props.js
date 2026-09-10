@@ -98,12 +98,13 @@ module.exports = {
                 return;
               }
 
-              if (isTypescriptPropertyType(prop.node)) {
-                if (!isReadonly(prop.node)) {
-                  reportReadOnlyProp(prop, propName, (fixer) =>
-                    fixer.insertTextBefore(prop.node, "readonly "),
-                  );
-                }
+              if (
+                isTypescriptPropertyType(prop.node) &&
+                !isReadonly(prop.node)
+              ) {
+                reportReadOnlyProp(prop, propName, (fixer) =>
+                  fixer.insertTextBefore(prop.node, "readonly "),
+                );
               }
             });
           });

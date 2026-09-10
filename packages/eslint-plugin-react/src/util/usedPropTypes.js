@@ -321,17 +321,16 @@ function getPropertyName(context, node, utils, checkAsyncSafeLifeCycles) {
           return property.value;
         }
         // Accept number as well but only accept props[123]
-        if (typeof property.value === "number") {
-          if (
-            isPropTypesUsageByMemberExpression(
-              context,
-              node,
-              utils,
-              checkAsyncSafeLifeCycles,
-            )
-          ) {
-            return property.raw;
-          }
+        if (
+          typeof property.value === "number" &&
+          isPropTypesUsageByMemberExpression(
+            context,
+            node,
+            utils,
+            checkAsyncSafeLifeCycles,
+          )
+        ) {
+          return property.raw;
         }
       // falls through
       default:

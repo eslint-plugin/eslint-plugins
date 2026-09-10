@@ -66,10 +66,11 @@ module.exports = {
 
     if (typeof config === "string") {
       option = config;
-    } else if (typeof config === "object") {
-      if (config.hasOwnProperty("location")) {
-        option = config.location;
-      }
+    } else if (
+      typeof config === "object" &&
+      config.hasOwnProperty("location")
+    ) {
+      option = config.location;
     }
 
     function getIndentation(openingStartOfLine, opening) {
