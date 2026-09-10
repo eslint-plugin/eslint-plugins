@@ -200,10 +200,8 @@ module.exports = {
      * @returns {boolean}
      */
     function isRequireStatement(node) {
-      if (node.type === "CallExpression") {
-        if (node.callee.type === "Identifier") {
-          return node.callee.name === "require";
-        }
+      if (node.type === "CallExpression" && node.callee.type === "Identifier") {
+        return node.callee.name === "require";
       }
       if (node.type === "MemberExpression") {
         return isRequireStatement(node.object);
@@ -383,22 +381,17 @@ module.exports = {
         const isClosestJSXAncestor = ancestorElement === allAncestorElements[0];
 
         const ancestor = getJSXElementName(ancestorElement);
-        if (ancestor) {
-          if (ancestor.name) {
-            const ancestorElements = config.elementOverrides[ancestor.name];
-            const ancestorConfig = ancestor.compoundName
-              ? config.elementOverrides[ancestor.compoundName] ||
-                ancestorElements
-              : ancestorElements;
+        if (ancestor?.name) {
+          const ancestorElements = config.elementOverrides[ancestor.name];
+          const ancestorConfig = ancestor.compoundName
+            ? config.elementOverrides[ancestor.compoundName] || ancestorElements
+            : ancestorElements;
 
-            if (ancestorConfig) {
-              if (
-                isClosestJSXAncestor ||
-                ancestorConfig.applyToNestedElements
-              ) {
-                return ancestorConfig;
-              }
-            }
+          if (
+            ancestorConfig &&
+            (isClosestJSXAncestor || ancestorConfig.applyToNestedElements)
+          ) {
+            return ancestorConfig;
           }
         }
       }
@@ -516,14 +509,15 @@ module.exports = {
             return;
           }
 
-          if (isViableTextNode(node, resolvedConfig)) {
-            if (hasJSXParentOrGrandParent || !config.ignoreProps) {
-              reportLiteralNode(
-                node,
-                defaultMessageId(hasJSXParentOrGrandParent, resolvedConfig),
-                resolvedConfig,
-              );
-            }
+          if (
+            isViableTextNode(node, resolvedConfig) &&
+            (hasJSXParentOrGrandParent || !config.ignoreProps)
+          ) {
+            reportLiteralNode(
+              node,
+              defaultMessageId(hasJSXParentOrGrandParent, resolvedConfig),
+              resolvedConfig,
+            );
           }
         },
 

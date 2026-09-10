@@ -327,26 +327,22 @@ module.exports = {
                   );
                 }
 
-                if (relAttribute.value.type === "JSXExpressionContainer") {
-                  if (relAttribute.value.expression.type === "Literal") {
-                    if (
-                      typeof relAttribute.value.expression.value === "string"
-                    ) {
-                      const parts = relAttribute.value.expression.value
-                        .split("noreferrer")
-                        .filter(Boolean);
-                      return fixer.replaceText(
-                        relAttribute.value.expression,
-                        `"${parts.concat("noreferrer").join(" ")}"`,
-                      );
-                    }
-
-                    // for undefined, boolean, number, symbol, bigint, and null
+                if (
+                  relAttribute.value.type === "JSXExpressionContainer" &&
+                  relAttribute.value.expression.type === "Literal"
+                ) {
+                  if (typeof relAttribute.value.expression.value === "string") {
+                    const parts = relAttribute.value.expression.value
+                      .split("noreferrer")
+                      .filter(Boolean);
                     return fixer.replaceText(
-                      relAttribute.value,
-                      '"noreferrer"',
+                      relAttribute.value.expression,
+                      `"${parts.concat("noreferrer").join(" ")}"`,
                     );
                   }
+
+                  // for undefined, boolean, number, symbol, bigint, and null
+                  return fixer.replaceText(relAttribute.value, '"noreferrer"');
                 }
 
                 return null;

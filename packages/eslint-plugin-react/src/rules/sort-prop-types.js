@@ -250,10 +250,12 @@ module.exports = {
         if (propType && propType.properties) {
           checkSorted(propType.properties);
         }
-      } else if (firstArg && firstArg.type === "ObjectTypeAnnotation") {
-        if (firstArg.properties) {
-          checkSorted(firstArg.properties);
-        }
+      } else if (
+        firstArg &&
+        firstArg.type === "ObjectTypeAnnotation" &&
+        firstArg.properties
+      ) {
+        checkSorted(firstArg.properties);
       }
     }
 

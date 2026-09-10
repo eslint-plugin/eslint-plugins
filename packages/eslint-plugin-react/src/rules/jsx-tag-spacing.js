@@ -136,23 +136,22 @@ function validateBeforeSelfClosing(context, node, option) {
 
   if (
     node.loc.start.line !== node.loc.end.line &&
-    option === "proportional-always"
+    option === "proportional-always" &&
+    leftToken.loc.end.line === closingSlash.loc.start.line
   ) {
-    if (leftToken.loc.end.line === closingSlash.loc.start.line) {
-      report(
-        context,
-        messages.beforeSelfCloseNeedNewline,
-        "beforeSelfCloseNeedNewline",
-        {
-          node,
-          loc: leftToken.loc.end,
-          fix(fixer) {
-            return fixer.insertTextBefore(closingSlash, "\n");
-          },
+    report(
+      context,
+      messages.beforeSelfCloseNeedNewline,
+      "beforeSelfCloseNeedNewline",
+      {
+        node,
+        loc: leftToken.loc.end,
+        fix(fixer) {
+          return fixer.insertTextBefore(closingSlash, "\n");
         },
-      );
-      return;
-    }
+      },
+    );
+    return;
   }
 
   if (leftToken.loc.end.line !== closingSlash.loc.start.line) {
@@ -193,10 +192,11 @@ function validateAfterOpening(context, node, option) {
   const sourceCode = getSourceCode(context);
   const openingToken = sourceCode.getTokenBefore(node.name);
 
-  if (option === "allow-multiline") {
-    if (openingToken.loc.start.line !== node.name.loc.start.line) {
-      return;
-    }
+  if (
+    option === "allow-multiline" &&
+    openingToken.loc.start.line !== node.name.loc.start.line
+  ) {
+    return;
   }
 
   const adjacent = !isSpaceBetween(sourceCode, openingToken, node.name);
@@ -240,23 +240,22 @@ function validateBeforeClosing(context, node, option) {
 
     if (
       node.loc.start.line !== node.loc.end.line &&
-      option === "proportional-always"
+      option === "proportional-always" &&
+      leftToken.loc.end.line === closingToken.loc.start.line
     ) {
-      if (leftToken.loc.end.line === closingToken.loc.start.line) {
-        report(
-          context,
-          messages.beforeCloseNeedNewline,
-          "beforeCloseNeedNewline",
-          {
-            node,
-            loc: leftToken.loc.end,
-            fix(fixer) {
-              return fixer.insertTextBefore(closingToken, "\n");
-            },
+      report(
+        context,
+        messages.beforeCloseNeedNewline,
+        "beforeCloseNeedNewline",
+        {
+          node,
+          loc: leftToken.loc.end,
+          fix(fixer) {
+            return fixer.insertTextBefore(closingToken, "\n");
           },
-        );
-        return;
-      }
+        },
+      );
+      return;
     }
 
     if (leftToken.loc.start.line !== closingToken.loc.start.line) {

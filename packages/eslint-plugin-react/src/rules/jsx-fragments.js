@@ -215,11 +215,10 @@ module.exports = {
               "imported" in spec &&
               spec.imported &&
               "name" in spec.imported &&
-              spec.imported.name === fragmentPragma
+              spec.imported.name === fragmentPragma &&
+              spec.local
             ) {
-              if (spec.local) {
-                fragmentNames.add(spec.local.name);
-              }
+              fragmentNames.add(spec.local.name);
             }
           });
         }

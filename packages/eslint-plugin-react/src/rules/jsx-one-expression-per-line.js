@@ -78,7 +78,7 @@ module.exports = {
 
       if (
         options.allow === "non-jsx" &&
-        !children.find(
+        !children.some(
           (child) =>
             child.type === "JSXFragment" || child.type === "JSXElement",
         )
@@ -100,15 +100,12 @@ module.exports = {
           openingElementEndLine === closingElementStartLine &&
           closingElementStartLine === closingElementEndLine &&
           closingElementEndLine === child.loc.start.line &&
-          child.loc.start.line === child.loc.end.line
-        ) {
-          if (
-            options.allow === "single-child" ||
+          child.loc.start.line === child.loc.end.line &&
+          (options.allow === "single-child" ||
             (options.allow === "literal" &&
-              (child.type === "Literal" || child.type === "JSXText"))
-          ) {
-            return;
-          }
+              (child.type === "Literal" || child.type === "JSXText")))
+        ) {
+          return;
         }
       }
 

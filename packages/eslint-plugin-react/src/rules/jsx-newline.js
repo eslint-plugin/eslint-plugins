@@ -58,6 +58,7 @@ module.exports = {
             },
           },
         },
+        // oxlint-disable-next-line unicorn/no-thenable (required by eslint)
         then: {
           properties: {
             prevent: {

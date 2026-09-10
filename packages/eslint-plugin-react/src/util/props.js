@@ -14,12 +14,11 @@ const astUtil = require("./ast");
 function isPropTypesDeclaration(node) {
   if (
     node &&
-    (node.type === "ClassProperty" || node.type === "PropertyDefinition")
+    (node.type === "ClassProperty" || node.type === "PropertyDefinition") &&
+    node.typeAnnotation &&
+    node.key.name === "context"
   ) {
-    // Flow support
-    if (node.typeAnnotation && node.key.name === "props") {
-      return true;
-    }
+    return true;
   }
   return astUtil.getPropertyName(node) === "propTypes";
 }
@@ -32,12 +31,11 @@ function isPropTypesDeclaration(node) {
 function isContextTypesDeclaration(node) {
   if (
     node &&
-    (node.type === "ClassProperty" || node.type === "PropertyDefinition")
+    (node.type === "ClassProperty" || node.type === "PropertyDefinition") &&
+    node.typeAnnotation &&
+    node.key.name === "context"
   ) {
-    // Flow support
-    if (node.typeAnnotation && node.key.name === "context") {
-      return true;
-    }
+    return true;
   }
   return astUtil.getPropertyName(node) === "contextTypes";
 }
